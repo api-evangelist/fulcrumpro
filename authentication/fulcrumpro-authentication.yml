@@ -1,0 +1,24 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/fulcrumpro-openapi-original.json
+docs: https://developers.fulcrumpro.com/docs/authentication
+summary:
+  types:
+  - http
+  api_key_in: []
+  oauth2_flows: []
+  notes: >-
+    Single scheme. Bearer JWT tokens are generated per Fulcrum site under
+    Business Setup -> System Data -> Advanced -> Public API Setup, with a name,
+    description, and expiration date. Tokens are site-scoped, can be created in
+    multiples, and are revoked by deletion. Sent as `Authorization: Bearer <token>`.
+schemes:
+- name: bearer
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Your API bearer token generated in System Data > Advanced > Public API Setup
+  header: 'Authorization: Bearer <token>'
+  token_management_url: https://developers.fulcrumpro.com/docs/authentication
+  sources:
+  - openapi/fulcrumpro-openapi-original.json
