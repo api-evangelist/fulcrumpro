@@ -1,0 +1,916 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Vendor API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Vendor
+paths:
+  /api/vendors:
+    post:
+      tags:
+      - Vendor
+      summary: Create a new vendor
+      operationId: CreateVendor
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/VendorCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/VendorCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/VendorCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Vendor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Vendor-Vendors-Edit Vendor
+  /api/vendors/{vendorId}:
+    patch:
+      tags:
+      - Vendor
+      summary: Partially update a vendor
+      operationId: PatchVendor
+      parameters:
+      - name: vendorId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocument'
+      responses:
+        '200':
+          description: Vendor item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/VendorDto'
+        '404':
+          description: Vendor did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Vendor-Vendors-Edit Vendor
+    put:
+      tags:
+      - Vendor
+      summary: Update a specific vendor
+      operationId: UpdateVendor
+      parameters:
+      - name: vendorId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/VendorUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/VendorUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/VendorUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: The vendor for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/VendorDto'
+        '404':
+          description: Vendor did not exist
+  /api/vendors/{id}:
+    get:
+      tags:
+      - Vendor
+      summary: Get a vendor.
+      operationId: GetVendor
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The vendor for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/VendorDto'
+        '404':
+          description: Vendor did not exist
+      x-c4-required-permissions:
+      - Vendor-Vendors-View Vendor
+  /api/vendors/list:
+    post:
+      tags:
+      - Vendor
+      summary: Find vendors based on search parameters.
+      operationId: ListVendor
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/VendorRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/VendorRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/VendorRequestFindParameters'
+      responses:
+        '200':
+          description: List of vendors matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DtoVendorDtoWithDetails'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DtoVendorDtoWithDetails'
+      x-c4-required-permissions:
+      - Vendor-Vendors-View Vendor
+components:
+  schemas:
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    VendorCreateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name to give the entity. Must be unique to all active vendors.
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
+          nullable: true
+        vendorCode:
+          minLength: 1
+          type: string
+          description: Unique identifier for this vendor.
+          nullable: true
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: General notes associated to this vendor
+          nullable: true
+        currencyCode:
+          type: string
+          description: The currency of the vendor
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for the vendor
+          nullable: true
+      additionalProperties: false
+      description: Definition for creating a vendor.
+    VendorDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name to give the vendor. Must be unique to all active vendors.
+        vendorCode:
+          minLength: 1
+          type: string
+          description: Unique identifier for this vendor.
+          nullable: true
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Payment terms identifier. Please reference /api/payment-terms endpoint.
+          nullable: true
+        paymentTerms:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: General notes associated to this vendor
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+          nullable: true
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+          nullable: true
+        currencyCode:
+          type: string
+          description: The currency of the vendor.
+          nullable: true
+        status:
+          type: string
+          description: 'Approval/quality status of the vendor. One of: Approved, Probation, Monitor, Disqualified, Other.'
+          nullable: true
+        active:
+          type: boolean
+          description: Whether the vendor is active.
+        leadTime:
+          type: integer
+          description: Default lead time in days.
+          format: int32
+          nullable: true
+        url:
+          type: string
+          description: Vendor website URL.
+          format: uri
+          nullable: true
+        vendorSince:
+          type: string
+          description: Date the vendor relationship began.
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: A vendor
+    VendorRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter to vendors who's name contains the given string
+          nullable: true
+        vendorCode:
+          minLength: 1
+          type: string
+          description: Unique identifier for this vendor.
+          nullable: true
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+      additionalProperties: false
+      description: Parameters used for searching/finding vendors.
+    VendorAddressDto:
+      required:
+      - address1
+      - city
+      - id
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+          nullable: true
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Second address line.
+          nullable: true
+        address3:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Third address line.
+          nullable: true
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address state/province.
+          nullable: true
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Country identifier.
+          nullable: true
+        shippingLeadTime:
+          minimum: 0
+          type: integer
+          description: Lead time for shipping contents.
+          format: int32
+          nullable: true
+        primaryBilling:
+          type: boolean
+          description: Signifies if this is a primary billing address.
+        primaryShipping:
+          type: boolean
+          description: Signifies if this is a primary billing address.
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        email:
+          type: string
+          description: Email address
+          format: email
+          nullable: true
+        phone:
+          type: string
+          description: Associated phone number
+          nullable: true
+        fax:
+          type: string
+          description: Associated fax number
+          nullable: true
+        notes:
+          type: string
+          description: General notes associated to this vendor address
+          nullable: true
+      additionalProperties: false
+      description: Address with additional context for a vendor
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonExternalReferenceFindDto:
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Arbitrary sub-key that can be used to qualify the value
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+          nullable: true
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    DtoVendorDtoWithDetails:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name to give the vendor. Must be unique to all active vendors.
+        vendorCode:
+          minLength: 1
+          type: string
+          description: Unique identifier for this vendor.
+          nullable: true
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Payment terms identifier. Please reference /api/payment-terms endpoint.
+          nullable: true
+        paymentTerms:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: General notes associated to this vendor
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+          nullable: true
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+          nullable: true
+        currencyCode:
+          type: string
+          description: The currency of the vendor.
+          nullable: true
+        status:
+          type: string
+          description: 'Approval/quality status of the vendor. One of: Approved, Probation, Monitor, Disqualified, Other.'
+          nullable: true
+        active:
+          type: boolean
+          description: Whether the vendor is active.
+        leadTime:
+          type: integer
+          description: Default lead time in days.
+          format: int32
+          nullable: true
+        url:
+          type: string
+          description: Vendor website URL.
+          format: uri
+          nullable: true
+        vendorSince:
+          type: string
+          description: Date the vendor relationship began.
+          format: date-time
+          nullable: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorAddressDto'
+          description: The addresses associated with the vendor
+      additionalProperties: false
+      description: A vendor
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    VendorUpdateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name to give the entity. Must be unique to all active vendors.
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
+          nullable: true
+        vendorCode:
+          minLength: 1
+          type: string
+          description: Unique identifier for this vendor.
+          nullable: true
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: General notes associated to this vendor.
+          nullable: true
+        currencyCode:
+          type: string
+          description: The currency of the vendor. When omitted, the existing value is preserved.
+          nullable: true
+        status:
+          type: string
+          description: 'Approval/quality status of the vendor. One of: Approved, Probation, Monitor, Disqualified, Other.
+
+            When omitted, the existing value is preserved.'
+          nullable: true
+        active:
+          type: boolean
+          description: Whether the vendor is active. When omitted, the existing value is preserved.
+          nullable: true
+        leadTime:
+          minimum: 0
+          type: integer
+          description: Default lead time in days.
+          format: int32
+          nullable: true
+        url:
+          type: string
+          description: Vendor website URL.
+          format: uri
+          nullable: true
+        vendorSince:
+          type: string
+          description: Date the vendor relationship began.
+          format: date-time
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+      additionalProperties: false
+      description: Definition for updating a vendor.
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+          nullable: true
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+          nullable: true
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

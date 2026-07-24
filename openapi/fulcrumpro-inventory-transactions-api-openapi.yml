@@ -1,0 +1,506 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Inventory Transactions API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Inventory Transactions
+paths:
+  /api/inventory-transactions/list:
+    post:
+      tags:
+      - Inventory Transactions
+      summary: Finds inventory transactions based on search parameters
+      operationId: ListInventoryTransactions
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/InventoryTransactionsListParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryTransactionsListParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/InventoryTransactionsListParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/InventoryTransactionsListParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoInventoryTransactionDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoInventoryTransactionDto'
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Inventory
+components:
+  schemas:
+    DtoCommonDateRangeFilter:
+      type: object
+      properties:
+        start:
+          type: string
+          description: Inclusive start date to filter by
+          format: date-time
+          nullable: true
+        end:
+          type: string
+          description: Inclusive end date to filter by
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Date range used for filters
+    InventoryEventType:
+      enum:
+      - pick
+      - receive
+      - revert
+      - adjustment
+      - setItemValue
+      - eventOverride
+      type: string
+      description: Primary inventory event type.
+    DtoPagedResultDtoInventoryTransactionDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryTransactionDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    V2InventoryDataEventSourceType:
+      enum:
+      - purchaseOrder
+      - job
+      - shipment
+      - shipmentLineItem
+      - shipping
+      - receiving
+      - item
+      - workOrder
+      - salesOrder
+      - jobOperation
+      - workOrderOperation
+      - fulfillment
+      - itemToMakeMaterialRemnant
+      - poRcvValueAdj
+      type: string
+    InventoryTransactionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the transaction
+          nullable: true
+        date:
+          type: string
+          description: The date of the transaction
+          format: date-time
+        type:
+          $ref: '#/components/schemas/InventoryEventType'
+        secondaryType:
+          $ref: '#/components/schemas/InventoryEventSecondaryType'
+        item:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        location:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        lot:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        quantity:
+          type: number
+          description: The quantity of the transaction
+          format: double
+        valueChange:
+          type: number
+          description: The item value change caused by the transaction
+          format: double
+        qtyChange:
+          type: number
+          description: The item quantity change caused by the transaction
+          format: double
+        note:
+          type: string
+          description: The note on the transaction
+          nullable: true
+        value:
+          type: number
+          description: The per-unit value of the transaction
+          format: double
+          nullable: true
+        totalValue:
+          type: number
+          description: The total value of the transaction
+          format: double
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+      description: An inventory transaction
+    InventoryEventSecondaryType:
+      enum:
+      - pick
+      - receive
+      - override
+      - revert
+      - deposit
+      - create
+      - consume
+      - ship
+      - sold
+      - transferOut
+      - transferIn
+      - found
+      - expired
+      - damaged
+      - lost
+      - returnVendor
+      - returnStock
+      - receivedNoPo
+      - returnIncrease
+      - returnDecrease
+      - otherIncrease
+      - otherDecrease
+      - scrap
+      - waste
+      - transferredFromSalesOrder
+      - overrideItemValue
+      - transferFromLot
+      - transferToLot
+      - stockAdjustmentIncrease
+      - stockAdjustmentDecrease
+      - stockTake
+      type: string
+      description: Secondary, verbose description for an event.
+    InventoryTransactionsListParameters:
+      type: object
+      properties:
+        itemIds:
+          type: array
+          items:
+            type: string
+          description: Filter inventory transactions based on item identifiers.
+          nullable: true
+        dateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        sourceType:
+          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
+        relatedEntityType:
+          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
+        relatedEntityId:
+          type: string
+          description: The transaction's related entity identifier
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching inventory transactions
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+          nullable: true
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+          nullable: true
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

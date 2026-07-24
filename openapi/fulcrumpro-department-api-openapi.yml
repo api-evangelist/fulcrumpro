@@ -1,0 +1,654 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Department API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Department
+paths:
+  /api/departments:
+    post:
+      tags:
+      - Department
+      summary: Create a department.
+      operationId: CreateDepartment
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Department created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - System-System Data-Manage System Data
+  /api/departments/{id}:
+    get:
+      tags:
+      - Department
+      summary: Get a department.
+      operationId: GetDepartment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The department for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DepartmentDto'
+        '404':
+          description: Department did not exist
+      x-c4-required-permissions:
+      - Scheduling-Schedule-View Schedule
+    put:
+      tags:
+      - Department
+      summary: Update a department.
+      operationId: UpdateDepartment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: The updated department
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DepartmentDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Department did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - System-System Data-Manage System Data
+  /api/departments/list:
+    post:
+      tags:
+      - Department
+      summary: Find departments based on search parameters.
+      operationId: ListDepartment
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentRequestFindParameters'
+      responses:
+        '200':
+          description: List of departments matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentDto'
+      x-c4-required-permissions:
+      - Scheduling-Schedule-View Schedule
+components:
+  schemas:
+    DepartmentRequestFindParameters:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Filter departments based on matching ids.
+          nullable: true
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter departments based on their name.
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding departments.
+    EquipmentDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Description.
+          nullable: true
+        workCenterId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
+          nullable: true
+        manufacturer:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Manufacturer.
+          nullable: true
+        modelNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Model number.
+          nullable: true
+        serialNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Serial number.
+          nullable: true
+        canRunUnattended:
+          type: boolean
+          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
+
+            that utilizes this equipment to be scheduled outside of a shift.'
+          nullable: true
+        unlimitedCapacity:
+          type: boolean
+          description: Indicates if this equipment can support multiple operations simultaneously.
+          nullable: true
+        status:
+          $ref: '#/components/schemas/EquipmentStatus'
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Notes associated to the equipment.
+          nullable: true
+        deleted:
+          type: boolean
+          description: Indicates whether this equipment has been deleted
+      additionalProperties: false
+      description: Equipment definition.
+    WorkCenterDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        departmentId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Department identifier. Please reference /api/departments endpoint.
+          nullable: true
+        setupRate:
+          minimum: 0
+          type: number
+          description: Hourly cost rate for setup.
+          format: double
+          nullable: true
+        runRate:
+          minimum: 0
+          type: number
+          description: Hourly cost rate for run.
+          format: double
+          nullable: true
+        laborRate:
+          minimum: 0
+          type: number
+          description: Hourly cost rate for labor.
+          format: double
+          nullable: true
+        overheadRate:
+          minimum: 0
+          type: number
+          description: Hourly cost rate for overhead.
+          format: double
+          nullable: true
+        machineRate:
+          minimum: 0
+          type: number
+          description: Hourly cost rate for machine.
+          format: double
+          nullable: true
+        deleted:
+          type: boolean
+          description: Indicates whether this equipment has been deleted
+        equipment:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquipmentDto'
+          description: Equipment associated with this workcenter.
+      additionalProperties: false
+      description: Workcenter definition.
+    EquipmentStatus:
+      enum:
+      - good
+      - poor
+      - bad
+      - outOfService
+      type: string
+      description: Equipment status
+    DepartmentDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        deleted:
+          type: boolean
+          description: Indicates whether this department has been deleted
+        workCenters:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkCenterDto'
+          description: Workcenters associated with this department.
+      additionalProperties: false
+      description: Department definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    DepartmentUpdateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Description of the department. Replaces the existing value.
+          nullable: true
+        workCenterIds:
+          type: array
+          items:
+            type: string
+          description: 'Identifiers of the work centers associated with this department. Replaces the existing set.
+
+            Please reference /api/work-centers endpoint.'
+          nullable: true
+      additionalProperties: false
+      description: 'Details of a department to be updated. This is a full replacement: any field omitted
+
+        (description, work centers) is treated as cleared.'
+    DepartmentCreateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Description of the department.
+          nullable: true
+        workCenterIds:
+          type: array
+          items:
+            type: string
+          description: Identifiers of the work centers associated with this department. Please reference /api/work-centers endpoint.
+          nullable: true
+      additionalProperties: false
+      description: Details of a department to be created.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

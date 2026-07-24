@@ -1,0 +1,2006 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Item Routing API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Item Routing
+paths:
+  /api/items/{itemId}/routing:
+    get:
+      tags:
+      - Item Routing
+      summary: Get a specific item routing input item
+      operationId: ItemRoutingGet
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: Input item for an item's routing matching id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingDto'
+        '204':
+          description: Input item id provided was not found on this item
+        '404':
+          description: Item id provided is not present in the system
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+    post:
+      tags:
+      - Item Routing
+      summary: Update a specific item's routing
+      operationId: ItemRoutingUpdate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Successful update of the input item
+        '204':
+          description: Input item id provided was not found on this item
+        '400':
+          description: Validation issue with input
+        '404':
+          description: Item id provided is not present in the system
+  /api/items/{itemId}/routing/input-items:
+    post:
+      tags:
+      - Item Routing
+      summary: Adds an input item to an item's routing
+      operationId: ItemRoutingInputItemCreate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+        required: true
+      responses:
+        '200':
+          description: An input item was added to the item's routing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issue with input
+        '404':
+          description: An item was not found matching the item id
+  /api/items/{itemId}/routing/input-items/batch:
+    post:
+      tags:
+      - Item Routing
+      summary: Add multiple input items to an item's routing
+      operationId: ItemRoutingInputItemCreateBatch
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderPartLineItemInputItemCreateBatchDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderPartLineItemInputItemCreateBatchDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderPartLineItemInputItemCreateBatchDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderPartLineItemInputItemCreateBatchDto'
+        required: true
+      responses:
+        '200':
+          description: Input item(s) were added to the item's routing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BatchCreatedResponseDto'
+        '400':
+          description: Validation issue with input
+        '404':
+          description: An item was not found matching the item id
+  /api/items/{itemId}/routing/input-items/{inputItemId}:
+    delete:
+      tags:
+      - Item Routing
+      summary: Deletes an input item from an item's routing
+      operationId: ItemRoutingInputItemDelete
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: inputItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: An input item was deleted from the item's routing
+        '204':
+          description: Input item id provided was not found on this item
+        '404':
+          description: Item id provided is not present in the system
+    get:
+      tags:
+      - Item Routing
+      summary: Get a specific item routing input item
+      operationId: ItemRoutingInputItemGet
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: inputItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Input item for an item's routing matching id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputItemDto'
+        '204':
+          description: Input item id provided was not found on this item
+        '404':
+          description: Item id provided is not present in the system
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+    post:
+      tags:
+      - Item Routing
+      summary: Update an input item for a specific item's routing
+      operationId: ItemRoutingInputItemUpdate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: inputItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Successful update of the input item
+        '204':
+          description: Input item id provided was not found on this item
+        '400':
+          description: Validation issue with input
+        '404':
+          description: Item id provided is not present in the system
+  /api/items/{itemId}/routing/input-items/list:
+    post:
+      tags:
+      - Item Routing
+      summary: Lists the input items for an item's routing
+      operationId: ItemRoutingInputItemList
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: skip
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: take
+        in: query
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 50
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+      responses:
+        '200':
+          description: List of input items matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputItemDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputItemDto'
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+  /api/items/{itemId}/routing/input-materials:
+    post:
+      tags:
+      - Item Routing
+      summary: Adds an input material to an item's routing
+      operationId: ItemRoutingInputMaterialCreate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialCreateDto'
+        required: true
+      responses:
+        '200':
+          description: An input material was created on the item's routing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issue with input
+        '404':
+          description: A material was not found matching the material id
+  /api/items/{itemId}/routing/input-materials/{materialId}:
+    delete:
+      tags:
+      - Item Routing
+      summary: Deletes an input material from an item's routing
+      operationId: ItemRoutingInputMaterialDelete
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: An input material was deleted from the item's routing
+        '204':
+          description: Input material id provided was not found on this item
+        '404':
+          description: Item id provided is not present in the system or a material was not found matching the material id
+  /api/items/{itemId}/routing/input-materials/list:
+    post:
+      tags:
+      - Item Routing
+      summary: Lists the input materials for an item's routing
+      operationId: ItemRoutingInputMaterialList
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: List of input materials matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+  /api/items/{itemId}/routing/input-materials/{materialId}/nesting:
+    post:
+      tags:
+      - Item Routing
+      summary: Adds an input material nesting to an item's routing material
+      operationId: ItemRoutingInputMaterialNestingCreate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialNestingCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialNestingCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialNestingCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialNestingCreateDto'
+        required: true
+      responses:
+        '200':
+          description: An input material nesting was added to the item's routing nesting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issue with input
+        '404':
+          description: A material was not found matching the material id
+  /api/items/{itemId}/routing/input-materials/{materialId}/nesting/{nestingId}:
+    delete:
+      tags:
+      - Item Routing
+      summary: Removes an input material nesting on an item's routing material
+      operationId: ItemRoutingInputMaterialNestingDelete
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: nestingId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: An input material nesting was added to the item's routing nesting
+        '400':
+          description: Validation issue with input
+        '404':
+          description: A material was not found matching the material id
+  /api/items/{itemId}/routing/input-materials/{inputMaterialId}:
+    put:
+      tags:
+      - Item Routing
+      summary: Update an input material on an item's routing
+      operationId: ItemRoutingInputMaterialUpdate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: inputMaterialId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputMaterialUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: An input material was updated on the item's routing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+        '400':
+          description: Validation issue with input
+        '404':
+          description: An input material was not found matching the input material id
+  /api/items/{itemId}/routing/operations/batch:
+    post:
+      tags:
+      - Item Routing
+      summary: Bulk reorganize routing operations for a specific item.
+      operationId: ItemRoutingOperationBatch
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Created operation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BatchCreatedResponseDto'
+        '400':
+          description: Validation issue with input
+        '404':
+          description: Item id not present in the system
+  /api/items/{itemId}/routing/operations:
+    post:
+      tags:
+      - Item Routing
+      summary: Create a routing operation for a specific item
+      operationId: ItemRoutingOperationCreate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Created operation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issue with input
+        '404':
+          description: Item id not present in the system
+  /api/items/{itemId}/routing/operations/{operationId}:
+    delete:
+      tags:
+      - Item Routing
+      summary: Delete a specific item routing operation
+      operationId: ItemRoutingOperationDelete
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: List of operations matching the filters
+        '204':
+          description: Operation id provided was not found on this item
+        '404':
+          description: Item id provided is not present in the system
+    get:
+      tags:
+      - Item Routing
+      summary: Get a specific item routing operation
+      operationId: ItemRoutingOperationGet
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Operation matching id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingOperationDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingOperationDto'
+        '404':
+          description: Item id or operation id provided are not present in the system
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+    put:
+      tags:
+      - Item Routing
+      summary: Update a routing operation for a specific item
+      operationId: ItemRoutingOperationUpdate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Successful update of the operation
+        '204':
+          description: Operation id provided was not found on this item
+        '400':
+          description: Validation issue with input
+        '404':
+          description: Item id not present in the system
+  /api/items/{itemId}/routing/operations/{operationId}/items:
+    post:
+      tags:
+      - Item Routing
+      summary: Adds an operation item to an item's routing
+      operationId: ItemRoutingOperationItemCreate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+        required: true
+      responses:
+        '200':
+          description: An operation item was added to the item's routing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '204':
+          description: Operation id provided was not found on this item
+        '400':
+          description: Validation issue with input
+        '404':
+          description: An item was not found matching the itemId
+  /api/items/{itemId}/routing/operations/{operationId}/items/{operationItemId}:
+    delete:
+      tags:
+      - Item Routing
+      summary: Deletes an operation item from an item's routing
+      operationId: ItemRoutingOperationItemDelete
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: An operation item was deleted from the item's routing
+        '204':
+          description: Operation or operation item id provided was not found on this item
+        '404':
+          description: An item was not found matching the itemId
+    get:
+      tags:
+      - Item Routing
+      summary: Get a specific item routing operation item
+      operationId: ItemRoutingOperationItemGet
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Operation item for an item's routing matching id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputItemDto'
+        '204':
+          description: Operation or operation item id provided was not found on this item
+        '404':
+          description: An item was not found matching the itemId
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+    post:
+      tags:
+      - Item Routing
+      summary: Update an operation item for a specific item's routing
+      operationId: ItemRoutingOperationItemUpdate
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Successful update of the input item
+        '400':
+          description: Validation issue with input
+        '404':
+          description: Item id provided is not present in the system
+  /api/items/{itemId}/routing/operations/{operationId}/items/list:
+    post:
+      tags:
+      - Item Routing
+      summary: Lists the operation items for an item's routing
+      operationId: ItemRoutingOperationItemList
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: skip
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: take
+        in: query
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 50
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+      responses:
+        '200':
+          description: List of operation items matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputItemDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputItemDto'
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+  /api/items/{itemId}/routing/operations/list:
+    post:
+      tags:
+      - Item Routing
+      summary: Lists the operations for an item's routing
+      operationId: ItemRoutingOperationList
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: skip
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: take
+        in: query
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 50
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestOperationFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestOperationFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestOperationFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestOperationFindParameters'
+      responses:
+        '200':
+          description: List of operations matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingOperationDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingOperationDto'
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+  /api/items/{itemId}/routing/operations/{operationId}/materials/list:
+    post:
+      tags:
+      - Item Routing
+      summary: Lists the operation materials for an item's routing
+      operationId: ItemRoutingOperationMaterialList
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: List of operation items matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+components:
+  schemas:
+    ItemRoutingInputItemDto:
+      required:
+      - description
+      - id
+      - itemId
+      - number
+      - valueType
+      - valueTypeUnits
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of this input item in the item's routing
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item Id
+          readOnly: true
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The number to give the item.
+          readOnly: true
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The revision of the item
+          readOnly: true
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The description to give the item.
+          readOnly: true
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An item
+    ItemRoutingOperationDto:
+      required:
+      - id
+      - name
+      - systemOperationId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The Id of this operation specific to this item's routing
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the system operation
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of the system operation
+        order:
+          minimum: 0
+          type: integer
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days
+          format: int32
+        unattended:
+          type: boolean
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+          nullable: true
+        machineTrackingEnabled:
+          type: boolean
+          description: Whether machine tracking is enabled.
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Instructions for this operation.
+          nullable: true
+      additionalProperties: false
+      description: A routing operation (step)
+    MaterialShapeVendorDto:
+      required:
+      - id
+      - isPrimary
+      - priceBreaks
+      - priceUnit
+      - vendorId
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor identifier. Pelase reference /api/vendors endpoint.
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        currencyCode:
+          type: string
+          description: Currency code/denomination associated to this vendor.
+          nullable: true
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        leadTimeInDays:
+          minimum: 0
+          type: integer
+          description: Number of days required between order and receipt
+          format: int32
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Material vendor definition
+    ItemRoutingDto:
+      type: object
+      properties:
+        allowContinuousFlow:
+          type: boolean
+          description: Allow an operation to start before previous operations in the routing end
+          nullable: true
+      additionalProperties: false
+      description: Represents an item's routing
+    CommonEnumMaterialRequirementCostingEnum:
+      enum:
+      - fullCost
+      - usageBased
+      type: string
+      description: Specifies the costing of the material.
+    MaterialShapeVendorPriceBreakDto:
+      required:
+      - id
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          type: number
+          description: The price per unit.
+          format: double
+      additionalProperties: false
+      description: Vendor prices breaks for a material shape.
+    ItemRoutingOutsideProcessingOperationDto:
+      type: object
+      properties:
+        outsideProcessingTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        selectedVendorId:
+          type: string
+          description: Outside processing vendor
+          nullable: true
+      additionalProperties: false
+      description: Defines outside processing fields
+    RoutingRequestOperationFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter to operations who's name contains the given string
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding operations on an item's routing.
+    BatchCreatedResponseDto:
+      required:
+      - ids
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: The ids of the created records
+      additionalProperties: false
+      description: Response for a batch created record
+    SalesOrderPartLineItemInputItemCreateBatchDto:
+      required:
+      - lineItems
+      type: object
+      properties:
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          description: The input items to add to an item.
+      additionalProperties: false
+      description: Represents a batch of input items to add to an item.
+    ItemRoutingInputMaterialCreateDto:
+      required:
+      - costing
+      - materialId
+      type: object
+      properties:
+        materialId:
+          minLength: 1
+          type: string
+          description: The material id to be added. Please reference /api/materials endpoint.
+        costing:
+          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
+        nestings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemRoutingInputMaterialNestingCreateDto'
+          description: Nestings associated to this material indicating bounding box dimensions and production quantities.
+          nullable: true
+        routingStepId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'The routing step id.
+
+            This value should be the Id from the response from items/{itemId}/routing/operations/list'
+          nullable: true
+      additionalProperties: false
+      description: Create an input material for routing
+    ItemRoutingInputItemUpdateDto:
+      required:
+      - valueTypeUnits
+      type: object
+      properties:
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemUpdateDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An input item for routing
+    ItemRoutingOperationUpdateDto:
+      type: object
+      properties:
+        order:
+          minimum: 0
+          type: integer
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+          nullable: true
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days. Will default to zero if not provided.
+          format: int32
+          nullable: true
+        unattended:
+          type: boolean
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+          nullable: true
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Instructions for this operation.
+          nullable: true
+      additionalProperties: false
+      description: A routing operation (step)
+    ItemRoutingInputMaterialNestingCreateDto:
+      required:
+      - d2
+      - d3
+      - produces
+      type: object
+      properties:
+        d2:
+          type: number
+          description: Length
+          format: double
+        d3:
+          type: number
+          description: For Sheets, the Width
+          format: double
+        produces:
+          type: integer
+          description: The quantity produced, given the bounding box dimensions (D2 x D3).
+          format: int32
+        useForEstimatedCosting:
+          type: boolean
+          description: 'Indicates if this nesting record will be used for estimated costing.
+
+            NOTE: Only one nesting record for a material can have this value set to true.'
+      additionalProperties: false
+      description: An input material nesting for routing
+    CommonEnumInputItemValueTypeEnum:
+      enum:
+      - creates
+      - requires
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    ItemRoutingOperationCreateDto:
+      required:
+      - systemOperationId
+      type: object
+      properties:
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: System Operation Id
+        order:
+          minimum: 0
+          type: integer
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+          nullable: true
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days. Will default to zero if not provided.
+          format: int32
+          nullable: true
+        unattended:
+          type: boolean
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+          nullable: true
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Operation instructions. Will default to the instructions defined on the operation when not provided.
+          nullable: true
+        inputMaterialIds:
+          type: array
+          items:
+            type: string
+          description: 'The ids on the input material to associate to this operation.
+
+            This value should be the Id from the response from items/{itemId}/routing/input-materials/list'
+          nullable: true
+      additionalProperties: false
+      description: A routing operation (step)
+    ItemRoutingOutsideProcessingCostOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+      description: The cost option for the outside processing operation
+    CommonEnumMaterialVendorPriceUnitEnum:
+      enum:
+      - kilogram
+      - pound
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    ItemRoutingInputMaterialDto:
+      required:
+      - costing
+      - id
+      - materialId
+      - materialName
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of this input material in the item's routing
+          format: uuid
+        materialId:
+          minLength: 1
+          type: string
+          description: The material id. Please reference /api/materials endpoint.
+        materialName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The material name.
+        materialShape:
+          $ref: '#/components/schemas/MaterialShapeDto'
+        costing:
+          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
+        nestings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemRoutingInputMaterialNestingDto'
+          description: Nestings associated to this material indicating bounding box dimensions and production quantities.
+        routingStepId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'The routing step id.
+
+            This value should be the Id from the response from items/{itemId}/routing/operations/list'
+          nullable: true
+      additionalProperties: false
+      description: An item input material
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    ItemRoutingNormalOperationDto:
+      type: object
+      properties:
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        anyEquipment:
+          type: boolean
+          description: Specifies that any equipment associated with this operation can be used
+        selectedEquipmentIds:
+          type: array
+          items:
+            type: string
+          description: List of equipment ids selected from equipment associated with this operation
+        isNestable:
+          type: boolean
+          description: Indicate if this operation is nestable.
+      additionalProperties: false
+      description: Defines non-outside-processing fields
+    CommonEnumMaterialFormEnum:
+      enum:
+      - sheet
+      - plate
+      - roundBar
+      - flatBar
+      - channel
+      - squareTube
+      - angle
+      - treadPlate
+      - hexBar
+      - squareBar
+      - teeBar
+      - hBeam
+      - rectTube
+      - pipe
+      - wBeam
+      - sBeam
+      - roundTube
+      - rectBar
+      - wideBar
+      type: string
+      description: Specifies the form of the material.
+    ItemRoutingInputItemCreateDto:
+      required:
+      - itemId
+      - valueType
+      - valueTypeUnits
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The item id to be added. Please reference /api/items endpoint.
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemCreateDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An input item for routing
+    ItemRoutingUpdateDto:
+      type: object
+      properties:
+        allowContinuousFlow:
+          type: boolean
+          description: Allow an operation to start before previous operations in the routing end
+          nullable: true
+      additionalProperties: false
+      description: Represents updates to an item's routing
+    ItemRoutingOperationTimeOption:
+      enum:
+      - fixedSeconds
+      - fixedMinutes
+      - fixedHours
+      - fixedDays
+      - secondsPerUnit
+      - minutesPerUnit
+      - hoursPerUnit
+      - daysPerUnit
+      - unitsPerHour
+      type: string
+      description: The time unit or option used in operation times
+    MaterialShapeDto:
+      required:
+      - form
+      - id
+      - materialReferenceId
+      - materialReferenceName
+      - name
+      - vendors
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: Unique id associated to this entity.
+        active:
+          type: boolean
+          description: Indicates if this material is activated.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name.
+        form:
+          $ref: '#/components/schemas/CommonEnumMaterialFormEnum'
+        materialReferenceId:
+          minLength: 1
+          type: string
+          description: Material Id
+        materialReferenceName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Material name
+        specification:
+          type: string
+          description: Specification
+          nullable: true
+        subSpecification:
+          type: string
+          description: Sub-specification
+          nullable: true
+        finish:
+          type: string
+          description: Finish
+          nullable: true
+        grade:
+          type: string
+          description: Grade
+          nullable: true
+        dimension:
+          type: string
+          description: Dimension
+          nullable: true
+        type:
+          type: string
+          description: Material type
+          nullable: true
+        version:
+          type: string
+          description: Version
+          nullable: true
+        vendors:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorDto'
+          description: Vendors that supply this material.
+      additionalProperties: false
+      description: Material definition.
+    ItemRoutingInputMaterialUpdateDto:
+      required:
+      - costing
+      type: object
+      properties:
+        costing:
+          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
+        routingStepId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'The routing step id.
+
+            This value should be the Id from the response from items/{itemId}/routing/operations/list'
+          nullable: true
+      additionalProperties: false
+      description: Update an input material for routing
+    ItemRoutingOutsideProcessingOperationCost:
+      type: object
+      properties:
+        costOption:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
+        fixedCost:
+          type: number
+          description: The fixed total cost for the operation
+          format: double
+          nullable: true
+        perUnitCost:
+          type: number
+          description: The cost per unit for the operation
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: Outside processing operation cost
+    ItemRoutingInputMaterialNestingDto:
+      required:
+      - d2
+      - d3
+      - id
+      - produces
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of this input material's nesting in the item's routing material
+          format: uuid
+        d2:
+          type: number
+          description: Length
+          format: double
+        d3:
+          type: number
+          description: For Sheets, the Width
+          format: double
+        produces:
+          type: integer
+          description: The quantity produced, given the bounding box dimensions (D2 x D3).
+          format: int32
+        useForEstimatedCosting:
+          type: boolean
+          description: 'Indicates if this nesting record will be used for estimated costing.
+
+            NOTE: Only one nesting record for a material can have this value set to true.'
+      additionalProperties: false
+      description: Create an input material nesting for routing
+    ItemRoutingOperationTime:
+      type: object
+      properties:
+        time:
+          type: number
+          description: Time or units of this operation
+          format: double
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
+      additionalProperties: false
+      description: Operation time and type
+    RoutingRequestItemFindParameters:
+      type: object
+      properties:
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter to items who's number contains the given string
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding input items on an item's routing.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

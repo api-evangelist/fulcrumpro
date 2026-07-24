@@ -1,0 +1,555 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Shipment Line Items (V3) API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Shipment Line Items (V3)
+paths:
+  /api/shipment-line-items/list:
+    post:
+      tags:
+      - Shipment Line Items (V3)
+      summary: Search for shipment line items based on parameters.
+      operationId: ListShipmentLineItems
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        description: The search parameters
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ShipmentLineItemsListParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentLineItemsListParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentLineItemsListParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ShipmentLineItemsListParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoShipmentLineItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoShipmentLineItemDto'
+      x-c4-required-permissions:
+      - Shipping-Shipping-View Shipments
+components:
+  schemas:
+    ShippingDataShipmentStatus:
+      enum:
+      - pending
+      - open
+      - shipped
+      - cancelled
+      type: string
+    ShippingDataPackingStatus:
+      enum:
+      - notPacked
+      - partiallyPacked
+      - fullyPacked
+      - overPacked
+      type: string
+    ShippingDataShipmentType:
+      enum:
+      - unknown
+      - standard
+      - outsideProcessing
+      type: string
+    ShipmentLineItemDto:
+      required:
+      - id
+      - packingStatus
+      - quantityToShip
+      - shipmentName
+      - shipmentType
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Shipment line item identifier
+        packingStatus:
+          $ref: '#/components/schemas/ShippingDataPackingStatus'
+        shipmentType:
+          $ref: '#/components/schemas/ShippingDataShipmentType'
+        quantityToShip:
+          type: number
+          description: The quantity to ship
+          format: double
+        shipmentName:
+          minLength: 1
+          type: string
+          description: The shipment name (eg. SHP-S0123-1)
+        shipmentStatus:
+          $ref: '#/components/schemas/ShippingDataShipmentStatus'
+        shipByDate:
+          type: string
+          description: The date the shipment this line item belongs to is scheduled to ship by
+          format: date-time
+          nullable: true
+        shippedDate:
+          type: string
+          description: The date the shipment this line item belongs to was actually shipped
+          format: date-time
+          nullable: true
+        shippedDateOverride:
+          type: string
+          description: The shipped date override of the shipment this line item belongs to
+          format: date-time
+          nullable: true
+        quantityInvoiced:
+          type: number
+          description: The quantity invoiced
+          format: double
+        quantityPacked:
+          type: number
+          description: The quantity packed
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The item identifier
+          nullable: true
+        shipmentId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The shipment identifier
+          nullable: true
+        salesOrderId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The sales order identifier
+          nullable: true
+        salesOrderLineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The sales order line item identifier
+          nullable: true
+        purchaseOrderId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The purchase order identifier
+          nullable: true
+        purchaseOrderLineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The purchase order line item identifier
+          nullable: true
+        quantityShipped:
+          type: number
+          description: The quantity shipped
+          format: double
+          readOnly: true
+        shippedFromLocations:
+          type: array
+          items:
+            type: string
+          description: The locations this line was shipped from
+        shippedFromLots:
+          type: array
+          items:
+            type: string
+          description: The lots this line was shipped from
+        packingDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentLineItemPackingDetailDto'
+          description: Packing details indicating how quantities were split amongst lots/locations.
+      additionalProperties: false
+      description: Shipment line item data transfer object
+    DtoPagedResultDtoShipmentLineItemDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentLineItemDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ShipmentLineItemPackingDetailDto:
+      type: object
+      properties:
+        lotId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Lot identifier. Please reference /api/inventory-lots endpoint.
+          nullable: true
+        lotName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Lot name.
+          nullable: true
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Location identifier. Please reference /api/locations endpoint.
+          nullable: true
+        locationName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Location name.
+          nullable: true
+        quantityPacked:
+          minimum: 0
+          type: number
+          description: Quantity packed for this shipment line item that are associated to this lot.
+          format: double
+          nullable: true
+        box:
+          maxLength: 36
+          minLength: 0
+          type: string
+          description: Box identifier this packing detail was packed into. Free-form (e.g., "1", "A1").
+          nullable: true
+      additionalProperties: false
+      description: Packing detail associated to a shipment line item.
+    ShipmentLineItemsListParameters:
+      type: object
+      properties:
+        packingStatus:
+          $ref: '#/components/schemas/ShippingDataPackingStatus'
+        itemId:
+          type: string
+          description: Filter shipment line items based on item identifier.
+          nullable: true
+        shipmentId:
+          type: string
+          description: Filter shipment line items based on shipment identifier.
+          nullable: true
+        salesOrderId:
+          type: string
+          description: Filter shipment line items based on sales order identifier.
+          nullable: true
+        purchaseOrderId:
+          type: string
+          description: Filter shipment line items based on purchase order identifier.
+          nullable: true
+        salesOrderLineItemIds:
+          type: array
+          items:
+            type: string
+          description: Filter shipment line items based on sales order line item(s) identifier.
+          nullable: true
+        purchaseOrderLineItemIds:
+          type: array
+          items:
+            type: string
+          description: Filter shipment line items based on purchase order line item identifier.
+          nullable: true
+        shipmentIds:
+          type: array
+          items:
+            type: string
+          description: Filter shipment line items based on shipment identifiers.
+          nullable: true
+        shipmentType:
+          $ref: '#/components/schemas/ShippingDataShipmentType'
+      additionalProperties: false
+      description: Parameters used for searching V3 shipment line items
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

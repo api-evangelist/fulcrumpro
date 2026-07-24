@@ -1,0 +1,1142 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Quote Part Line Item API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Quote Part Line Item
+paths:
+  /api/quotes/{quoteId}/part-line-items:
+    post:
+      tags:
+      - Quote Part Line Item
+      summary: Create a part line item on a Quote
+      operationId: CreateQuotePartLineItem
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Part line item added to Quote
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-Quotes-Edit Quote
+  /api/quotes/{quoteId}/part-line-items/batch:
+    post:
+      tags:
+      - Quote Part Line Item
+      summary: Create one or more part line items on a quote
+      operationId: CreateQuotePartLineItemBatch
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemCreateBatchDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemCreateBatchDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemCreateBatchDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemCreateBatchDto'
+        required: true
+      responses:
+        '200':
+          description: Part line items added to quote
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchCreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BatchCreatedResponseDto'
+        '400':
+          description: Validation issues with input
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-Quotes-Edit Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}:
+    delete:
+      tags:
+      - Quote Part Line Item
+      summary: Delete a specific part line item for a Quote
+      operationId: DeleteQuotePartLineItem
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Part line item did not exist
+        '404':
+          description: Quote did not exist
+    get:
+      tags:
+      - Quote Part Line Item
+      summary: Get a specific part line item for a quote
+      operationId: GetQuotePartLineItem
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: includeCostBreakdown
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Part line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuotePartLineItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/QuotePartLineItemDto'
+        '404':
+          description: Quote or line items did not exist
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+    put:
+      tags:
+      - Quote Part Line Item
+      summary: Update a specific part line item for a Quote
+      operationId: UpdateQuotePartLineItem
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/QuotePartLineItemUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Part line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuotePartLineItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/QuotePartLineItemDto'
+        '404':
+          description: Quote or line items did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-Quotes-Edit Quote
+  /api/quotes/{quoteId}/part-line-items/list:
+    post:
+      tags:
+      - Quote Part Line Item
+      summary: Get a list of part lines items for a quote
+      operationId: ListQuotePartLineItem
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: includeCostBreakdown
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: List of part line items for the given quote id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuotePartLineItemDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuotePartLineItemDto'
+        '404':
+          description: The quote did not exist
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/cost-breakdown:
+    get:
+      tags:
+      - Quote Part Line Item
+      summary: Get the cost breakdown for a specific part line item for a quote
+      operationId: GetQuotePartLineItemCostBreakdown
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Part line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonCostBreakdownDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CommonCostBreakdownDto'
+        '404':
+          description: Quote or line items did not exist
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+      - Pricing-Margins-View Margins
+components:
+  schemas:
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    CommonCostBreakdownDto:
+      required:
+      - calculatedOn
+      - componentLabor
+      - componentMachine
+      - componentMaterial
+      - componentOutsideProcessing
+      - cumulative
+      - cumulativeLabor
+      - cumulativeMachine
+      - cumulativeMaterial
+      - cumulativeOutsideProcessing
+      - id
+      - itemLabor
+      - itemMachine
+      - itemMaterial
+      - itemOutsideProcessing
+      - lines
+      - quantity
+      - shopRateMachine
+      - shopRateRun
+      - shopRateSetup
+      - time
+      - type
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: The id of the parent item.
+        type:
+          $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
+        quantity:
+          minimum: 0
+          type: integer
+          description: Number of units.
+          format: int32
+        quantityScrapped:
+          minimum: 0
+          type: integer
+          description: Number of units scrapped.
+          format: int32
+          nullable: true
+        calculatedOn:
+          type: string
+          description: When was this cost breakdown last calculated/aggregated.
+          format: date-time
+        time:
+          $ref: '#/components/schemas/CommonTimeDto'
+        cumulative:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateSetup:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateRun:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonCostBreakdownLineDto'
+          description: Cost breakdown line details.
+      additionalProperties: false
+      description: Cost breakdown
+    CommonCostDto:
+      required:
+      - perUnit
+      - total
+      type: object
+      properties:
+        total:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        perUnit:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Cost information
+    ItemsAndInventoryRoutingsCostBreakdownType:
+      enum:
+      - estimated
+      - inProgressJob
+      - completedJob
+      - cancelledJob
+      type: string
+    QuotePartLineItemDto:
+      required:
+      - accountingDetails
+      - discountedPrice
+      - id
+      - isTaxable
+      - itemId
+      - preDiscountSubTotal
+      - price
+      - quantity
+      - subTotal
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type: number
+          description: The line item price.
+          format: double
+        discountedPrice:
+          minimum: 0
+          type: number
+          description: The discounted line item price.
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item id associated with this line item.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The part line item description.  Defaults to the item's description if none specified.
+          nullable: true
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        isTaxable:
+          type: boolean
+          description: Dictate if this line item is taxable.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+          nullable: true
+        taxRate:
+          minimum: 0
+          type: number
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemDto.TaxRate will supercede the defined tax rate.
+          format: double
+          nullable: true
+        overrideTaxRate:
+          type: boolean
+          description: Dictate if the tax rate is overridden.
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+        isPercentageDiscount:
+          type: boolean
+          description: Indicates whether FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemDto.DiscountAmount discount is percentage based (else, it's an absolute amount).
+          nullable: true
+        discountAmount:
+          type: number
+          description: The amount of the discount.
+          format: double
+          nullable: true
+        subTotal:
+          minimum: 0
+          type: number
+          description: Total line item cost, including applicable discounts
+          format: double
+        preDiscountSubTotal:
+          minimum: 0
+          type: number
+          description: Total line item cost, before discounts
+          format: double
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined for the part line item;
+          nullable: true
+        number:
+          type: integer
+          description: Line number
+          format: int32
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+        costBreakdown:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
+      additionalProperties: false
+      description: Represents a part line item on a quote.
+    BatchCreatedResponseDto:
+      required:
+      - ids
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: The ids of the created records
+      additionalProperties: false
+      description: Response for a batch created record
+    CommonEnumCostBreakdownLineTypeEnum:
+      enum:
+      - material
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      - componentMaterial
+      - componentLabor
+      - componentMachine
+      - componentOutsideProcessing
+      - nestPartMaterialUsage
+      - nestPartMaterialScrap
+      - overhead
+      - unknown
+      type: string
+      description: Cost breakdown types
+    QuotePartLineItemCreateBatchDto:
+      required:
+      - lineItems
+      type: object
+      properties:
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuotePartLineItemCreateDto'
+          description: The line items to add to a sales order.
+      additionalProperties: false
+      description: Represents a batch of part line items to add to a quote.
+    CommonCostBreakdownLineDto:
+      required:
+      - cost
+      - costType
+      - name
+      type: object
+      properties:
+        costType:
+          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
+        operationType:
+          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        name:
+          minLength: 1
+          type: string
+          description: Decription of this line.
+        cost:
+          minimum: 0
+          type: number
+          description: Cost.
+          format: double
+        quantity:
+          minimum: 0
+          type: number
+          description: Quantity (if applicable)
+          format: double
+          nullable: true
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of the item that was picked. Please reference /api/items endpoint.
+          nullable: true
+        itemName:
+          type: string
+          description: The name of the item that was picked.
+          nullable: true
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        operationInformation:
+          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+      additionalProperties: false
+      description: Cost breakdown line information.
+    CommonTimeDto:
+      required:
+      - labor
+      - machine
+      - setup
+      type: object
+      properties:
+        labor:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        machine:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+        setup:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Time information
+    QuotePartLineItemCreateDto:
+      required:
+      - itemId
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item id associated with this line item.
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type: number
+          description: The line item price.
+          format: double
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The part line item description.  Defaults to the item's description if none specified.
+          nullable: true
+        internalNotes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: The line item internal notes
+          nullable: true
+        itemNotes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: The line item notes.
+          nullable: true
+        isTaxable:
+          type: boolean
+          description: Dictate if this line item is taxable.
+          nullable: true
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+          nullable: true
+        taxRate:
+          minimum: 0
+          type: number
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemCreateDto.TaxRate will supercede the defined tax rate.
+          format: double
+          nullable: true
+        overrideTaxRate:
+          type: boolean
+          description: Indicate if the tax supplied is intended to be an override.
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+        isPercentageDiscount:
+          type: boolean
+          description: Indicates whether FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemCreateDto.DiscountAmount discount is percentage based (else, it's an absolute amount).
+          nullable: true
+        discountAmount:
+          type: number
+          description: The amount of the discount.
+          format: double
+          nullable: true
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+      additionalProperties: false
+      description: Represents a part line item on a quote.
+    CommonEnumOperationTypeEnum:
+      enum:
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      type: string
+      description: Operation type
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    CommonCostBreakdownOperationDto:
+      required:
+      - operationId
+      type: object
+      properties:
+        operationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Operation id. Please reference /api/operations
+        name:
+          type: string
+          description: Operation name.
+          nullable: true
+        timeInSeconds:
+          minimum: 0
+          type: number
+          description: Time in seconds.
+          format: double
+          nullable: true
+          readOnly: true
+        timeInHours:
+          minimum: 0
+          type: number
+          description: Time in hours
+          format: double
+          nullable: true
+        ratePerSecond:
+          minimum: 0
+          type: number
+          description: Rate per second
+          format: double
+          nullable: true
+          readOnly: true
+        ratePerHour:
+          minimum: 0
+          type: number
+          description: Rate per hour
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: Operation information
+    QuotePartLineItemUpdateDto:
+      type: object
+      properties:
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type: number
+          description: The line item price.
+          format: double
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The part line item description.  Defaults to the item's description if none specified.
+          nullable: true
+        internalNotes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: The line item internal notes
+          nullable: true
+        itemNotes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: The line item notes.
+          nullable: true
+        isTaxable:
+          type: boolean
+          description: Dictate if this line item is taxable.
+          nullable: true
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+          nullable: true
+        taxRate:
+          minimum: 0
+          type: number
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemUpdateDto.TaxRate will supercede the defined tax rate.
+          format: double
+          nullable: true
+        overrideTaxRate:
+          type: boolean
+          description: Indicate if the tax supplied is intended to be an override.
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+        isPercentageDiscount:
+          type: boolean
+          description: Indicates whether FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemUpdateDto.DiscountAmount discount is percentage based (else, it's an absolute amount).
+          nullable: true
+        discountAmount:
+          type: number
+          description: The amount of the discount.
+          format: double
+          nullable: true
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+      additionalProperties: false
+      description: Represents a part line item on a quote.
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+          nullable: true
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+      additionalProperties: false
+      description: An object that contains all accounting details.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

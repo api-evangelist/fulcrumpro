@@ -1,0 +1,2816 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Reporting API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Reporting
+paths:
+  /api/reporting/inventory/list:
+    post:
+      tags:
+      - Reporting
+      summary: 'Lists report-ready on-hand inventory rows from the inventory reporting view, including per-unit and
+
+        extended valuation (material/labor/machine/OP), lot and location context, and item categorization
+
+        so callers do not need to hand-join inventory to lots, items, and their details. Returns exactly
+
+        one row per (item, lot, location), so summing on-hand quantity or value across the rows does not
+
+        over-count a lot.'
+      operationId: ListInventoryReport
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingInventoryReportFilter'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingInventoryReportFilter'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingInventoryReportFilter'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingInventoryReportFilter'
+      responses:
+        '200':
+          description: A page of inventory report rows with the total matching count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingInventoryReportRow'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingInventoryReportRow'
+        '403':
+          description: The viewer lacks the View Inventory permission.
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Inventory
+  /api/reporting/invoice/list:
+    post:
+      tags:
+      - Reporting
+      summary: 'Lists report-ready invoice-line rows from the invoice reporting view, including line type,
+
+        pricing, tax, and aging detail joined to sales-order and shipment context so callers do not need
+
+        to hand-join invoices to invoice line items, sales orders, and shipments.'
+      operationId: ListInvoiceReport
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingInvoiceReportFilter'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingInvoiceReportFilter'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingInvoiceReportFilter'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingInvoiceReportFilter'
+      responses:
+        '200':
+          description: A page of invoice report rows with the total matching count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingInvoiceReportRow'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingInvoiceReportRow'
+        '403':
+          description: The viewer lacks the View Invoices permission.
+      x-c4-required-permissions:
+      - Invoicing-Invoicing-View Invoices
+  /api/reporting/job-activity-by-operator/list:
+    post:
+      tags:
+      - Reporting
+      summary: 'Lists report-ready per-operator operation rows from the job-activity-by-operator reporting view,
+
+        including setup/labor/machine time and cost, run-by-run quantities, rates, and job/routing context
+
+        so callers do not need to hand-join jobs to items-to-make, operations, timers, and job logs.'
+      operationId: ListJobActivityByOperatorReport
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingJobActivityByOperatorReportFilter'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingJobActivityByOperatorReportFilter'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingJobActivityByOperatorReportFilter'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingJobActivityByOperatorReportFilter'
+      responses:
+        '200':
+          description: A page of job-activity-by-operator report rows with the total matching count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingJobActivityByOperatorReportRow'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingJobActivityByOperatorReportRow'
+        '403':
+          description: The viewer lacks one of the required permissions (View Job and View Time Management).
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/reporting/job-activity/list:
+    post:
+      tags:
+      - Reporting
+      summary: 'Lists report-ready job-operation rows from the job-activity reporting view, including schedule,
+
+        timer, completion-progress, and routing context so callers do not need to hand-join jobs to
+
+        items-to-make, operations, timers, and scheduling data.'
+      operationId: ListJobActivityReport
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingJobActivityReportFilter'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingJobActivityReportFilter'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingJobActivityReportFilter'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingJobActivityReportFilter'
+      responses:
+        '200':
+          description: A page of job-activity report rows with the total matching count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingJobActivityReportRow'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingJobActivityReportRow'
+        '403':
+          description: The viewer lacks the View Job permission.
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/reporting/quote/list:
+    post:
+      tags:
+      - Reporting
+      summary: 'Lists report-ready quote rows from the quote reporting view, including totals, cost, status, and
+
+        lifecycle dates, so callers do not need to hand-assemble quote-level summary data.'
+      operationId: ListQuoteReport
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingQuoteReportFilter'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingQuoteReportFilter'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingQuoteReportFilter'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingQuoteReportFilter'
+      responses:
+        '200':
+          description: A page of quote report rows with the total matching count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingQuoteReportRow'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingQuoteReportRow'
+        '403':
+          description: The viewer lacks the View Quote permission.
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/reporting/sales-order-lines/list:
+    post:
+      tags:
+      - Reporting
+      summary: 'Lists report-ready sales-order line rows from the sales-order line-items reporting view,
+
+        including pre-computed cost, invoice, ship, and return columns so callers do not need to
+
+        hand-join sales orders to line items, jobs, invoices, shipments, and returns.'
+      operationId: ListSalesOrderLinesReport
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingSalesOrderLinesReportFilter'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingSalesOrderLinesReportFilter'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingSalesOrderLinesReportFilter'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingSalesOrderLinesReportFilter'
+      responses:
+        '200':
+          description: A page of sales-order line report rows with the total matching count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingSalesOrderLinesReportRow'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingSalesOrderLinesReportRow'
+        '403':
+          description: The viewer lacks one of the required permissions (View Sales Order, View Customer, View Job, View Invoices, and View Shipments).
+      x-c4-required-permissions:
+      - Orders-SalesOrders-View Sales Order
+  /api/reporting/shipping/list:
+    post:
+      tags:
+      - Reporting
+      summary: 'Lists report-ready shipment line rows from the shipping reporting view, including pre-computed
+
+        dollar columns ($ shipped, $ unshipped, total $ ordered, unit price) so callers do not need to
+
+        hand-join shipments to sales-order line items.'
+      operationId: ListShippingReport
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingShippingReportFilter'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingShippingReportFilter'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingShippingReportFilter'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingShippingReportFilter'
+      responses:
+        '200':
+          description: A page of shipping report rows with the total matching count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingShippingReportRow'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingShippingReportRow'
+        '403':
+          description: The viewer lacks the View Shipments permission.
+      x-c4-required-permissions:
+      - Shipping-Shipping-View Shipments
+  /api/reporting/time-clock/list:
+    post:
+      tags:
+      - Reporting
+      summary: 'Lists report-ready time-clock rows from the time-clock reporting view, including clock-in/clock-out
+
+        times, computed shift hours, reason and clock codes, and override-audit context so callers do not
+
+        need to hand-join timer entries to their reason and clock-code tags.'
+      operationId: ListTimeClockReport
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingTimeClockReportFilter'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingTimeClockReportFilter'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingTimeClockReportFilter'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DtoReportingTimeClockReportFilter'
+      responses:
+        '200':
+          description: A page of time-clock report rows with the total matching count.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingTimeClockReportRow'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoDtoReportingTimeClockReportRow'
+        '403':
+          description: The viewer lacks the View Time Management permission.
+      x-c4-required-permissions:
+      - Time-Time-View Time Management
+components:
+  schemas:
+    DtoPagedResultDtoDtoReportingInvoiceReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingInvoiceReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingJobActivityByOperatorReportFilter:
+      type: object
+      properties:
+        startedOrCreatedDateFrom:
+          type: string
+          description: Inclusive lower bound applied to the run's Started or Created Date. Null means no lower bound.
+          format: date-time
+          nullable: true
+        startedOrCreatedDateTo:
+          type: string
+          description: 'Inclusive upper bound applied to the run''s Started or Created Date (the whole `to` day is
+
+            included). Null means no upper bound.'
+          format: date-time
+          nullable: true
+        employee:
+          type: string
+          description: Optional exact-match filter on the operator / employee name. Null means no operator filter.
+          nullable: true
+        department:
+          type: string
+          description: 'Optional exact-match filter on the department containing the operation''s work center. Null means
+
+            no department filter.'
+          nullable: true
+      additionalProperties: false
+      description: 'Constrained filter for the job-activity-by-operator reporting list endpoint. Every field maps to a
+
+        fixed, server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoReportingJobActivityReportRow:
+      type: object
+      properties:
+        jobName:
+          type: string
+          description: Job name (typically the user-facing job identifier).
+          nullable: true
+        item:
+          type: string
+          description: Item number being produced.
+          nullable: true
+        itemDescription:
+          type: string
+          description: Item description.
+          nullable: true
+        itemRevision:
+          type: string
+          description: Item revision when revision tracking is enabled.
+          nullable: true
+        itemTags:
+          type: string
+          description: Comma-separated descriptive tags from the item.
+          nullable: true
+        productionDueDate:
+          type: string
+          description: Job's production due date.
+          format: date-time
+          nullable: true
+        salesOrderNumber:
+          type: string
+          description: Source sales order number, when the job is SO-driven.
+          nullable: true
+        customer:
+          type: string
+          description: Customer name from the sales order.
+          nullable: true
+        customerPurchaseOrder:
+          type: string
+          description: Customer's PO number from the sales order.
+          nullable: true
+        jobPriority:
+          type: string
+          description: Job priority value (High, Medium, or Low).
+          nullable: true
+        jobStatus:
+          type: string
+          description: Job lifecycle status (Approved, Scheduled, In Progress, Complete, etc.).
+          nullable: true
+        jobScheduledStart:
+          type: string
+          description: Scheduled start time of the job.
+          format: date-time
+          nullable: true
+        jobScheduledEnd:
+          type: string
+          description: Scheduled end time of the job.
+          format: date-time
+          nullable: true
+        jobLateStatus:
+          type: string
+          description: Late classification for the job (Late or On Time).
+          nullable: true
+        jobPlannedQty:
+          type: number
+          description: Planned quantity for the job.
+          format: double
+          nullable: true
+        uoM:
+          type: string
+          description: Unit of measure for the item being produced.
+          nullable: true
+        department:
+          type: string
+          description: Department containing the operation's scheduled work center.
+          nullable: true
+        shift:
+          type: string
+          description: Shift assigned to the operation.
+          nullable: true
+        operationName:
+          type: string
+          description: Operation name within the routing.
+          nullable: true
+        scheduledEquipment:
+          type: string
+          description: Equipment scheduled for this operation.
+          nullable: true
+        operationNumber:
+          type: integer
+          description: Operation sequence number within the routing.
+          format: int32
+          nullable: true
+        operationStatus:
+          type: string
+          description: Operation lifecycle status (Ready, Pending, Running, Paused, Complete).
+          nullable: true
+        setupComplete:
+          type: string
+          description: '"TRUE" when the setup phase is complete, otherwise "FALSE".'
+          nullable: true
+        runComplete:
+          type: string
+          description: '"TRUE" when the run phase is complete, otherwise "FALSE".'
+          nullable: true
+        estimatedSetupTimeHours:
+          type: number
+          description: Estimated setup hours for this operation.
+          format: double
+          nullable: true
+        estimatedRunTimeHours:
+          type: number
+          description: Estimated run hours for this operation.
+          format: double
+          nullable: true
+        estimatedMachineTimeHours:
+          type: number
+          description: Estimated machine hours for this operation.
+          format: double
+          nullable: true
+        unitsCompletedOnOperation:
+          type: number
+          description: Quantity completed on this operation so far.
+          format: double
+          nullable: true
+        unitsCompletedOnJob:
+          type: number
+          description: Quantity completed on the job overall.
+          format: double
+          nullable: true
+        isOutsideProcessing:
+          type: string
+          description: '"Outside Processing" when this operation is performed by an outside vendor, otherwise empty.'
+          nullable: true
+        outsideProcessingLeadTime:
+          type: integer
+          description: Configured lead time for outside-processing operations.
+          format: int32
+          nullable: true
+        isRework:
+          type: boolean
+          description: True when this operation row represents rework rather than original production.
+          nullable: true
+        totalOperationTimeHours:
+          type: number
+          description: Total elapsed operator time on this operation (across all phases).
+          format: double
+          nullable: true
+        totalMachineTimeHours:
+          type: number
+          description: Total elapsed machine time on this operation.
+          format: double
+          nullable: true
+        operationScheduledStart:
+          type: string
+          description: Scheduled start time for this operation.
+          format: date-time
+          nullable: true
+        actualStart:
+          type: string
+          description: Actual start timestamp (from timer data).
+          format: date-time
+          nullable: true
+        lastStoppedOn:
+          type: string
+          description: Timestamp of the most recent timer stop.
+          format: date-time
+          nullable: true
+        latestUser:
+          type: string
+          description: Name of the most recent operator to work on the operation.
+          nullable: true
+        scheduledEnd:
+          type: string
+          description: Scheduled end time for this operation.
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: 'One row of the pre-joined job-activity reporting view
+
+        (`rpt.View_ExposedReportingData_JobActivity`): one operation per item-to-make per job, carrying
+
+        schedule, timer, completion-progress, and routing context. Property names are clean identifiers; the
+
+        query aliases each source column (e.g. `[Production Due Date]`) to the matching property so
+
+        Dapper can bind it.'
+    DtoPagedResultDtoDtoReportingTimeClockReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingTimeClockReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingSalesOrderLinesReportRow:
+      type: object
+      properties:
+        companyName:
+          type: string
+          description: Issuing company / tenant company name.
+          nullable: true
+        associatedQuote:
+          type: string
+          description: Quote number this SO was converted from, when applicable.
+          nullable: true
+        salesOrderNumber:
+          type: integer
+          description: Numeric sales-order identifier.
+          format: int32
+          nullable: true
+        customerPONumber:
+          type: string
+          description: Customer's PO number recorded on the sales order.
+          nullable: true
+        salesOrderStatus:
+          type: string
+          description: SO lifecycle status.
+          nullable: true
+        completedDate:
+          type: string
+          description: Date the SO was marked complete.
+          format: date-time
+          nullable: true
+        orderPriority:
+          type: string
+          description: Order priority value.
+          nullable: true
+        customerName:
+          type: string
+          description: Customer display name.
+          nullable: true
+        customerTier:
+          type: string
+          description: Customer tier classification.
+          nullable: true
+        paymentTerms:
+          type: string
+          description: Payment terms name.
+          nullable: true
+        city:
+          type: string
+          description: Customer city.
+          nullable: true
+        customerStateProvince:
+          type: string
+          description: Customer state or province.
+          nullable: true
+        customerContact:
+          type: string
+          description: Name of the customer contact recorded on the order.
+          nullable: true
+        customerPhone:
+          type: string
+          description: Customer contact phone number.
+          nullable: true
+        customerEmail:
+          type: string
+          description: Customer contact email address.
+          nullable: true
+        salesperson:
+          type: string
+          description: Name of the assigned salesperson.
+          nullable: true
+        orderedDate:
+          type: string
+          description: Date the order was placed.
+          format: date-time
+          nullable: true
+        lineItem:
+          type: string
+          description: Item name on the SO line.
+          nullable: true
+        lineItemDescription:
+          type: string
+          description: Item description on the SO line.
+          nullable: true
+        deliverBy:
+          type: string
+          description: Customer-requested delivery-by date.
+          format: date-time
+          nullable: true
+        lineItemType:
+          type: string
+          description: Line classification (part, fee, etc.).
+          nullable: true
+        blanketOrder:
+          type: integer
+          description: 1 when the SO line is a blanket order, otherwise 0. (Computed 1/0 flag in the view.)
+          format: int32
+          nullable: true
+        deliveryDueDate:
+          type: string
+          description: Computed delivery due date for the line.
+          format: date-time
+          nullable: true
+        internalUnitOfMeasure:
+          type: string
+          description: Internal unit of measure used by Fulcrum.
+          nullable: true
+        customerPartNumber:
+          type: string
+          description: Customer's part number for the line.
+          nullable: true
+        customerPartDescription:
+          type: string
+          description: Customer's description for the line.
+          nullable: true
+        customerUnitOfMeasure:
+          type: string
+          description: Unit of measure used on the customer's PO.
+          nullable: true
+        accountingCode:
+          type: string
+          description: Accounting code mapped to the line.
+          nullable: true
+        accountingClass:
+          type: string
+          description: Accounting classification for the line's account.
+          nullable: true
+        itemTags:
+          type: string
+          description: Comma-separated tags from the line's item.
+          nullable: true
+        itemCategory:
+          type: string
+          description: Category from the line's item.
+          nullable: true
+        quantityOrdered:
+          type: number
+          description: Quantity ordered on the line.
+          format: double
+          nullable: true
+        unitPrice:
+          type: number
+          description: Per-unit price billed to the customer.
+          format: double
+          nullable: true
+        lineItemSubTotal:
+          type: number
+          description: Extended line subtotal (Quantity × Unit Price).
+          format: double
+          nullable: true
+        pricingStrategy:
+          type: string
+          description: Pricing strategy used (e.g. Fixed, Shop Rate).
+          nullable: true
+        hasDiscount:
+          type: boolean
+          description: True when any discount has been applied to the line.
+          nullable: true
+        isTimeAndMaterials:
+          type: boolean
+          description: True when the line is priced time-and-materials.
+          nullable: true
+        margin:
+          type: number
+          description: Margin recorded on the line at order time.
+          format: double
+          nullable: true
+        estimatedUnitCost:
+          type: number
+          description: Estimated cost per produced unit (from costing).
+          format: double
+          nullable: true
+        associatedJobs:
+          type: string
+          description: Comma-separated list of associated job names.
+          nullable: true
+        associatedJobStatuses:
+          type: string
+          description: Comma-separated list of associated job statuses.
+          nullable: true
+        jobTotalEstimatedLaborCost:
+          type: number
+          description: Estimated labor cost summed across associated jobs.
+          format: double
+          nullable: true
+        jobTotalEstimatedMachineCost:
+          type: number
+          description: Estimated machine cost summed across associated jobs.
+          format: double
+          nullable: true
+        jobTotalEstimatedMaterialCost:
+          type: number
+          description: Estimated material cost summed across associated jobs.
+          format: double
+          nullable: true
+        jobTotalEstimatedOPCost:
+          type: number
+          description: Estimated outside-processing cost summed across associated jobs.
+          format: double
+          nullable: true
+        jobTotalEstimatedCost:
+          type: number
+          description: Total estimated cost summed across associated jobs.
+          format: double
+          nullable: true
+        actualAvgUnitCost:
+          type: number
+          description: Actual cost per produced unit, averaged across associated jobs.
+          format: double
+          nullable: true
+        actualAvgMaterialUnitCost:
+          type: number
+          description: Actual material cost per unit, averaged.
+          format: double
+          nullable: true
+        actualAvgLaborUnitCost:
+          type: number
+          description: Actual labor cost per unit, averaged.
+          format: double
+          nullable: true
+        actualAvgMachineUnitCost:
+          type: number
+          description: Actual machine cost per unit, averaged.
+          format: double
+          nullable: true
+        actualAvgOPUnitCost:
+          type: number
+          description: Actual outside-processing cost per unit, averaged.
+          format: double
+          nullable: true
+        jobActualTotalCost:
+          type: number
+          description: Actual total cost summed across associated jobs.
+          format: double
+          nullable: true
+        totalQuantityProduced:
+          type: number
+          description: Total quantity produced across associated jobs.
+          format: double
+          nullable: true
+        hasInvoice:
+          type: string
+          description: '"Yes" when at least one invoice has been issued for this line, otherwise "No".'
+          nullable: true
+        totalQuantityInvoicedIssued:
+          type: number
+          description: Total quantity invoiced (on issued invoices).
+          format: double
+          nullable: true
+        invoiceNumbers:
+          type: string
+          description: Comma-separated list of associated invoice numbers.
+          nullable: true
+        invoiceStatuses:
+          type: string
+          description: Comma-separated list of associated invoice statuses.
+          nullable: true
+        invoiceLinesSubtotal:
+          type: number
+          description: Sum of invoice-line subtotals across associated invoices.
+          format: double
+          nullable: true
+        quantityShipped:
+          type: number
+          description: Total quantity shipped to date.
+          format: double
+          nullable: true
+        quantityToShip:
+          type: number
+          description: Quantity remaining to ship (Ordered − Shipped).
+          format: double
+          nullable: true
+        valueShipped:
+          type: number
+          description: Extended value already shipped.
+          format: double
+          nullable: true
+        valueToShip:
+          type: number
+          description: Extended value remaining to ship.
+          format: double
+          nullable: true
+        associatedShipmentNumbers:
+          type: string
+          description: Comma-separated list of shipment numbers.
+          nullable: true
+        associatedShipmentStatuses:
+          type: string
+          description: Comma-separated list of shipment statuses.
+          nullable: true
+        associatedShipmentMethods:
+          type: string
+          description: Comma-separated list of shipment methods used.
+          nullable: true
+        hasReturn:
+          type: string
+          description: '"Yes" when at least one return is associated with the line, otherwise "No".'
+          nullable: true
+        quantityToReturn:
+          type: number
+          description: Quantity flagged to return.
+          format: double
+          nullable: true
+        refundReason:
+          type: string
+          description: Reason text for any refund logged against the line.
+          nullable: true
+      additionalProperties: false
+      description: 'One row of the pre-joined sales-order line-items reporting view
+
+        (`rpt.View_ExposedReportingData_SalesOrderLineItems`): one sales-order line, carrying the
+
+        order/customer context and the line''s pre-computed cost, invoice, ship, and return values. Property
+
+        names are clean identifiers; the query aliases each source column (e.g. `[Sales Order Number]`)
+
+        to the matching property so Dapper can bind it.'
+    DtoReportingInventoryReportFilter:
+      type: object
+      properties:
+        itemNumber:
+          type: string
+          description: 'Optional exact-match filter on the item number (the user-facing item identifier). Null means no
+
+            item filter.'
+          nullable: true
+        locationName:
+          type: string
+          description: Optional exact-match filter on the inventory location name. Null means no location filter.
+          nullable: true
+        category:
+          type: string
+          description: Optional exact-match filter on the item category. Null means no category filter.
+          nullable: true
+      additionalProperties: false
+      description: 'Constrained filter for the inventory reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoReportingQuoteReportFilter:
+      type: object
+      properties:
+        quotedDateFrom:
+          type: string
+          description: Inclusive lower bound applied to the quote's Quoted Date. Null means no lower bound.
+          format: date-time
+          nullable: true
+        quotedDateTo:
+          type: string
+          description: 'Inclusive upper bound applied to the quote''s Quoted Date (the whole `to` day is included).
+
+            Null means no upper bound.'
+          format: date-time
+          nullable: true
+        status:
+          type: string
+          description: Optional exact-match filter on the quote lifecycle status. Null means no status filter.
+          nullable: true
+        customerName:
+          type: string
+          description: Optional exact-match filter on the customer name. Null means no customer filter.
+          nullable: true
+      additionalProperties: false
+      description: 'Constrained filter for the quote reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoReportingTimeClockReportFilter:
+      type: object
+      properties:
+        startedFrom:
+          type: string
+          description: Inclusive lower bound applied to the entry's clock-in time (Started). Null means no lower bound.
+          format: date-time
+          nullable: true
+        startedTo:
+          type: string
+          description: 'Inclusive upper bound applied to the entry''s clock-in time (Started); the whole `to` day is
+
+            included. Null means no upper bound.'
+          format: date-time
+          nullable: true
+        employee:
+          type: string
+          description: Optional exact-match filter on the operator / employee name. Null means no employee filter.
+          nullable: true
+        type:
+          type: string
+          description: Optional exact-match filter on the timer-entry type (ClockIn or Break). Null means no type filter.
+          nullable: true
+      additionalProperties: false
+      description: 'Constrained filter for the time-clock reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoReportingInvoiceReportFilter:
+      type: object
+      properties:
+        issuedDateFrom:
+          type: string
+          description: Inclusive lower bound applied to the invoice's Issued Date. Null means no lower bound.
+          format: date-time
+          nullable: true
+        issuedDateTo:
+          type: string
+          description: 'Inclusive upper bound applied to the invoice''s Issued Date (the whole `to` day is included).
+
+            Null means no upper bound.'
+          format: date-time
+          nullable: true
+        invoiceStatus:
+          type: string
+          description: 'Optional exact-match filter on the invoice lifecycle status (e.g. "Issued", "Paid"). Null means
+
+            no status filter.'
+          nullable: true
+        lineType:
+          type: string
+          description: 'Optional exact-match filter on the line type (Part, Shipping, Fee, Deposit, Discount, Refund,
+
+            Tax, or NA). Null means no line-type filter.'
+          nullable: true
+      additionalProperties: false
+      description: 'Constrained filter for the invoice reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoReportingTimeClockReportRow:
+      type: object
+      properties:
+        employee:
+          type: string
+          description: Operator / employee name.
+          nullable: true
+        overridden:
+          type: string
+          description: '"Yes" when the entry''s start or stop time was manually overridden, otherwise "No".'
+          nullable: true
+        type:
+          type: string
+          description: Timer-entry type classification (ClockIn or Break).
+          nullable: true
+        started:
+          type: string
+          description: Clock-in timestamp.
+          format: date-time
+          nullable: true
+        stopped:
+          type: string
+          description: Clock-out timestamp; null if not yet stopped.
+          format: date-time
+          nullable: true
+        shiftHoursWorked:
+          type: number
+          description: Computed hours between Started and Stopped.
+          format: double
+          nullable: true
+        reason:
+          type: string
+          description: Reason code for the entry, when applicable.
+          nullable: true
+        clockCode:
+          type: string
+          description: Clock-code tag attached to the entry, when applicable.
+          nullable: true
+        createdByName:
+          type: string
+          description: User who created the entry.
+          nullable: true
+        modifiedByName:
+          type: string
+          description: Most recent user to modify the entry.
+          nullable: true
+        startedOnOverrideByName:
+          type: string
+          description: User who overrode the start time, when applicable.
+          nullable: true
+        stoppedOnOverrideByName:
+          type: string
+          description: User who overrode the stop time, when applicable.
+          nullable: true
+      additionalProperties: false
+      description: 'One row of the pre-joined time-clock reporting view (`rpt.View_ExposedReportingData_TimeClock`):
+
+        one timer entry (clock-in or break), carrying clock-in/clock-out times, computed shift hours, reason
+
+        and clock codes, and override-audit context. Property names are clean identifiers; the query aliases
+
+        each source column (e.g. `[Shift Hours Worked]`) to the matching property so Dapper can bind it.'
+    DtoPagedResultDtoDtoReportingJobActivityReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingJobActivityReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingInvoiceReportRow:
+      type: object
+      properties:
+        company:
+          type: string
+          description: Issuing company / tenant company name.
+          nullable: true
+        invoiceNumber:
+          type: integer
+          description: Numeric invoice identifier assigned by Fulcrum.
+          format: int32
+          nullable: true
+        invoiceStatus:
+          type: string
+          description: Lifecycle state — typically New, Approved, Issued, Paid.
+          nullable: true
+        salesOrderNumber:
+          type: integer
+          description: Number identifying the sales order being invoiced.
+          format: int32
+          nullable: true
+        customerPurchaseOrder:
+          type: string
+          description: Customer's PO number recorded on the sales order.
+          nullable: true
+        customerName:
+          type: string
+          description: Display name of the billed customer.
+          nullable: true
+        salesPerson:
+          type: string
+          description: Name of the salesperson associated with the sales order.
+          nullable: true
+        isDeposit:
+          type: string
+          description: Set to the string "Deposit" when the row represents a deposit; null otherwise.
+          nullable: true
+        createdDate:
+          type: string
+          description: UTC timestamp when the invoice record was created.
+          format: date-time
+          nullable: true
+        lineType:
+          type: string
+          description: Discriminator — Part, Shipping, Fee, Deposit, Discount, Refund, Tax, or NA.
+          nullable: true
+        lineItemName:
+          type: string
+          description: Item name (for part lines) or descriptive label for non-part lines.
+          nullable: true
+        customerPartNumber:
+          type: string
+          description: Customer's part number for this line, when supplied.
+          nullable: true
+        customerPartDescription:
+          type: string
+          description: Customer's description for this line, when supplied.
+          nullable: true
+        itemDescription:
+          type: string
+          description: Internal item description for the line.
+          nullable: true
+        accountingCode:
+          type: string
+          description: Accounting code mapped to the invoice line.
+          nullable: true
+        itemTags:
+          type: string
+          description: Comma-separated list of descriptive tags from the item.
+          nullable: true
+        issuedDate:
+          type: string
+          description: Date the invoice was issued. NULL for drafts.
+          format: date-time
+          nullable: true
+        dueDate:
+          type: string
+          description: Date payment is due per the invoice's payment terms.
+          format: date-time
+          nullable: true
+        salesOrderTotal:
+          type: number
+          description: Total of the source sales order (may differ from invoice total).
+          format: double
+          nullable: true
+        unitPrice:
+          type: number
+          description: Per-unit price for the line (varies by Line Type; negative for discounts).
+          format: double
+          nullable: true
+        quantityInvoiced:
+          type: number
+          description: Quantity billed on this line.
+          format: double
+          nullable: true
+        invoiceAmount:
+          type: number
+          description: Extended amount for this line before tax.
+          format: double
+          nullable: true
+        isTaxable:
+          type: integer
+          description: 1 when the line is subject to taxation, otherwise 0. (Computed 1/0 flag in the view.)
+          format: int32
+          nullable: true
+        taxCode:
+          type: string
+          description: Descriptive name of the tax code applied to the line, when applicable.
+          nullable: true
+        taxTotal:
+          type: number
+          description: Equivalent to Invoice Amount for tax line items; 0 otherwise.
+          format: double
+          nullable: true
+        invoiceTotalWithoutTax:
+          type: number
+          description: Invoice-level total excluding tax (repeats on every line of the invoice).
+          format: double
+          nullable: true
+        invoiceTotalWithTax:
+          type: number
+          description: Invoice-level total including tax (repeats on every line of the invoice).
+          format: double
+          nullable: true
+        paidDate:
+          type: string
+          description: Date the invoice was marked paid; null while open.
+          format: date-time
+          nullable: true
+        late:
+          type: integer
+          description: 1 when the invoice is past Due Date and unpaid or was paid late, otherwise 0. (Computed 1/0 flag in the view.)
+          format: int32
+          nullable: true
+        daysLate:
+          type: integer
+          description: Days between Due Date and either Paid Date (if paid) or today (if open). 0 if not yet due.
+          format: int32
+          nullable: true
+        customerCurrencyCode:
+          type: string
+          description: ISO currency code of the customer's billing currency.
+          nullable: true
+        shipmentName:
+          type: string
+          description: Concatenated names of shipments invoiced on this line (comma-separated).
+          nullable: true
+        shipmentsLine1s:
+          type: string
+          description: Together with ShipmentsLine2s, concatenated shipment address values (comma-separated).
+          nullable: true
+        shipmentsLine2s:
+          type: string
+          description: Together with ShipmentsLine1s, concatenated shipment address values (comma-separated).
+          nullable: true
+        shipmentsCities:
+          type: string
+          description: Concatenated shipment cities (comma-separated).
+          nullable: true
+        shipmentsStates:
+          type: string
+          description: Concatenated shipment state/provinces (comma-separated).
+          nullable: true
+        shipmentsCountries:
+          type: string
+          description: Concatenated shipment countries (comma-separated).
+          nullable: true
+        accountingClass:
+          type: string
+          description: Accounting classification for the item associated to the line, if applicable.
+          nullable: true
+      additionalProperties: false
+      description: 'One row of the pre-joined invoice reporting view (`rpt.View_ExposedReportingData_Invoice`): one
+
+        invoice line item, joined to sales-order and shipment context with line type, pricing, tax, and aging
+
+        detail. Property names are clean identifiers; the query aliases each source column (e.g.
+
+        `[Issued Date]`) to the matching property so Dapper can bind it.'
+    DtoPagedResultDtoDtoReportingSalesOrderLinesReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingSalesOrderLinesReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingShippingReportFilter:
+      type: object
+      properties:
+        shipByDateFrom:
+          type: string
+          description: Inclusive lower bound applied to the shipment's Ship By Date. Null means no lower bound.
+          format: date-time
+          nullable: true
+        shipByDateTo:
+          type: string
+          description: 'Inclusive upper bound applied to the shipment''s Ship By Date (the whole `to` day is
+
+            included). Null means no upper bound.'
+          format: date-time
+          nullable: true
+        status:
+          type: string
+          description: 'Optional exact-match filter on the shipment lifecycle status (e.g. "Shipped", "Open"). Null
+
+            means no status filter.'
+          nullable: true
+      additionalProperties: false
+      description: 'Constrained filter for the shipping reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoReportingSalesOrderLinesReportFilter:
+      type: object
+      properties:
+        orderedDateFrom:
+          type: string
+          description: Inclusive lower bound applied to the order's Ordered Date. Null means no lower bound.
+          format: date-time
+          nullable: true
+        orderedDateTo:
+          type: string
+          description: 'Inclusive upper bound applied to the order''s Ordered Date (the whole `to` day is included).
+
+            Null means no upper bound.'
+          format: date-time
+          nullable: true
+        deliveryDueDateFrom:
+          type: string
+          description: Inclusive lower bound applied to the line's Delivery Due Date. Null means no lower bound.
+          format: date-time
+          nullable: true
+        deliveryDueDateTo:
+          type: string
+          description: 'Inclusive upper bound applied to the line''s Delivery Due Date (the whole `to` day is
+
+            included). Null means no upper bound.'
+          format: date-time
+          nullable: true
+        salesOrderStatus:
+          type: string
+          description: Optional exact-match filter on the sales-order lifecycle status. Null means no status filter.
+          nullable: true
+        customerName:
+          type: string
+          description: Optional exact-match filter on the customer name. Null means no customer filter.
+          nullable: true
+        accountingCode:
+          type: string
+          description: 'Optional exact-match filter on the accounting code mapped to the line. Null means no accounting
+
+            code filter.'
+          nullable: true
+        unshippedOnly:
+          type: boolean
+          description: 'When true, returns only lines with quantity remaining to ship (Quantity to Ship > 0). When
+
+            false or null, no ship-status filter is applied.'
+          nullable: true
+      additionalProperties: false
+      description: 'Constrained filter for the sales-order line-items reporting list endpoint. Every field maps to a
+
+        fixed, server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoReportingJobActivityReportFilter:
+      type: object
+      properties:
+        operationStatus:
+          type: string
+          description: 'Optional exact-match filter on the operation lifecycle status (e.g. "Running", "Complete"). Null
+
+            means no operation-status filter.'
+          nullable: true
+        jobStatus:
+          type: string
+          description: 'Optional exact-match filter on the job lifecycle status (e.g. "In Progress", "Complete"). Null
+
+            means no job-status filter.'
+          nullable: true
+        department:
+          type: string
+          description: 'Optional exact-match filter on the department containing the operation''s scheduled work center.
+
+            Null means no department filter.'
+          nullable: true
+        productionDueDateFrom:
+          type: string
+          description: Inclusive lower bound applied to the job's Production Due Date. Null means no lower bound.
+          format: date-time
+          nullable: true
+        productionDueDateTo:
+          type: string
+          description: 'Inclusive upper bound applied to the job''s Production Due Date (the whole `to` day is
+
+            included). Null means no upper bound.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: 'Constrained filter for the job-activity reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoPagedResultDtoDtoReportingInventoryReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingInventoryReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingInventoryReportRow:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Item number (the user-facing identifier for an item).
+          nullable: true
+        description:
+          type: string
+          description: Item description.
+          nullable: true
+        revision:
+          type: string
+          description: Item revision label.
+          nullable: true
+        origin:
+          type: string
+          description: Item origin classification (e.g. Make, Buy, MakeOrBuy, CustomerSupplied).
+          nullable: true
+        isSellable:
+          type: string
+          description: '"Sellable" when the item can appear on a sales order line, otherwise empty.'
+          nullable: true
+        primaryVendorName:
+          type: string
+          description: Default vendor name for purchasing the item (Buy or MakeOrBuy items only).
+          nullable: true
+        tags:
+          type: string
+          description: Comma-separated list of descriptive, user-applied tags on the item.
+          nullable: true
+        minimumStockOnHand:
+          type: number
+          description: Configured minimum stock threshold for reorder planning.
+          format: double
+          nullable: true
+        unitOfMeasureName:
+          type: string
+          description: Inventory unit of measure (e.g. Piece, Foot, Centimeter).
+          nullable: true
+        accountingCode1:
+          type: string
+          description: Primary accounting code mapped to this item.
+          nullable: true
+        accountingCode2:
+          type: string
+          description: Secondary accounting code, when configured.
+          nullable: true
+        accountingClass:
+          type: string
+          description: Accounting classification.
+          nullable: true
+        category:
+          type: string
+          description: Item category for grouping.
+          nullable: true
+        isArchived:
+          type: string
+          description: '"Archived" when the item is archived and no longer in active use, otherwise empty.'
+          nullable: true
+        shippingUnitWeight:
+          type: number
+          description: Weight per inventory unit used for shipping calculations.
+          format: double
+          nullable: true
+        materialUnitWeightLbs:
+          type: number
+          description: Underlying material weight per unit, in pounds, for raw-material shape items.
+          format: double
+          nullable: true
+        onHandQty:
+          type: number
+          description: Quantity currently on hand for this lot at this location.
+          format: double
+          nullable: true
+        lotNumber:
+          type: string
+          description: Lot identifier.
+          nullable: true
+        expirationDate:
+          type: string
+          description: Lot expiration date when applicable.
+          format: date-time
+          nullable: true
+        locationName:
+          type: string
+          description: Inventory location name.
+          nullable: true
+        isCustom:
+          type: string
+          description: '"Custom" when the lot holds customized / non-standard variations of an item, otherwise empty.'
+          nullable: true
+        materialValue:
+          type: number
+          description: Per-unit value of input materials required to produce the items in this lot.
+          format: double
+          nullable: true
+        laborValue:
+          type: number
+          description: Per-unit value of labor required to produce the items in this lot.
+          format: double
+          nullable: true
+        machineValue:
+          type: number
+          description: Per-unit value of equipment time required to produce the items in this lot.
+          format: double
+          nullable: true
+        outsideProcessingValue:
+          type: number
+          description: Per-unit value of outside processes required to produce the items in this lot.
+          format: double
+          nullable: true
+        totalUnitValue:
+          type: number
+          description: Sum of per-unit cost components (material + labor + machine + OP).
+          format: double
+          nullable: true
+        totalValue:
+          type: number
+          description: On-hand quantity × total unit value (extended inventory value).
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: 'One row of the pre-joined inventory reporting view (`rpt.View_ExposedReportingData_Inventory`):
+
+        one (item, lot, location) combination, carrying on-hand quantity, per-unit and extended valuation
+
+        (material/labor/machine/OP), lot and location context, and item categorization. Property names are
+
+        clean identifiers; the query aliases each source column (e.g. `[On Hand Qty]`) to the matching
+
+        property so Dapper can bind it.'
+    DtoPagedResultDtoDtoReportingQuoteReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingQuoteReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingQuoteReportRow:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Internal stable identifier for the quote.
+          nullable: true
+        number:
+          type: integer
+          description: Numeric quote number.
+          format: int32
+          nullable: true
+        createdUtc:
+          type: string
+          description: UTC timestamp the quote was created.
+          format: date-time
+          nullable: true
+        customerName:
+          type: string
+          description: Customer name on the quote.
+          nullable: true
+        priority:
+          type: string
+          description: Quote priority value.
+          nullable: true
+        salesPersonName:
+          type: string
+          description: Name of the assigned salesperson.
+          nullable: true
+        expirationDate:
+          type: string
+          description: Quote expiration date. (Source column name `ExipirationDate` is a typo preserved in the view definition.)
+          format: date-time
+          nullable: true
+        quotedDate:
+          type: string
+          description: Date the quote was sent to the customer.
+          format: date-time
+          nullable: true
+        closedDate:
+          type: string
+          description: Date the quote was closed (won, lost, or expired).
+          format: date-time
+          nullable: true
+        status:
+          type: string
+          description: Quote lifecycle status.
+          nullable: true
+        publicNote:
+          type: string
+          description: Public-facing note attached to the quote.
+          nullable: true
+        discount:
+          type: number
+          description: Total discount amount applied to the quote.
+          format: double
+          nullable: true
+        totalInPrimaryCurrency:
+          type: number
+          description: Quote total converted to the tenant's primary currency.
+          format: double
+          nullable: true
+        totalWithTax:
+          type: number
+          description: Quote total including tax.
+          format: double
+          nullable: true
+        cost:
+          type: number
+          description: Estimated total cost across all quote lines.
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: 'One row of the pre-joined quote reporting view (`rpt.View_ExposedReportingData_Quote`): one
+
+        quote, carrying totals, cost, status, and lifecycle dates. Property names are clean identifiers; the
+
+        query aliases each source column (e.g. `[QuotedDate]`) to the matching property so Dapper can
+
+        bind it.'
+    DtoPagedResultDtoDtoReportingJobActivityByOperatorReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingJobActivityByOperatorReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingShippingReportRow:
+      type: object
+      properties:
+        shipmentName:
+          type: string
+          description: Shipment identifier / name.
+          nullable: true
+        status:
+          type: string
+          description: Shipment lifecycle status.
+          nullable: true
+        packingStatus:
+          type: string
+          description: Packing status (e.g. Not Packed, Partially Packed, Packed).
+          nullable: true
+        shipmentType:
+          type: string
+          description: Shipment classification.
+          nullable: true
+        shipByDate:
+          type: string
+          description: Date the shipment must ship by.
+          format: date-time
+          nullable: true
+        shippedDate:
+          type: string
+          description: Actual ship date; null if not yet shipped.
+          format: date-time
+          nullable: true
+        isLate:
+          type: integer
+          description: 1 when Shipped Date is after Ship By Date, otherwise 0. (Computed 1/0 flag in the view.)
+          format: int32
+          nullable: true
+        isOnTime:
+          type: integer
+          description: 1 when Shipped Date is on or before Ship By Date, otherwise 0. (Computed 1/0 flag in the view.)
+          format: int32
+          nullable: true
+        daysLate:
+          type: integer
+          description: Days between Ship By Date and Shipped Date (negative when shipped early).
+          format: int32
+          nullable: true
+        trackingNumber:
+          type: string
+          description: Carrier tracking number, when supplied.
+          nullable: true
+        recipientName:
+          type: string
+          description: Customer / recipient name.
+          nullable: true
+        recipientCustomerCode:
+          type: string
+          description: Customer code for the recipient.
+          nullable: true
+        shipToName:
+          type: string
+          description: Ship-to contact name.
+          nullable: true
+        shipToCity:
+          type: string
+          description: Ship-to city.
+          nullable: true
+        shipToState:
+          type: string
+          description: Ship-to state / province.
+          nullable: true
+        shipToCountry:
+          type: string
+          description: Ship-to country.
+          nullable: true
+        customerPONumber:
+          type: string
+          description: Customer's PO number from the source sales order.
+          nullable: true
+        purchaseOrder:
+          type: string
+          description: Linked purchase order number, when this shipment is PO-driven.
+          nullable: true
+        salesOrder:
+          type: string
+          description: Linked sales order number, when this shipment is SO-driven.
+          nullable: true
+        shippedByName:
+          type: string
+          description: Name of the user who recorded the shipment.
+          nullable: true
+        shippingCost:
+          type: number
+          description: Cost of shipping (internal).
+          format: double
+          nullable: true
+        shippingCharge:
+          type: number
+          description: Charge billed to the customer for shipping.
+          format: double
+          nullable: true
+        shippingCostNeedsInvoice:
+          type: boolean
+          description: True when the shipping cost has not yet been invoiced to the customer.
+          nullable: true
+        shippingMethod:
+          type: string
+          description: Carrier / shipping method used.
+          nullable: true
+        itemName:
+          type: string
+          description: Item name on the shipment line.
+          nullable: true
+        description:
+          type: string
+          description: Item description on the shipment line.
+          nullable: true
+        itemCategory:
+          type: string
+          description: Category from the line's item.
+          nullable: true
+        accountingCodeName:
+          type: string
+          description: Accounting code mapped to the line's item.
+          nullable: true
+        accountingClass:
+          type: string
+          description: Accounting classification for the line's account.
+          nullable: true
+        itemTags:
+          type: string
+          description: Comma-separated tags from the line's item.
+          nullable: true
+        quantityShipped:
+          type: number
+          description: Quantity shipped on this line.
+          format: double
+          nullable: true
+        totalQtyOrdered:
+          type: number
+          description: Total quantity ordered on the source SO line.
+          format: double
+          nullable: true
+        totalQtyShipped:
+          type: number
+          description: Total quantity shipped across all shipments for the source SO line.
+          format: double
+          nullable: true
+        unitPrice:
+          type: number
+          description: Per-unit price on the source SO line.
+          format: double
+          nullable: true
+        quantityToShip:
+          type: number
+          description: Quantity remaining to ship on the source SO line.
+          format: double
+          nullable: true
+        totalDollarsOrdered:
+          type: number
+          description: Extended dollar value of the source SO line.
+          format: double
+          nullable: true
+        dollarsShipped:
+          type: number
+          description: Extended dollar value already shipped for the source SO line.
+          format: double
+          nullable: true
+        dollarsUnshipped:
+          type: number
+          description: Extended dollar value remaining to ship.
+          format: double
+          nullable: true
+        quantityInvoiced:
+          type: number
+          description: Total quantity invoiced for the source SO line.
+          format: double
+          nullable: true
+        unitOfMeasureName:
+          type: string
+          description: Unit of measure on the line.
+          nullable: true
+        quantityPacked:
+          type: number
+          description: Quantity packed on this shipment line.
+          format: double
+          nullable: true
+        linePackingStatus:
+          type: string
+          description: Per-line packing status.
+          nullable: true
+        isReady:
+          type: boolean
+          description: True when the line is ready to ship.
+          nullable: true
+        openJobs:
+          type: string
+          description: Comma-separated list of open jobs producing this line's item.
+          nullable: true
+        qtyShippedLate:
+          type: number
+          description: Quantity shipped after Ship By Date.
+          format: double
+          nullable: true
+        dollarsShippedLate:
+          type: number
+          description: Extended dollar value shipped late.
+          format: double
+          nullable: true
+        qtyShippedOnTime:
+          type: number
+          description: Quantity shipped on or before Ship By Date.
+          format: double
+          nullable: true
+        dollarsShippedOnTime:
+          type: number
+          description: Extended dollar value shipped on time.
+          format: double
+          nullable: true
+        createdByName:
+          type: string
+          description: User who created the shipment record.
+          nullable: true
+        modifiedByName:
+          type: string
+          description: Most recent user to modify the shipment record.
+          nullable: true
+      additionalProperties: false
+      description: 'One row of the pre-joined shipping reporting view (`rpt.View_ExposedReportingData_Shipping`):
+
+        one shipment line, carrying the line''s quantities and the source sales-order line''s pre-computed
+
+        dollar values. Property names are clean identifiers; the query aliases each source column
+
+        (e.g. `[$ Shipped]`) to the matching property so Dapper can bind it.'
+    DtoReportingJobActivityByOperatorReportRow:
+      type: object
+      properties:
+        jobName:
+          type: string
+          description: Job name.
+          nullable: true
+        item:
+          type: string
+          description: Item being produced.
+          nullable: true
+        operationName:
+          type: string
+          description: Operation name within the routing.
+          nullable: true
+        operationNumber:
+          type: integer
+          description: Operation sequence number within the routing.
+          format: int32
+          nullable: true
+        employee:
+          type: string
+          description: Operator name.
+          nullable: true
+        startedOrCreatedDate:
+          type: string
+          description: Date the operator's run started (or the row was created).
+          format: date-time
+          nullable: true
+        jobCompletedDate:
+          type: string
+          description: Completion date of the job overall.
+          format: date-time
+          nullable: true
+        itemDescription:
+          type: string
+          description: Item description.
+          nullable: true
+        itemRevision:
+          type: string
+          description: Item revision when applicable.
+          nullable: true
+        isParent:
+          type: integer
+          description: 1 when this item is a parent assembly within the job, otherwise 0. (Computed 1/0 flag.)
+          format: int32
+          nullable: true
+        lastOperationOnItem:
+          type: integer
+          description: 1 when this is the final operation in the item's routing, otherwise 0. (Computed 1/0 flag.)
+          format: int32
+          nullable: true
+        productionDueDate:
+          type: string
+          description: Job's production due date.
+          format: date-time
+          nullable: true
+        salesOrderNumber:
+          type: string
+          description: Source sales order number.
+          nullable: true
+        customer:
+          type: string
+          description: Customer name from the sales order.
+          nullable: true
+        customerPurchaseOrder:
+          type: string
+          description: Customer's PO number from the sales order.
+          nullable: true
+        jobPriority:
+          type: string
+          description: Job priority value.
+          nullable: true
+        jobStatus:
+          type: string
+          description: Job lifecycle status.
+          nullable: true
+        jobScheduledStart:
+          type: string
+          description: Scheduled start time of the job.
+          format: date-time
+          nullable: true
+        jobScheduledEnd:
+          type: string
+          description: Scheduled end time of the job.
+          format: date-time
+          nullable: true
+        jobLateStatus:
+          type: string
+          description: Late classification for the job (Late or On Time).
+          nullable: true
+        jobPlannedQty:
+          type: number
+          description: Planned quantity for the job.
+          format: double
+          nullable: true
+        uoM:
+          type: string
+          description: Unit of measure for the item being produced.
+          nullable: true
+        department:
+          type: string
+          description: Department containing the work center.
+          nullable: true
+        shift:
+          type: string
+          description: Shift assigned to the operation.
+          nullable: true
+        scheduledEquipment:
+          type: string
+          description: Equipment scheduled for this operation.
+          nullable: true
+        operationStatus:
+          type: string
+          description: Operation lifecycle status (Ready, Pending, Running, Paused, Complete).
+          nullable: true
+        operationCompletedDate:
+          type: string
+          description: Completion date of the operation.
+          format: date-time
+          nullable: true
+        setupComplete:
+          type: string
+          description: '"TRUE" when the setup phase is complete, otherwise "FALSE".'
+          nullable: true
+        runComplete:
+          type: string
+          description: '"TRUE" when the run phase is complete, otherwise "FALSE".'
+          nullable: true
+        estimatedSetupTimeHours:
+          type: number
+          description: Estimated setup hours for the operation.
+          format: double
+          nullable: true
+        estimatedRunTimeHours:
+          type: number
+          description: Estimated run hours for the operation.
+          format: double
+          nullable: true
+        estimatedMachineTimeHours:
+          type: number
+          description: Estimated machine hours for the operation.
+          format: double
+          nullable: true
+        unitsCompletedOnOperation:
+          type: number
+          description: Quantity completed on the operation overall.
+          format: double
+          nullable: true
+        isOutsideProcessing:
+          type: string
+          description: '"Outside Processing" when the operation is performed by an outside vendor, otherwise empty.'
+          nullable: true
+        setupTimeHours:
+          type: number
+          description: Operator's actual setup hours on this run.
+          format: double
+          nullable: true
+        laborTimeHours:
+          type: number
+          description: Operator's actual labor hours on this run.
+          format: double
+          nullable: true
+        machineTimeHours:
+          type: number
+          description: Machine hours recorded on this run.
+          format: double
+          nullable: true
+        startedOn:
+          type: string
+          description: Timer start timestamp for this run.
+          format: date-time
+          nullable: true
+        stoppedOn:
+          type: string
+          description: Timer stop timestamp for this run.
+          format: date-time
+          nullable: true
+        qtyCompletedThisRun:
+          type: number
+          description: Quantity completed in this specific run.
+          format: double
+          nullable: true
+        qtyInventoriedThisRun:
+          type: number
+          description: Quantity moved to inventory in this specific run.
+          format: double
+          nullable: true
+        unitsPerHour:
+          type: number
+          description: Throughput rate for this run (units / labor hour).
+          format: double
+          nullable: true
+        setupRate:
+          type: number
+          description: Hourly rate applied to setup hours.
+          format: double
+          nullable: true
+        laborRate:
+          type: number
+          description: Hourly rate applied to labor hours.
+          format: double
+          nullable: true
+        machineRate:
+          type: number
+          description: Hourly rate applied to machine hours.
+          format: double
+          nullable: true
+        setupCost:
+          type: number
+          description: Computed setup cost for this run (hours × rate).
+          format: double
+          nullable: true
+        laborCost:
+          type: number
+          description: Computed labor cost for this run (hours × rate).
+          format: double
+          nullable: true
+        machineCost:
+          type: number
+          description: Computed machine cost for this run (hours × rate).
+          format: double
+          nullable: true
+        operationScheduledStart:
+          type: string
+          description: Scheduled start time for this operation.
+          format: date-time
+          nullable: true
+        operationScheduledEnd:
+          type: string
+          description: Scheduled end time for this operation.
+          format: date-time
+          nullable: true
+        systemOperationId:
+          type: string
+          description: Internal stable identifier for the operation.
+          nullable: true
+      additionalProperties: false
+      description: 'One row of the pre-joined job-activity-by-operator reporting view
+
+        (`rpt.View_ExposedReportingData_JobActivityByOperator`): one operation, day, and operator,
+
+        carrying per-operator setup/labor/machine time and cost, run-by-run quantities, rates, and job/routing
+
+        context. Property names are clean identifiers; the query aliases each source column
+
+        (e.g. `[Started or Created Date]`) to the matching property so Dapper can bind it.'
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    DtoPagedResultDtoDtoReportingShippingReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingShippingReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

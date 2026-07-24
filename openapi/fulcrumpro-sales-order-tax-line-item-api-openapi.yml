@@ -1,0 +1,697 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Sales Order Tax Line Item API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Sales Order Tax Line Item
+paths:
+  /api/sales-orders/{salesOrderId}/tax-line-items:
+    post:
+      tags:
+      - Sales Order Tax Line Item
+      summary: Create a tax line item on a sales order
+      operationId: CreateSalesOrderTaxLineItem
+      parameters:
+      - name: salesOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderTaxLineItemCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderTaxLineItemCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderTaxLineItemCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderTaxLineItemCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Tax line item added to sales order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-SalesOrders-Edit Sales Order
+  /api/sales-orders/{salesOrderId}/tax-line-items/{lineItemId}:
+    delete:
+      tags:
+      - Sales Order Tax Line Item
+      summary: Delete a specific tax line item for a sales order
+      operationId: DeleteSalesOrderTaxLineItem
+      parameters:
+      - name: salesOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Tax line item did not exist
+        '404':
+          description: Sales order did not exist
+    get:
+      tags:
+      - Sales Order Tax Line Item
+      summary: Get a specific tax line item for a sales order
+      operationId: GetSalesOrderTaxLineItem
+      parameters:
+      - name: salesOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Tax line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesOrderTaxLineItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/SalesOrderTaxLineItemDto'
+        '404':
+          description: Sales order or tax line items did not exist
+      x-c4-required-permissions:
+      - Orders-SalesOrders-View Sales Order
+    put:
+      tags:
+      - Sales Order Tax Line Item
+      summary: Update a specific tax line item for a sales order
+      operationId: UpdateSalesOrderTaxLineItem
+      parameters:
+      - name: salesOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderTaxLineItemUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderTaxLineItemUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderTaxLineItemUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderTaxLineItemUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Tax line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesOrderTaxLineItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/SalesOrderTaxLineItemDto'
+        '404':
+          description: Sales order or tax line items did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-SalesOrders-Edit Sales Order
+  /api/sales-orders/{salesOrderId}/tax-line-items/list:
+    post:
+      tags:
+      - Sales Order Tax Line Item
+      summary: Get a list of tax lines items for a sales order
+      operationId: ListSalesOrderTaxLineItem
+      parameters:
+      - name: salesOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: List of tax line items for the given sales order id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesOrderTaxLineItemDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesOrderTaxLineItemDto'
+        '404':
+          description: The sales order did not exist
+      x-c4-required-permissions:
+      - Orders-SalesOrders-View Sales Order
+components:
+  schemas:
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    SalesOrderTaxLineItemUpdateDto:
+      type: object
+      properties:
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Verbose description for this entity.
+          nullable: true
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
+
+            If FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.TaxCodeId will be ignored.'
+          nullable: true
+        taxRate:
+          minimum: 0
+          type: number
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.TaxRate will supercede the defined tax rate.
+          format: double
+          nullable: true
+        avalaraOptions:
+          $ref: '#/components/schemas/SalesOrderTaxLineItemAvalaraOptions'
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+      additionalProperties: false
+      description: Represents a tax line item on a sales order.
+    SalesOrderTaxLineItemCreateDto:
+      type: object
+      properties:
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Verbose description for this entity.
+          nullable: true
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
+
+            If FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.TaxCodeId will be ignored.'
+          nullable: true
+        taxRate:
+          minimum: 0
+          type: number
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.TaxRate will supercede the defined tax rate.
+          format: double
+          nullable: true
+        avalaraOptions:
+          $ref: '#/components/schemas/SalesOrderTaxLineItemAvalaraOptions'
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+      additionalProperties: false
+      description: Represents a tax line item on a sales order.
+    CommonAddressDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+          nullable: true
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Second address line.
+          nullable: true
+        address3:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Third address line.
+          nullable: true
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address state/province.
+          nullable: true
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Country identifier.
+          nullable: true
+        phone:
+          type: string
+          description: Phone number.
+          format: tel
+          nullable: true
+        email:
+          type: string
+          description: Email address
+          format: email
+          nullable: true
+      additionalProperties: false
+      description: Address definition
+    SalesOrderTaxLineItemDto:
+      required:
+      - accountingDetails
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Verbose description for this entity.
+          nullable: true
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+          nullable: true
+        taxRate:
+          minimum: 0
+          type: number
+          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemDto.TaxRate will supercede the defined tax rate.
+          format: double
+          nullable: true
+        avalaraOptions:
+          $ref: '#/components/schemas/SalesOrderTaxLineItemAvalaraOptions'
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+        price:
+          minimum: 0
+          type: number
+          description: Tax amount applied at this rate across the entire sales order.
+          format: double
+          nullable: true
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+      additionalProperties: false
+      description: Represents a tax line item on a sales order.
+    SalesOrderTaxLineItemAvalaraOptions:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/CommonAddressDto'
+      additionalProperties: false
+      description: Options for use with Avalara (if enabled).
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+          nullable: true
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+      additionalProperties: false
+      description: An object that contains all accounting details.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

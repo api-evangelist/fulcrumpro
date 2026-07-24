@@ -1,0 +1,762 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Item PriceBreaks API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Item PriceBreaks
+paths:
+  /api/items/{itemId}/purchase-price-breaks/list:
+    post:
+      tags:
+      - Item PriceBreaks
+      summary: List purchase price breaks for an item.
+      operationId: ListPurchasePriceBreaks
+      parameters:
+      - name: itemId
+        in: path
+        description: The id of the item.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        description: Optional filters to narrow the result set.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakListPurchasePriceBreaksDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakListPurchasePriceBreaksDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakListPurchasePriceBreaksDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakListPurchasePriceBreaksDto'
+      responses:
+        '200':
+          description: List of purchase price breaks for the given item.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PriceBreakPurchasePriceBreakDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PriceBreakPurchasePriceBreakDto'
+        '404':
+          description: An item with the given id was not found.
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+      - Pricing-Margins-View Margins
+  /api/items/{itemId}/sales-price-breaks/list:
+    post:
+      tags:
+      - Item PriceBreaks
+      summary: 'List sales price breaks for an item, including the item''s base price, customer-specific
+
+        price breaks, and customer-tier price breaks.'
+      operationId: ListSalesPriceBreaks
+      parameters:
+      - name: itemId
+        in: path
+        description: The id of the item.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        description: Optional filters to narrow the result set.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakListSalesPriceBreaksDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakListSalesPriceBreaksDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakListSalesPriceBreaksDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakListSalesPriceBreaksDto'
+      responses:
+        '200':
+          description: List of sales price breaks for the given item.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PriceBreakSalesPriceBreakDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PriceBreakSalesPriceBreakDto'
+        '404':
+          description: An item with the given id was not found.
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+  /api/items/{itemId}/purchase-price-breaks:
+    put:
+      tags:
+      - Item PriceBreaks
+      summary: 'Create or update a purchase price break for an item. The price break is identified by
+
+        the combination of (item, vendor, currency, unit of measure): if a match exists it is
+
+        replaced, otherwise a new price break is created.'
+      operationId: UpsertPurchasePriceBreak
+      parameters:
+      - name: itemId
+        in: path
+        description: The id of the item.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        description: The price break to upsert.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakPurchasePriceBreakUpsertDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakPurchasePriceBreakUpsertDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakPurchasePriceBreakUpsertDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakPurchasePriceBreakUpsertDto'
+        required: true
+      responses:
+        '200':
+          description: The upserted price break.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceBreakPurchasePriceBreakDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PriceBreakPurchasePriceBreakDto'
+        '400':
+          description: Validation issues with input.
+        '404':
+          description: Item or vendor did not exist.
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+      - Pricing-Margins-Edit Margins
+  /api/items/{itemId}/sales-price-breaks:
+    put:
+      tags:
+      - Item PriceBreaks
+      summary: "Create or update a sales price break for an item. The price break is identified by\nthe combination of (item, customer, customer tier, currency, sales unit of measure):\nif a match exists it is replaced, otherwise a new price break is created.\n            \nCustomer and customer tier are mutually exclusive. Leaving both null upserts the\nitem's base price."
+      operationId: UpsertSalesPriceBreak
+      parameters:
+      - name: itemId
+        in: path
+        description: The id of the item.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        description: The price break to upsert.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakSalesPriceBreakUpsertDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakSalesPriceBreakUpsertDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakSalesPriceBreakUpsertDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PriceBreakSalesPriceBreakUpsertDto'
+        required: true
+      responses:
+        '200':
+          description: The upserted price break.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceBreakSalesPriceBreakDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PriceBreakSalesPriceBreakDto'
+        '400':
+          description: Validation issues with input.
+        '404':
+          description: Item, customer, or customer tier did not exist.
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+components:
+  schemas:
+    PriceBreakListPurchasePriceBreaksDto:
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Restrict to price breaks for the given vendor.
+          nullable: true
+        currencyCode:
+          type: string
+          description: Restrict to price breaks in the given currency.
+          nullable: true
+      additionalProperties: false
+      description: Filters for listing purchase price breaks.
+    PriceBreakListSalesPriceBreaksDto:
+      type: object
+      properties:
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Restrict to price breaks for the given customer.
+          nullable: true
+        customerTierId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Restrict to price breaks for the given customer tier.
+          nullable: true
+        currencyCode:
+          type: string
+          description: Restrict to price breaks in the given currency.
+          nullable: true
+        baseOnly:
+          type: boolean
+          description: When true, include only the item's base price (no customer or customer tier).
+          nullable: true
+      additionalProperties: false
+      description: Filters for listing sales price breaks.
+    PriceBreakItemPriceBreakPointDto:
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Identifier for this break point. Server-generated; ignored on write.
+          nullable: true
+        quantity:
+          maximum: 2147483647
+          minimum: 2
+          type: integer
+          description: 'The quantity at which this break point becomes active. Must be greater than 1
+
+            (the unit/base price covers quantity 1).'
+          format: int32
+        price:
+          minimum: 0
+          type: number
+          description: 'The price per unit at this break point. Required for Price-type sales breaks and all
+
+            purchase (Cost) breaks.'
+          format: double
+          nullable: true
+        margin:
+          type: number
+          description: The margin percentage at this break point. Used when the price break is calculated by Margin.
+          format: double
+          nullable: true
+        showOnPdf:
+          type: boolean
+          description: 'Whether this break point should be displayed on customer-facing PDFs (quotes, sales orders).
+
+            Has no effect for purchase price breaks.'
+      additionalProperties: false
+      description: A single quantity break inside a price break.
+    DtoPriceBreakSalesPriceBreakPricingTypeEnum:
+      enum:
+      - price
+      - margin
+      type: string
+      description: How a sales price break is calculated.
+    PriceBreakSalesPriceBreakDto:
+      required:
+      - breakPoints
+      - id
+      - itemId
+      - pricingType
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the price break.
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the item this price break applies to.
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the customer this price break applies to. Mutually exclusive with
+
+            FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakDto.CustomerTierId; null on both means this is the item''s base price.'
+          nullable: true
+        customerTierId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the customer tier this price break applies to. Mutually exclusive with
+
+            FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakDto.CustomerId; null on both means this is the item''s base price.'
+          nullable: true
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code. Null indicates the company's primary currency.
+          nullable: true
+        unitOfMeasureName:
+          type: string
+          description: Sales unit of measure for this price break. Null indicates the item's default sales unit of measure.
+          nullable: true
+        pricingType:
+          $ref: '#/components/schemas/DtoPriceBreakSalesPriceBreakPricingTypeEnum'
+        unitPrice:
+          type: number
+          description: The unit price at quantity 1. Populated when FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakDto.PricingType is Price.
+          format: double
+          nullable: true
+        margin:
+          type: number
+          description: The margin percentage applied at quantity 1. Populated when FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakDto.PricingType is Margin.
+          format: double
+          nullable: true
+        showOnPdf:
+          type: boolean
+          description: Whether the unit/base price should be displayed on customer-facing PDFs.
+        breakPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceBreakItemPriceBreakPointDto'
+          description: Quantity break points beyond quantity 1.
+        modifiedUtc:
+          type: string
+          description: When this price break was last modified.
+          format: date-time
+      additionalProperties: false
+      description: 'Sales price break for an item. A sales price break is targeted at one of:
+
+        the item''s base price, a specific customer, or a customer tier.'
+    PriceBreakPurchasePriceBreakDto:
+      required:
+      - breakPoints
+      - id
+      - itemId
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the price break.
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the item this price break applies to.
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the vendor this price break applies to.
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code. Null indicates the company's primary currency.
+          nullable: true
+        unitOfMeasureName:
+          type: string
+          description: Purchasing unit of measure for this price break. Null indicates the item's default unit of measure.
+          nullable: true
+        unitPrice:
+          type: number
+          description: The unit price at quantity 1.
+          format: double
+          nullable: true
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The vendor's part number for this item, if different from the internal number.
+          nullable: true
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The vendor's part description for this item.
+          nullable: true
+        breakPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceBreakItemPriceBreakPointDto'
+          description: Quantity break points beyond quantity 1.
+        modifiedUtc:
+          type: string
+          description: When this price break was last modified.
+          format: date-time
+      additionalProperties: false
+      description: Purchase (vendor cost) price break for an item.
+    PriceBreakPurchasePriceBreakUpsertDto:
+      required:
+      - breakPoints
+      - vendorId
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the vendor this price break applies to.
+        currencyCode:
+          type: string
+          description: 'ISO 4217 currency code. Null is treated as the vendor''s currency (or, if the vendor has no
+
+            currency, the company''s primary currency) for identity matching. When matching an existing
+
+            break, that break''s stored CurrencyCode is preserved. On insert, the value stored is the
+
+            supplied value or the vendor''s currency if none was supplied.'
+          nullable: true
+        unitOfMeasureName:
+          type: string
+          description: 'Purchasing unit of measure. Null indicates the item''s default unit of measure.
+
+            Same null/default-equivalence rules as FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.CurrencyCode.'
+          nullable: true
+        unitPrice:
+          minimum: 0
+          type: number
+          description: The unit price at quantity 1. Required.
+          format: double
+          nullable: true
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The vendor's part number for this item, if different from the internal number.
+          nullable: true
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The vendor's part description for this item.
+          nullable: true
+        breakPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceBreakItemPriceBreakPointDto'
+          description: 'Quantity break points beyond quantity 1. The complete set of break points is replaced
+
+            on each upsert; omit a quantity to remove it.'
+      additionalProperties: false
+      description: "Upsert payload for a purchase (vendor cost) price break.\n            \nIdentity key (item-id is the route parameter):\n  FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.VendorId, FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.CurrencyCode, FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.UnitOfMeasureName.\nIf a price break already exists for this key, it is updated; otherwise a new one is created."
+    PriceBreakSalesPriceBreakUpsertDto:
+      required:
+      - breakPoints
+      - pricingType
+      type: object
+      properties:
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the customer this price break applies to. Mutually exclusive with
+
+            FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakUpsertDto.CustomerTierId. Leave both null to upsert the item''s base price.'
+          nullable: true
+        customerTierId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the customer tier this price break applies to. Mutually exclusive with
+
+            FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakUpsertDto.CustomerId. Leave both null to upsert the item''s base price.'
+          nullable: true
+        currencyCode:
+          type: string
+          description: 'ISO 4217 currency code. Null indicates the company''s primary currency.
+
+            Null and the explicit primary currency code are treated as equivalent for identity matching;
+
+            when matching an existing break, that break''s stored CurrencyCode is preserved (legacy
+
+            records may hold null even after primary is set, and downstream code distinguishes them).
+
+            On insert, the value is stored exactly as supplied.'
+          nullable: true
+        unitOfMeasureName:
+          type: string
+          description: 'Sales unit of measure. Null indicates the item''s default sales unit of measure.
+
+            Same null/default-equivalence rules as FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakUpsertDto.CurrencyCode.'
+          nullable: true
+        pricingType:
+          $ref: '#/components/schemas/DtoPriceBreakSalesPriceBreakPricingTypeEnum'
+        unitPrice:
+          minimum: 0
+          type: number
+          description: The unit price at quantity 1. Required when FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakUpsertDto.PricingType is Price.
+          format: double
+          nullable: true
+        margin:
+          type: number
+          description: The margin percentage at quantity 1. Required when FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakUpsertDto.PricingType is Margin.
+          format: double
+          nullable: true
+        showOnPdf:
+          type: boolean
+          description: Whether the unit/base price should be displayed on customer-facing PDFs.
+        breakPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceBreakItemPriceBreakPointDto'
+          description: 'Quantity break points beyond quantity 1. The complete set of break points is replaced
+
+            on each upsert; omit a quantity to remove it.'
+      additionalProperties: false
+      description: "Upsert payload for a sales price break.\n            \nIdentity key (item-id is the route parameter):\n  FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakUpsertDto.CustomerId, FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakUpsertDto.CustomerTierId, FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakUpsertDto.CurrencyCode, FulcrumProduct.PublicApi.Dto.PriceBreak.SalesPriceBreakUpsertDto.UnitOfMeasureName.\nIf a price break already exists for this key, it is updated; otherwise a new one is created."
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

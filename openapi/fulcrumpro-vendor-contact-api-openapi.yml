@@ -1,0 +1,588 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Vendor Contact API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Vendor Contact
+paths:
+  /api/vendors/{vendorId}/contacts:
+    post:
+      tags:
+      - Vendor Contact
+      summary: Create a new vendor contact
+      operationId: CreateVendorContact
+      parameters:
+      - name: vendorId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/VendorContactCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorContactCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/VendorContactCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/VendorContactCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Vendor contact created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Vendor with the given id did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Vendor-Vendors-Edit Vendor
+  /api/vendors/{vendorId}/contacts/{contactId}:
+    delete:
+      tags:
+      - Vendor Contact
+      summary: Delete a specific customer contact
+      operationId: DeleteVendorContact
+      parameters:
+      - name: vendorId
+        in: path
+        description: The id of the vendor to modify contacts for
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: contactId
+        in: path
+        description: The id of the vendor contact.
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Vendor contact did not exist
+        '404':
+          description: The vendor did not exist
+    get:
+      tags:
+      - Vendor Contact
+      summary: Get a specific vendor contact
+      operationId: GetVendorContact
+      parameters:
+      - name: vendorId
+        in: path
+        description: The id of the vendor to modify contacts for
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: contactId
+        in: path
+        description: The id of the vendor contact.
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: The vendor contact for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VendorContactDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/VendorContactDto'
+        '404':
+          description: Vendor or contact did not exist
+      x-c4-required-permissions:
+      - Vendor-Vendors-View Vendor
+    put:
+      tags:
+      - Vendor Contact
+      summary: Update a specific vendor contact
+      operationId: UpdateVendorContact
+      parameters:
+      - name: vendorId
+        in: path
+        description: The id of the vendor to modify contacts for
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: contactId
+        in: path
+        description: The id of the vendor contact.
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        description: The new data to apply to the given contact
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/VendorContactUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorContactUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/VendorContactUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/VendorContactUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Vendor contact updated
+        '404':
+          description: Vendor did not exist or no contact existed with the specified Id
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Vendor-Vendors-Edit Vendor
+  /api/vendors/{vendorId}/contacts/list:
+    post:
+      tags:
+      - Vendor Contact
+      summary: Get a list of contacts for a vendor
+      operationId: ListVendorContact
+      parameters:
+      - name: vendorId
+        in: path
+        description: ''
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: List of contacts for the given vendor id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VendorContactDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VendorContactDto'
+        '404':
+          description: The vendor did not exist
+      x-c4-required-permissions:
+      - Vendor-Vendors-View Vendor
+components:
+  schemas:
+    VendorContactUpdateDto:
+      required:
+      - firstName
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Last name
+          nullable: true
+        position:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Position / Job Title
+          nullable: true
+        phone:
+          type: string
+          description: Phone number
+          nullable: true
+        cellPhone:
+          type: string
+          description: Cellphone number
+          nullable: true
+        email:
+          type: string
+          description: Email address
+          format: email
+          nullable: true
+        fax:
+          type: string
+          description: Fax number
+          nullable: true
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Internal notes about this contact.
+          nullable: true
+        emailPurchaseOrders:
+          type: boolean
+          description: Whether this contact should receive purchase order emails. When omitted, the existing value is preserved.
+          nullable: true
+      additionalProperties: false
+      description: A vendor contact
+    VendorContactCreateDto:
+      required:
+      - firstName
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Last name
+          nullable: true
+        position:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Position / Job Title
+          nullable: true
+        phone:
+          type: string
+          description: Phone number
+          nullable: true
+        cellPhone:
+          type: string
+          description: Cellphone number
+          nullable: true
+        email:
+          type: string
+          description: Email address
+          format: email
+          nullable: true
+        fax:
+          type: string
+          description: Fax number
+          nullable: true
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Internal notes about this contact.
+          nullable: true
+        emailPurchaseOrders:
+          type: boolean
+          description: Whether this contact should receive purchase order emails.
+      additionalProperties: false
+      description: A vendor contact
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    VendorContactDto:
+      required:
+      - firstName
+      - id
+      - lastName
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Position / Job Title
+          nullable: true
+        cellPhone:
+          type: string
+          description: Cellphone number
+          nullable: true
+        phone:
+          type: string
+          description: Phone number
+          nullable: true
+        email:
+          type: string
+          description: Email address
+          format: email
+          nullable: true
+        fax:
+          type: string
+          description: Fax number
+          nullable: true
+        notes:
+          type: string
+          description: Internal notes about this contact.
+          nullable: true
+        emailPurchaseOrders:
+          type: boolean
+          description: Whether this contact should receive purchase order emails.
+      additionalProperties: false
+      description: A vendor contact
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

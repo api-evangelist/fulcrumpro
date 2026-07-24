@@ -1,0 +1,783 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Invoice API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Invoice
+paths:
+  /api/invoices/{invoiceId}:
+    get:
+      tags:
+      - Invoice
+      summary: Get a specific invoice
+      operationId: GetInvoice
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The invoice for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDto'
+        '404':
+          description: Invoice did not exist
+      x-c4-required-permissions:
+      - Invoicing-Invoicing-View Invoices
+    patch:
+      tags:
+      - Invoice
+      summary: Partially update an invoice
+      operationId: PatchInvoice
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocument'
+      responses:
+        '200':
+          description: Invoice item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDto'
+        '404':
+          description: Invoice did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Invoicing-Invoicing-Edit Invoices
+    put:
+      tags:
+      - Invoice
+      summary: Update an invoice
+      operationId: UpdateInvoice
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/InvoiceUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/InvoiceUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Invoice item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDto'
+        '404':
+          description: Invoice did not exist
+  /api/invoices/list:
+    post:
+      tags:
+      - Invoice
+      summary: Find invoices based on search parameters.
+      operationId: ListInvoice
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/InvoiceRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/InvoiceRequestFindParameters'
+      responses:
+        '200':
+          description: List of invoices matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceDto'
+      x-c4-required-permissions:
+      - Invoicing-Invoicing-View Invoices
+  /api/invoices/{invoiceId}/status:
+    post:
+      tags:
+      - Invoice
+      summary: Update an invoice status
+      operationId: StatusUpdateInvoice
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/InvoiceRequestUpdateStatus'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceRequestUpdateStatus'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceRequestUpdateStatus'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/InvoiceRequestUpdateStatus'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Invoice cannot be moved to requested status
+        '404':
+          description: Invoice did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Invoicing-Invoicing-Edit Invoices
+components:
+  schemas:
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    CommonAddressDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+          nullable: true
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Second address line.
+          nullable: true
+        address3:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Third address line.
+          nullable: true
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address state/province.
+          nullable: true
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Country identifier.
+          nullable: true
+        phone:
+          type: string
+          description: Phone number.
+          format: tel
+          nullable: true
+        email:
+          type: string
+          description: Email address
+          format: email
+          nullable: true
+      additionalProperties: false
+      description: Address definition
+    InvoiceUpdateDto:
+      type: object
+      properties:
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+      additionalProperties: false
+      description: Represents an update on an invoice.
+    InvoiceRequestFindParameters:
+      type: object
+      properties:
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: Filter invoices to only given numbers
+          nullable: true
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+      additionalProperties: false
+      description: Parameters used for searching/finding invoices.
+    InvoiceRequestUpdateStatus:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+        paidDate:
+          type: string
+          description: The date that the invoice was paid.
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Update an invoice status.
+    InvoiceDto:
+      required:
+      - customerId
+      - id
+      - number
+      - status
+      - subtotal
+      - total
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        number:
+          minimum: 0
+          type: integer
+          description: Number
+          format: int32
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The id of the customer that the invoice is for. Please reference /api/customers endpoint.
+        currencyInfo:
+          $ref: '#/components/schemas/CurrencyInfoDto'
+        issueDate:
+          type: string
+          description: Invoice issued date indicates when the invoice was sent to the customer.
+          format: date-time
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+          nullable: true
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
+          nullable: true
+        paymentTerms:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        companyInfoId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Company Information Id;
+          nullable: true
+        salesOrderId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Sales order identifier. Please reference /api/sales-orders endpoint.
+          nullable: true
+        customerPONumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Customer PO number.
+          nullable: true
+        dueDate:
+          type: string
+          description: Invoice due date.
+          format: date-time
+          nullable: true
+        total:
+          minimum: 0
+          type: number
+          description: The final amount due, calculated as the sum of all item costs, taxes, fees, and any discounts applied in primary currency.
+          format: double
+        subtotal:
+          minimum: 0
+          type: number
+          description: The sum of all item costs before taxes and discounts are applied in primary currency.
+          format: double
+        lineItemsTotal:
+          type: number
+          description: The summation of the line item amounts due.
+          format: double
+        notesToCustomer:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: A field for the seller to provide additional details or instructions for the customer relating to the order.
+          nullable: true
+        billingAddress:
+          $ref: '#/components/schemas/CommonAddressDto'
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+          nullable: true
+        isDeposit:
+          type: boolean
+          description: Is deposit invoice
+        deleted:
+          type: boolean
+          description: Indicates whether this invoice has been deleted
+      additionalProperties: false
+      description: Represents an invoice
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonExternalReferenceFindDto:
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Arbitrary sub-key that can be used to qualify the value
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+          nullable: true
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    InvoiceStatusEnum:
+      enum:
+      - new
+      - needsApproval
+      - approved
+      - issued
+      - paid
+      type: string
+      description: Invoice status
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+          nullable: true
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+          nullable: true
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    CurrencyInfoDto:
+      required:
+      - documentCurrencyCode
+      - primaryCurrencyCode
+      type: object
+      properties:
+        documentCurrencyCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Document Currency Code
+        primaryCurrencyCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary Currency Code
+      additionalProperties: false
+      description: Currency Info Dto
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

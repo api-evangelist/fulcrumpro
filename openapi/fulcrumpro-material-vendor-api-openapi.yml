@@ -1,0 +1,738 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Material Vendor API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Material Vendor
+paths:
+  /api/materials/{materialId}/vendors:
+    post:
+      tags:
+      - Material Vendor
+      summary: 'Create a new material vendor. DEPRECATED: use POST /v2/material-vendors instead,
+
+        which accepts the material id in the request body. This endpoint fails for material
+
+        ids that contain ''/'' characters (e.g. "SS-301-CR 1/2 HD") because ASP.NET Core routing
+
+        cannot match URL-encoded forward slashes in path segments.'
+      operationId: CreateMaterialVendor
+      parameters:
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MaterialShapeVendorCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaterialShapeVendorCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MaterialShapeVendorCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MaterialShapeVendorCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Material vendor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Item with the given id did not exist
+      deprecated: true
+  /api/v2/material-vendors:
+    post:
+      tags:
+      - Material Vendor
+      summary: 'Create a new material vendor. Use this endpoint instead of the path-based v1
+
+        when your material ids may contain ''/'' characters, which ASP.NET Core routing
+
+        cannot match once URL-encoded.'
+      operationId: CreateMaterialVendorV2
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorCreateMaterialVendorRequestDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorCreateMaterialVendorRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorCreateMaterialVendorRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorCreateMaterialVendorRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Material vendor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Item with the given id did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+  /api/materials/{materialId}/vendors/list:
+    post:
+      tags:
+      - Material Vendor
+      summary: 'Get a list of vendors for a material. DEPRECATED: use POST /v2/material-vendors/list
+
+        instead, which accepts the material id in the request body. This endpoint fails for
+
+        material ids that contain ''/'' characters (e.g. "SS-301-CR 1/2 HD") because ASP.NET Core
+
+        routing cannot match URL-encoded forward slashes in path segments.'
+      operationId: ListMaterialVendor
+      parameters:
+      - name: materialId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of vendors for the given material id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MaterialShapeVendorDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MaterialShapeVendorDto'
+        '404':
+          description: The material did not exist
+      deprecated: true
+  /api/v2/material-vendors/list:
+    post:
+      tags:
+      - Material Vendor
+      summary: 'List the vendors for a material. Use this endpoint instead of the path-based v1
+
+        when your material ids may contain ''/'' characters, which ASP.NET Core routing
+
+        cannot match once URL-encoded.'
+      operationId: ListMaterialVendorV2
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorListMaterialVendorRequestDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorListMaterialVendorRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorListMaterialVendorRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorListMaterialVendorRequestDto'
+        required: true
+      responses:
+        '200':
+          description: List of vendors for the given material id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MaterialShapeVendorDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MaterialShapeVendorDto'
+        '404':
+          description: The material did not exist
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+  /api/materials/{materialId}/vendors/{vendorId}:
+    put:
+      tags:
+      - Material Vendor
+      summary: 'Update a specific material vendor. DEPRECATED: use PUT /v2/material-vendors/{vendorId} instead,
+
+        which accepts the material id in the request body. This endpoint fails for material
+
+        ids that contain ''/'' characters (e.g. "SS-301-CR 1/2 HD") because ASP.NET Core routing
+
+        cannot match URL-encoded forward slashes in path segments.'
+      operationId: UpdateMaterialVendor
+      parameters:
+      - name: materialId
+        in: path
+        description: The id of the item to modify vendors for
+        required: true
+        schema:
+          type: string
+      - name: vendorId
+        in: path
+        description: The id of the actual vendor.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        description: The new data to apply to the given vendor detail
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MaterialShapeVendorUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaterialShapeVendorUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MaterialShapeVendorUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MaterialShapeVendorUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Update successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaterialShapeVendorDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/MaterialShapeVendorDto'
+        '404':
+          description: Material did not exist or no vendor existed
+      deprecated: true
+  /api/v2/material-vendors/{vendorId}:
+    put:
+      tags:
+      - Material Vendor
+      summary: 'Update a specific material vendor. Use this endpoint instead of the path-based v1
+
+        when your material ids may contain ''/'' characters, which ASP.NET Core routing
+
+        cannot match once URL-encoded.'
+      operationId: UpdateMaterialVendorV2
+      parameters:
+      - name: vendorId
+        in: path
+        description: Unique id of the vendor to update on the material.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        description: The new data to apply to the given vendor detail, including the material id
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorUpdateMaterialVendorRequestDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorUpdateMaterialVendorRequestDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorUpdateMaterialVendorRequestDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MaterialVendorUpdateMaterialVendorRequestDto'
+        required: true
+      responses:
+        '200':
+          description: Update successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaterialShapeVendorDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/MaterialShapeVendorDto'
+        '404':
+          description: Material did not exist or no vendor existed
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+components:
+  schemas:
+    MaterialShapeVendorPriceBreakCreateDto:
+      required:
+      - price
+      - quantity
+      type: object
+      properties:
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          minimum: 0
+          type: number
+          description: The price per unit.
+          format: double
+      additionalProperties: false
+      description: Vendor prices break create/update for a material shape.
+    MaterialVendorCreateMaterialVendorRequestDto:
+      required:
+      - materialId
+      - priceBreaks
+      - priceUnit
+      - vendorId
+      type: object
+      properties:
+        materialId:
+          minLength: 1
+          type: string
+          description: Unique id of the material to create the vendor on.
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        leadTimeInDays:
+          minimum: 0
+          type: integer
+          description: Lead time for this vendor.
+          format: int32
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: 'Request parameters for creating a vendor on a material.
+
+        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
+
+        which cannot be round-tripped through URL path segments.'
+    MaterialVendorUpdateMaterialVendorRequestDto:
+      required:
+      - materialId
+      - priceBreaks
+      type: object
+      properties:
+        materialId:
+          minLength: 1
+          type: string
+          description: Unique id of the material whose vendor will be updated.
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        leadTimeInDays:
+          minimum: 0
+          type: integer
+          description: Lead time for this vendor.
+          format: int32
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: 'Request parameters for updating a vendor on a material.
+
+        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
+
+        which cannot be round-tripped through URL path segments.'
+    MaterialShapeVendorCreateDto:
+      required:
+      - priceBreaks
+      - priceUnit
+      - vendorId
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        leadTimeInDays:
+          minimum: 0
+          type: integer
+          description: Lead time for this vendor.
+          format: int32
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Vendor with additional context for a material.
+    MaterialShapeVendorUpdateDto:
+      required:
+      - priceBreaks
+      type: object
+      properties:
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        leadTimeInDays:
+          minimum: 0
+          type: integer
+          description: Lead time for this vendor.
+          format: int32
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Vendor with additional context for a material.
+    CommonEnumMaterialVendorPriceUnitEnum:
+      enum:
+      - kilogram
+      - pound
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    MaterialVendorListMaterialVendorRequestDto:
+      required:
+      - materialId
+      type: object
+      properties:
+        materialId:
+          minLength: 1
+          type: string
+          description: Unique id of the material to list vendors for.
+      additionalProperties: false
+      description: 'Request parameters for listing the vendors on a material.
+
+        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
+
+        which cannot be round-tripped through URL path segments.'
+    MaterialShapeVendorDto:
+      required:
+      - id
+      - isPrimary
+      - priceBreaks
+      - priceUnit
+      - vendorId
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor identifier. Pelase reference /api/vendors endpoint.
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        currencyCode:
+          type: string
+          description: Currency code/denomination associated to this vendor.
+          nullable: true
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        leadTimeInDays:
+          minimum: 0
+          type: integer
+          description: Number of days required between order and receipt
+          format: int32
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Material vendor definition
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    MaterialShapeVendorPriceBreakDto:
+      required:
+      - id
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          type: number
+          description: The price per unit.
+          format: double
+      additionalProperties: false
+      description: Vendor prices breaks for a material shape.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

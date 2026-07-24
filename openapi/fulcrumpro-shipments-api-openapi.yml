@@ -1,0 +1,779 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Shipments API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Shipments
+paths:
+  /api/shipments/{shipmentId}:
+    get:
+      tags:
+      - Shipments
+      summary: Get a specific shipment. Includes the scheduled ship by date and, once shipped, the actual shipped date.
+      operationId: GetShipment
+      parameters:
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The shipment for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipmentsShipmentDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ShipmentsShipmentDto'
+        '404':
+          description: Shipment did not exist
+      x-c4-required-permissions:
+      - Shipping-Shipping-View Shipments
+    patch:
+      tags:
+      - Shipments
+      summary: Partially update a Shipment
+      operationId: PatchShipment
+      parameters:
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocument'
+      responses:
+        '200':
+          description: Shipment item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipmentsShipmentDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ShipmentsShipmentDto'
+        '404':
+          description: Shipment did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Shipping-Shipping-Edit Shipments
+    put:
+      tags:
+      - Shipments
+      summary: Update a specific shipment
+      operationId: UpdateShipment
+      parameters:
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ShipmentsShipmentUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentsShipmentUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentsShipmentUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ShipmentsShipmentUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Shipment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipmentsShipmentDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ShipmentsShipmentDto'
+        '404':
+          description: Shipment did not exist
+  /api/shipments/list:
+    post:
+      tags:
+      - Shipments
+      summary: Finds shipments based on search parameters
+      operationId: ListShipments
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ShipmentsListParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentsListParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ShipmentsListParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ShipmentsListParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoShipmentsShipmentDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoShipmentsShipmentDto'
+      x-c4-required-permissions:
+      - Shipping-Shipping-View Shipments
+components:
+  schemas:
+    ShipmentsShipmentDto:
+      required:
+      - id
+      - name
+      - number
+      - packingStatus
+      - status
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        number:
+          minimum: 0
+          type: integer
+          description: Number
+          format: int32
+        name:
+          minLength: 1
+          type: string
+          description: Shipment Name
+        status:
+          $ref: '#/components/schemas/ShippingDataShipmentStatus'
+        packingStatus:
+          $ref: '#/components/schemas/ShippingDataPackingStatus'
+        trackingNumber:
+          type: string
+          description: Tracking number
+          nullable: true
+        shipByDate:
+          type: string
+          description: Ship by date.
+          format: date-time
+          nullable: true
+        shippedDate:
+          type: string
+          description: Shipped date.
+          format: date-time
+          nullable: true
+        shippedDateOverride:
+          type: string
+          description: Shipped date override.
+          format: date-time
+          nullable: true
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Shipment notes.
+          nullable: true
+        displayNotesToCustomer:
+          type: boolean
+          description: Whether to display the shipment notes on the pack list.
+        shippingMethod:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        shippingAccount:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        shippingCost:
+          type: number
+          description: The actual cost to ship as set on the shipment page
+          format: double
+          nullable: true
+        shippingCharge:
+          type: number
+          description: The estimated cost to ship as set on the original shipment from the sales order page. It is charged to the customer via the Shipping/Handling line
+          format: double
+          nullable: true
+        address:
+          $ref: '#/components/schemas/CommonAddressDto'
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: The external references associated with this shipment
+          nullable: true
+      additionalProperties: false
+      description: Represents a shipment
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    ShippingDataShipmentStatus:
+      enum:
+      - pending
+      - open
+      - shipped
+      - cancelled
+      type: string
+    ShippingDataPackingStatus:
+      enum:
+      - notPacked
+      - partiallyPacked
+      - fullyPacked
+      - overPacked
+      type: string
+    CommonAddressDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+          nullable: true
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Second address line.
+          nullable: true
+        address3:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Third address line.
+          nullable: true
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address state/province.
+          nullable: true
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Country identifier.
+          nullable: true
+        phone:
+          type: string
+          description: Phone number.
+          format: tel
+          nullable: true
+        email:
+          type: string
+          description: Email address
+          format: email
+          nullable: true
+      additionalProperties: false
+      description: Address definition
+    ShipmentsShipmentUpdateDto:
+      type: object
+      properties:
+        shipByDate:
+          type: string
+          description: Ship by date.
+          format: date-time
+          nullable: true
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Shipment notes.
+          nullable: true
+        displayNotesToCustomer:
+          type: boolean
+          description: Whether or not to display the shipment notes on the pack list.
+        trackingNumber:
+          type: string
+          description: The tracking number for the shipment.
+          nullable: true
+        shippingMethodId:
+          type: string
+          description: The shipping method identifier
+          nullable: true
+        shippedDate:
+          type: string
+          description: The shipped date
+          format: date-time
+          nullable: true
+        shippedDateOverride:
+          type: string
+          description: The override of the shipped date (used for changing the date of a shipment after it's been created)
+          format: date-time
+          nullable: true
+        shippingCost:
+          type: number
+          description: The shipment's cost
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: Represents an update to a Shipment.
+    ShipmentsListParameters:
+      type: object
+      properties:
+        shipmentStatus:
+          $ref: '#/components/schemas/ShippingDataShipmentStatus'
+        packingStatus:
+          $ref: '#/components/schemas/ShippingDataPackingStatus'
+        salesOrderId:
+          type: string
+          description: Filter shipments by sales order identifier
+          nullable: true
+        purchaseOrderId:
+          type: string
+          description: Filter shipments by purchase order identifier
+          nullable: true
+        shipmentType:
+          $ref: '#/components/schemas/ShippingDataShipmentType'
+        shipmentIds:
+          type: array
+          items:
+            type: string
+          description: Filter shipments by shipment identifiers.
+        shipByDateBefore:
+          type: string
+          description: Filter to shipments scheduled to ship before this date (exclusive).
+          format: date-time
+          nullable: true
+        shipByDateAfter:
+          type: string
+          description: Filter to shipments scheduled to ship after this date (exclusive).
+          format: date-time
+          nullable: true
+        shippedDateBefore:
+          type: string
+          description: 'Filter to shipments actually shipped before this date (exclusive).
+
+            Compares against the shipped date override (a shop-local date) when one is set, otherwise the shipped date (UTC).'
+          format: date-time
+          nullable: true
+        shippedDateAfter:
+          type: string
+          description: 'Filter to shipments actually shipped after this date (exclusive).
+
+            Compares against the shipped date override (a shop-local date) when one is set, otherwise the shipped date (UTC).'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching V3 shipments
+    ShippingDataShipmentType:
+      enum:
+      - unknown
+      - standard
+      - outsideProcessing
+      type: string
+    DtoPagedResultDtoShipmentsShipmentDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentsShipmentDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+          nullable: true
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+          nullable: true
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

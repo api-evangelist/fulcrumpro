@@ -1,0 +1,754 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Receiving Receipt API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Receiving Receipt
+paths:
+  /api/receiving/receipts:
+    post:
+      tags:
+      - Receiving Receipt
+      summary: Create a receipt for a specific purchase or sales order
+      operationId: CreateReceipt
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ReceivingReceiptCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceivingReceiptCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReceivingReceiptCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ReceivingReceiptCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Receipt created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceivingReceiptDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ReceivingReceiptDto'
+        '404':
+          description: Receipt was not created
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Receiving-Receiving-Edit Receiving
+  /api/receiving/receipts/{receiptId}:
+    get:
+      tags:
+      - Receiving Receipt
+      summary: Get a specific receipt on a purchase or sales order
+      operationId: GetReceipt
+      parameters:
+      - name: receiptId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceivingReceiptDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ReceivingReceiptDto'
+        '404':
+          description: Receipt did not exist
+      x-c4-required-permissions:
+      - Receiving-Receiving-View Receiving
+    patch:
+      tags:
+      - Receiving Receipt
+      summary: Partially update a specific receipt for a purchase or sales order
+      operationId: PatchReceipt
+      parameters:
+      - name: receiptId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocument'
+      responses:
+        '200':
+          description: Receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceivingReceiptDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ReceivingReceiptDto'
+        '404':
+          description: Receipt did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Receiving-Receiving-Edit Receiving
+    put:
+      tags:
+      - Receiving Receipt
+      summary: Update a specific receipt for a purchase or sales order
+      operationId: UpdateReceipt
+      parameters:
+      - name: receiptId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ReceivingReceiptUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceivingReceiptUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReceivingReceiptUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ReceivingReceiptUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Receipt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceivingReceiptDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ReceivingReceiptDto'
+        '404':
+          description: Receipt did not exist
+  /api/receiving/receipts/list:
+    post:
+      tags:
+      - Receiving Receipt
+      summary: Get a list of receipts for purchase and sales orders
+      operationId: ListReceipt
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ReceivingRequestListFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceivingRequestListFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReceivingRequestListFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ReceivingRequestListFindParameters'
+      responses:
+        '200':
+          description: List of receipts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReceivingReceiptDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReceivingReceiptDto'
+      x-c4-required-permissions:
+      - Receiving-Receiving-View Receiving
+components:
+  schemas:
+    ReceivingReceiptDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        receivedBy:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Id of the user who received the item(s)
+          nullable: true
+          readOnly: true
+        number:
+          type: number
+          description: Number
+          format: double
+          nullable: true
+        date:
+          type: string
+          description: Received date
+          format: date-time
+          nullable: true
+        dateOriginal:
+          type: string
+          description: Original received date
+          format: date-time
+          nullable: true
+        dateOverride:
+          type: string
+          description: Override received date
+          format: date-time
+          nullable: true
+        orderType:
+          $ref: '#/components/schemas/CommonEnumOrderType'
+        orderId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of parent order to which this receipt belongs
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt object.
+          nullable: true
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemDto'
+          description: Receipt Line item data.
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+          nullable: true
+        invoiceNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The vendor invoice invoice number associated to the receipt.
+          nullable: true
+      additionalProperties: false
+      description: Represents a receiving object
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    ReceivingRequestListFindParameters:
+      type: object
+      properties:
+        salesOrderIds:
+          type: array
+          items:
+            type: string
+          description: Include receipts for specific sales order ids
+          nullable: true
+        purchaseOrderIds:
+          type: array
+          items:
+            type: string
+          description: Include receipts for specific purchase order ids
+          nullable: true
+        receiptIds:
+          type: array
+          items:
+            type: string
+          description: Include receipts with specific ids
+          nullable: true
+        includeReceiptLines:
+          type: boolean
+          description: If set to true, receipt line items will be included in the results
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+      additionalProperties: false
+      description: Parameters used for searching/finding receipts.
+    CommonEnumOrderType:
+      enum:
+      - purchaseOrder
+      - salesOrder
+      type: string
+      description: Order type enum
+    ReceivingReceiptCreateDto:
+      required:
+      - lines
+      - orderId
+      - orderType
+      type: object
+      properties:
+        orderType:
+          $ref: '#/components/schemas/CommonEnumOrderType'
+        orderId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of parent order to which this receipt belongs
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemCreateDto'
+          description: Line items
+      additionalProperties: false
+      description: Represents creating a receiving object on an entity
+    ReceivingLineItemReceiptLineItemCreateDto:
+      required:
+      - lineItemId
+      - quantityReceived
+      type: object
+      properties:
+        lineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of the line item corresponding to this receiving.
+        quantityReceived:
+          type: number
+          description: Quantity of the associated item that has been received (non-cumulative).
+          format: double
+        lotNumber:
+          type: string
+          description: Lot number to receive the item into.
+          nullable: true
+        locationId:
+          type: string
+          description: Location to receive the item into. Please reference /api/locations endpoint.
+          nullable: true
+        expirationDate:
+          type: string
+          description: Expiration date indicating when this receiving is good until.
+          format: date-time
+          nullable: true
+        fullyReceived:
+          type: boolean
+          description: Indicate if this is fully received.
+          nullable: true
+      additionalProperties: false
+      description: Represents creating a receiving object on a purchase order
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonExternalReferenceFindDto:
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Arbitrary sub-key that can be used to qualify the value
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+          nullable: true
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    ReceivingLineItemReceiptLineItemDto:
+      required:
+      - fullyReceived
+      - id
+      - lineItemId
+      - rolledBack
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        lineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of the purchase order line item corresponding to this update
+        fullyReceived:
+          type: boolean
+          description: Indicates whether the entire quantity of this line item have been received
+        rolledBack:
+          type: boolean
+          description: Indicates whether this update is active.
+        quantityReceived:
+          type: number
+          description: Quantity of the associated item that has been received on this update in the specified unit of measure (non-cumulative)
+          format: double
+          nullable: true
+        unitOfMeasureMultiplier:
+          type: number
+          description: 'If the receipt has a different unit of measure than the item is stored in fulcrum, you would use this multiplier with the QuantityReceived to get the amount you received into
+
+            Fulcrum.'
+          format: double
+        convertedQuantityReceived:
+          type: number
+          description: Quantity of the associated item that has been received in Fulcrum's unit of measure
+          format: double
+          readOnly: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+      additionalProperties: false
+      description: Represents a line item on a receipt for a purchase or sales order
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ReceivingReceiptUpdateDto:
+      required:
+      - receivedBy
+      type: object
+      properties:
+        receivedBy:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of the user who received the item(s)
+        date:
+          type: string
+          description: 'Received date override.  If not provided,
+
+            receipt date will default to the date the object was initially created.'
+          format: date-time
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt object.
+          nullable: true
+      additionalProperties: false
+      description: Represents a receiving object on a purchase order
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

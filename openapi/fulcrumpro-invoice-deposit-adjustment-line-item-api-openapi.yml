@@ -1,0 +1,432 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Invoice Deposit Adjustment Line Item API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Invoice Deposit Adjustment Line Item
+paths:
+  /api/invoices/{invoiceId}/deposit-adjustment-line-items/{lineItemId}:
+    get:
+      tags:
+      - Invoice Deposit Adjustment Line Item
+      summary: Get a specific deposit adjustment line item for an invoice
+      operationId: GetDepositAdjustmentLineItem
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Deposit adjustment line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDepositAdjustmentLineItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDepositAdjustmentLineItemDto'
+        '404':
+          description: Invoice or deposit adjustment line item did not exist
+      x-c4-required-permissions:
+      - Invoicing-Invoicing-View Invoices
+  /api/invoices/{invoiceId}/deposit-adjustment-line-items/list:
+    post:
+      tags:
+      - Invoice Deposit Adjustment Line Item
+      summary: Get a list of deposit adjustment lines items for an invoice
+      operationId: ListDepositAdjustmentLineItem
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: List of deposit adjustment line items for the given invoice id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceDepositAdjustmentLineItemDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceDepositAdjustmentLineItemDto'
+        '404':
+          description: The invoice did not exist
+      x-c4-required-permissions:
+      - Invoicing-Invoicing-View Invoices
+components:
+  schemas:
+    InvoiceDepositAdjustmentLineItemDto:
+      required:
+      - accountingDetails
+      - id
+      - price
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Verbose name for this entity.
+          nullable: true
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Verbose description for this entity.
+          nullable: true
+        price:
+          minimum: 0
+          type: number
+          description: The line item price.
+          format: double
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+        salesOrderLineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Related sales order line item id.
+          nullable: true
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+      additionalProperties: false
+      description: Represents a deposit adjustment line item on an invoice.
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+          nullable: true
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+      additionalProperties: false
+      description: An object that contains all accounting details.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

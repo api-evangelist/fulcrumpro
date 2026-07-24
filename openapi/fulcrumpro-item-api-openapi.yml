@@ -1,0 +1,2313 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Item API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Item
+paths:
+  /api/items/{itemId}/revision:
+    post:
+      tags:
+      - Item
+      summary: Add a revision to an item
+      operationId: AddRevisionItem
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestAddRevision'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestAddRevision'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestAddRevision'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestAddRevision'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '404':
+          description: Item did not exist
+        '409':
+          description: Item revision already exists
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+  /api/items:
+    post:
+      tags:
+      - Item
+      summary: Create a new item
+      operationId: CreateItem
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+  /api/items/{itemId}:
+    get:
+      tags:
+      - Item
+      summary: Get a specific item
+      operationId: GetItem
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The item for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemDto'
+        '404':
+          description: Item did not exist
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+    patch:
+      tags:
+      - Item
+      summary: Partially update an item
+      operationId: PatchItem
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocument'
+      responses:
+        '200':
+          description: Item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemDto'
+        '404':
+          description: Item did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+    put:
+      tags:
+      - Item
+      summary: Update a specific item
+      operationId: UpdateItem
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemDto'
+        '404':
+          description: Item did not exist
+  /api/items/{itemId}/can-make:
+    get:
+      tags:
+      - Item
+      summary: 'Get the can-make quantities for an item. Returns how much of this item can be produced
+
+        from current subcomponent inventory (on-hand and available).'
+      operationId: GetItemCanMake
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The can-make quantities for the given item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemCanMakeDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemCanMakeDto'
+        '404':
+          description: Item id provided was not found
+        '400':
+          description: Item is not a make item
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+  /api/items/list:
+    post:
+      tags:
+      - Item
+      summary: TO BE REMOVED 11/02/2023 - Find items based on search parameters.
+      description: Use V2 which includes a list of number filters
+      operationId: ListItem
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestFindParameters'
+      responses:
+        '200':
+          description: List of items matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemDto'
+      deprecated: true
+  /api/items/list/v2:
+    post:
+      tags:
+      - Item
+      summary: Find items based on search parameters.
+      operationId: ListItemV2
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestFindParametersV2'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestFindParametersV2'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestFindParametersV2'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestFindParametersV2'
+      responses:
+        '200':
+          description: List of items matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemListDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemListDto'
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+  /api/items/{itemId}/inventory/pick:
+    post:
+      tags:
+      - Item
+      summary: TO BE REMOVED 10/13/2023 - Pick inventory against a specific item.
+      description: Use /inventory/pick API instead
+      operationId: PickItemInventory
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequestItemInventoryPickEvent'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequestItemInventoryPickEvent'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequestItemInventoryPickEvent'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequestItemInventoryPickEvent'
+        required: true
+      responses:
+        '200':
+          description: Inventory transaction processed
+        '400':
+          description: Validation issues with input
+      deprecated: true
+  /api/items/{itemId}/inventory/receive:
+    post:
+      tags:
+      - Item
+      summary: TO BE REMOVED 10/13/2023 - Receive inventory against a specific item.
+      description: Use /inventory/receive API instead
+      operationId: ReceiveItemInventory
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequestItemInventoryReceiveEvent'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequestItemInventoryReceiveEvent'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequestItemInventoryReceiveEvent'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequestItemInventoryReceiveEvent'
+        required: true
+      responses:
+        '200':
+          description: Inventory transaction processed
+        '400':
+          description: Validation issues with input
+      deprecated: true
+components:
+  schemas:
+    ItemShippingDto:
+      type: object
+      properties:
+        class:
+          type: string
+          description: The item shipping class
+          nullable: true
+        nmfc:
+          type: string
+          description: The National Motor Freight Classification
+          nullable: true
+        isHazmat:
+          type: boolean
+          description: Whether the item is hazardous to ship
+        unitWeight:
+          type: number
+          description: The unit weight in lbs.
+          format: double
+          nullable: true
+        tariffCode:
+          type: string
+          description: The item tariff code
+          nullable: true
+        countryOfOrigin:
+          type: string
+          description: The country of origin
+          nullable: true
+      additionalProperties: false
+      description: Item Shipping Properties
+    ItemCustomerDto:
+      required:
+      - customerId
+      - id
+      - priceBreaks
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The id of the item-customer association. Use this value for update and delete operations.
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Customer id associated to this entity. Please reference /api/customers endpoint.
+        customerItemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item number for this customer.
+          nullable: true
+        customerItemName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item name for this customer.
+          nullable: true
+        unitOfMeasureName:
+          minLength: 1
+          type: string
+          description: The unit of measure name. This can be standard unit measurement names (Piece, Square foot, etc) or a custom measurement name.
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonPriceBreakDto'
+          description: Price breaks.
+      additionalProperties: false
+      description: Customer with additional context for an item.
+    ItemRequestAddRevision:
+      required:
+      - revision
+      type: object
+      properties:
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The revision to be created.
+        archiveSourceItem:
+          type: boolean
+          description: Indicate whether we should archive the source item. This will default to false.
+          nullable: true
+      additionalProperties: false
+      description: Add an item revision.
+    InventoryEnumEventSourceType:
+      enum:
+      - purchaseOrder
+      - job
+      - shipment
+      - shipmentLineItem
+      - shipping
+      - receiving
+      - item
+      - workOrder
+      - salesOrder
+      - jobOperation
+      - workOrderOperation
+      - fulfillment
+      - itemToMakeMaterialRemnant
+      - poRcvValueAdj
+      type: string
+      description: Indicator for the initial source of the event.
+    CommonCustomFieldSearchDto:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Key/identifier for the custom field
+        value:
+          minLength: 1
+          type: string
+          description: Underlying value of the custom field
+      additionalProperties: false
+      description: Custom field associated to an entity.
+    ItemsAndInventoryDataQualityPlanStatus:
+      enum:
+      - needsApproval
+      - approved
+      type: string
+    ItemRequestFilterMode:
+      enum:
+      - equal
+      - startsWith
+      - contains
+      type: string
+      description: How item numbers are matched against the search string
+    ItemCanMakeDto:
+      type: object
+      properties:
+        canMakeFromOnHand:
+          type: number
+          description: 'The quantity that can be made from on-hand inventory of subcomponents of this item.
+
+            Null if the planning cache has not yet been computed.'
+          format: double
+          nullable: true
+        canMakeFromAvailable:
+          type: number
+          description: 'The quantity that can be made from available inventory (on-hand + incoming supply) of subcomponents of this item.
+
+            Null if the planning cache has not yet been computed.'
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: 'Indicates how much of this item can be produced from its subcomponent inventory.
+
+        Only applicable to make items.'
+    ItemMaterialVendorDto:
+      required:
+      - id
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item number for this vendor.
+          nullable: true
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item name for this vendor.
+          nullable: true
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Notes to the vendor.
+          nullable: true
+      additionalProperties: false
+      description: Material vendor with additional context for an item.
+    CommonUnitOfMeasureConversionDto:
+      required:
+      - destinationQuantity
+      - destinationUnitOfMeasureName
+      - sourceQuantity
+      type: object
+      properties:
+        sourceQuantity:
+          type: number
+          description: This value signifies the quantity of the item's source unit of measure.
+          format: double
+        destinationQuantity:
+          type: number
+          description: This value signifies the quantity of the "destination" unit of measure.
+          format: double
+        destinationUnitOfMeasureName:
+          minLength: 1
+          type: string
+          description: The destination unit of measure.
+        isCustom:
+          type: boolean
+          description: Indicate if this is a custom (not out-of-the-box) unit of measure.
+        isDefault:
+          type: boolean
+          description: Indicate if this is the default unit of measure
+        multiplier:
+          type: number
+          description: Indicates the conversion factor used to calculate source to converted units.
+          format: double
+          readOnly: true
+      additionalProperties: false
+      description: Unit of measure conversion definition
+    ItemUpdateDto:
+      type: object
+      properties:
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: Item description.
+          nullable: true
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        accountingCode2Id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        materialCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item material code key identifier. Please reference /api/material-codes endpoint.
+          nullable: true
+        gradeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item grade code key identifier. Please reference /api/grade-codes endpoint.
+          nullable: true
+        shapeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item shape code key identifier. Please reference /api/shape-codes endpoint.
+          nullable: true
+        gaugeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item gauge code key identifier. Please reference /api/gauge-codes endpoint.
+          nullable: true
+        categoryId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item category code key identifier. Please reference /api/item-categories endpoint.
+          nullable: true
+        width:
+          minimum: 0
+          type: number
+          description: Item width
+          format: double
+          nullable: true
+        height:
+          minimum: 0
+          type: number
+          description: Item height
+          format: double
+          nullable: true
+        length:
+          minimum: 0
+          type: number
+          description: Item length
+          format: double
+          nullable: true
+        weight:
+          minimum: 0
+          type: number
+          description: Item weight
+          format: double
+          nullable: true
+        minimumStockOnHand:
+          minimum: 0
+          type: number
+          description: Item minimum stock on hand.
+          format: double
+          nullable: true
+        minimumProductionQuantity:
+          minimum: 0
+          type: number
+          description: Item minimum production quantity for a manufacturing run.
+          format: double
+          nullable: true
+        internalNotes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Internal item notes.
+          nullable: true
+        salesUnitOfMeasureConversions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonUnitOfMeasureConversionDto'
+          description: Unit of measure conversions for sellable items.
+          nullable: true
+        isTaxable:
+          type: boolean
+          description: Whether or not this item is taxable (default)
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+      additionalProperties: false
+      description: Represents an update on an Item.
+    ItemDto:
+      required:
+      - accountingDetails
+      - description
+      - id
+      - itemOrigin
+      - number
+      - unitOfMeasureName
+      - unitTypeName
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The number to give the item.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The description to give the item.
+        itemOrigin:
+          $ref: '#/components/schemas/DomainItemsAndInventoryItemOrigin'
+        unitTypeName:
+          minLength: 1
+          type: string
+          description: 'The unit of measure type, ex: Piece, Volume or Weight'
+        unitOfMeasureName:
+          minLength: 1
+          type: string
+          description: The unit of measure name. Options available depend on the selected UnitTypeName. For Pieces, you might have a UOM of Piece, Set or Case. For Volume, options include Liter, Milliliter, etc.
+        revision:
+          $ref: '#/components/schemas/ItemRevisionDto'
+        barCodeNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The barcode number to give the item.
+          nullable: true
+        isSellable:
+          type: boolean
+          description: Define if this item is able to be sold/sellable.
+        isArchived:
+          type: boolean
+          description: Indicate if this item is archived.
+        isNonInventory:
+          type: boolean
+          description: Indicate if this item is considered a non-inventory item.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        accountingCode2Id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code 2 key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        materialCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item material code key identifier. Please reference /api/material-codes endpoint.
+          nullable: true
+        gradeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item grade code key identifier. Please reference /api/grade-codes endpoint.
+          nullable: true
+        shapeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item shape code key identifier. Please reference /api/shape-codes endpoint.
+          nullable: true
+        gaugeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item gauge code key identifier. Please reference /api/gauge-codes endpoint.
+          nullable: true
+        categoryId:
+          type: string
+          description: Item category code key identifier. Please reference /api/item-categories endpoint.
+          nullable: true
+        width:
+          minimum: 0
+          type: number
+          description: Item width
+          format: double
+          nullable: true
+        height:
+          minimum: 0
+          type: number
+          description: Item height
+          format: double
+          nullable: true
+        length:
+          minimum: 0
+          type: number
+          description: Item length
+          format: double
+          nullable: true
+        weight:
+          minimum: 0
+          type: number
+          description: Item weight
+          format: double
+          nullable: true
+        materialWeight:
+          minimum: 0
+          type: number
+          description: The weight of material item (calculated)
+          format: double
+          nullable: true
+        minimumStockOnHand:
+          minimum: 0
+          type: number
+          description: Item minimum stock on hand.
+          format: double
+          nullable: true
+        minimumProductionQuantity:
+          minimum: 0
+          type: number
+          description: Item minimum production quantity for a manufacturing run.
+          format: double
+          nullable: true
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+          nullable: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagDto'
+          description: Item tags.
+        internalNotes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Internal item notes.
+          nullable: true
+        salesUnitOfMeasureConversions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonUnitOfMeasureConversionDto'
+          description: Sales unit of measurements
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+          nullable: true
+        isTaxable:
+          type: boolean
+          description: Whether this item is taxable
+          nullable: true
+        buildToOrder:
+          type: boolean
+          description: Whether or not this item is build to order (jobs are made from sales orders, not overall demand)
+          nullable: true
+        buildToStock:
+          type: boolean
+          description: Whether or not this item is build to stock (jobs are created from overall demand, not sales orders)
+          nullable: true
+        isSingleUseItem:
+          type: boolean
+          description: Indicate if this item is intended for single use.
+          nullable: true
+        isLotTracked:
+          type: boolean
+          description: Indicate if this item is lot-tracked.
+          nullable: true
+        shipping:
+          $ref: '#/components/schemas/ItemShippingDto'
+        createdUtc:
+          type: string
+          description: The date the item was created
+          format: date-time
+        modifiedUtc:
+          type: string
+          description: The date the item was last modified
+          format: date-time
+        customerTiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemCustomerTierDto'
+          description: Customer tiers associated with this item.
+        materialDetails:
+          $ref: '#/components/schemas/ItemMaterialDetailsDto'
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+        materialVendorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemMaterialVendorDto'
+          description: Includes vendor (purchasing) details for this item. This is specific to material-based items.
+          nullable: true
+        vendorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemVendorDto'
+          description: Includes vendor (purchasing) details for this item.
+          nullable: true
+        customerDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemCustomerDto'
+          description: Includes customer (selling) details for this item.
+          nullable: true
+        qualityPlanStatus:
+          $ref: '#/components/schemas/ItemsAndInventoryDataQualityPlanStatus'
+      additionalProperties: false
+      description: An item
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    FulcrumProductMaterialsFulcrumLengthUnits:
+      enum:
+      - inch
+      - foot
+      - yard
+      - millimeter
+      - centimeter
+      - meter
+      type: string
+    CommonEnumTagTypeEnum:
+      enum:
+      - item
+      - accountingCode
+      - itemCategory
+      - itemShape
+      - itemMaterial
+      - itemGrade
+      - itemGauge
+      - itemShippingContainer
+      - itemClass
+      - breakReasonCode
+      - refundReasonCode
+      - vendorOrderIssueCode
+      - chartOfAccounts
+      type: string
+      description: What the tag is used for (can be many).
+    TagDto:
+      required:
+      - id
+      - name
+      - style
+      - types
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+        style:
+          $ref: '#/components/schemas/CommonEnumStyleEnum'
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+          nullable: true
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
+          description: Represents where/how this tag is used.
+        deleted:
+          type: boolean
+          description: Indicate if this tag has been deleted.
+          nullable: true
+      additionalProperties: false
+      description: Represents a tag
+    ItemCreateDto:
+      required:
+      - itemOrigin
+      - number
+      - unitOfMeasureName
+      - unitTypeName
+      type: object
+      properties:
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name to give the item. Must be unique to all active items.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The verbose description to give the item.
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Revision name
+          nullable: true
+        itemOrigin:
+          $ref: '#/components/schemas/DomainItemsAndInventoryItemOrigin'
+        unitTypeName:
+          minLength: 1
+          type: string
+          description: 'The unit of measure type, ex: Pieces, Volume, Weight, Area'
+        unitOfMeasureName:
+          minLength: 1
+          type: string
+          description: The unit of measure name. Options available depend on the selected UnitTypeName. For Pieces, you might have a UOM of Piece, Set or Case. For Volume options include Liter, Milliliter, etc.
+        isSellable:
+          type: boolean
+          description: Define if this item is able to be sold/sellable.
+          nullable: true
+        isSingleUseItem:
+          type: boolean
+          description: Indicate if this item is intended for single use.
+          nullable: true
+        isLotTracked:
+          type: boolean
+          description: Indicate if this item is going to be lot-tracked.
+          nullable: true
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        accountingCode2Id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        materialCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item material code key identifier. Please reference /api/material-codes endpoint.
+          nullable: true
+        categoryId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item category code key identifier. Please reference /api/item-categories endpoint.
+          nullable: true
+        gradeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item grade code key identifier. Please reference /api/grade-codes endpoint.
+          nullable: true
+        shapeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item shape code key identifier. Please reference /api/shape-codes endpoint.
+          nullable: true
+        gaugeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item gauge code key identifier. Please reference /api/gauge-codes endpoint.
+          nullable: true
+        width:
+          minimum: 0
+          type: number
+          description: Item width
+          format: double
+          nullable: true
+        height:
+          minimum: 0
+          type: number
+          description: Item height
+          format: double
+          nullable: true
+        length:
+          minimum: 0
+          type: number
+          description: Item length
+          format: double
+          nullable: true
+        weight:
+          minimum: 0
+          type: number
+          description: Item weight
+          format: double
+          nullable: true
+        minimumStockOnHand:
+          minimum: 0
+          type: number
+          description: Item minimum stock on hand.
+          format: double
+          nullable: true
+        minimumProductionQuantity:
+          minimum: 0
+          type: number
+          description: Item minimum production quantity for a manufacturing run.
+          format: double
+          nullable: true
+        internalNotes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Internal item notes.
+          nullable: true
+        salesUnitOfMeasureConversions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonUnitOfMeasureConversionDto'
+          description: Unit of measure conversions for sellable items.
+          nullable: true
+        isTaxable:
+          type: boolean
+          description: Whether or not this item is taxable (default)
+          nullable: true
+        buildToOrder:
+          type: boolean
+          description: Whether or not this item is build to order (jobs are made from sales orders, not overall demand)
+          nullable: true
+        buildToStock:
+          type: boolean
+          description: Whether or not this item is build to stock (jobs are created from overall demand, not sales orders)
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+      additionalProperties: false
+      description: Details of item to be created
+    ItemVendorDto:
+      required:
+      - id
+      - priceBreaks
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item number for this vendor.
+          nullable: true
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item name for this vendor.
+          nullable: true
+        price:
+          minimum: 0
+          type: number
+          description: The price of this item for this vendor.
+          format: double
+          nullable: true
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this item.
+        leadTimeInDays:
+          type: integer
+          description: Lead time for this vendor.
+          format: int32
+          nullable: true
+        unitOfMeasureName:
+          minLength: 1
+          type: string
+          description: The unit of measure name. This can be standard unit measurement names (Piece, Square foot, etc) or a custom measurement name.
+          nullable: true
+        unitQuantity:
+          type: number
+          description: 'The vendor unit quantity for conversions. Ex: a FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity of 5 would indicate that 5 FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName of this item for this vendor are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity in the base inventory unit of measure.'
+          format: double
+          nullable: true
+        inventoryUnitQuantity:
+          type: number
+          description: 'The inventory unit quantity for conversions. Ex: an FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity of 5 would indicate that 5 inventory units (Pieces, Foot, etc) of this item are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity units in FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName for this vendor.'
+          format: double
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonPriceBreakDto'
+          description: Price breaks.
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Notes on this association.
+          nullable: true
+      additionalProperties: false
+      description: Vendor with additional context for an item.
+    InventoryRequestItemInventoryReceiveEvent:
+      required:
+      - secondaryType
+      type: object
+      properties:
+        secondaryType:
+          $ref: '#/components/schemas/InventoryEventSecondaryType'
+        lotId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Lot identifier for this block of inventory.
+          nullable: true
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Location id that inventory is placed into.
+          nullable: true
+        quantity:
+          minimum: 0
+          type: number
+          description: Location id that inventory is placed into.
+          format: double
+          nullable: true
+        actionDate:
+          type: string
+          description: The moment in time where this inventory event action occurs. If not provided, this will default to the current date/time.
+          format: date-time
+          nullable: true
+        source:
+          $ref: '#/components/schemas/InventoryEnumEventSourceType'
+        url:
+          type: string
+          description: The source url of the event.
+          format: uri
+          nullable: true
+        relatedSource:
+          $ref: '#/components/schemas/InventoryEnumEventSourceType'
+        relatedEntityId:
+          type: string
+          description: Entity id for tying this event back to a related entity.
+          nullable: true
+        note:
+          type: string
+          description: Notes associated to this transaction.
+          nullable: true
+      additionalProperties: false
+      description: Receive event for item inventory.
+    ItemRequestFindParametersV2:
+      type: object
+      properties:
+        numbers:
+          maxItems: 50
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemNumberFilter'
+          description: Filter items based on numbers
+          nullable: true
+        customField:
+          $ref: '#/components/schemas/CommonCustomFieldSearchDto'
+        customFields:
+          maxItems: 50
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonCustomFieldSearchDto'
+          description: 'Filter items based on custom fields
+
+            Note: these will be OR''d with each other and are not additive in filtering.'
+          nullable: true
+        latestRevision:
+          type: boolean
+          description: Indicate whether we want the latest revision(s) of the items.
+        itemIds:
+          maxItems: 50
+          type: array
+          items:
+            type: string
+          description: Filter to items whose ids are in the list
+          nullable: true
+        descriptionFilter:
+          type: string
+          description: 'Filter items by description.
+
+            Use (escaped) double-quotes to filter by exact phrase, e.g., \\"search phrase\\".
+
+            Prepend search term with "-" to exclude'
+          nullable: true
+        isArchived:
+          type: boolean
+          description: Include or exclude archived items
+          nullable: true
+        includeUsageData:
+          type: boolean
+          description: If set to true, data on where the item is being used will be included in the results
+        includeVendorData:
+          type: boolean
+          description: If set to true, vendor details about the item will be included in the results
+        includeCustomerData:
+          type: boolean
+          description: If set to true, customer details about the item will be included in the results
+        includeCustomerTierData:
+          type: boolean
+          description: If set to true, customer tier details about the item will be included in the results
+        vendorId:
+          type: string
+          description: If provided, filter to items that are produced by this vendor.
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding items.
+    InventoryEventSecondaryType:
+      enum:
+      - pick
+      - receive
+      - override
+      - revert
+      - deposit
+      - create
+      - consume
+      - ship
+      - sold
+      - transferOut
+      - transferIn
+      - found
+      - expired
+      - damaged
+      - lost
+      - returnVendor
+      - returnStock
+      - receivedNoPo
+      - returnIncrease
+      - returnDecrease
+      - otherIncrease
+      - otherDecrease
+      - scrap
+      - waste
+      - transferredFromSalesOrder
+      - overrideItemValue
+      - transferFromLot
+      - transferToLot
+      - stockAdjustmentIncrease
+      - stockAdjustmentDecrease
+      - stockTake
+      type: string
+      description: Secondary, verbose description for an event.
+    InventoryRequestItemInventoryPickEvent:
+      required:
+      - secondaryType
+      type: object
+      properties:
+        secondaryType:
+          $ref: '#/components/schemas/InventoryEventSecondaryType'
+        lotId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Lot identifier for this block of inventory.
+          nullable: true
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Location id that inventory is placed into.
+          nullable: true
+        quantity:
+          minimum: 0
+          type: number
+          description: Location id that inventory is placed into.
+          format: double
+          nullable: true
+        actionDate:
+          type: string
+          description: The moment in time where this inventory event action occurs. If not provided, this will default to the current date/time.
+          format: date-time
+          nullable: true
+        source:
+          $ref: '#/components/schemas/InventoryEnumEventSourceType'
+        url:
+          type: string
+          description: The source url of the event.
+          format: uri
+          nullable: true
+        relatedSource:
+          $ref: '#/components/schemas/InventoryEnumEventSourceType'
+        relatedEntityId:
+          type: string
+          description: Entity id for tying this event back to a related entity.
+          nullable: true
+        note:
+          type: string
+          description: Notes associated to this transaction.
+          nullable: true
+      additionalProperties: false
+      description: Pick event for item inventory.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    ItemRevisionDto:
+      type: object
+      properties:
+        isLatestRevision:
+          type: boolean
+          description: Indicate if this is the latest revision of an item.
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Revision name.
+          nullable: true
+      additionalProperties: false
+      description: Item revision information.
+    ItemMaterialDetailsDto:
+      type: object
+      properties:
+        materialWidth:
+          minimum: 0
+          type: number
+          description: For Sheets, the Width
+          format: double
+          nullable: true
+        materialLength:
+          minimum: 0
+          type: number
+          description: Length. For Sheets, the Height
+          format: double
+          nullable: true
+        materialThickness:
+          minimum: 0
+          type: number
+          description: Thickness or Diameter
+          format: double
+          nullable: true
+        form:
+          $ref: '#/components/schemas/FulcrumProductMaterialsMaterialForms'
+        unit:
+          $ref: '#/components/schemas/FulcrumProductMaterialsFulcrumLengthUnits'
+        materialId:
+          type: string
+          description: 'Ex: SS-SAE-304-Sheet-0.25000'
+          nullable: true
+        materialName:
+          type: string
+          description: 'Ex: Stainless Steel 304 Sheet 1/4"'
+          nullable: true
+        isRemnant:
+          type: boolean
+          description: True if the item was created as a remnant.
+      additionalProperties: false
+      description: Material Details
+    ItemRequestFindParameters:
+      type: object
+      properties:
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter to items who's number contains the given string
+          nullable: true
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter to items who's revision matches the given string
+          nullable: true
+        customField:
+          $ref: '#/components/schemas/CommonCustomFieldSearchDto'
+        latestRevision:
+          type: boolean
+          description: Indicate whether we want the latest revision(s) of the items.
+        itemIds:
+          type: array
+          items:
+            type: string
+          description: Filter to items whose ids are in the list
+          nullable: true
+        descriptionFilter:
+          type: string
+          description: 'Filter items by description.
+
+            Use (escaped) double-quotes to filter by exact phrase, e.g., \\"search phrase\\".
+
+            Prepend search term with "-" to exclude'
+          nullable: true
+        isArchived:
+          type: boolean
+          description: Include or exclude archived items
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding items.
+    CommonEnumStyleEnum:
+      enum:
+      - primary
+      - secondary
+      - success
+      - danger
+      - warning
+      - info
+      - light
+      - dark
+      - connected
+      type: string
+      description: Style enum (for tags).
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonPriceBreakDto:
+      required:
+      - type
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: Indicates at what quantity this price break becomes active.
+          format: int32
+          nullable: true
+        price:
+          type: number
+          description: The price "per unit" at this price break.
+          format: double
+          nullable: true
+        margin:
+          type: number
+          description: Margin
+          format: double
+          nullable: true
+        currencyCode:
+          type: string
+          description: Currency code associated to this price break.
+          nullable: true
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor identifier. Please reference /api/vendors endpoint.
+          nullable: true
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Customer identifier. Please reference /api/customers endpoint.
+          nullable: true
+        customerTierId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Customer tier identifier. Please reference /api/customer-tiers endpoint.
+          nullable: true
+        unitOfMeasureName:
+          type: string
+          description: The unit of measurement.
+          nullable: true
+        type:
+          $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
+      additionalProperties: false
+      description: Price break definition
+    FulcrumProductMaterialsMaterialForms:
+      enum:
+      - sheet
+      - plate
+      - roundBar
+      - flatBar
+      - channel
+      - squareTube
+      - angle
+      - treadPlate
+      - hexBar
+      - squareBar
+      - teeBar
+      - hBeam
+      - rectTube
+      - pipe
+      - wBeam
+      - sBeam
+      - roundTube
+      - rectBar
+      - wideBar
+      - reinforcingBar
+      - halfRoundBar
+      - halfOvalBar
+      type: string
+    CustomerTierDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: Description
+          nullable: true
+      additionalProperties: false
+      description: Customer tier definition.
+    DomainItemsAndInventoryItemOrigin:
+      enum:
+      - make
+      - buy
+      - makeOrBuy
+      - customerSupplied
+      - kit
+      - none
+      type: string
+    CommonEnumCasingOption:
+      enum:
+      - caseSensitive
+      - caseInsensitive
+      type: string
+      description: Case sensititivy options. Of note, in a SQL environment, this should have no impact as SQL is case-insensitive naturally.
+    ItemCustomerTierDto:
+      required:
+      - customerTier
+      - priceBreaks
+      type: object
+      properties:
+        customerTier:
+          $ref: '#/components/schemas/CustomerTierDto'
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonPriceBreakDto'
+          description: Price breaks.
+      additionalProperties: false
+      description: Item customer tier definition
+    ItemListDto:
+      required:
+      - accountingDetails
+      - description
+      - id
+      - itemOrigin
+      - number
+      - unitOfMeasureName
+      - unitTypeName
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The number to give the item.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The description to give the item.
+        itemOrigin:
+          $ref: '#/components/schemas/DomainItemsAndInventoryItemOrigin'
+        unitTypeName:
+          minLength: 1
+          type: string
+          description: 'The unit of measure type, ex: Piece, Volume or Weight'
+        unitOfMeasureName:
+          minLength: 1
+          type: string
+          description: The unit of measure name. Options available depend on the selected UnitTypeName. For Pieces, you might have a UOM of Piece, Set or Case. For Volume, options include Liter, Milliliter, etc.
+        revision:
+          $ref: '#/components/schemas/ItemRevisionDto'
+        barCodeNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The barcode number to give the item.
+          nullable: true
+        isSellable:
+          type: boolean
+          description: Define if this item is able to be sold/sellable.
+        isArchived:
+          type: boolean
+          description: Indicate if this item is archived.
+        isNonInventory:
+          type: boolean
+          description: Indicate if this item is considered a non-inventory item.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        accountingCode2Id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code 2 key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        materialCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item material code key identifier. Please reference /api/material-codes endpoint.
+          nullable: true
+        gradeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item grade code key identifier. Please reference /api/grade-codes endpoint.
+          nullable: true
+        shapeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item shape code key identifier. Please reference /api/shape-codes endpoint.
+          nullable: true
+        gaugeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item gauge code key identifier. Please reference /api/gauge-codes endpoint.
+          nullable: true
+        categoryId:
+          type: string
+          description: Item category code key identifier. Please reference /api/item-categories endpoint.
+          nullable: true
+        width:
+          minimum: 0
+          type: number
+          description: Item width
+          format: double
+          nullable: true
+        height:
+          minimum: 0
+          type: number
+          description: Item height
+          format: double
+          nullable: true
+        length:
+          minimum: 0
+          type: number
+          description: Item length
+          format: double
+          nullable: true
+        weight:
+          minimum: 0
+          type: number
+          description: Item weight
+          format: double
+          nullable: true
+        materialWeight:
+          minimum: 0
+          type: number
+          description: The weight of material item (calculated)
+          format: double
+          nullable: true
+        minimumStockOnHand:
+          minimum: 0
+          type: number
+          description: Item minimum stock on hand.
+          format: double
+          nullable: true
+        minimumProductionQuantity:
+          minimum: 0
+          type: number
+          description: Item minimum production quantity for a manufacturing run.
+          format: double
+          nullable: true
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+          nullable: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagDto'
+          description: Item tags.
+        internalNotes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Internal item notes.
+          nullable: true
+        salesUnitOfMeasureConversions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonUnitOfMeasureConversionDto'
+          description: Sales unit of measurements
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+          nullable: true
+        isTaxable:
+          type: boolean
+          description: Whether this item is taxable
+          nullable: true
+        buildToOrder:
+          type: boolean
+          description: Whether or not this item is build to order (jobs are made from sales orders, not overall demand)
+          nullable: true
+        buildToStock:
+          type: boolean
+          description: Whether or not this item is build to stock (jobs are created from overall demand, not sales orders)
+          nullable: true
+        isSingleUseItem:
+          type: boolean
+          description: Indicate if this item is intended for single use.
+          nullable: true
+        isLotTracked:
+          type: boolean
+          description: Indicate if this item is lot-tracked.
+          nullable: true
+        shipping:
+          $ref: '#/components/schemas/ItemShippingDto'
+        createdUtc:
+          type: string
+          description: The date the item was created
+          format: date-time
+        modifiedUtc:
+          type: string
+          description: The date the item was last modified
+          format: date-time
+        customerTiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemCustomerTierDto'
+          description: Customer tiers associated with this item.
+        materialDetails:
+          $ref: '#/components/schemas/ItemMaterialDetailsDto'
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+        materialVendorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemMaterialVendorDto'
+          description: Includes vendor (purchasing) details for this item. This is specific to material-based items.
+          nullable: true
+        vendorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemVendorDto'
+          description: Includes vendor (purchasing) details for this item.
+          nullable: true
+        customerDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemCustomerDto'
+          description: Includes customer (selling) details for this item.
+          nullable: true
+        qualityPlanStatus:
+          $ref: '#/components/schemas/ItemsAndInventoryDataQualityPlanStatus'
+        usedByItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonReferenceDto'
+          description: 'Items that use this item. Will only be populated if IncludeUsageData is set to true in
+
+            the request parameters.'
+          nullable: true
+      additionalProperties: false
+      description: An item
+    DomainPriceBreaksPriceBreakTypeEnum:
+      enum:
+      - price
+      - margin
+      - cost
+      - operation
+      - shopRate
+      type: string
+    ItemNumberFilter:
+      required:
+      - casingOption
+      - mode
+      - query
+      type: object
+      properties:
+        query:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The filter string to match against.
+        mode:
+          $ref: '#/components/schemas/ItemRequestFilterMode'
+        casingOption:
+          $ref: '#/components/schemas/CommonEnumCasingOption'
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Optional revision to match against. Revision is always tested for exact equality
+          nullable: true
+      additionalProperties: false
+      description: Filter used to limit results by item number
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+          nullable: true
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+      additionalProperties: false
+      description: An object that contains all accounting details.
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+          nullable: true
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+          nullable: true
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

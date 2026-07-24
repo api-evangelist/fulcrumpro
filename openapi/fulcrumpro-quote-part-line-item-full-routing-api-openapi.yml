@@ -1,0 +1,2022 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Quote Part Line Item Full Routing API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Quote Part Line Item Full Routing
+paths:
+  /api/quotes/{QuoteId}/part-line-items/{lineItemId}/routing/{routingId}/input-items:
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Create a full routing input item for a quote part line item
+      operationId: QuotePartLineItemFullRoutingInputItemCreate
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/input-items/{inputItemId}:
+    delete:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Delete a full routing input item from quote part line item
+      operationId: QuotePartLineItemFullRoutingInputItemDelete
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: inputItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Gets a full routing input item for a quote part line item
+      operationId: QuotePartLineItemFullRoutingInputItemGet
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: inputItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputItemDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Update a full routing input item for a quote part line item
+      operationId: QuotePartLineItemFullRoutingInputItemUpdate
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: inputItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/input-items/list:
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Lists the full routing input items for a quote part line item
+      operationId: QuotePartLineItemFullRoutingInputItemList
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: skip
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: take
+        in: query
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 50
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputItemDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputItemDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/input-materials/list:
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: List input materials for a quote part line item's routing
+      operationId: QuotePartLineItemFullRoutingInputMaterialList
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: skip
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: take
+        in: query
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 50
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/operations/{operationId}/ipts/{phase}:
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Creates a full routing operations for a quote part line item
+      operationId: QuotePartLineItemFullRoutingIptCreate
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: phase
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DomainInProcessTrackingFieldCheckpointPhase'
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingIptCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingIptCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingIptCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingIptCreateDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/operations/{operationId}/ipts/{phase}/{iptId}:
+    delete:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Deletes a full routing operation in process tracking field for a quote part line item
+      operationId: QuotePartLineItemFullRoutingIptDelete
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: phase
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DomainInProcessTrackingFieldCheckpointPhase'
+      - name: iptId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Gets a full routing operation in process tracking field for a quote part line item
+      operationId: QuotePartLineItemFullRoutingIptGet
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: phase
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DomainInProcessTrackingFieldCheckpointPhase'
+      - name: iptId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingIptDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingIptDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/operations/{operationId}/ipts/{phase}/list:
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Lists full routing operation in process tracking fields for a quote part line item
+      operationId: QuotePartLineItemFullRoutingIptList
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: phase
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DomainInProcessTrackingFieldCheckpointPhase'
+      - name: skip
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: take
+        in: query
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 50
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestIptFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestIptFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestIptFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestIptFindParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingIptDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingIptDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/make-summary:
+    get:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Get a summary of the make routing for a quote part line item
+      operationId: QuotePartLineItemFullRoutingMakeSummaryGet
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoutingDataFullRoutingMakeSummaryDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoutingDataFullRoutingMakeSummaryDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/operations:
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Creates a full routing operation for a quote part line item
+      operationId: QuotePartLineItemFullRoutingOperationCreate
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationCreateDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/operations/{operationId}:
+    delete:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Removes a full routing operation for a quote part line item
+      operationId: QuotePartLineItemFullRoutingOperationDelete
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Gets a full routing operation for a quote part line item
+      operationId: QuotePartLineItemFullRoutingOperationGet
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingOperationDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingOperationDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Updates a full routing operation for a quote part line item
+      operationId: QuotePartLineItemFullRoutingOperationUpdate
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRoutingOperationUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/operations/{operationId}/items/{operationItemId}:
+    get:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Gets a full routing operation item for a quote part line item
+      operationId: QuotePartLineItemFullRoutingOperationItemGet
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingInputItemDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/operations/{operationId}/items/list:
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: List full routing operation items for a quote part line item
+      operationId: QuotePartLineItemFullRoutingOperationItemList
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: skip
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: take
+        in: query
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 50
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestItemFindParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputItemDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingInputItemDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}/operations/list:
+    post:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Lists full routing operations for a quote part line item
+      operationId: QuotePartLineItemFullRoutingOperationList
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: skip
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+      - name: take
+        in: query
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+          default: 50
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestOperationFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestOperationFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestOperationFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RoutingRequestOperationFindParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingOperationDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemRoutingOperationDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+  /api/quotes/{quoteId}/part-line-items/{lineItemId}/routing/{routingId}:
+    get:
+      tags:
+      - Quote Part Line Item Full Routing
+      summary: Gets a full routing routing for a quote part line item
+      operationId: QuotePartLineItemFullRoutingRoutingGet
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: routingId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemRoutingDto'
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
+components:
+  schemas:
+    ItemRoutingInputItemDto:
+      required:
+      - description
+      - id
+      - itemId
+      - number
+      - valueType
+      - valueTypeUnits
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of this input item in the item's routing
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item Id
+          readOnly: true
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The number to give the item.
+          readOnly: true
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The revision of the item
+          readOnly: true
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The description to give the item.
+          readOnly: true
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An item
+    ItemRoutingOperationDto:
+      required:
+      - id
+      - name
+      - systemOperationId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The Id of this operation specific to this item's routing
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the system operation
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of the system operation
+        order:
+          minimum: 0
+          type: integer
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days
+          format: int32
+        unattended:
+          type: boolean
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+          nullable: true
+        machineTrackingEnabled:
+          type: boolean
+          description: Whether machine tracking is enabled.
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Instructions for this operation.
+          nullable: true
+      additionalProperties: false
+      description: A routing operation (step)
+    MaterialShapeVendorDto:
+      required:
+      - id
+      - isPrimary
+      - priceBreaks
+      - priceUnit
+      - vendorId
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor identifier. Pelase reference /api/vendors endpoint.
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        currencyCode:
+          type: string
+          description: Currency code/denomination associated to this vendor.
+          nullable: true
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        leadTimeInDays:
+          minimum: 0
+          type: integer
+          description: Number of days required between order and receipt
+          format: int32
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Material vendor definition
+    ItemRoutingDto:
+      type: object
+      properties:
+        allowContinuousFlow:
+          type: boolean
+          description: Allow an operation to start before previous operations in the routing end
+          nullable: true
+      additionalProperties: false
+      description: Represents an item's routing
+    CommonEnumMaterialRequirementCostingEnum:
+      enum:
+      - fullCost
+      - usageBased
+      type: string
+      description: Specifies the costing of the material.
+    MaterialShapeVendorPriceBreakDto:
+      required:
+      - id
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          type: number
+          description: The price per unit.
+          format: double
+      additionalProperties: false
+      description: Vendor prices breaks for a material shape.
+    ItemRoutingOutsideProcessingOperationDto:
+      type: object
+      properties:
+        outsideProcessingTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        selectedVendorId:
+          type: string
+          description: Outside processing vendor
+          nullable: true
+      additionalProperties: false
+      description: Defines outside processing fields
+    ItemRoutingIptCreateDto:
+      required:
+      - fieldTypeId
+      - label
+      type: object
+      properties:
+        label:
+          minLength: 1
+          type: string
+          description: Label describing the in process tracking field
+        description:
+          type: string
+          description: The description of the in process tracking field
+          nullable: true
+        units:
+          type: string
+          description: The units used when this in process tracking field represents a number
+          nullable: true
+        fieldTypeId:
+          minLength: 1
+          type: string
+          description: The id of the field type for this in process tracking field
+        targetValue:
+          type: number
+          description: The target or ideal value of an in process tracking field response
+          format: double
+          nullable: true
+        minimumValue:
+          type: number
+          description: The minimum acceptable value for a tracking field response
+          format: double
+          nullable: true
+        maximumValue:
+          type: number
+          description: The maximum acceptable value for a tracking field response
+          format: double
+          nullable: true
+        triggeringBooleanValue:
+          type: boolean
+          description: The target value for booleans. Typically Yes/No for proceeding with next checkpoint
+          nullable: true
+        triggeringDropdownValue:
+          type: string
+          description: The target value for multiple options
+          nullable: true
+        required:
+          type: boolean
+          description: Whether the in process tracking field requires a response
+        restricted:
+          type: boolean
+          description: If true, only users with the appropriate permission will be allowed to save a response.
+        firstArticle:
+          type: boolean
+          description: 'Only applies to the During phase.  If true (and Required), this field will prevent adding any
+
+            completed items to inventory if target is not met.'
+      additionalProperties: false
+      description: An in process tracking field for a routing step
+    RoutingRequestOperationFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter to operations who's name contains the given string
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding operations on an item's routing.
+    ItemRoutingOperationUpdateDto:
+      type: object
+      properties:
+        order:
+          minimum: 0
+          type: integer
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+          nullable: true
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days. Will default to zero if not provided.
+          format: int32
+          nullable: true
+        unattended:
+          type: boolean
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+          nullable: true
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Instructions for this operation.
+          nullable: true
+      additionalProperties: false
+      description: A routing operation (step)
+    CommonEnumInputItemValueTypeEnum:
+      enum:
+      - creates
+      - requires
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    DomainInProcessTrackingFieldCheckpointPhase:
+      enum:
+      - preOperation
+      - duringOperation
+      - postOperation
+      type: string
+    ItemRoutingOperationCreateDto:
+      required:
+      - systemOperationId
+      type: object
+      properties:
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: System Operation Id
+        order:
+          minimum: 0
+          type: integer
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+          nullable: true
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days. Will default to zero if not provided.
+          format: int32
+          nullable: true
+        unattended:
+          type: boolean
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+          nullable: true
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Operation instructions. Will default to the instructions defined on the operation when not provided.
+          nullable: true
+        inputMaterialIds:
+          type: array
+          items:
+            type: string
+          description: 'The ids on the input material to associate to this operation.
+
+            This value should be the Id from the response from items/{itemId}/routing/input-materials/list'
+          nullable: true
+      additionalProperties: false
+      description: A routing operation (step)
+    ItemRoutingOutsideProcessingCostOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+      description: The cost option for the outside processing operation
+    CommonEnumMaterialVendorPriceUnitEnum:
+      enum:
+      - kilogram
+      - pound
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    ItemRoutingInputMaterialDto:
+      required:
+      - costing
+      - id
+      - materialId
+      - materialName
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of this input material in the item's routing
+          format: uuid
+        materialId:
+          minLength: 1
+          type: string
+          description: The material id. Please reference /api/materials endpoint.
+        materialName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The material name.
+        materialShape:
+          $ref: '#/components/schemas/MaterialShapeDto'
+        costing:
+          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
+        nestings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemRoutingInputMaterialNestingDto'
+          description: Nestings associated to this material indicating bounding box dimensions and production quantities.
+        routingStepId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'The routing step id.
+
+            This value should be the Id from the response from items/{itemId}/routing/operations/list'
+          nullable: true
+      additionalProperties: false
+      description: An item input material
+    ItemRoutingIptDto:
+      required:
+      - fieldTypeId
+      - id
+      - label
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the in process tracking field
+          format: uuid
+        label:
+          minLength: 1
+          type: string
+          description: Label describing the in process tracking field
+        units:
+          type: string
+          description: The units used when this in process tracking field represents a number
+          nullable: true
+        fieldTypeId:
+          minLength: 1
+          type: string
+          description: The id of the field type for this in process tracking field
+        targetValue:
+          type: number
+          description: The target or ideal value of an in process tracking field response
+          format: double
+          nullable: true
+        minimumValue:
+          type: number
+          description: The minimum acceptable value for a tracking field response
+          format: double
+          nullable: true
+        maximumValue:
+          type: number
+          description: The maximum acceptable value for a tracking field response
+          format: double
+          nullable: true
+        triggeringBooleanValue:
+          type: boolean
+          description: The target value for booleans. Typically Yes/No for proceeding with next checkpoint
+          nullable: true
+        triggeringDropdownValue:
+          type: string
+          description: The target value for multiple options
+          nullable: true
+        required:
+          type: boolean
+          description: Whether the in process tracking field requires a response
+        restricted:
+          type: boolean
+          description: If true, only users with the appropriate permission will be allowed to save a response.
+        firstArticle:
+          type: boolean
+          description: 'Only applies to the During phase.  If true (and Required), this field will prevent adding any
+
+            completed items to inventory if target is not met.'
+      additionalProperties: false
+      description: An in process tracking field for a routing step
+    ItemRoutingNormalOperationDto:
+      type: object
+      properties:
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        anyEquipment:
+          type: boolean
+          description: Specifies that any equipment associated with this operation can be used
+        selectedEquipmentIds:
+          type: array
+          items:
+            type: string
+          description: List of equipment ids selected from equipment associated with this operation
+        isNestable:
+          type: boolean
+          description: Indicate if this operation is nestable.
+      additionalProperties: false
+      description: Defines non-outside-processing fields
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    ItemRoutingInputItemCreateDto:
+      required:
+      - itemId
+      - valueType
+      - valueTypeUnits
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The item id to be added. Please reference /api/items endpoint.
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemCreateDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An input item for routing
+    CommonEnumMaterialFormEnum:
+      enum:
+      - sheet
+      - plate
+      - roundBar
+      - flatBar
+      - channel
+      - squareTube
+      - angle
+      - treadPlate
+      - hexBar
+      - squareBar
+      - teeBar
+      - hBeam
+      - rectTube
+      - pipe
+      - wBeam
+      - sBeam
+      - roundTube
+      - rectBar
+      - wideBar
+      type: string
+      description: Specifies the form of the material.
+    RoutingDataFullRoutingMakeSummaryDto:
+      type: object
+      properties:
+        itemLevel:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+        itemName:
+          type: string
+          nullable: true
+        routingId:
+          type: string
+          nullable: true
+        path:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ItemRoutingOperationTimeOption:
+      enum:
+      - fixedSeconds
+      - fixedMinutes
+      - fixedHours
+      - fixedDays
+      - secondsPerUnit
+      - minutesPerUnit
+      - hoursPerUnit
+      - daysPerUnit
+      - unitsPerHour
+      type: string
+      description: The time unit or option used in operation times
+    MaterialShapeDto:
+      required:
+      - form
+      - id
+      - materialReferenceId
+      - materialReferenceName
+      - name
+      - vendors
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: Unique id associated to this entity.
+        active:
+          type: boolean
+          description: Indicates if this material is activated.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name.
+        form:
+          $ref: '#/components/schemas/CommonEnumMaterialFormEnum'
+        materialReferenceId:
+          minLength: 1
+          type: string
+          description: Material Id
+        materialReferenceName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Material name
+        specification:
+          type: string
+          description: Specification
+          nullable: true
+        subSpecification:
+          type: string
+          description: Sub-specification
+          nullable: true
+        finish:
+          type: string
+          description: Finish
+          nullable: true
+        grade:
+          type: string
+          description: Grade
+          nullable: true
+        dimension:
+          type: string
+          description: Dimension
+          nullable: true
+        type:
+          type: string
+          description: Material type
+          nullable: true
+        version:
+          type: string
+          description: Version
+          nullable: true
+        vendors:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorDto'
+          description: Vendors that supply this material.
+      additionalProperties: false
+      description: Material definition.
+    ItemRoutingOutsideProcessingOperationCost:
+      type: object
+      properties:
+        costOption:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
+        fixedCost:
+          type: number
+          description: The fixed total cost for the operation
+          format: double
+          nullable: true
+        perUnitCost:
+          type: number
+          description: The cost per unit for the operation
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: Outside processing operation cost
+    ItemRoutingInputMaterialNestingDto:
+      required:
+      - d2
+      - d3
+      - id
+      - produces
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of this input material's nesting in the item's routing material
+          format: uuid
+        d2:
+          type: number
+          description: Length
+          format: double
+        d3:
+          type: number
+          description: For Sheets, the Width
+          format: double
+        produces:
+          type: integer
+          description: The quantity produced, given the bounding box dimensions (D2 x D3).
+          format: int32
+        useForEstimatedCosting:
+          type: boolean
+          description: 'Indicates if this nesting record will be used for estimated costing.
+
+            NOTE: Only one nesting record for a material can have this value set to true.'
+      additionalProperties: false
+      description: Create an input material nesting for routing
+    ItemRoutingOperationTime:
+      type: object
+      properties:
+        time:
+          type: number
+          description: Time or units of this operation
+          format: double
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
+      additionalProperties: false
+      description: Operation time and type
+    RoutingRequestIptFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter to in process tracking fields whose label contains the given string
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding operations on an item's routing.
+    RoutingRequestItemFindParameters:
+      type: object
+      properties:
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter to items who's number contains the given string
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding input items on an item's routing.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

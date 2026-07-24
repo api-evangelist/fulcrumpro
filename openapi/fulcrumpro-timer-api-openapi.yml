@@ -1,0 +1,877 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Timer API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Timer
+paths:
+  /api/timers:
+    post:
+      tags:
+      - Timer
+      summary: 'Creates a completed timer block retroactively. Unlike the start/stop endpoints, which stamp the server
+
+        time on receipt, this endpoint accepts explicit timestamps so integrations can submit a whole block of
+
+        time after the fact. Blocks may not be in the future, older than 30 days, or longer than 7 days.'
+      operationId: CreateTimer
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TimerCreateTimerDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimerCreateTimerDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TimerCreateTimerDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TimerCreateTimerDto'
+      responses:
+        '200':
+          description: "The created timer. When the operation already has a machine timer, a Machine block\n            is added to that timer as a segment and the combined timer is returned."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimerDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/TimerDto'
+        '400':
+          description: "The block failed validation (bad timestamps, disallowed type, or overlap with\n            existing machine time on the operation)"
+        '404':
+          description: The job, item to make, operation, or user did not exist
+        '409':
+          description: A machine timer is currently running for the operation
+      x-c4-required-permissions:
+      - Time-Time-Edit Time Managements
+  /api/timers/list:
+    post:
+      tags:
+      - Timer
+      summary: Finds timers based on search parameters
+      operationId: ListTimer
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        description: The search parameters
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JobTrackingTimerRequestListTimersParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTrackingTimerRequestListTimersParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/JobTrackingTimerRequestListTimersParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/JobTrackingTimerRequestListTimersParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoTimerDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoTimerDto'
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+      - Time-Time-View Time Management
+  /api/timers/{timerId}:
+    patch:
+      tags:
+      - Timer
+      summary: Partially update a timer
+      operationId: PatchTimer
+      parameters:
+      - name: timerId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocument'
+      responses:
+        '200':
+          description: Timer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimerDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/TimerDto'
+        '404':
+          description: Timer did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Time-Time-Edit Time Managements
+    put:
+      tags:
+      - Timer
+      summary: Update a specific timer
+      operationId: UpdateTimer
+      parameters:
+      - name: timerId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TimerUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimerUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TimerUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TimerUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Timer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimerDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/TimerDto'
+        '404':
+          description: Timer did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Time-Time-Edit Time Managements
+components:
+  schemas:
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    TimerDto:
+      required:
+      - createdUtc
+      - id
+      - segments
+      - startedOnUtc
+      - startedOnUtcOriginal
+      - type
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The timer identifier
+        jobId:
+          type: string
+          description: The job identifier
+          nullable: true
+        jobName:
+          type: string
+          description: The job name.
+          nullable: true
+        itemToMakeId:
+          type: string
+          description: The item to make identifier
+          nullable: true
+        itemToMakeItemId:
+          type: string
+          description: The item to make's original item id.
+          nullable: true
+        itemToMakeName:
+          type: string
+          description: The item to make name.
+          nullable: true
+        itemToMakeDescription:
+          type: string
+          description: The item to make description.
+          nullable: true
+        jobOperationId:
+          type: string
+          description: The job operation identifier
+          nullable: true
+        jobOperationName:
+          type: string
+          description: The job operation name.
+          nullable: true
+        jobOperationDescription:
+          type: string
+          description: The job operation description.
+          nullable: true
+        startedById:
+          type: string
+          description: The user identifier who started the timer
+          nullable: true
+        startedOnUtc:
+          type: string
+          description: When the timer was started in UTC time.
+          format: date-time
+        startedOnUtcOriginal:
+          type: string
+          description: When the timer was ORIGINALLY started in UTC time.
+          format: date-time
+        stoppedOnUtc:
+          type: string
+          description: When the timer was stopped in UTC time.
+          format: date-time
+          nullable: true
+        stoppedOnUtcOriginal:
+          type: string
+          description: When the timer was ORIGINALLY stopped in UTC time.
+          format: date-time
+          nullable: true
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+        isRunning:
+          type: boolean
+          description: Whether the timer is running or not
+          readOnly: true
+        createdUtc:
+          type: string
+          description: When the timer was created in UTC time.
+          format: date-time
+        modifiedUtc:
+          type: string
+          description: When the timer was modified in UTC time.
+          format: date-time
+          nullable: true
+        elapsedTimeInSeconds:
+          type: number
+          description: Elapsed time this timer was running.  Can be greater than the labor time if the operator has multiple concurrent timers.
+          format: double
+          nullable: true
+        operationTimeInSeconds:
+          type: number
+          description: 'Total Operation run time
+
+            If this timer was overridden, the operation time will be adjusted by the multiple of the adjustment'
+          format: double
+          nullable: true
+        laborTimeInSeconds:
+          type: number
+          description: 'Labor time for use in costing calculations
+
+            Can be less than elapsed time if an operator''s time was split between jobs'
+          format: double
+          nullable: true
+        machineTimeInSeconds:
+          type: number
+          description: 'Machine time for use in costing and time displays which is just the elapsed time of the segments
+
+            If the start/stop time has been overridden directly, use that value'
+          format: double
+          nullable: true
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimerSegmentDto'
+          description: The segments of time that this overall timer represents.
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+          nullable: true
+        details:
+          $ref: '#/components/schemas/DtoTimerAttributionDetails'
+      additionalProperties: false
+      description: Data transfer object for Timer entity
+    TimerSegmentDto:
+      required:
+      - id
+      - startedOnUtc
+      type: object
+      properties:
+        id:
+          type: string
+          description: The timer segment identifier.
+          format: uuid
+        startedOnUtc:
+          type: string
+          description: When this segment begins.
+          format: date-time
+        stoppedOnUtc:
+          type: string
+          description: When this segment ends. If the timer is not stopped (still running), this value will be blank.
+          format: date-time
+          nullable: true
+        isRunning:
+          type: boolean
+          description: Whether the timer segment is running or not.
+          readOnly: true
+        details:
+          $ref: '#/components/schemas/DtoTimerSegmentAttributionDetails'
+      additionalProperties: false
+      description: Data transfer object for TimerSegments entity
+    DtoPagedResultDtoTimerDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimerDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    JobTrackingTimerRequestListTimersParameters:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Filter timers based on who started it
+          nullable: true
+        jobId:
+          type: string
+          description: Filter timers based on job
+          nullable: true
+        runningTimersOnly:
+          type: boolean
+          description: Filter to only running timers
+          nullable: true
+        types:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+          description: Filter to specific timer types
+          nullable: true
+        createdBeforeUtc:
+          type: string
+          description: Filters timers created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        createdAfterUtc:
+          type: string
+          description: Filters timers created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        modifiedBeforeUtc:
+          type: string
+          description: Filters timers modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        modifiedAfterUtc:
+          type: string
+          description: Filters timers modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        startedBeforeUtc:
+          type: string
+          description: Filters timers started before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        startedAfterUtc:
+          type: string
+          description: Filters timers started after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        stoppedBeforeUtc:
+          type: string
+          description: Filters timers stopped before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        stoppedAfterUtc:
+          type: string
+          description: Filters timers stopped after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        stoppedBeforeUtcOriginal:
+          type: string
+          description: 'Filters timers stopped before (exclusive) this parameter in UTC time.
+
+            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
+
+            If no time component is passed, midnight UTC will be used.'
+          format: date-time
+          nullable: true
+        stoppedAfterUtcOriginal:
+          type: string
+          description: 'Filters timers stopped after (exclusive) this parameter in UTC time.
+
+            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
+
+            If no time component is passed, midnight UTC will be used.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching job tracking timers
+    TimerUpdateDto:
+      type: object
+      properties:
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+      additionalProperties: false
+      description: Represents an update on a timer.
+    TimerCreateTimerDto:
+      required:
+      - itemToMakeId
+      - jobId
+      - operationId
+      - startedOnUtc
+      - stoppedOnUtc
+      - type
+      - userId
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The user the timer block is attributed to.
+        jobId:
+          minLength: 1
+          type: string
+          description: The job identifier
+        itemToMakeId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The item to make identifier
+        operationId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The operation identifier
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+        startedOnUtc:
+          type: string
+          description: When the block started, in UTC.
+          format: date-time
+        stoppedOnUtc:
+          type: string
+          description: When the block stopped, in UTC. Must be after StartedOnUtc.
+          format: date-time
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value data used to correlate this timer with external systems and search for it later.
+          nullable: true
+      additionalProperties: false
+      description: Model for creating a complete, closed timer block via the public API.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    DomainTimeTrackingTimer_Type:
+      enum:
+      - setup
+      - run
+      - clockIn
+      - break
+      - labor
+      - machine
+      type: string
+    DtoTimerAttributionDetails:
+      required:
+      - timeInSeconds
+      - timeInSecondsWeighted
+      type: object
+      properties:
+        timeInSeconds:
+          type: number
+          description: Elapsed time.
+          format: double
+        timeInSecondsWeighted:
+          type: number
+          description: Time in seconds (after using the multiplier/weighted).
+          format: double
+        rateHourlyInPrimaryCurrency:
+          type: number
+          description: Rate in primary currency.
+          format: double
+          nullable: true
+        cost:
+          type: number
+          description: Cost. This value will always reflect the current calculated cost. What this means is that overriding start/stop times would affect this value.
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: Cost and time attribution for a timer.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    DtoTimerSegmentAttributionDetails:
+      required:
+      - timeInSeconds
+      - timeInSecondsWeighted
+      type: object
+      properties:
+        timeInSeconds:
+          type: number
+          description: Elapsed time. If the segment is not stopped, this value will be calculated as of now.
+          format: double
+        timeInSecondsWeighted:
+          type: number
+          description: Time in seconds (after using the multiplier/weighted).
+          format: double
+        multiplier:
+          type: number
+          description: With timers, because segments account for overlapping operations, we must account for the percentage to attribute to this segment.
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: Time attribution for a timer segment.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

@@ -1,0 +1,445 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Work Order API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Work Order
+paths:
+  /api/work-orders/{workOrderId}:
+    get:
+      tags:
+      - Work Order
+      summary: Get a specific work order
+      operationId: GetWorkOrder
+      parameters:
+      - name: workOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The work order for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkOrderDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/WorkOrderDto'
+        '404':
+          description: Work order did not exist
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/work-orders/list:
+    post:
+      tags:
+      - Work Order
+      summary: Find work orders based on search parameters.
+      operationId: ListWorkOrder
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderRequestFindParameters'
+      responses:
+        '200':
+          description: List of work orders matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkOrderDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkOrderDto'
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+components:
+  schemas:
+    WorkOrderRequestFindParameters:
+      type: object
+      properties:
+        workOrderIds:
+          maxItems: 500
+          minItems: 1
+          type: array
+          items:
+            type: string
+          description: Filter to work orders whose ids are in the list
+          nullable: true
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: Filter to only given numbers
+          nullable: true
+        names:
+          maxItems: 500
+          minItems: 1
+          type: array
+          items:
+            type: string
+          description: Filter to only given names
+          nullable: true
+        statuses:
+          maxItems: 500
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderStatusEnum'
+          description: Filter to match the given statuses
+          nullable: true
+        createdBeforeUtc:
+          type: string
+          description: Filters jobs created before (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        createdAfterUtc:
+          type: string
+          description: Filters jobs created after (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding work orders.
+    JobPriorityEnum:
+      enum:
+      - low
+      - moderate
+      - high
+      type: string
+      description: Job priority
+    WorkOrderStatusEnum:
+      enum:
+      - needsReview
+      - approved
+      - scheduled
+      - inProgress
+      - complete
+      - cancelled
+      type: string
+      description: Work order status
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    WorkOrderDto:
+      required:
+      - id
+      - name
+      - number
+      - status
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to this entity
+        number:
+          type: integer
+          description: Job number
+          format: int32
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Job name, defaults to number unless otherwise specified.
+        createdUtc:
+          type: string
+          description: The date the job was created
+          format: date-time
+        completedOnUtc:
+          type: string
+          description: The job completion datetime.
+          format: date-time
+          nullable: true
+        cancelledOnUtc:
+          type: string
+          description: The job cancelled datetime.
+          format: date-time
+          nullable: true
+        scheduledStartUtc:
+          type: string
+          description: The current scheduled start time.
+          format: date-time
+          nullable: true
+        scheduledEndUtc:
+          type: string
+          description: The current scheduled end time.
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/WorkOrderStatusEnum'
+        priority:
+          $ref: '#/components/schemas/JobPriorityEnum'
+      additionalProperties: false
+      description: Represents a work order
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

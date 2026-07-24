@@ -1,0 +1,868 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Job Item To Make Operation API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Job Item To Make Operation
+paths:
+  /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/{operationId}/add-quantity-completed:
+    post:
+      tags:
+      - Job Item To Make Operation
+      summary: 'Adds additional quantity completed to a job operation without completing the operation.
+
+        Each call will increment the quantity completed by the specified amount.'
+      description: "This is a non-idempotent action. Multiple calls with the same parameters will result in \nthe quantity being added multiple times. Implement appropriate client-side controls to \nprevent duplicate submissions."
+      operationId: AddQuantityCompletedToJobOperation
+      parameters:
+      - name: jobId
+        in: path
+        description: The ID of the job
+        required: true
+        schema:
+          type: string
+      - name: itemToMakeId
+        in: path
+        description: The ID of the item to make
+        required: true
+        schema:
+          type: string
+      - name: operationId
+        in: path
+        description: The ID of the operation
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request containing the additional quantity to add
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemsToMakeOperationsAddQuantityCompletedRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemsToMakeOperationsAddQuantityCompletedRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemsToMakeOperationsAddQuantityCompletedRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemsToMakeOperationsAddQuantityCompletedRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsToMakeOperationsAddQuantityCompletedResponse'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemsToMakeOperationsAddQuantityCompletedResponse'
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Jobs-Jobs-Edit In Progress Job
+  /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/{operationId}:
+    get:
+      tags:
+      - Job Item To Make Operation
+      summary: Get a specific operation for an item to make on a job
+      operationId: GetJobItemToMakeOperation
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemToMakeId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: The operation for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemToMakeOperationDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemToMakeOperationDto'
+        '404':
+          description: Job, item to make, or operation did not exist
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+    post:
+      tags:
+      - Job Item To Make Operation
+      summary: Get a specific operation for an item to make on a job
+      operationId: UpdateJobItemToMakeOperation
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemToMakeId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemToMakeOperationUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemToMakeOperationUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemToMakeOperationUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemToMakeOperationUpdateDto'
+      responses:
+        '200':
+          description: The operation for the given id
+        '404':
+          description: Job, item to make, or operation did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Jobs-Jobs-Edit In Progress Job
+  /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/list:
+    post:
+      tags:
+      - Job Item To Make Operation
+      summary: Get a list of operations for an item to make on a job
+      operationId: ListJobItemToMakeOperation
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemToMakeId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: The operations for the given item to make
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemToMakeOperationDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemToMakeOperationDto'
+        '404':
+          description: Job or item to make did not exist
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/{operationId}/items-required/list:
+    post:
+      tags:
+      - Job Item To Make Operation
+      summary: Get a list of required items for an operation on a job item to make
+      operationId: ListJobItemToMakeOperationItemsRequired
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemToMakeId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: The required items for the given operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemToMakeOperationItemRequiredDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemToMakeOperationItemRequiredDto'
+        '404':
+          description: Job, item to make, or operation did not exist
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/{operationId}/materials-required/list:
+    post:
+      tags:
+      - Job Item To Make Operation
+      summary: Get a list of required materials for an operation on a job item to make
+      operationId: ListJobItemToMakeOperationMaterialsRequired
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemToMakeId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: The required materials for the given operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemToMakeOperationMaterialRequiredDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemToMakeOperationMaterialRequiredDto'
+        '404':
+          description: Job, item to make, or operation did not exist
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/{operationId}/pick:
+    post:
+      tags:
+      - Job Item To Make Operation
+      summary: Pick a specific item for a specific item to make on a job.
+      operationId: PickInventoryForJobItemToMakeOperation
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemToMakeId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JobItemToMakeOperationPickInventoryDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobItemToMakeOperationPickInventoryDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/JobItemToMakeOperationPickInventoryDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/JobItemToMakeOperationPickInventoryDto'
+        required: true
+      responses:
+        '200':
+          description: Inventory transaction processed
+        '400':
+          description: Validation issues with input
+        '404':
+          description: The job, item to make, or operation did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Jobs-Jobs-Edit In Progress Job
+components:
+  schemas:
+    JobItemToMakeOpStatusEnum:
+      enum:
+      - pending
+      - ready
+      - running
+      - paused
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make Operation status
+    ItemsToMakeOperationsAddQuantityCompletedRequest:
+      required:
+      - additionalQuantity
+      type: object
+      properties:
+        additionalQuantity:
+          type: number
+          description: 'The additional quantity to add to the operation''s completed quantity.
+
+            Must be greater than zero.'
+          format: double
+      additionalProperties: false
+      description: Request to add additional quantity completed to a job operation
+    ItemToMakeOperationMaterialRequiredDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: 'Identifier of the material shape.
+
+            Please reference /api/material-shapes endpoint.'
+        name:
+          minLength: 1
+          type: string
+          description: Name of the material shape required
+      additionalProperties: false
+      description: Represents a required input material for a job operation
+    ItemToMakeOperationItemRequiredDto:
+      required:
+      - itemId
+      - itemNumber
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the required item.
+
+            Please reference /api/items endpoint.'
+        itemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Item number of the required item
+        revision:
+          type: string
+          description: Revision of the required item
+          nullable: true
+      additionalProperties: false
+      description: Represents a required input item for a job operation
+    DomainOperationsRouting_Step_RunTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      - unitsPerHour
+      type: string
+    ItemsToMakeOperationsAddQuantityCompletedResponse:
+      required:
+      - additionalQuantityAdded
+      - itemToMakeId
+      - jobId
+      - newTotalQuantityCompleted
+      - operationId
+      - operationStatus
+      - previousQuantityCompleted
+      - quantityRequired
+      type: object
+      properties:
+        jobId:
+          minLength: 1
+          type: string
+          description: The ID of the job
+        itemToMakeId:
+          minLength: 1
+          type: string
+          description: The ID of the item to make
+        operationId:
+          minLength: 1
+          type: string
+          description: The ID of the operation
+        previousQuantityCompleted:
+          type: number
+          description: The quantity completed before this action
+          format: double
+        additionalQuantityAdded:
+          type: number
+          description: The quantity added in this action
+          format: double
+        newTotalQuantityCompleted:
+          type: number
+          description: The new total quantity completed after this action
+          format: double
+        quantityRequired:
+          type: number
+          description: The total quantity required for this operation
+          format: double
+        operationStatus:
+          minLength: 1
+          type: string
+          description: The current status of the operation
+      additionalProperties: false
+      description: Response after adding additional quantity completed to a job operation
+    ItemToMakeOperationUpdateDto:
+      type: object
+      properties:
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: The custom fields to update on the operation object
+          nullable: true
+      additionalProperties: false
+      description: Represents an routing operation on a job item to make
+    JobItemToMakeOperationPickInventoryDto:
+      required:
+      - itemId
+      - quantity
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The identifier of the item to be picked. Please reference api/items endpoint
+        quantity:
+          type: number
+          description: Quantity of the item to pick.
+          format: double
+        locationId:
+          type: string
+          description: 'ID of the location to pick from. If not set or set to an empty string, will
+
+            pick from inventory not assigned to a location. Cannot be set if FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.UseDefaultLocation
+
+            is set to ```true```.'
+          nullable: true
+        useDefaultLocation:
+          type: boolean
+          description: 'If set to true, inventory will be picked from the default location for the item. If set to true,
+
+            FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.LocationId cannot be set.  If the item does not have a default location set and this
+
+            is set to true, will pick from inventory not assigned to a location.'
+        lotId:
+          type: string
+          description: The ID of the lot to pick from.
+          nullable: true
+      additionalProperties: false
+      description: Pick event for an input item
+    DomainOperationsRouting_Step_SetupTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+    ItemToMakeOperationDto:
+      required:
+      - id
+      - isOutsideProcessing
+      - order
+      - status
+      - systemOperationId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique Id associated to this entity
+        status:
+          $ref: '#/components/schemas/JobItemToMakeOpStatusEnum'
+        order:
+          minimum: 0
+          type: integer
+          description: Routing order of the operation
+          format: int32
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the system operation associated to this entity
+
+            Please reference api/operations.'
+        isOutsideProcessing:
+          type: boolean
+          description: Denotes whether this is an outside processing operation
+        originalScheduledStartUtc:
+          type: string
+          description: The first scheduled start time.
+          format: date-time
+          nullable: true
+        originalScheduledEndUtc:
+          type: string
+          description: The first scheduled end time.
+          format: date-time
+          nullable: true
+        scheduledStartUtc:
+          type: string
+          description: Scheduled start datetime of the operation
+          format: date-time
+          nullable: true
+        scheduledEndUtc:
+          type: string
+          description: Scheduled end datetime of the operation
+          format: date-time
+          nullable: true
+        completedOnUtc:
+          type: string
+          description: The operation completion datetime.
+          format: date-time
+          nullable: true
+        completedById:
+          type: string
+          description: Operation completed user identifier. Please reference /api/users endpoint.
+          nullable: true
+        scheduledEquipmentId:
+          type: string
+          description: Identifier of the equipment that this operation is scheduled to run on
+          nullable: true
+        scheduledEquipmentName:
+          type: string
+          description: The name of the equipment that this operation is scheduled to run on.
+          nullable: true
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: The custom field data on the object
+          nullable: true
+        instructions:
+          type: string
+          description: Instructions specific to the item to make operation.
+          nullable: true
+        name:
+          type: string
+          description: System operation name.
+          nullable: true
+        leadTimeInDays:
+          minimum: 0
+          type: integer
+          description: Number of days required between order and receipt. Only applicable for outside processing operations.
+          format: int32
+          nullable: true
+        associatedPurchaseOrderIds:
+          type: array
+          items:
+            type: string
+          description: Associated purchase order IDs.
+          nullable: true
+        estimatedSetupTimeInSeconds:
+          type: number
+          description: The estimated setup time in seconds for the operation.
+          format: double
+          nullable: true
+        estimatedSetupTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_SetupTimeOption'
+        estimatedRunTimeInSeconds:
+          type: number
+          description: 'The estimated run time in seconds for the operation.
+
+            Note: This is an obsolete field from when operation could not separate between machine (unattended) and labor (attended) time.'
+          format: double
+          nullable: true
+        estimatedRunTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
+        estimatedMachineTimeInSeconds:
+          type: number
+          description: The estimated machine time in seconds for the operation.
+          format: double
+          nullable: true
+        estimatedMachineTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
+        estimatedLaborTimeInSeconds:
+          type: number
+          description: The estimated labor time in seconds for the operation.
+          format: double
+          nullable: true
+        estimatedLaborTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
+        isMachineTimeOnly:
+          type: boolean
+          description: 'Whether this operation can be run without an employee present.  If true, use the machineTime properties.  If false,
+
+            use the laborTime properties.'
+        workOrderId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of work order that this operation is associated to, if applicable.
+
+            Please reference api/work-orders endpoint.'
+          nullable: true
+      additionalProperties: false
+      description: Represents an routing operation on a job item to make
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

@@ -1,0 +1,578 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Item Vendor API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Item Vendor
+paths:
+  /api/items/{itemId}/vendors:
+    post:
+      tags:
+      - Item Vendor
+      summary: Create a new item vendor
+      operationId: CreateItemVendor
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemVendorCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemVendorCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemVendorCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemVendorCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Item vendor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Item with the given id did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+  /api/items/{itemId}/vendors/list:
+    post:
+      tags:
+      - Item Vendor
+      summary: Get a list of vendors for an item
+      operationId: ListItemVendor
+      parameters:
+      - name: itemId
+        in: path
+        description: ''
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: List of vendors for the given item id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemVendorDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemVendorDto'
+        '404':
+          description: The item did not exist
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+  /api/items/{itemId}/vendors/{itemVendorId}:
+    put:
+      tags:
+      - Item Vendor
+      summary: Update a specific item vendor
+      operationId: UpdateItemVendor
+      parameters:
+      - name: itemId
+        in: path
+        description: The id of the item to modify vendors for
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemVendorId
+        in: path
+        description: The id of the item vendor.
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        description: The new data to apply to the given vendor detail
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemVendorUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemVendorUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemVendorUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemVendorUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Update successful
+        '404':
+          description: Item did not exist or no vendor existed at the specified index
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+components:
+  schemas:
+    CommonPriceBreakDto:
+      required:
+      - type
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: Indicates at what quantity this price break becomes active.
+          format: int32
+          nullable: true
+        price:
+          type: number
+          description: The price "per unit" at this price break.
+          format: double
+          nullable: true
+        margin:
+          type: number
+          description: Margin
+          format: double
+          nullable: true
+        currencyCode:
+          type: string
+          description: Currency code associated to this price break.
+          nullable: true
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor identifier. Please reference /api/vendors endpoint.
+          nullable: true
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Customer identifier. Please reference /api/customers endpoint.
+          nullable: true
+        customerTierId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Customer tier identifier. Please reference /api/customer-tiers endpoint.
+          nullable: true
+        unitOfMeasureName:
+          type: string
+          description: The unit of measurement.
+          nullable: true
+        type:
+          $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
+      additionalProperties: false
+      description: Price break definition
+    ItemVendorCreateDto:
+      required:
+      - vendorId
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item number for this vendor.
+          nullable: true
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item name for this vendor.
+          nullable: true
+        price:
+          minimum: 0
+          type: number
+          description: The price of this item for this vendor.
+          format: double
+          nullable: true
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this item.
+        leadTimeInDays:
+          type: integer
+          description: Lead time for this vendor.
+          format: int32
+          nullable: true
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Notes on this association.
+          nullable: true
+      additionalProperties: false
+      description: Vendor with additional context for an item.
+    ItemVendorDto:
+      required:
+      - id
+      - priceBreaks
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item number for this vendor.
+          nullable: true
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item name for this vendor.
+          nullable: true
+        price:
+          minimum: 0
+          type: number
+          description: The price of this item for this vendor.
+          format: double
+          nullable: true
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this item.
+        leadTimeInDays:
+          type: integer
+          description: Lead time for this vendor.
+          format: int32
+          nullable: true
+        unitOfMeasureName:
+          minLength: 1
+          type: string
+          description: The unit of measure name. This can be standard unit measurement names (Piece, Square foot, etc) or a custom measurement name.
+          nullable: true
+        unitQuantity:
+          type: number
+          description: 'The vendor unit quantity for conversions. Ex: a FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity of 5 would indicate that 5 FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName of this item for this vendor are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity in the base inventory unit of measure.'
+          format: double
+          nullable: true
+        inventoryUnitQuantity:
+          type: number
+          description: 'The inventory unit quantity for conversions. Ex: an FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity of 5 would indicate that 5 inventory units (Pieces, Foot, etc) of this item are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity units in FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName for this vendor.'
+          format: double
+          nullable: true
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonPriceBreakDto'
+          description: Price breaks.
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Notes on this association.
+          nullable: true
+      additionalProperties: false
+      description: Vendor with additional context for an item.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    DomainPriceBreaksPriceBreakTypeEnum:
+      enum:
+      - price
+      - margin
+      - cost
+      - operation
+      - shopRate
+      type: string
+    ItemVendorUpdateDto:
+      type: object
+      properties:
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item number for this vendor.
+          nullable: true
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The item name for this vendor.
+          nullable: true
+        price:
+          minimum: 0
+          type: number
+          description: The price of this item for this vendor.
+          format: double
+          nullable: true
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this item.
+        leadTimeInDays:
+          type: integer
+          description: Lead time for this vendor.
+          format: int32
+          nullable: true
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Notes on this association.
+          nullable: true
+      additionalProperties: false
+      description: Vendor with additional context for an item.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

@@ -1,0 +1,706 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Operation API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Operation
+paths:
+  /api/operation:
+    post:
+      tags:
+      - Operation
+      summary: Create a new operation
+      operationId: CreateOperation
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/OperationCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/OperationCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/OperationCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Operation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - System-System Data-Manage System Data
+  /api/operations/{id}:
+    get:
+      tags:
+      - Operation
+      summary: Get an operation.
+      operationId: GetOperation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The operation for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/OperationDto'
+        '404':
+          description: Operation did not exist
+      x-c4-required-permissions:
+      - Scheduling-Schedule-View Schedule
+  /api/operations/list:
+    post:
+      tags:
+      - Operation
+      summary: Find operations based on search parameters.
+      operationId: ListOperation
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/OperationRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/OperationRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/OperationRequestFindParameters'
+      responses:
+        '200':
+          description: List of operations matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OperationDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OperationDto'
+      x-c4-required-permissions:
+      - Scheduling-Schedule-View Schedule
+  /api/operation/{id}:
+    put:
+      tags:
+      - Operation
+      summary: Update an operation.
+      operationId: UpdateOperation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/OperationUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/OperationUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/OperationUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: The updated operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/OperationDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Operation did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - System-System Data-Manage System Data
+components:
+  schemas:
+    ItemRoutingOperationTimeOption:
+      enum:
+      - fixedSeconds
+      - fixedMinutes
+      - fixedHours
+      - fixedDays
+      - secondsPerUnit
+      - minutesPerUnit
+      - hoursPerUnit
+      - daysPerUnit
+      - unitsPerHour
+      type: string
+      description: The time unit or option used in operation times
+    ItemRoutingOutsideProcessingCostOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+      description: The cost option for the outside processing operation
+    ItemRoutingOutsideProcessingOperationCost:
+      type: object
+      properties:
+        costOption:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
+        fixedCost:
+          type: number
+          description: The fixed total cost for the operation
+          format: double
+          nullable: true
+        perUnitCost:
+          type: number
+          description: The cost per unit for the operation
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: Outside processing operation cost
+    ItemRoutingOperationTime:
+      type: object
+      properties:
+        time:
+          type: number
+          description: Time or units of this operation
+          format: double
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
+      additionalProperties: false
+      description: Operation time and type
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    OperationCreateDto:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of operation.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The description of the operation.
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation.
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTimeTrackingEnabled:
+          type: boolean
+          description: Specifies whether machine tracking is enabled.
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        defaultVendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
+          nullable: true
+        vendors:
+          type: array
+          items:
+            type: string
+          description: Available vendors.
+          nullable: true
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days.
+          format: int32
+          nullable: true
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Instructions.
+          nullable: true
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+      additionalProperties: false
+      description: Details of operation to be created
+    OperationRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Filter operations based on their name.
+          nullable: true
+        modifiedBeforeUtc:
+          type: string
+          description: Filters operations modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+          nullable: true
+        modifiedAfterUtc:
+          type: string
+          description: 'Filters operations modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Useful for polling incrementally instead of re-syncing every operation.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding operations.
+    OperationDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: A verbose description of the location.
+          nullable: true
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTimeTrackingEnabled:
+          type: boolean
+          description: Is machine time tracking enabled.
+          nullable: true
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        unattended:
+          type: boolean
+          description: Specifies whether this is operation will be unattended.
+        defaultVendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
+          nullable: true
+        leadDays:
+          type: integer
+          description: Lead days.
+          format: int32
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        workCenters:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonReferenceDto'
+          description: The work centers associated with the operation
+        isNestable:
+          type: boolean
+          description: Indicates if this operation is nestable.
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Instructions.
+          nullable: true
+      additionalProperties: false
+      description: Operation definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+          nullable: true
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+          nullable: true
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    OperationUpdateDto:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of operation.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The description of the operation.
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation.
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTimeTrackingEnabled:
+          type: boolean
+          description: Specifies whether machine tracking is enabled.
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        defaultVendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
+          nullable: true
+        vendors:
+          type: array
+          items:
+            type: string
+          description: Available vendors.
+          nullable: true
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days.
+          format: int32
+          nullable: true
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: Instructions.
+          nullable: true
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+      additionalProperties: false
+      description: 'Details of an operation to be updated. This is a full replacement of the publicly-exposed fields.
+
+        Internal-only fields not exposed here (in-process tracking, tolerances, shop rates) are preserved.'
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

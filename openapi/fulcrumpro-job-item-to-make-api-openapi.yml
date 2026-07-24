@@ -1,0 +1,668 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Job Item To Make API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Job Item To Make
+paths:
+  /api/jobs/{jobId}/items-to-make/{itemToMakeId}:
+    get:
+      tags:
+      - Job Item To Make
+      summary: Get a specific item to make on a job
+      operationId: GetJobItemToMake
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemToMakeId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: includeCostBreakdown
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: The item to make for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobItemToMakeDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/JobItemToMakeDto'
+        '404':
+          description: Job or item to make did not exist
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/jobs/{jobId}/items-to-make/list:
+    post:
+      tags:
+      - Job Item To Make
+      summary: Get a list of items to make on a job
+      operationId: ListJobItemToMake
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: includeCostBreakdown
+        in: query
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: The items to make for the given job id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobItemToMakeDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobItemToMakeDto'
+        '404':
+          description: Job did not exist
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/jobs/{jobId}/items-to-make/{itemToMakeId}/cost-breakdown:
+    get:
+      tags:
+      - Job Item To Make
+      summary: Get the cost breakdowns for specific item to make on a job
+      operationId: GetJobItemToMakeCostBreakdown
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemToMakeId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: The item to make for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobItemToMakeCostBreakdownsDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/JobItemToMakeCostBreakdownsDto'
+        '404':
+          description: Job or item to make did not exist
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+      - Pricing-Margins-View Margins
+components:
+  schemas:
+    CommonCostBreakdownDto:
+      required:
+      - calculatedOn
+      - componentLabor
+      - componentMachine
+      - componentMaterial
+      - componentOutsideProcessing
+      - cumulative
+      - cumulativeLabor
+      - cumulativeMachine
+      - cumulativeMaterial
+      - cumulativeOutsideProcessing
+      - id
+      - itemLabor
+      - itemMachine
+      - itemMaterial
+      - itemOutsideProcessing
+      - lines
+      - quantity
+      - shopRateMachine
+      - shopRateRun
+      - shopRateSetup
+      - time
+      - type
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: The id of the parent item.
+        type:
+          $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
+        quantity:
+          minimum: 0
+          type: integer
+          description: Number of units.
+          format: int32
+        quantityScrapped:
+          minimum: 0
+          type: integer
+          description: Number of units scrapped.
+          format: int32
+          nullable: true
+        calculatedOn:
+          type: string
+          description: When was this cost breakdown last calculated/aggregated.
+          format: date-time
+        time:
+          $ref: '#/components/schemas/CommonTimeDto'
+        cumulative:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateSetup:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateRun:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonCostBreakdownLineDto'
+          description: Cost breakdown line details.
+      additionalProperties: false
+      description: Cost breakdown
+    CommonCostDto:
+      required:
+      - perUnit
+      - total
+      type: object
+      properties:
+        total:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        perUnit:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Cost information
+    ItemsAndInventoryRoutingsCostBreakdownType:
+      enum:
+      - estimated
+      - inProgressJob
+      - completedJob
+      - cancelledJob
+      type: string
+    CommonEnumCostBreakdownLineTypeEnum:
+      enum:
+      - material
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      - componentMaterial
+      - componentLabor
+      - componentMachine
+      - componentOutsideProcessing
+      - nestPartMaterialUsage
+      - nestPartMaterialScrap
+      - overhead
+      - unknown
+      type: string
+      description: Cost breakdown types
+    JobItemToMakeDto:
+      required:
+      - depth
+      - id
+      - isCustom
+      - itemId
+      - quantityToMake
+      - status
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique Id associated to this entity
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Id of the item on which this entity is based.
+
+            Please reference /api/items endpoint.'
+        quantityToMake:
+          type: number
+          description: Quantity of this item produced by the associated job.
+          format: double
+        isCustom:
+          type: boolean
+          description: Denotes whether this job produces a customized version of the base item
+        status:
+          $ref: '#/components/schemas/JobItemToMakeStatusEnum'
+        quantityMade:
+          type: number
+          description: Quantity already produced, if the job is in progress.
+          format: double
+          nullable: true
+        depth:
+          type: integer
+          description: 'Structurally, identify where in the tree of building the parent item this item lies.
+
+            Example: The top-level item would have a depth of zero and it''s direct subcomponents would be 1.
+
+            This cascades down so that a subcomponent to a subcomponent would be 2... and so on.'
+          format: int32
+        routingNotes:
+          type: string
+          description: 'The routing notes (the "Routing Notes" field) captured on this job''s routing for the item.
+
+            Null when the job''s routing has no note for the item.'
+          nullable: true
+        costBreakdown:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
+        costBreakdownEstimated:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
+      additionalProperties: false
+      description: Represents an ItemToMake on a Job
+    CommonEnumOperationTypeEnum:
+      enum:
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      type: string
+      description: Operation type
+    CommonCostBreakdownLineDto:
+      required:
+      - cost
+      - costType
+      - name
+      type: object
+      properties:
+        costType:
+          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
+        operationType:
+          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        name:
+          minLength: 1
+          type: string
+          description: Decription of this line.
+        cost:
+          minimum: 0
+          type: number
+          description: Cost.
+          format: double
+        quantity:
+          minimum: 0
+          type: number
+          description: Quantity (if applicable)
+          format: double
+          nullable: true
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of the item that was picked. Please reference /api/items endpoint.
+          nullable: true
+        itemName:
+          type: string
+          description: The name of the item that was picked.
+          nullable: true
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        operationInformation:
+          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+      additionalProperties: false
+      description: Cost breakdown line information.
+    CommonTimeDto:
+      required:
+      - labor
+      - machine
+      - setup
+      type: object
+      properties:
+        labor:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        machine:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+        setup:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Time information
+    JobItemToMakeStatusEnum:
+      enum:
+      - new
+      - working
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make status
+    JobItemToMakeCostBreakdownsDto:
+      type: object
+      properties:
+        costBreakdown:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
+        costBreakdownEstimated:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
+      additionalProperties: false
+      description: Cost breakdowns for an item to make
+    CommonCostBreakdownOperationDto:
+      required:
+      - operationId
+      type: object
+      properties:
+        operationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Operation id. Please reference /api/operations
+        name:
+          type: string
+          description: Operation name.
+          nullable: true
+        timeInSeconds:
+          minimum: 0
+          type: number
+          description: Time in seconds.
+          format: double
+          nullable: true
+          readOnly: true
+        timeInHours:
+          minimum: 0
+          type: number
+          description: Time in hours
+          format: double
+          nullable: true
+        ratePerSecond:
+          minimum: 0
+          type: number
+          description: Rate per second
+          format: double
+          nullable: true
+          readOnly: true
+        ratePerHour:
+          minimum: 0
+          type: number
+          description: Rate per hour
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: Operation information
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

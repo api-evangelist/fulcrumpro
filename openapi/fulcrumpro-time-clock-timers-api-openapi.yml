@@ -1,0 +1,496 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Time Clock Timers API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Time Clock Timers
+paths:
+  /api/time-clock-timers/clock-in:
+    post:
+      tags:
+      - Time Clock Timers
+      summary: Clocks in a specific user
+      operationId: ClockIn
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TimeClockClockInDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeClockClockInDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TimeClockClockInDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TimeClockClockInDto'
+      responses:
+        '200':
+          description: OK
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Time-Time-Edit Time Managements
+  /api/time-clock-timers/clock-out:
+    post:
+      tags:
+      - Time Clock Timers
+      summary: Clocks out a specific user
+      operationId: ClockOut
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TimeClockClockOutDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeClockClockOutDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TimeClockClockOutDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TimeClockClockOutDto'
+      responses:
+        '200':
+          description: OK
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Time-Time-Edit Time Managements
+  /api/time-clock-timers/list:
+    post:
+      tags:
+      - Time Clock Timers
+      summary: Finds daily time clocks based on search parameters
+      operationId: ListTimeClock
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        description: The search parameters
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TimeClockRequestListTimeClocksParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeClockRequestListTimeClocksParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TimeClockRequestListTimeClocksParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TimeClockRequestListTimeClocksParameters'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoTimeClockDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoTimeClockDto'
+      x-c4-required-permissions:
+      - Time-Time-View Time Management
+components:
+  schemas:
+    DtoPagedResultDtoTimeClockDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeClockDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    TimeClockDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The timer identifier
+          nullable: true
+        startedById:
+          type: string
+          description: The user identifier who started the timer
+          nullable: true
+        startedOnUtc:
+          type: string
+          description: When the timer was started in UTC time.
+          format: date-time
+          nullable: true
+        stoppedOnUtc:
+          type: string
+          description: When the timer was stopped in UTC time.
+          format: date-time
+          nullable: true
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+        isRunning:
+          type: boolean
+          description: Whether the timer is running or not
+          readOnly: true
+        reasonCodeId:
+          type: string
+          description: The tag identifier for the reason code
+          nullable: true
+        clockInCodeId:
+          type: string
+          description: The tag identifier for the clock in code
+          nullable: true
+      additionalProperties: false
+      description: Data transfer object for Timer entity
+    DtoCommonDateRangeFilter:
+      type: object
+      properties:
+        start:
+          type: string
+          description: Inclusive start date to filter by
+          format: date-time
+          nullable: true
+        end:
+          type: string
+          description: Inclusive end date to filter by
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Date range used for filters
+    TimeClockClockInDto:
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The user identifier to associate the clock in to.  If not supplied, will use the user assigned to the api key used for authorization
+          nullable: true
+      additionalProperties: false
+      description: Model for clocking in via the public api
+    DomainTimeTrackingTimer_Type:
+      enum:
+      - setup
+      - run
+      - clockIn
+      - break
+      - labor
+      - machine
+      type: string
+    TimeClockClockOutDto:
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
+          nullable: true
+      additionalProperties: false
+      description: Model for clocking a user out
+    TimeClockRequestListTimeClocksParameters:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Filter timers based on who started it
+          nullable: true
+        startedDateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        stoppedDateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        runningTimersOnly:
+          type: boolean
+          description: Filter to only open timers
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching time clocks
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

@@ -1,0 +1,952 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Purchase Order API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Purchase Order
+paths:
+  /api/purchase-orders:
+    post:
+      tags:
+      - Purchase Order
+      summary: Create a new draft purchase order
+      operationId: CreatePurchaseOrder
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Purchase order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderDto'
+        '400':
+          description: Validation issues with input
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-Edit Purchase Order
+  /api/purchase-orders/{purchaseOrderId}:
+    delete:
+      tags:
+      - Purchase Order
+      summary: Delete a specific purchase order
+      operationId: DeletePurchaseOrder
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Purchase order did not exist
+    get:
+      tags:
+      - Purchase Order
+      summary: Get a specific purchase order
+      operationId: GetPurchaseOrder
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The purchase order for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderDto'
+        '404':
+          description: Purchase order did not exist
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-View Purchase Order
+    patch:
+      tags:
+      - Purchase Order
+      summary: Partially update a purchase order
+      operationId: PatchPurchaseOrder
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocument'
+      responses:
+        '200':
+          description: Purchase order item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderDto'
+        '404':
+          description: Purchase order did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-Edit Purchase Order
+    put:
+      tags:
+      - Purchase Order
+      summary: Update a purchase order
+      operationId: UpdatePurchaseOrder
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Purchase order item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderDto'
+        '404':
+          description: Purchase order did not exist
+  /api/purchase-orders/list:
+    post:
+      tags:
+      - Purchase Order
+      summary: Find purchase orders based on search parameters.
+      operationId: ListPurchaseOrder
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: Number of records to skip.
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: Number of records to return (maximum)
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderRequestFindParameters'
+      responses:
+        '200':
+          description: List of purchase orders matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseOrderListDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseOrderListDto'
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-View Purchase Order
+  /api/purchase-orders/{purchaseOrderId}/status:
+    post:
+      tags:
+      - Purchase Order
+      summary: Update a purchase order status
+      operationId: StatusUpdatePurchaseOrder
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderRequestUpdateStatus'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderRequestUpdateStatus'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderRequestUpdateStatus'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderRequestUpdateStatus'
+        required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Purchase order cannot be moved to requested status
+        '404':
+          description: Purchase order did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-Edit Purchase Order
+components:
+  schemas:
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    PurchaseOrderCreateDto:
+      required:
+      - type
+      - vendorId
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor Id
+        type:
+          $ref: '#/components/schemas/PurchaseOrderTypeEnum'
+        contactId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'Vendor Contact Id;
+
+            defaults to the Id of the first contact belonging to the input vendor'
+          nullable: true
+        companyInfoId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Company Information Id;
+
+            defaults to primary company info Id'
+          nullable: true
+        currencyCode:
+          type: string
+          description: 'Currency code override;
+
+            defaults to vendor currency code override, then the company''s primary currency code'
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+          nullable: true
+        expectedReceiveDate:
+          type: string
+          description: PO Expected receipt date
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Details of purchase order to be created
+    PurchaseOrderRequestUpdateStatus:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/PurchaseOrderStatusEnum'
+        paidDate:
+          type: string
+          description: The date that the purchase order was paid. Should be provided in UTC. Will default to current date/time if not provided when applicable.
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Update a purchase order status.
+    PurchaseOrderTypeEnum:
+      enum:
+      - standard
+      - outsideProcessing
+      - vendorCredit
+      type: string
+      description: Purchase order type
+    PurchaseOrderDto:
+      required:
+      - companyInfoId
+      - contactId
+      - id
+      - number
+      - receivingStatus
+      - status
+      - type
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        number:
+          minimum: 0
+          type: integer
+          description: Number
+          format: int32
+        issueDate:
+          type: string
+          description: PO creation date
+          format: date-time
+          nullable: true
+        earliestReceiveDate:
+          type: string
+          description: Earliest Receive Date
+          format: date-time
+          nullable: true
+        orderDate:
+          type: string
+          description: PO order date (null until status set to Ordered)
+          format: date-time
+          nullable: true
+        expectedReceiveDate:
+          type: string
+          description: PO Expected receipt date
+          format: date-time
+          nullable: true
+        promiseDate:
+          type: string
+          description: PO Promise date.
+          format: date-time
+          nullable: true
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor Id
+        contactId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor Contact Id
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
+          nullable: true
+        paymentTerms:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        type:
+          $ref: '#/components/schemas/PurchaseOrderTypeEnum'
+        status:
+          $ref: '#/components/schemas/PurchaseOrderStatusEnum'
+        receivingStatus:
+          $ref: '#/components/schemas/PurchaseOrderReceivingStatusEnum'
+        vendorCredit:
+          type: number
+          description: Vendor credit applied to this purchase order, if applicable
+          format: double
+          nullable: true
+        discount:
+          type: number
+          description: Discount applied to this purchase order, if applicable
+          format: double
+          nullable: true
+        subTotal:
+          type: number
+          description: Total cost of this purchase order, sans tax (if applicable)
+          format: double
+        total:
+          type: number
+          description: Total cost of this purchase order, tax included (if applicable)
+          format: double
+        companyInfoId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Company Information Id;
+        vendorNote:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: The vendor note is a string property that represents a note provided to the vendor.
+          nullable: true
+        notes:
+          type: array
+          items:
+            type: string
+          description: Notes
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+          nullable: true
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+          nullable: true
+        deleted:
+          type: boolean
+          description: Indicates whether this purchase order has been deleted
+        currencyCode:
+          minLength: 1
+          type: string
+          description: 'Currency code/denomination associated to this vendor.
+
+            If not provided, default to the primary currency code for the organization.'
+          nullable: true
+        vendorOrderNumber:
+          type: string
+          description: The vendor's purchase order number
+          nullable: true
+      additionalProperties: false
+      description: Represents a purchase order
+    PurchaseOrderRequestFindParameters:
+      type: object
+      properties:
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: Filter purchase orders to only given numbers
+          nullable: true
+        status:
+          $ref: '#/components/schemas/PurchaseOrderStatusEnum'
+        receivingStatus:
+          $ref: '#/components/schemas/PurchaseOrderReceivingStatusEnum'
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+        includeReceiptData:
+          type: boolean
+          description: If set to true, receipt data will be included in the results
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The vendor id.
+          nullable: true
+      additionalProperties: false
+      description: Parameters used for searching/finding purchase orders.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonExternalReferenceFindDto:
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Arbitrary sub-key that can be used to qualify the value
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+          nullable: true
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    PurchaseOrderStatusEnum:
+      enum:
+      - draft
+      - needsApproval
+      - approved
+      - ordered
+      - paid
+      - cancelled
+      type: string
+      description: Purchase order status
+    PurchaseOrderReceivingStatusEnum:
+      enum:
+      - notReceived
+      - partiallyReceived
+      - received
+      type: string
+      description: Purchase order receipt status
+    PurchaseOrderListDto:
+      required:
+      - id
+      - number
+      - receivingStatus
+      - status
+      - type
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        number:
+          minimum: 0
+          type: integer
+          description: Number
+          format: int32
+        issueDate:
+          type: string
+          description: PO creation date
+          format: date-time
+          nullable: true
+        orderDate:
+          type: string
+          description: PO order date (null until status set to Ordered)
+          format: date-time
+          nullable: true
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor Id
+        type:
+          $ref: '#/components/schemas/PurchaseOrderTypeEnum'
+        status:
+          $ref: '#/components/schemas/PurchaseOrderStatusEnum'
+        receivingStatus:
+          $ref: '#/components/schemas/PurchaseOrderReceivingStatusEnum'
+        expectedReceiveDate:
+          type: string
+          description: PO Expected receipt date
+          format: date-time
+          nullable: true
+        customFieldData:
+          type: object
+          additionalProperties: {}
+          description: Custom Fields
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+          nullable: true
+        currencyCode:
+          minLength: 1
+          type: string
+          description: 'Currency code/denomination associated to this vendor.
+
+            If not provided, default to the primary currency code for the organization.'
+          nullable: true
+        vendorOrderNumber:
+          type: string
+          description: The vendor's purchase order number
+          nullable: true
+        vendorNote:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: The vendor note is a string property that represents a note provided to the vendor.
+          nullable: true
+      additionalProperties: false
+      description: Represents a purchase order
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    PurchaseOrderUpdateDto:
+      type: object
+      properties:
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+        vendorNote:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: The vendor note is a string property that represents a note provided to the vendor.
+          nullable: true
+        vendorOrderNumber:
+          type: string
+          description: Vendor order number associated to a third party system.
+          nullable: true
+        expectedReceiveDate:
+          type: string
+          description: PO Expected receipt date (UTC)
+          format: date-time
+          nullable: true
+        promiseDate:
+          type: string
+          description: PO Promise date (UTC).
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Represents an update on a purchase order.
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+          nullable: true
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+          nullable: true
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

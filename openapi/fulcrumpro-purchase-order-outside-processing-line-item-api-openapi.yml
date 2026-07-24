@@ -1,0 +1,838 @@
+openapi: 3.0.4
+info:
+  title: Fulcrum Public Accounting Code Purchase Order Outside Processing Line Item API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Purchase Order Outside Processing Line Item
+paths:
+  /api/purchase-orders/{purchaseOrderId}/outside-processing-line-items:
+    post:
+      tags:
+      - Purchase Order Outside Processing Line Item
+      summary: Create an outside processing line item on a purchase order
+      operationId: CreatePurchaseOrderOutsideProcessingLineItem
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Outside processing line item added to purchase order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '404':
+          description: Purchase order not found
+        '400':
+          description: Validation issues with input
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-Edit Purchase Order
+  /api/purchase-orders/{purchaseOrderId}/outside-processing-line-items/{lineItemId}:
+    delete:
+      tags:
+      - Purchase Order Outside Processing Line Item
+      summary: Delete an outside processing line item on a purchase order
+      operationId: DeletePurchaseOrderOutsideProcessingLineItem
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Purchase order or line item cannot be modified
+        '404':
+          description: Purchase order or line item did not exist
+    get:
+      tags:
+      - Purchase Order Outside Processing Line Item
+      summary: Get a specific outside processing line item for a purchase order
+      operationId: GetPurchaseOrderOutsideProcessingLineItem
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Outside processing line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemDto'
+        '404':
+          description: Purchase order or line item did not exist
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-View Purchase Order
+    patch:
+      tags:
+      - Purchase Order Outside Processing Line Item
+      summary: Partially update a specific outside processing line item for a purchase order
+      operationId: PatchPurchaseOrderOutsideProcessingLineItem
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/JsonPatchDocument'
+      responses:
+        '200':
+          description: Outside processing line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemDto'
+        '400':
+          description: Purchase order or line item cannot be modified
+        '404':
+          description: Purchase order or line item did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-Edit Purchase Order
+    put:
+      tags:
+      - Purchase Order Outside Processing Line Item
+      summary: Update a specific outside processing line item for a purchase order
+      operationId: UpdatePurchaseOrderOutsideProcessingLineItem
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Outside processing line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemDto'
+        '400':
+          description: Purchase order or line item cannot be modified
+        '404':
+          description: Purchase order or line item did not exist
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-Edit Purchase Order
+  /api/purchase-orders/{purchaseOrderId}/outside-processing-line-items/list:
+    post:
+      tags:
+      - Purchase Order Outside Processing Line Item
+      summary: Get a list of outside processing lines items for a purchase order
+      operationId: ListPurchaseOrderOutsideProcessingLineItem
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: List of outside processing line items for the given purchase order id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseOrderOutsideProcessingLineItemDto'
+        '404':
+          description: The purchase order did not exist
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-View Purchase Order
+  /api/purchase-orders/{purchaseOrderId}/outside-processing-line-items/{lineItemId}/tax-allocations:
+    get:
+      tags:
+      - Purchase Order Outside Processing Line Item
+      summary: Get tax allocations for a specific outside processing line item on a purchase order
+      operationId: GetPurchaseOrderOutsideProcessingLineItemTaxAllocations
+      parameters:
+      - name: purchaseOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: lineItemId
+        in: path
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      responses:
+        '200':
+          description: Tax allocation data for the outside processing line item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderLineItemTaxAllocationResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrderLineItemTaxAllocationResponseDto'
+        '404':
+          description: Purchase order or line item did not exist
+      x-c4-required-permissions:
+      - Orders-PurchaseOrders-View Purchase Order
+components:
+  schemas:
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the type of this identifier.
+          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+          nullable: true
+        status:
+          type: string
+          description: A status for the external reference
+          nullable: true
+        url:
+          type: string
+          description: An external url for the reference
+          nullable: true
+        modifiedUtc:
+          type: string
+          description: Date the external reference was modified
+          format: date-time
+          nullable: true
+        lastSyncedUtc:
+          type: string
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    PurchaseOrderOutsideProcessingLineItemDto:
+      required:
+      - accountingDetails
+      - id
+      - isTaxable
+      - itemId
+      - jobId
+      - name
+      - operationId
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Line item name
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type: number
+          description: The line item unit price.
+          format: double
+        jobId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Job id associated with this line item.
+        operationId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Job operation associated with this line item.
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item id associated with this line item.
+        isTaxable:
+          type: boolean
+          description: Dictates whether the line item is taxable.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+          nullable: true
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The line item description.
+          nullable: true
+        receivedStatus:
+          $ref: '#/components/schemas/PurchaseOrderEnumLineItemReceiptStatusEnum'
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+        number:
+          type: integer
+          description: Line number
+          format: int32
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+        customFields:
+          type: object
+          additionalProperties: {}
+          description: Custom fields that have been defined for the outside processing line item.
+          nullable: true
+        expectedReceiveDate:
+          type: string
+          description: Expected receipt date for this line item.
+          format: date-time
+          nullable: true
+        promiseDate:
+          type: string
+          description: Promise date (UTC).
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Represents an outside processing line item on a purchase order.
+    PurchaseOrderOutsideProcessingLineItemCreateDto:
+      required:
+      - jobId
+      - operationId
+      type: object
+      properties:
+        jobId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Job id associated with this line item.
+        operationId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Operation id associated with this line item.
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity.  If not provided, defaults to Job operation QuantityToMake
+          format: double
+          nullable: true
+        price:
+          minimum: 0
+          type: number
+          description: The line item unit price.  If not provided, defaults to price data stored on Job operation.
+          format: double
+          nullable: true
+        expectedReceiveDate:
+          type: string
+          description: Expected receipt date for this line item.
+          format: date-time
+          nullable: true
+        promiseDate:
+          type: string
+          description: Promise date (UTC).
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Represents an outside processing line item on a purchase order.
+    PurchaseOrderAppliedTaxDto:
+      required:
+      - taxAmount
+      - taxLineItemId
+      type: object
+      properties:
+        taxLineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'The id of the PO-level tax line item that generated this tax amount.
+
+            Reference /api/purchase-orders/{id}/tax-line-items for full details.'
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The tax code id. Please reference /api/tax-rates endpoint.
+          nullable: true
+        taxCodeCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The tax code identifier string (e.g., "CA State Tax").
+          nullable: true
+        taxRate:
+          minimum: 0
+          type: number
+          description: The tax rate applied (as a decimal, e.g., 0.0725 for 7.25%).
+          format: double
+        taxAmount:
+          type: number
+          description: The calculated tax amount allocated to this line item from this tax line.
+          format: double
+      additionalProperties: false
+      description: Represents a tax allocation from a PO-level tax line item to an individual line item.
+    PurchaseOrderOutsideProcessingLineItemUpdateDto:
+      type: object
+      properties:
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity
+          format: double
+          nullable: true
+        price:
+          minimum: 0
+          type: number
+          description: The line item price.
+          format: double
+          nullable: true
+        externalReferences:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          nullable: true
+        expectedReceiveDate:
+          type: string
+          description: Expected receipt date for this line item.
+          format: date-time
+          nullable: true
+        promiseDate:
+          type: string
+          description: Promise date (UTC).
+          format: date-time
+          nullable: true
+      additionalProperties: false
+      description: Represents an outside processing line item on a purchase order
+    PurchaseOrderLineItemTaxAllocationResponseDto:
+      type: object
+      properties:
+        appliedTaxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
+          description: 'Tax amounts allocated to this line item from PO-level tax lines.
+
+            Null if the line item is not taxable or has no tax allocations.'
+          nullable: true
+        totalTax:
+          type: number
+          description: 'Total tax amount allocated to this line item across all applicable tax lines.
+
+            Null if the line item is not taxable.'
+          format: double
+          nullable: true
+      additionalProperties: false
+      description: Tax allocation data for a purchase order line item.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    PurchaseOrderEnumLineItemReceiptStatusEnum:
+      enum:
+      - open
+      - partiallyReceived
+      - received
+      type: string
+      description: Purchase order line item receipt status
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+          nullable: true
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          nullable: true
+      additionalProperties: false
+      description: An object that contains all accounting details.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Equipment
+  tags:
+  - Equipment
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter
