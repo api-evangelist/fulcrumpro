@@ -1,0 +1,91 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/fulcrumpro-openapi-original.json
+notes: >-
+  Entity-relationship graph derived from the Fulcrum Public API OpenAPI (422
+  schemas, 350 paths). Entities are the top-level API resources; relationships
+  are inferred from id-reference fields (customerId, vendorId, salesOrderId,
+  createdFromQuoteId, etc.) present in the request/response DTOs. Manufacturing
+  ERP domain: quotes convert to sales orders, which drive jobs (production) and
+  invoices; purchase orders source materials from vendors.
+entities:
+- name: Customer
+  path: /api/customers
+  relationships:
+  - has_many: SalesOrder
+    via: customerId
+  - has_many: Invoice
+    via: customerId
+  - has_many: CustomerAddress
+    via: customerId
+- name: Quote
+  path: /api/quotes
+  relationships:
+  - belongs_to: Customer
+    via: customerId
+  - has_one: SalesOrder
+    via: convert (ConvertToSalesOrder)
+- name: SalesOrder
+  path: /api/sales-orders
+  relationships:
+  - belongs_to: Customer
+    via: customerId
+  - belongs_to: Quote
+    via: createdFromQuoteId
+  - has_many: SalesOrderLineItem
+    via: salesOrderId
+  - has_many: Job
+    via: salesOrderId
+  - has_many: Invoice
+    via: salesOrderId
+- name: Job
+  path: /api/jobs
+  relationships:
+  - belongs_to: SalesOrder
+    via: salesOrderId
+  - belongs_to: Item
+    via: itemToMakeId
+  - has_many: JobTrackingTimer
+    via: jobId
+- name: PurchaseOrder
+  path: /api/purchase-orders
+  relationships:
+  - belongs_to: Vendor
+    via: vendorId
+  - has_many: PurchaseOrderLineItem
+    via: purchaseOrderId
+- name: Invoice
+  path: /api/invoices
+  relationships:
+  - belongs_to: Customer
+    via: customerId
+  - belongs_to: SalesOrder
+    via: salesOrderId
+- name: Item
+  path: /api/items
+  relationships:
+  - has_many: ItemRevision
+    via: itemId
+  - has_many: RoutingOperation
+    via: itemId
+  - has_many: InventoryLot
+    via: itemId
+- name: Vendor
+  path: /api/vendors
+  relationships:
+  - has_many: PurchaseOrder
+    via: vendorId
+  - has_many: Material
+    via: vendorId
+- name: Material
+  path: /api/materials
+  relationships:
+  - belongs_to: Vendor
+    via: vendorId
+- name: InventoryLot
+  path: /api/inventory-lots
+  relationships:
+  - belongs_to: Item
+    via: itemId
+  - belongs_to: Location
+    via: locationId

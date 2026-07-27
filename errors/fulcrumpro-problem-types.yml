@@ -1,0 +1,41 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/fulcrumpro-openapi-original.json
+format: rfc9457
+notes: >-
+  Derived from the Fulcrum Public API OpenAPI. 380 of 454 operations return
+  `application/problem+json` error bodies (RFC 9457 Problem Details). Status
+  codes below are the distinct 4xx/5xx responses declared across the spec, with
+  a representative operation and description for each.
+media_type: application/problem+json
+problems:
+- status: 400
+  title: Bad request
+  description: Request was malformed or a value was invalid (e.g. unsupported file extension).
+  count: 79
+  example_operation: DownloadAttachments
+- status: 403
+  title: Forbidden
+  description: The viewer lacks the required Fulcrum permission for the operation (e.g. View Inventory).
+  count: 8
+  example_operation: ListInventoryReport
+- status: 404
+  title: Not found
+  description: The referenced record did not exist (e.g. accounting code, customer, job).
+  count: 261
+  example_operation: GetAccountingCode
+- status: 409
+  title: Conflict
+  description: The change conflicts with existing state (e.g. item revision already exists).
+  count: 2
+  example_operation: AddRevisionItem
+- status: 410
+  title: Gone
+  description: The record had an invalid or no-longer-valid identifier.
+  count: 1
+  example_operation: DeleteAttachment
+- status: 500
+  title: Internal server error
+  description: An unspecified error occurred with the request.
+  count: 1
+  example_operation: OverrideInventory

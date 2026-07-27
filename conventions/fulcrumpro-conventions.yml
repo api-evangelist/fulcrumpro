@@ -1,0 +1,46 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/fulcrumpro-openapi-original.json
+docs: https://developers.fulcrumpro.com/docs
+notes: >-
+  Cross-cutting request/response semantics for the Fulcrum Public API, derived
+  from the OpenAPI plus the developer docs. Fulcrum uses site-scoped bearer JWT
+  auth, offset pagination on list endpoints, and RFC 9457 problem+json errors.
+authentication:
+  style: bearer-jwt
+  header: 'Authorization: Bearer <token>'
+  ref: authentication/fulcrumpro-authentication.yml
+pagination:
+  style: offset
+  params:
+    offset: Skip
+    limit: Take
+  sort_params:
+    field: Sort.Field
+    direction: Sort.Dir
+  notes: >-
+    List endpoints (typically POST `/api/<resource>/list`) accept Skip/Take for
+    offset paging and Sort.Field/Sort.Dir for ordering.
+idempotency:
+  supported: false
+  notes: No idempotency-key header or parameter is documented or present in the OpenAPI.
+versioning:
+  scheme: uri-path
+  current: v1
+  notes: >-
+    Base path `/api/`. A small set of newer endpoints are published under
+    `/api/.../v2` (e.g. ListItemV2, v2 Material endpoints) alongside the v1
+    surface; superseded paths are marked obsolete rather than removed.
+  ref: lifecycle/fulcrumpro-lifecycle.yml
+error_envelope:
+  format: rfc9457
+  media_type: application/problem+json
+  ref: errors/fulcrumpro-problem-types.yml
+custom_fields:
+  supported: true
+  notes: >-
+    Many resources (Customer, Purchase Order, etc.) accept a customFields object;
+    changes are documented as addition-only in the changelog.
+rate_limiting:
+  documented: false
+  notes: No published rate-limit headers or quotas found in the docs or spec.

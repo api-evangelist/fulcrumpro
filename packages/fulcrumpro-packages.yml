@@ -1,0 +1,24 @@
+generated: '2026-07-19'
+method: searched
+source: https://developers.fulcrumpro.com/docs/generating-a-client
+notes: >-
+  Fulcrum does not publish first-party client SDKs. The developer docs instead
+  recommend generating a typed client from the OpenAPI schema
+  (https://api.fulcrumpro.com/swagger/v1/swagger.json) using
+  openapi-typescript-codegen. A community Python package exists on PyPI but is
+  not published by Fulcrum (no author, home page, or source repo declared) and
+  is marked unofficial. Fulcrum's public GitHub org (github.com/fulcrumpro) hosts
+  unrelated side projects, not an API SDK.
+client_generation:
+  method: openapi-typescript-codegen
+  schema: https://api.fulcrumpro.com/swagger/v1/swagger.json
+  example: openapi --client axios --name FulcrumService --input https://api.fulcrumpro.com/swagger/v1/swagger.json --output ./services/fulcrum
+packages:
+- language: python
+  registry: pypi
+  name: fulcrumpro
+  url: https://pypi.org/project/fulcrumpro/
+  install: pip install fulcrumpro
+  version: 0.14.0
+  official: false
+  notes: Community/third-party lightweight Python SDK; no declared author or source repo. Unverified.

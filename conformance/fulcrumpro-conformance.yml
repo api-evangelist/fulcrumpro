@@ -1,0 +1,35 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/fulcrumpro-openapi-original.json
+docs: https://developers.fulcrumpro.com/docs/itar
+notes: >-
+  Cross-cutting standards conformance. Technical standards are derived from the
+  OpenAPI; the security/compliance posture (ITAR, CMMC) is claimed on Fulcrum's
+  own product and developer pages.
+standards:
+- id: oauth2
+  conforms: false
+  evidence: Single bearer (JWT) http security scheme; no oauth2 flows declared.
+- id: openid-connect
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: true
+  evidence: 380 of 454 operations return application/problem+json error bodies.
+- id: rfc6750-bearer-token
+  conforms: true
+  evidence: Authorization Bearer JWT security scheme.
+- id: openapi-3.0
+  conforms: true
+  evidence: OpenAPI 3.0.4 document at https://api.fulcrumpro.com/swagger/v1/swagger.json
+- id: pagination
+  conforms: true
+  evidence: Offset pagination via Skip/Take on list endpoints.
+- id: idempotency
+  conforms: false
+  evidence: No idempotency-key header or parameter present.
+- id: itar
+  conforms: true
+  evidence: Marketed as "ITAR secure"; ITAR usage documented at developers.fulcrumpro.com/docs/itar.
+- id: cmmc-2.0
+  conforms: true
+  evidence: Marketed as "CMMC 2.0 ready".

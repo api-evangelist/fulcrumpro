@@ -1,0 +1,37 @@
+generated: '2026-07-19'
+method: searched
+source: https://developers.fulcrumpro.com/mcp
+status: published
+notes: >-
+  Fulcrum publishes an official MCP server that connects AI assistants (Claude,
+  ChatGPT) directly to a Fulcrum site's data. It supports read queries (jobs,
+  sales orders, customers, invoices) and actions (approving purchase orders,
+  moving jobs through workflows, updating priorities). The connection endpoint
+  and config are provided on the docs page and authenticated with the same
+  site-scoped bearer token as the REST API. The tool list below is a
+  representative candidate mapping to REST operations (the published server's
+  exact tool names are not enumerated on the public page).
+server:
+  name: fulcrum
+  transport: http
+  docs: https://developers.fulcrumpro.com/mcp
+  auth: bearer-jwt (Fulcrum site Public API token)
+tools:
+- name: get_job
+  description: Look up a job by id.
+  source_operation: openapi/fulcrumpro-openapi-original.json#GetJob
+- name: list_sales_orders
+  description: List sales orders.
+  source_operation: openapi/fulcrumpro-openapi-original.json#ListSalesOrder
+- name: get_customer
+  description: Look up a customer by id.
+  source_operation: openapi/fulcrumpro-openapi-original.json#GetCustomer
+- name: get_invoice
+  description: Look up an invoice by id.
+  source_operation: openapi/fulcrumpro-openapi-original.json#GetInvoice
+- name: update_purchase_order_status
+  description: Approve or advance a purchase order.
+  source_operation: openapi/fulcrumpro-openapi-original.json#StatusUpdatePurchaseOrder
+- name: update_job_status
+  description: Move a job through its workflow.
+  source_operation: openapi/fulcrumpro-openapi-original.json#StatusUpdateJob

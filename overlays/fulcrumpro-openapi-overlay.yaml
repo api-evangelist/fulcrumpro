@@ -1,0 +1,20 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Fulcrum Public API
+  version: 1.0.0
+extends: openapi/fulcrumpro-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: fulcrumpro
+    x-apievangelist-industry: manufacturing-erp
+    x-apievangelist-auth: bearer-jwt
+    x-apievangelist-error-format: rfc9457
+    x-apievangelist-pagination: offset (Skip/Take)
+    x-apievangelist-status-page: https://status.fulcrumpro.com
+    x-apievangelist-changelog: https://developers.fulcrumpro.com/docs/ChangeLog
+    x-apievangelist-mcp: https://developers.fulcrumpro.com/mcp
+- target: $.servers
+  update:
+  - url: https://api.fulcrumpro.com
+    description: Fulcrum Public API production host (base path /api/)
