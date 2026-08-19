@@ -1,0 +1,622 @@
+{
+  "item": [
+    {
+      "id": "999f2c54-0c3b-4c4d-8ae6-0414cacad248",
+      "name": "WorkCenter",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "61ef2911-bbfd-4f3b-923f-68ccaac332b5",
+          "name": "Create a work center.",
+          "request": {
+            "name": "Create a work center.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "work-centers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"departmentId\": \"<string>\",\n  \"setupRate\": \"<double>\",\n  \"laborRate\": \"<double>\",\n  \"overheadRate\": \"<double>\",\n  \"machineRate\": \"<double>\",\n  \"equipmentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "09af0945-9310-483e-9b6e-c35392a11887",
+              "name": "Work center created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "work-centers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"departmentId\": \"<string>\",\n  \"setupRate\": \"<double>\",\n  \"laborRate\": \"<double>\",\n  \"overheadRate\": \"<double>\",\n  \"machineRate\": \"<double>\",\n  \"equipmentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "def9a334-627d-40be-9a18-d59c3dc346f5",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "work-centers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"departmentId\": \"<string>\",\n  \"setupRate\": \"<double>\",\n  \"laborRate\": \"<double>\",\n  \"overheadRate\": \"<double>\",\n  \"machineRate\": \"<double>\",\n  \"equipmentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d51574d0-581c-4f74-ae25-3d85267777a2",
+          "name": "Get a workcenter.",
+          "request": {
+            "name": "Get a workcenter.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "work-centers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3a2bb9c2-4b5b-4e2a-b649-a84341fef745",
+              "name": "The workcenter for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "work-centers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"departmentId\": \"stringstringstringstring\",\n  \"setupRate\": 3016.4034956618725,\n  \"runRate\": 4992.775430253411,\n  \"laborRate\": 4895.020680493859,\n  \"overheadRate\": 9455.621080535962,\n  \"machineRate\": 3528.4169168316103,\n  \"deleted\": false,\n  \"equipment\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"workCenterId\": \"stringstringstringstring\",\n      \"manufacturer\": \"string\",\n      \"modelNumber\": \"string\",\n      \"serialNumber\": \"string\",\n      \"canRunUnattended\": false,\n      \"unlimitedCapacity\": true,\n      \"status\": \"good\",\n      \"notes\": \"string\",\n      \"deleted\": true\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"workCenterId\": \"stringstringstringstring\",\n      \"manufacturer\": \"string\",\n      \"modelNumber\": \"string\",\n      \"serialNumber\": \"string\",\n      \"canRunUnattended\": true,\n      \"unlimitedCapacity\": false,\n      \"status\": \"outOfService\",\n      \"notes\": \"string\",\n      \"deleted\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9590d476-1e68-4912-9f8b-ef4e4a72ff14",
+              "name": "Workcenter did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "work-centers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e95d55fa-fcfd-4ebc-90e2-37a8aa11ec5c",
+          "name": "Update a work center.",
+          "request": {
+            "name": "Update a work center.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "work-centers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"departmentId\": \"<string>\",\n  \"setupRate\": \"<double>\",\n  \"laborRate\": \"<double>\",\n  \"overheadRate\": \"<double>\",\n  \"machineRate\": \"<double>\",\n  \"equipmentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aa461a8a-b241-436a-b14a-b685ee1b0ac4",
+              "name": "The updated work center",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "work-centers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"departmentId\": \"<string>\",\n  \"setupRate\": \"<double>\",\n  \"laborRate\": \"<double>\",\n  \"overheadRate\": \"<double>\",\n  \"machineRate\": \"<double>\",\n  \"equipmentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"departmentId\": \"stringstringstringstring\",\n  \"setupRate\": 9594.640930214136,\n  \"runRate\": 4061.096576087574,\n  \"laborRate\": 8145.513675849099,\n  \"overheadRate\": 5998.317968464242,\n  \"machineRate\": 9119.523237525887,\n  \"deleted\": false,\n  \"equipment\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"workCenterId\": \"stringstringstringstring\",\n      \"manufacturer\": \"string\",\n      \"modelNumber\": \"string\",\n      \"serialNumber\": \"string\",\n      \"canRunUnattended\": false,\n      \"unlimitedCapacity\": false,\n      \"status\": \"poor\",\n      \"notes\": \"string\",\n      \"deleted\": true\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"workCenterId\": \"stringstringstringstring\",\n      \"manufacturer\": \"string\",\n      \"modelNumber\": \"string\",\n      \"serialNumber\": \"string\",\n      \"canRunUnattended\": false,\n      \"unlimitedCapacity\": false,\n      \"status\": \"outOfService\",\n      \"notes\": \"string\",\n      \"deleted\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62c936f4-0bbf-4f3c-b9c8-0d4f4344d925",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "work-centers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"departmentId\": \"<string>\",\n  \"setupRate\": \"<double>\",\n  \"laborRate\": \"<double>\",\n  \"overheadRate\": \"<double>\",\n  \"machineRate\": \"<double>\",\n  \"equipmentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fc5ad9e7-ee99-40e3-b2b3-0fe6214d591d",
+              "name": "Work center did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "work-centers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"departmentId\": \"<string>\",\n  \"setupRate\": \"<double>\",\n  \"laborRate\": \"<double>\",\n  \"overheadRate\": \"<double>\",\n  \"machineRate\": \"<double>\",\n  \"equipmentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1494a836-0702-4be7-98cb-4c9f46fdcc1e",
+          "name": "Find workcenters based on search parameters.",
+          "request": {
+            "name": "Find workcenters based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "work-centers",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8739f8f8-7c48-4792-ace7-60e4a0958c69",
+              "name": "List of workcenters matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "work-centers",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"departmentId\": \"stringstringstringstring\",\n    \"setupRate\": 6069.875524405219,\n    \"runRate\": 7377.534912375752,\n    \"laborRate\": 1484.220209315884,\n    \"overheadRate\": 2473.8998285944303,\n    \"machineRate\": 1877.4050828296918,\n    \"deleted\": true,\n    \"equipment\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"workCenterId\": \"stringstringstringstring\",\n        \"manufacturer\": \"string\",\n        \"modelNumber\": \"string\",\n        \"serialNumber\": \"string\",\n        \"canRunUnattended\": true,\n        \"unlimitedCapacity\": true,\n        \"status\": \"good\",\n        \"notes\": \"string\",\n        \"deleted\": true\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"workCenterId\": \"stringstringstringstring\",\n        \"manufacturer\": \"string\",\n        \"modelNumber\": \"string\",\n        \"serialNumber\": \"string\",\n        \"canRunUnattended\": true,\n        \"unlimitedCapacity\": false,\n        \"status\": \"good\",\n        \"notes\": \"string\",\n        \"deleted\": false\n      }\n    ]\n  },\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"departmentId\": \"stringstringstringstring\",\n    \"setupRate\": 3339.351754833534,\n    \"runRate\": 3189.362094302297,\n    \"laborRate\": 1672.8039926347549,\n    \"overheadRate\": 1179.8376069453964,\n    \"machineRate\": 484.5747000635692,\n    \"deleted\": false,\n    \"equipment\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"workCenterId\": \"stringstringstringstring\",\n        \"manufacturer\": \"string\",\n        \"modelNumber\": \"string\",\n        \"serialNumber\": \"string\",\n        \"canRunUnattended\": false,\n        \"unlimitedCapacity\": true,\n        \"status\": \"poor\",\n        \"notes\": \"string\",\n        \"deleted\": false\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\",\n        \"workCenterId\": \"stringstringstringstring\",\n        \"manufacturer\": \"string\",\n        \"modelNumber\": \"string\",\n        \"serialNumber\": \"string\",\n        \"canRunUnattended\": true,\n        \"unlimitedCapacity\": false,\n        \"status\": \"outOfService\",\n        \"notes\": \"string\",\n        \"deleted\": false\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "63f16cc6-3bb5-4e82-8570-c58eca490be9",
+    "name": "Fulcrum Public Accounting Code WorkCenter API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

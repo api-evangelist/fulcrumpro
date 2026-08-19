@@ -1,0 +1,123 @@
+{
+  "item": [
+    {
+      "id": "ec652ff6-f4c3-4fce-aaf0-c11cd3e60f6f",
+      "name": "ScrapReport",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "121ec9eb-6fd2-4503-8dec-6a16d40483ae",
+          "name": "Returns scrap entries logged within the supplied date range. Both\ndates are optional; the Domain layer defaults to the prior 90 days\nwhen neither is supplied.",
+          "request": {
+            "name": "Returns scrap entries logged within the supplied date range. Both\ndates are optional; the Domain layer defaults to the prior 90 days\nwhen neither is supplied.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "scrap-reports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startDateUtc",
+                  "value": "<dateTime>",
+                  "description": "Inclusive start of the report window (UTC). Defaults to today minus 90 days when omitted."
+                },
+                {
+                  "disabled": false,
+                  "key": "endDateUtc",
+                  "value": "<dateTime>",
+                  "description": "Exclusive end of the report window (UTC). Defaults to tomorrow when omitted."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b12eeba2-513a-4cd1-87ef-b37b73d3b529",
+              "name": "Scrap entries within the requested window.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "scrap-reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDateUtc",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "endDateUtc",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"dateUtc\": \"1948-05-04T13:55:37.032Z\",\n    \"quantity\": 8389.422535455176,\n    \"value\": 7118.301219522998,\n    \"item\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"operator\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"operation\": \"string\",\n    \"workCenter\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"department\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"equipment\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"job\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    }\n  },\n  {\n    \"dateUtc\": \"2011-10-22T21:03:36.887Z\",\n    \"quantity\": 603.6421206601927,\n    \"value\": 1303.3203259505533,\n    \"item\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"operator\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"operation\": \"string\",\n    \"workCenter\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"department\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"equipment\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"job\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3e2c9618-2757-495c-92d5-a6e9eee928df",
+    "name": "Fulcrum Public Accounting Code ScrapReport API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

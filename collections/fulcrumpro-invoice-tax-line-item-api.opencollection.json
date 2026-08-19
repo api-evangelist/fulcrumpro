@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Invoice Tax Line Item API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Invoice Tax Line Item",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a specific tax line item for an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/invoices/:invoiceId/tax-line-items/:lineItemId",
+            "params": [
+              {
+                "name": "invoiceId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "lineItemId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a specific tax line item for an invoice"
+        },
+        {
+          "info": {
+            "name": "Get a list of tax lines items for an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/invoices/:invoiceId/tax-line-items/list",
+            "params": [
+              {
+                "name": "invoiceId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a list of tax lines items for an invoice"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

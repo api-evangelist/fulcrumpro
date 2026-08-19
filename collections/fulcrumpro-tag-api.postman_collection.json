@@ -1,0 +1,598 @@
+{
+  "item": [
+    {
+      "id": "138d92fc-907b-4620-b483-6cfff2746499",
+      "name": "Tag",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "652b2f1f-b473-4b4d-af98-af53b6044dcf",
+          "name": "Get a tag.",
+          "request": {
+            "name": "Get a tag.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "tags",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b3816b90-4ba8-4a9c-b217-7b7fe19791ee",
+              "name": "The tag for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "tags",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"style\": \"connected\",\n  \"types\": [\n    \"accountingCode\",\n    \"accountingCode\"\n  ],\n  \"description\": \"string\",\n  \"deleted\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a4b5e1f-ce95-42a5-87f6-56882ad7c0dd",
+              "name": "Tag did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "tags",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3b8011f9-fac0-4681-a6d9-f736f71dcbcb",
+          "name": "Find tags based on search parameters.",
+          "request": {
+            "name": "Find tags based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "tags",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"types\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed8f38ce-6ea2-4bf3-b41e-9a499a285de3",
+              "name": "List of tags matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "tags",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"types\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"style\": \"success\",\n    \"types\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"description\": \"string\",\n    \"deleted\": false\n  },\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"style\": \"danger\",\n    \"types\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"description\": \"string\",\n    \"deleted\": false\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae1ee845-0ec0-42ce-b008-5d2687ff01f3",
+          "name": "Create a tag",
+          "request": {
+            "name": "Create a tag",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "tags"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"style\": \"<string>\",\n  \"types\": [\n    \"<string>\"\n  ],\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "afa1ad7e-9c9f-42e1-90e7-5c0c2ceaa43b",
+              "name": "Tag created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "tags"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"style\": \"<string>\",\n  \"types\": [\n    \"<string>\"\n  ],\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0aaecd20-dd6b-4106-9928-97fd5246965d",
+          "name": "Patch a tag",
+          "request": {
+            "name": "Patch a tag",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "tags",
+                ":tagId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tagId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5d89f455-cb32-41f6-8569-7202c41ad55a",
+              "name": "Tag patched",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "tags",
+                    ":tagId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tagId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"style\": \"<string>\",\n  \"types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"description\": \"string\",\n  \"deleted\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ca51ef5c-a109-444c-a9c9-968e5bef0404",
+          "name": "Update a tag",
+          "request": {
+            "name": "Update a tag",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "tags",
+                ":tagId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tagId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"style\": \"<string>\",\n  \"types\": [\n    \"<string>\"\n  ],\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d98cc286-0055-4430-aef2-ff393de952f5",
+              "name": "Tag updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "tags",
+                    ":tagId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tagId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"style\": \"<string>\",\n  \"types\": [\n    \"<string>\"\n  ],\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"style\": \"<string>\",\n  \"types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"description\": \"string\",\n  \"deleted\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "542a8cc4-7e0d-4aba-aeb3-8cf418688053",
+    "name": "Fulcrum Public Accounting Code Tag API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

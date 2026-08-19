@@ -1,0 +1,1014 @@
+{
+  "item": [
+    {
+      "id": "4cc6cf3b-4913-43d1-946d-5d65bbdd20c0",
+      "name": "Material Vendor",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "39c0933b-1015-4013-9665-9f88a3612c7c",
+          "name": "Create a new material vendor. DEPRECATED: use POST /v2/material-vendors instead,\nwhich accepts the material id in the request body. This endpoint fails for material\nids that contain '/' characters (e.g. \"SS-301-CR 1/2 HD\") because ASP.NET Core routing\ncannot match URL-encoded forward slashes in path segments.",
+          "request": {
+            "name": "Create a new material vendor. DEPRECATED: use POST /v2/material-vendors instead,\nwhich accepts the material id in the request body. This endpoint fails for material\nids that contain '/' characters (e.g. \"SS-301-CR 1/2 HD\") because ASP.NET Core routing\ncannot match URL-encoded forward slashes in path segments.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "materials",
+                ":materialId",
+                "vendors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "materialId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"<string>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "75eef4e5-a337-424e-8c31-8753fed0cccd",
+              "name": "Material vendor created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "materials",
+                    ":materialId",
+                    "vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "materialId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"<string>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ee51f12-c7cc-4c90-9b98-b12957e87909",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "materials",
+                    ":materialId",
+                    "vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "materialId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"<string>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c063b9ae-d995-4087-ad0c-71477a8a8529",
+              "name": "Item with the given id did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "materials",
+                    ":materialId",
+                    "vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "materialId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"<string>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "474563ad-36a8-436b-b937-451135edd53b",
+          "name": "Create a new material vendor. Use this endpoint instead of the path-based v1\nwhen your material ids may contain '/' characters, which ASP.NET Core routing\ncannot match once URL-encoded.",
+          "request": {
+            "name": "Create a new material vendor. Use this endpoint instead of the path-based v1\nwhen your material ids may contain '/' characters, which ASP.NET Core routing\ncannot match once URL-encoded.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "material-vendors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"materialId\": \"<string>\",\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"<string>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "49a4ac88-b673-4bab-a6bf-a6833ec41328",
+              "name": "Material vendor created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "material-vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"materialId\": \"<string>\",\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"<string>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a4e4530-6bb7-4f4e-b508-ac8e4da10d17",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "material-vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"materialId\": \"<string>\",\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"<string>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4e6e34ce-4522-405b-b11a-bdbda01d63a5",
+              "name": "Item with the given id did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "material-vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"materialId\": \"<string>\",\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"<string>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "72c3e87a-382e-4fb5-91ad-5849ed3cd072",
+          "name": "Get a list of vendors for a material. DEPRECATED: use POST /v2/material-vendors/list\ninstead, which accepts the material id in the request body. This endpoint fails for\nmaterial ids that contain '/' characters (e.g. \"SS-301-CR 1/2 HD\") because ASP.NET Core\nrouting cannot match URL-encoded forward slashes in path segments.",
+          "request": {
+            "name": "Get a list of vendors for a material. DEPRECATED: use POST /v2/material-vendors/list\ninstead, which accepts the material id in the request body. This endpoint fails for\nmaterial ids that contain '/' characters (e.g. \"SS-301-CR 1/2 HD\") because ASP.NET Core\nrouting cannot match URL-encoded forward slashes in path segments.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "materials",
+                ":materialId",
+                "vendors",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "materialId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "475cba35-6a4b-4c9a-aed5-3715707c8082",
+              "name": "List of vendors for the given material id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "materials",
+                    ":materialId",
+                    "vendors",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "materialId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"c18a894b-5366-3f46-b891-f6ecf6ee4b09\",\n    \"isPrimary\": true,\n    \"priceBreaks\": [\n      {\n        \"id\": \"62e2d643-7992-d555-a962-8c12a08413bf\",\n        \"price\": 7571.421861933411,\n        \"quantity\": 127\n      },\n      {\n        \"id\": \"5795fdf6-b874-3d0c-324b-1b2524836cc3\",\n        \"price\": 6446.481131889426,\n        \"quantity\": 3153\n      }\n    ],\n    \"priceUnit\": \"<string>\",\n    \"vendorId\": \"stringstringstringstring\",\n    \"currencyCode\": \"string\",\n    \"leadTimeInDays\": 1044\n  },\n  {\n    \"id\": \"4ab374c3-3896-42b1-63e7-06865e26d5c0\",\n    \"isPrimary\": false,\n    \"priceBreaks\": [\n      {\n        \"id\": \"dd4caa3a-9456-1a4d-2000-fa5d50282d26\",\n        \"price\": 8214.714972924787,\n        \"quantity\": 5588\n      },\n      {\n        \"id\": \"1d17fa5a-0ab8-d179-47a0-b774428ae4d5\",\n        \"price\": 1867.3111143087074,\n        \"quantity\": 1002\n      }\n    ],\n    \"priceUnit\": \"<string>\",\n    \"vendorId\": \"stringstringstringstring\",\n    \"currencyCode\": \"string\",\n    \"leadTimeInDays\": 597\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "528e0e6c-ba6e-426b-9f15-7ecb7580b5a6",
+              "name": "The material did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "materials",
+                    ":materialId",
+                    "vendors",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "materialId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "52597f8e-c9ce-4d9f-b027-349ebdc1c7d1",
+          "name": "List the vendors for a material. Use this endpoint instead of the path-based v1\nwhen your material ids may contain '/' characters, which ASP.NET Core routing\ncannot match once URL-encoded.",
+          "request": {
+            "name": "List the vendors for a material. Use this endpoint instead of the path-based v1\nwhen your material ids may contain '/' characters, which ASP.NET Core routing\ncannot match once URL-encoded.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "material-vendors",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"materialId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "687d9d5c-6e49-4c5c-96af-4adec8397ba5",
+              "name": "List of vendors for the given material id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "material-vendors",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"materialId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"c992a1c5-e4b6-dfaf-0e68-fe3f61aed336\",\n    \"isPrimary\": true,\n    \"priceBreaks\": [\n      {\n        \"id\": \"fc003799-7895-49a2-1ea6-62197142e26b\",\n        \"price\": 509.7423781559995,\n        \"quantity\": 8967\n      },\n      {\n        \"id\": \"9efaf011-92a1-8008-bb94-626e177c0470\",\n        \"price\": 3349.9491718850813,\n        \"quantity\": 7756\n      }\n    ],\n    \"priceUnit\": \"<string>\",\n    \"vendorId\": \"stringstringstringstring\",\n    \"currencyCode\": \"string\",\n    \"leadTimeInDays\": 3797\n  },\n  {\n    \"id\": \"8e59304f-cd2a-e3ce-bc75-419cd61e04c9\",\n    \"isPrimary\": false,\n    \"priceBreaks\": [\n      {\n        \"id\": \"18c8479d-4278-bed7-40c9-c6df2d2dbaab\",\n        \"price\": 3457.8138052189024,\n        \"quantity\": 6625\n      },\n      {\n        \"id\": \"93f5fca8-141e-02d4-75f2-730f81aee1b5\",\n        \"price\": 250.53963577541305,\n        \"quantity\": 7980\n      }\n    ],\n    \"priceUnit\": \"<string>\",\n    \"vendorId\": \"stringstringstringstring\",\n    \"currencyCode\": \"string\",\n    \"leadTimeInDays\": 2038\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5310b48-4cc8-4cb2-ae54-74bbeb251601",
+              "name": "The material did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "material-vendors",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"materialId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a12fff48-4fdf-4c67-b6b0-b8f1b90ea8e3",
+          "name": "Update a specific material vendor. DEPRECATED: use PUT /v2/material-vendors/{vendorId} instead,\nwhich accepts the material id in the request body. This endpoint fails for material\nids that contain '/' characters (e.g. \"SS-301-CR 1/2 HD\") because ASP.NET Core routing\ncannot match URL-encoded forward slashes in path segments.",
+          "request": {
+            "name": "Update a specific material vendor. DEPRECATED: use PUT /v2/material-vendors/{vendorId} instead,\nwhich accepts the material id in the request body. This endpoint fails for material\nids that contain '/' characters (e.g. \"SS-301-CR 1/2 HD\") because ASP.NET Core routing\ncannot match URL-encoded forward slashes in path segments.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "materials",
+                ":materialId",
+                "vendors",
+                ":vendorId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "materialId",
+                  "description": "(Required) The id of the item to modify vendors for"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "vendorId",
+                  "description": "(Required) The id of the actual vendor."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5ee23229-0ffe-4451-a6f5-87fe4ff0e657",
+              "name": "Update successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "materials",
+                    ":materialId",
+                    "vendors",
+                    ":vendorId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "materialId",
+                      "description": "(Required) The id of the item to modify vendors for"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "vendorId",
+                      "description": "(Required) The id of the actual vendor."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"95356e11-1f42-40fd-ab94-8212d45621e6\",\n  \"isPrimary\": true,\n  \"priceBreaks\": [\n    {\n      \"id\": \"866768e0-bd93-97a0-38ba-f68feaa3dc26\",\n      \"price\": 412.45791376450234,\n      \"quantity\": 3263\n    },\n    {\n      \"id\": \"d68b6647-1c70-80ca-db29-5b516e7e7eef\",\n      \"price\": 4062.8065537389966,\n      \"quantity\": 8931\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"stringstringstringstring\",\n  \"currencyCode\": \"string\",\n  \"leadTimeInDays\": 1440\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b47cfce-5403-411f-9a4a-04941b8a3735",
+              "name": "Material did not exist or no vendor existed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "materials",
+                    ":materialId",
+                    "vendors",
+                    ":vendorId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "materialId",
+                      "description": "(Required) The id of the item to modify vendors for"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "vendorId",
+                      "description": "(Required) The id of the actual vendor."
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "099c687c-29aa-49bd-aa95-6764aa7b6bae",
+          "name": "Update a specific material vendor. Use this endpoint instead of the path-based v1\nwhen your material ids may contain '/' characters, which ASP.NET Core routing\ncannot match once URL-encoded.",
+          "request": {
+            "name": "Update a specific material vendor. Use this endpoint instead of the path-based v1\nwhen your material ids may contain '/' characters, which ASP.NET Core routing\ncannot match once URL-encoded.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "material-vendors",
+                ":vendorId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "vendorId",
+                  "description": "(Required) Unique id of the vendor to update on the material."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"materialId\": \"<string>\",\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "602c8082-c7c1-448d-99d5-e3887a0b1d0f",
+              "name": "Update successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "material-vendors",
+                    ":vendorId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "vendorId",
+                      "description": "(Required) Unique id of the vendor to update on the material."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"materialId\": \"<string>\",\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"95356e11-1f42-40fd-ab94-8212d45621e6\",\n  \"isPrimary\": true,\n  \"priceBreaks\": [\n    {\n      \"id\": \"866768e0-bd93-97a0-38ba-f68feaa3dc26\",\n      \"price\": 412.45791376450234,\n      \"quantity\": 3263\n    },\n    {\n      \"id\": \"d68b6647-1c70-80ca-db29-5b516e7e7eef\",\n      \"price\": 4062.8065537389966,\n      \"quantity\": 8931\n    }\n  ],\n  \"priceUnit\": \"<string>\",\n  \"vendorId\": \"stringstringstringstring\",\n  \"currencyCode\": \"string\",\n  \"leadTimeInDays\": 1440\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3fafb306-c832-4a45-b55a-34c50edf78f2",
+              "name": "Material did not exist or no vendor existed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "material-vendors",
+                    ":vendorId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "vendorId",
+                      "description": "(Required) Unique id of the vendor to update on the material."
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"materialId\": \"<string>\",\n  \"priceBreaks\": [\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    },\n    {\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\"\n    }\n  ],\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f61e3f45-8841-434d-882d-1878cc0bb69d",
+    "name": "Fulcrum Public Accounting Code Material Vendor API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

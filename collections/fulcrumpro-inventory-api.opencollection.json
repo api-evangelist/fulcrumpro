@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Inventory API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Inventory",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find inventory based on search parameters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/inventory/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Find inventory based on search parameters."
+        },
+        {
+          "info": {
+            "name": "Returns on hand counts by item.  Excludes reserved inventory counts by default, but can be included by passing in the ```includeReserved``` query parameter.\nNOTE: If the response does not contain an item identifier, it means there is no quantity on hand.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/inventory/byItem",
+            "params": [
+              {
+                "name": "includeReserved",
+                "value": "",
+                "type": "query",
+                "description": "Whether to included reserved inventory into the counts"
+              }
+            ]
+          },
+          "docs": "Returns on hand counts by item.  Excludes reserved inventory counts by default, but can be included by passing in the ```includeReserved``` query parameter.\nNOTE: If the response does not contain an item identifier, it means there is no quantity on hand."
+        },
+        {
+          "info": {
+            "name": "Override an inventory's quantity.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/inventory/override",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Override an inventory's quantity."
+        },
+        {
+          "info": {
+            "name": "Pick inventory against a specific item.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/inventory/pick",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Pick inventory against a specific item."
+        },
+        {
+          "info": {
+            "name": "Returns quantity available by item. This is the on hand + incoming supply - demand.\nNOTE: If the response does not contain an item identifier, it means there is no quantity on hand.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/inventory/availableByItem"
+          },
+          "docs": "Returns quantity available by item. This is the on hand + incoming supply - demand.\nNOTE: If the response does not contain an item identifier, it means there is no quantity on hand."
+        },
+        {
+          "info": {
+            "name": "Receive inventory for a specific item.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/inventory/receive",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Receive inventory for a specific item."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

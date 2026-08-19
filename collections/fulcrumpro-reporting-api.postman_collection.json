@@ -1,0 +1,1576 @@
+{
+  "item": [
+    {
+      "id": "d3946b60-bf8a-4a96-83fb-93c0c1c2de66",
+      "name": "Reporting",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bb87fd8a-270e-489e-ac8b-7e0c63cbcf15",
+          "name": "Lists report-ready on-hand inventory rows from the inventory reporting view, including per-unit and\nextended valuation (material/labor/machine/OP), lot and location context, and item categorization\nso callers do not need to hand-join inventory to lots, items, and their details. Returns exactly\none row per (item, lot, location), so summing on-hand quantity or value across the rows does not\nover-count a lot.",
+          "request": {
+            "name": "Lists report-ready on-hand inventory rows from the inventory reporting view, including per-unit and\nextended valuation (material/labor/machine/OP), lot and location context, and item categorization\nso callers do not need to hand-join inventory to lots, items, and their details. Returns exactly\none row per (item, lot, location), so summing on-hand quantity or value across the rows does not\nover-count a lot.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "reporting",
+                "inventory",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemNumber\": \"<string>\",\n  \"locationName\": \"<string>\",\n  \"category\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8fee8534-3453-4bb8-a4b7-c0cc38282449",
+              "name": "A page of inventory report rows with the total matching count.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "inventory",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemNumber\": \"<string>\",\n  \"locationName\": \"<string>\",\n  \"category\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"number\": \"string\",\n      \"description\": \"string\",\n      \"revision\": \"string\",\n      \"origin\": \"string\",\n      \"isSellable\": \"string\",\n      \"primaryVendorName\": \"string\",\n      \"tags\": \"string\",\n      \"minimumStockOnHand\": 7119.476858344907,\n      \"unitOfMeasureName\": \"string\",\n      \"accountingCode1\": \"string\",\n      \"accountingCode2\": \"string\",\n      \"accountingClass\": \"string\",\n      \"category\": \"string\",\n      \"isArchived\": \"string\",\n      \"shippingUnitWeight\": 5179.640015014026,\n      \"materialUnitWeightLbs\": 2321.06566633866,\n      \"onHandQty\": 8818.136596966695,\n      \"lotNumber\": \"string\",\n      \"expirationDate\": \"1992-10-06T19:38:31.993Z\",\n      \"locationName\": \"string\",\n      \"isCustom\": \"string\",\n      \"materialValue\": 5043.064596712179,\n      \"laborValue\": 5448.640523580375,\n      \"machineValue\": 5125.1016382264415,\n      \"outsideProcessingValue\": 3205.5216866554206,\n      \"totalUnitValue\": 4367.79357735609,\n      \"totalValue\": 3470.1655013510267\n    },\n    {\n      \"number\": \"string\",\n      \"description\": \"string\",\n      \"revision\": \"string\",\n      \"origin\": \"string\",\n      \"isSellable\": \"string\",\n      \"primaryVendorName\": \"string\",\n      \"tags\": \"string\",\n      \"minimumStockOnHand\": 5792.145883134278,\n      \"unitOfMeasureName\": \"string\",\n      \"accountingCode1\": \"string\",\n      \"accountingCode2\": \"string\",\n      \"accountingClass\": \"string\",\n      \"category\": \"string\",\n      \"isArchived\": \"string\",\n      \"shippingUnitWeight\": 8228.23463909632,\n      \"materialUnitWeightLbs\": 6040.615454535146,\n      \"onHandQty\": 5249.936604316767,\n      \"lotNumber\": \"string\",\n      \"expirationDate\": \"1948-05-24T10:50:31.755Z\",\n      \"locationName\": \"string\",\n      \"isCustom\": \"string\",\n      \"materialValue\": 2225.023318855676,\n      \"laborValue\": 3296.0982934674707,\n      \"machineValue\": 8140.052181531766,\n      \"outsideProcessingValue\": 6393.849119566114,\n      \"totalUnitValue\": 9611.236351476085,\n      \"totalValue\": 6722.914524760847\n    }\n  ],\n  \"hasNextPage\": true,\n  \"hasPreviousPage\": true,\n  \"page\": 8605,\n  \"pageSize\": 5013,\n  \"totalCount\": 5528,\n  \"totalPages\": 8727\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00ce2e08-7122-408c-aee9-a1aaa7895a3c",
+              "name": "The viewer lacks the View Inventory permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "inventory",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemNumber\": \"<string>\",\n  \"locationName\": \"<string>\",\n  \"category\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4ea55c82-4ea2-43eb-8b31-36f5160f6cb4",
+          "name": "Lists report-ready invoice-line rows from the invoice reporting view, including line type,\npricing, tax, and aging detail joined to sales-order and shipment context so callers do not need\nto hand-join invoices to invoice line items, sales orders, and shipments.",
+          "request": {
+            "name": "Lists report-ready invoice-line rows from the invoice reporting view, including line type,\npricing, tax, and aging detail joined to sales-order and shipment context so callers do not need\nto hand-join invoices to invoice line items, sales orders, and shipments.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "reporting",
+                "invoice",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"issuedDateFrom\": \"<dateTime>\",\n  \"issuedDateTo\": \"<dateTime>\",\n  \"invoiceStatus\": \"<string>\",\n  \"lineType\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f7a071a5-2d1d-4802-a9fe-15570e4a5a2e",
+              "name": "A page of invoice report rows with the total matching count.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "invoice",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issuedDateFrom\": \"<dateTime>\",\n  \"issuedDateTo\": \"<dateTime>\",\n  \"invoiceStatus\": \"<string>\",\n  \"lineType\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"company\": \"string\",\n      \"invoiceNumber\": 5838,\n      \"invoiceStatus\": \"string\",\n      \"salesOrderNumber\": 4619,\n      \"customerPurchaseOrder\": \"string\",\n      \"customerName\": \"string\",\n      \"salesPerson\": \"string\",\n      \"isDeposit\": \"string\",\n      \"createdDate\": \"1982-06-30T15:07:13.530Z\",\n      \"lineType\": \"string\",\n      \"lineItemName\": \"string\",\n      \"customerPartNumber\": \"string\",\n      \"customerPartDescription\": \"string\",\n      \"itemDescription\": \"string\",\n      \"accountingCode\": \"string\",\n      \"itemTags\": \"string\",\n      \"issuedDate\": \"1981-06-06T16:10:15.997Z\",\n      \"dueDate\": \"2011-05-05T22:41:13.028Z\",\n      \"salesOrderTotal\": 9552.307671222661,\n      \"unitPrice\": 5684.103464897306,\n      \"quantityInvoiced\": 8620.351297919171,\n      \"invoiceAmount\": 8198.136363366535,\n      \"isTaxable\": 9534,\n      \"taxCode\": \"string\",\n      \"taxTotal\": 9431.944809642819,\n      \"invoiceTotalWithoutTax\": 5106.611769889006,\n      \"invoiceTotalWithTax\": 1969.7852276367146,\n      \"paidDate\": \"1994-04-30T05:12:56.100Z\",\n      \"late\": 8861,\n      \"daysLate\": 8955,\n      \"customerCurrencyCode\": \"string\",\n      \"shipmentName\": \"string\",\n      \"shipmentsLine1s\": \"string\",\n      \"shipmentsLine2s\": \"string\",\n      \"shipmentsCities\": \"string\",\n      \"shipmentsStates\": \"string\",\n      \"shipmentsCountries\": \"string\",\n      \"accountingClass\": \"string\"\n    },\n    {\n      \"company\": \"string\",\n      \"invoiceNumber\": 2065,\n      \"invoiceStatus\": \"string\",\n      \"salesOrderNumber\": 7568,\n      \"customerPurchaseOrder\": \"string\",\n      \"customerName\": \"string\",\n      \"salesPerson\": \"string\",\n      \"isDeposit\": \"string\",\n      \"createdDate\": \"1970-03-15T16:53:23.584Z\",\n      \"lineType\": \"string\",\n      \"lineItemName\": \"string\",\n      \"customerPartNumber\": \"string\",\n      \"customerPartDescription\": \"string\",\n      \"itemDescription\": \"string\",\n      \"accountingCode\": \"string\",\n      \"itemTags\": \"string\",\n      \"issuedDate\": \"2020-12-08T16:05:11.062Z\",\n      \"dueDate\": \"2018-03-31T16:21:27.340Z\",\n      \"salesOrderTotal\": 853.1774851118878,\n      \"unitPrice\": 1378.4330448645753,\n      \"quantityInvoiced\": 2384.8146087463997,\n      \"invoiceAmount\": 8467.004384534175,\n      \"isTaxable\": 3185,\n      \"taxCode\": \"string\",\n      \"taxTotal\": 3064.1397967689677,\n      \"invoiceTotalWithoutTax\": 791.190499552663,\n      \"invoiceTotalWithTax\": 8727.957530067788,\n      \"paidDate\": \"1957-09-28T19:57:21.979Z\",\n      \"late\": 399,\n      \"daysLate\": 3052,\n      \"customerCurrencyCode\": \"string\",\n      \"shipmentName\": \"string\",\n      \"shipmentsLine1s\": \"string\",\n      \"shipmentsLine2s\": \"string\",\n      \"shipmentsCities\": \"string\",\n      \"shipmentsStates\": \"string\",\n      \"shipmentsCountries\": \"string\",\n      \"accountingClass\": \"string\"\n    }\n  ],\n  \"hasNextPage\": false,\n  \"hasPreviousPage\": true,\n  \"page\": 2870,\n  \"pageSize\": 351,\n  \"totalCount\": 9761,\n  \"totalPages\": 6928\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a24644a0-1b6e-4b41-9fdd-105201c36709",
+              "name": "The viewer lacks the View Invoices permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "invoice",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"issuedDateFrom\": \"<dateTime>\",\n  \"issuedDateTo\": \"<dateTime>\",\n  \"invoiceStatus\": \"<string>\",\n  \"lineType\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53461617-34e7-489e-b6f0-8e228967ba14",
+          "name": "Lists report-ready per-operator operation rows from the job-activity-by-operator reporting view,\nincluding setup/labor/machine time and cost, run-by-run quantities, rates, and job/routing context\nso callers do not need to hand-join jobs to items-to-make, operations, timers, and job logs.",
+          "request": {
+            "name": "Lists report-ready per-operator operation rows from the job-activity-by-operator reporting view,\nincluding setup/labor/machine time and cost, run-by-run quantities, rates, and job/routing context\nso callers do not need to hand-join jobs to items-to-make, operations, timers, and job logs.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "reporting",
+                "job-activity-by-operator",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startedOrCreatedDateFrom\": \"<dateTime>\",\n  \"startedOrCreatedDateTo\": \"<dateTime>\",\n  \"employee\": \"<string>\",\n  \"department\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "03c26b89-1fb6-4958-b227-13cab6e9f459",
+              "name": "A page of job-activity-by-operator report rows with the total matching count.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "job-activity-by-operator",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"startedOrCreatedDateFrom\": \"<dateTime>\",\n  \"startedOrCreatedDateTo\": \"<dateTime>\",\n  \"employee\": \"<string>\",\n  \"department\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"jobName\": \"string\",\n      \"item\": \"string\",\n      \"operationName\": \"string\",\n      \"operationNumber\": 4644,\n      \"employee\": \"string\",\n      \"startedOrCreatedDate\": \"1977-04-01T05:09:52.494Z\",\n      \"jobCompletedDate\": \"1995-09-23T20:18:46.837Z\",\n      \"itemDescription\": \"string\",\n      \"itemRevision\": \"string\",\n      \"isParent\": 3216,\n      \"lastOperationOnItem\": 2678,\n      \"productionDueDate\": \"1949-02-21T20:17:28.657Z\",\n      \"salesOrderNumber\": \"string\",\n      \"customer\": \"string\",\n      \"customerPurchaseOrder\": \"string\",\n      \"jobPriority\": \"string\",\n      \"jobStatus\": \"string\",\n      \"jobScheduledStart\": \"1993-01-09T12:00:08.727Z\",\n      \"jobScheduledEnd\": \"2021-02-11T08:27:36.857Z\",\n      \"jobLateStatus\": \"string\",\n      \"jobPlannedQty\": 8182.799646726988,\n      \"uoM\": \"string\",\n      \"department\": \"string\",\n      \"shift\": \"string\",\n      \"scheduledEquipment\": \"string\",\n      \"operationStatus\": \"string\",\n      \"operationCompletedDate\": \"2015-01-09T12:16:01.578Z\",\n      \"setupComplete\": \"string\",\n      \"runComplete\": \"string\",\n      \"estimatedSetupTimeHours\": 6274.925305073725,\n      \"estimatedRunTimeHours\": 9032.644983919403,\n      \"estimatedMachineTimeHours\": 2430.255848966497,\n      \"unitsCompletedOnOperation\": 3515.053665985923,\n      \"isOutsideProcessing\": \"string\",\n      \"setupTimeHours\": 180.83038410463436,\n      \"laborTimeHours\": 4253.715382428191,\n      \"machineTimeHours\": 7581.501859831817,\n      \"startedOn\": \"1979-09-02T06:21:19.971Z\",\n      \"stoppedOn\": \"1995-10-08T11:49:41.810Z\",\n      \"qtyCompletedThisRun\": 758.4389519733803,\n      \"qtyInventoriedThisRun\": 7077.624499756389,\n      \"unitsPerHour\": 537.5712594648929,\n      \"setupRate\": 6614.579934918578,\n      \"laborRate\": 3155.9308014684084,\n      \"machineRate\": 5087.467315798504,\n      \"setupCost\": 5756.741213012333,\n      \"laborCost\": 2621.5656151334865,\n      \"machineCost\": 3311.457138937155,\n      \"operationScheduledStart\": \"1984-05-03T09:55:56.053Z\",\n      \"operationScheduledEnd\": \"2022-03-05T20:18:33.173Z\",\n      \"systemOperationId\": \"string\"\n    },\n    {\n      \"jobName\": \"string\",\n      \"item\": \"string\",\n      \"operationName\": \"string\",\n      \"operationNumber\": 2820,\n      \"employee\": \"string\",\n      \"startedOrCreatedDate\": \"2018-01-03T22:28:15.961Z\",\n      \"jobCompletedDate\": \"2006-07-23T15:09:00.339Z\",\n      \"itemDescription\": \"string\",\n      \"itemRevision\": \"string\",\n      \"isParent\": 1347,\n      \"lastOperationOnItem\": 8327,\n      \"productionDueDate\": \"2012-06-07T15:15:57.249Z\",\n      \"salesOrderNumber\": \"string\",\n      \"customer\": \"string\",\n      \"customerPurchaseOrder\": \"string\",\n      \"jobPriority\": \"string\",\n      \"jobStatus\": \"string\",\n      \"jobScheduledStart\": \"1947-02-01T07:12:42.235Z\",\n      \"jobScheduledEnd\": \"2010-10-17T16:56:58.728Z\",\n      \"jobLateStatus\": \"string\",\n      \"jobPlannedQty\": 1820.73305205945,\n      \"uoM\": \"string\",\n      \"department\": \"string\",\n      \"shift\": \"string\",\n      \"scheduledEquipment\": \"string\",\n      \"operationStatus\": \"string\",\n      \"operationCompletedDate\": \"1993-03-26T02:15:04.866Z\",\n      \"setupComplete\": \"string\",\n      \"runComplete\": \"string\",\n      \"estimatedSetupTimeHours\": 3731.2627902784325,\n      \"estimatedRunTimeHours\": 1520.8573362870436,\n      \"estimatedMachineTimeHours\": 9805.222577733946,\n      \"unitsCompletedOnOperation\": 8504.266914466856,\n      \"isOutsideProcessing\": \"string\",\n      \"setupTimeHours\": 6668.570628760567,\n      \"laborTimeHours\": 7304.839068514887,\n      \"machineTimeHours\": 6884.1424191027,\n      \"startedOn\": \"1982-11-23T02:37:00.913Z\",\n      \"stoppedOn\": \"2025-08-02T14:38:51.125Z\",\n      \"qtyCompletedThisRun\": 3321.116876631033,\n      \"qtyInventoriedThisRun\": 8153.157108539075,\n      \"unitsPerHour\": 9102.36705064327,\n      \"setupRate\": 9940.026224726389,\n      \"laborRate\": 482.67733342471473,\n      \"machineRate\": 304.38961382712404,\n      \"setupCost\": 5318.558753560624,\n      \"laborCost\": 4940.498474866688,\n      \"machineCost\": 8328.494997011983,\n      \"operationScheduledStart\": \"1984-05-18T06:39:13.208Z\",\n      \"operationScheduledEnd\": \"2003-10-20T21:05:02.150Z\",\n      \"systemOperationId\": \"string\"\n    }\n  ],\n  \"hasNextPage\": false,\n  \"hasPreviousPage\": true,\n  \"page\": 8462,\n  \"pageSize\": 1352,\n  \"totalCount\": 8868,\n  \"totalPages\": 4340\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6c87050c-5968-4e73-ab0e-ea9a0d4c0d81",
+              "name": "The viewer lacks one of the required permissions (View Job and View Time Management).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "job-activity-by-operator",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"startedOrCreatedDateFrom\": \"<dateTime>\",\n  \"startedOrCreatedDateTo\": \"<dateTime>\",\n  \"employee\": \"<string>\",\n  \"department\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "859f703e-6cb2-42cc-8bba-ecd087838c6f",
+          "name": "Lists report-ready job-operation rows from the job-activity reporting view, including schedule,\ntimer, completion-progress, and routing context so callers do not need to hand-join jobs to\nitems-to-make, operations, timers, and scheduling data.",
+          "request": {
+            "name": "Lists report-ready job-operation rows from the job-activity reporting view, including schedule,\ntimer, completion-progress, and routing context so callers do not need to hand-join jobs to\nitems-to-make, operations, timers, and scheduling data.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "reporting",
+                "job-activity",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operationStatus\": \"<string>\",\n  \"jobStatus\": \"<string>\",\n  \"department\": \"<string>\",\n  \"productionDueDateFrom\": \"<dateTime>\",\n  \"productionDueDateTo\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "232694ac-4a94-4ebd-8006-b23a3e6b118e",
+              "name": "A page of job-activity report rows with the total matching count.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "job-activity",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"operationStatus\": \"<string>\",\n  \"jobStatus\": \"<string>\",\n  \"department\": \"<string>\",\n  \"productionDueDateFrom\": \"<dateTime>\",\n  \"productionDueDateTo\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"jobName\": \"string\",\n      \"item\": \"string\",\n      \"itemDescription\": \"string\",\n      \"itemRevision\": \"string\",\n      \"itemTags\": \"string\",\n      \"productionDueDate\": \"2008-05-25T05:43:06.646Z\",\n      \"salesOrderNumber\": \"string\",\n      \"customer\": \"string\",\n      \"customerPurchaseOrder\": \"string\",\n      \"jobPriority\": \"string\",\n      \"jobStatus\": \"string\",\n      \"jobScheduledStart\": \"2015-02-18T10:08:54.637Z\",\n      \"jobScheduledEnd\": \"1999-09-25T00:30:59.363Z\",\n      \"jobLateStatus\": \"string\",\n      \"jobPlannedQty\": 912.6598409354747,\n      \"uoM\": \"string\",\n      \"department\": \"string\",\n      \"shift\": \"string\",\n      \"operationName\": \"string\",\n      \"scheduledEquipment\": \"string\",\n      \"operationNumber\": 3186,\n      \"operationStatus\": \"string\",\n      \"setupComplete\": \"string\",\n      \"runComplete\": \"string\",\n      \"estimatedSetupTimeHours\": 764.6751508500682,\n      \"estimatedRunTimeHours\": 3975.547358932656,\n      \"estimatedMachineTimeHours\": 605.2850610063765,\n      \"unitsCompletedOnOperation\": 8176.193457406263,\n      \"unitsCompletedOnJob\": 3502.8811571315264,\n      \"isOutsideProcessing\": \"string\",\n      \"outsideProcessingLeadTime\": 1305,\n      \"isRework\": false,\n      \"totalOperationTimeHours\": 8993.752644195047,\n      \"totalMachineTimeHours\": 8472.673320574617,\n      \"operationScheduledStart\": \"1949-10-13T15:59:41.943Z\",\n      \"actualStart\": \"2025-01-04T20:00:03.423Z\",\n      \"lastStoppedOn\": \"1952-01-31T20:12:16.686Z\",\n      \"latestUser\": \"string\",\n      \"scheduledEnd\": \"1982-11-26T19:36:03.192Z\"\n    },\n    {\n      \"jobName\": \"string\",\n      \"item\": \"string\",\n      \"itemDescription\": \"string\",\n      \"itemRevision\": \"string\",\n      \"itemTags\": \"string\",\n      \"productionDueDate\": \"1977-12-17T22:57:11.616Z\",\n      \"salesOrderNumber\": \"string\",\n      \"customer\": \"string\",\n      \"customerPurchaseOrder\": \"string\",\n      \"jobPriority\": \"string\",\n      \"jobStatus\": \"string\",\n      \"jobScheduledStart\": \"1961-05-28T12:33:10.985Z\",\n      \"jobScheduledEnd\": \"2005-11-04T21:43:24.381Z\",\n      \"jobLateStatus\": \"string\",\n      \"jobPlannedQty\": 2243.988933000809,\n      \"uoM\": \"string\",\n      \"department\": \"string\",\n      \"shift\": \"string\",\n      \"operationName\": \"string\",\n      \"scheduledEquipment\": \"string\",\n      \"operationNumber\": 2687,\n      \"operationStatus\": \"string\",\n      \"setupComplete\": \"string\",\n      \"runComplete\": \"string\",\n      \"estimatedSetupTimeHours\": 7612.0930544479515,\n      \"estimatedRunTimeHours\": 399.60946038912095,\n      \"estimatedMachineTimeHours\": 8233.23927019405,\n      \"unitsCompletedOnOperation\": 4618.156538122239,\n      \"unitsCompletedOnJob\": 585.6115494993941,\n      \"isOutsideProcessing\": \"string\",\n      \"outsideProcessingLeadTime\": 7035,\n      \"isRework\": true,\n      \"totalOperationTimeHours\": 2291.6440726889587,\n      \"totalMachineTimeHours\": 7828.781356330107,\n      \"operationScheduledStart\": \"2015-03-14T02:21:19.774Z\",\n      \"actualStart\": \"1984-01-05T14:30:17.115Z\",\n      \"lastStoppedOn\": \"1949-01-11T12:10:07.722Z\",\n      \"latestUser\": \"string\",\n      \"scheduledEnd\": \"1994-03-04T17:39:38.929Z\"\n    }\n  ],\n  \"hasNextPage\": false,\n  \"hasPreviousPage\": false,\n  \"page\": 8581,\n  \"pageSize\": 1155,\n  \"totalCount\": 9326,\n  \"totalPages\": 2515\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2757b3d1-2084-42b6-bc38-86518d235074",
+              "name": "The viewer lacks the View Job permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "job-activity",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"operationStatus\": \"<string>\",\n  \"jobStatus\": \"<string>\",\n  \"department\": \"<string>\",\n  \"productionDueDateFrom\": \"<dateTime>\",\n  \"productionDueDateTo\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6353b0fc-885a-4c38-afe3-c31cd7a8baa4",
+          "name": "Lists report-ready quote rows from the quote reporting view, including totals, cost, status, and\nlifecycle dates, so callers do not need to hand-assemble quote-level summary data.",
+          "request": {
+            "name": "Lists report-ready quote rows from the quote reporting view, including totals, cost, status, and\nlifecycle dates, so callers do not need to hand-assemble quote-level summary data.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "reporting",
+                "quote",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quotedDateFrom\": \"<dateTime>\",\n  \"quotedDateTo\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"customerName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aac67425-6e65-474b-a330-600ac9d6c506",
+              "name": "A page of quote report rows with the total matching count.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "quote",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"quotedDateFrom\": \"<dateTime>\",\n  \"quotedDateTo\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"customerName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"number\": 7292,\n      \"createdUtc\": \"1977-08-14T14:49:11.435Z\",\n      \"customerName\": \"string\",\n      \"priority\": \"string\",\n      \"salesPersonName\": \"string\",\n      \"expirationDate\": \"1970-12-01T15:48:50.339Z\",\n      \"quotedDate\": \"1949-10-14T08:42:51.359Z\",\n      \"closedDate\": \"2006-09-05T00:05:16.362Z\",\n      \"status\": \"string\",\n      \"publicNote\": \"string\",\n      \"discount\": 4132.3752491399255,\n      \"totalInPrimaryCurrency\": 1771.6220408050865,\n      \"totalWithTax\": 3876.057642544859,\n      \"cost\": 7512.829417275466\n    },\n    {\n      \"id\": \"string\",\n      \"number\": 7057,\n      \"createdUtc\": \"2020-01-24T05:42:51.812Z\",\n      \"customerName\": \"string\",\n      \"priority\": \"string\",\n      \"salesPersonName\": \"string\",\n      \"expirationDate\": \"1958-01-01T21:11:44.969Z\",\n      \"quotedDate\": \"1965-04-24T17:50:14.085Z\",\n      \"closedDate\": \"1994-05-28T12:48:33.243Z\",\n      \"status\": \"string\",\n      \"publicNote\": \"string\",\n      \"discount\": 1136.0568034378616,\n      \"totalInPrimaryCurrency\": 9404.891556039203,\n      \"totalWithTax\": 1704.3726759187116,\n      \"cost\": 8012.710562250607\n    }\n  ],\n  \"hasNextPage\": false,\n  \"hasPreviousPage\": true,\n  \"page\": 3669,\n  \"pageSize\": 304,\n  \"totalCount\": 1097,\n  \"totalPages\": 6139\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39809cf6-76d3-4cd9-af7f-e23e821b71e6",
+              "name": "The viewer lacks the View Quote permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "quote",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"quotedDateFrom\": \"<dateTime>\",\n  \"quotedDateTo\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"customerName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "571d03d2-8ea6-4650-9f75-3cc7b127e22b",
+          "name": "Lists report-ready sales-order line rows from the sales-order line-items reporting view,\nincluding pre-computed cost, invoice, ship, and return columns so callers do not need to\nhand-join sales orders to line items, jobs, invoices, shipments, and returns.",
+          "request": {
+            "name": "Lists report-ready sales-order line rows from the sales-order line-items reporting view,\nincluding pre-computed cost, invoice, ship, and return columns so callers do not need to\nhand-join sales orders to line items, jobs, invoices, shipments, and returns.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "reporting",
+                "sales-order-lines",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderedDateFrom\": \"<dateTime>\",\n  \"orderedDateTo\": \"<dateTime>\",\n  \"deliveryDueDateFrom\": \"<dateTime>\",\n  \"deliveryDueDateTo\": \"<dateTime>\",\n  \"salesOrderStatus\": \"<string>\",\n  \"customerName\": \"<string>\",\n  \"accountingCode\": \"<string>\",\n  \"unshippedOnly\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0df842c6-58bb-4c43-ad59-ebf8e3f49579",
+              "name": "A page of sales-order line report rows with the total matching count.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "sales-order-lines",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderedDateFrom\": \"<dateTime>\",\n  \"orderedDateTo\": \"<dateTime>\",\n  \"deliveryDueDateFrom\": \"<dateTime>\",\n  \"deliveryDueDateTo\": \"<dateTime>\",\n  \"salesOrderStatus\": \"<string>\",\n  \"customerName\": \"<string>\",\n  \"accountingCode\": \"<string>\",\n  \"unshippedOnly\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"companyName\": \"string\",\n      \"associatedQuote\": \"string\",\n      \"salesOrderNumber\": 462,\n      \"customerPONumber\": \"string\",\n      \"salesOrderStatus\": \"string\",\n      \"completedDate\": \"1994-08-29T14:44:03.682Z\",\n      \"orderPriority\": \"string\",\n      \"customerName\": \"string\",\n      \"customerTier\": \"string\",\n      \"paymentTerms\": \"string\",\n      \"city\": \"string\",\n      \"customerStateProvince\": \"string\",\n      \"customerContact\": \"string\",\n      \"customerPhone\": \"string\",\n      \"customerEmail\": \"string\",\n      \"salesperson\": \"string\",\n      \"orderedDate\": \"1984-05-01T13:36:56.639Z\",\n      \"lineItem\": \"string\",\n      \"lineItemDescription\": \"string\",\n      \"deliverBy\": \"2005-03-22T02:08:11.502Z\",\n      \"lineItemType\": \"string\",\n      \"blanketOrder\": 5631,\n      \"deliveryDueDate\": \"2014-01-14T18:26:12.033Z\",\n      \"internalUnitOfMeasure\": \"string\",\n      \"customerPartNumber\": \"string\",\n      \"customerPartDescription\": \"string\",\n      \"customerUnitOfMeasure\": \"string\",\n      \"accountingCode\": \"string\",\n      \"accountingClass\": \"string\",\n      \"itemTags\": \"string\",\n      \"itemCategory\": \"string\",\n      \"quantityOrdered\": 2613.8047757694803,\n      \"unitPrice\": 6717.879198962496,\n      \"lineItemSubTotal\": 2278.1256017494457,\n      \"pricingStrategy\": \"string\",\n      \"hasDiscount\": true,\n      \"isTimeAndMaterials\": true,\n      \"margin\": 4596.035463480362,\n      \"estimatedUnitCost\": 2996.669618396618,\n      \"associatedJobs\": \"string\",\n      \"associatedJobStatuses\": \"string\",\n      \"jobTotalEstimatedLaborCost\": 1647.7168387745612,\n      \"jobTotalEstimatedMachineCost\": 3257.1200033685654,\n      \"jobTotalEstimatedMaterialCost\": 4123.733837551238,\n      \"jobTotalEstimatedOPCost\": 1225.035757092967,\n      \"jobTotalEstimatedCost\": 6577.0715888199,\n      \"actualAvgUnitCost\": 264.4746915009899,\n      \"actualAvgMaterialUnitCost\": 8282.595830498816,\n      \"actualAvgLaborUnitCost\": 3056.1784486282395,\n      \"actualAvgMachineUnitCost\": 330.84323491257675,\n      \"actualAvgOPUnitCost\": 4617.213139979607,\n      \"jobActualTotalCost\": 276.04296884585324,\n      \"totalQuantityProduced\": 9978.596322492249,\n      \"hasInvoice\": \"string\",\n      \"totalQuantityInvoicedIssued\": 2362.7535058946014,\n      \"invoiceNumbers\": \"string\",\n      \"invoiceStatuses\": \"string\",\n      \"invoiceLinesSubtotal\": 9206.000259198212,\n      \"quantityShipped\": 5266.4657874407985,\n      \"quantityToShip\": 7384.235271400419,\n      \"valueShipped\": 5619.747627074393,\n      \"valueToShip\": 3785.4281244228437,\n      \"associatedShipmentNumbers\": \"string\",\n      \"associatedShipmentStatuses\": \"string\",\n      \"associatedShipmentMethods\": \"string\",\n      \"hasReturn\": \"string\",\n      \"quantityToReturn\": 9868.859874526343,\n      \"refundReason\": \"string\"\n    },\n    {\n      \"companyName\": \"string\",\n      \"associatedQuote\": \"string\",\n      \"salesOrderNumber\": 1634,\n      \"customerPONumber\": \"string\",\n      \"salesOrderStatus\": \"string\",\n      \"completedDate\": \"1964-11-21T18:18:25.664Z\",\n      \"orderPriority\": \"string\",\n      \"customerName\": \"string\",\n      \"customerTier\": \"string\",\n      \"paymentTerms\": \"string\",\n      \"city\": \"string\",\n      \"customerStateProvince\": \"string\",\n      \"customerContact\": \"string\",\n      \"customerPhone\": \"string\",\n      \"customerEmail\": \"string\",\n      \"salesperson\": \"string\",\n      \"orderedDate\": \"2012-11-13T11:42:23.408Z\",\n      \"lineItem\": \"string\",\n      \"lineItemDescription\": \"string\",\n      \"deliverBy\": \"2019-08-12T12:42:22.727Z\",\n      \"lineItemType\": \"string\",\n      \"blanketOrder\": 7618,\n      \"deliveryDueDate\": \"2025-12-29T18:25:07.137Z\",\n      \"internalUnitOfMeasure\": \"string\",\n      \"customerPartNumber\": \"string\",\n      \"customerPartDescription\": \"string\",\n      \"customerUnitOfMeasure\": \"string\",\n      \"accountingCode\": \"string\",\n      \"accountingClass\": \"string\",\n      \"itemTags\": \"string\",\n      \"itemCategory\": \"string\",\n      \"quantityOrdered\": 6433.92383730755,\n      \"unitPrice\": 8579.876403014709,\n      \"lineItemSubTotal\": 5250.600455576369,\n      \"pricingStrategy\": \"string\",\n      \"hasDiscount\": true,\n      \"isTimeAndMaterials\": false,\n      \"margin\": 203.19321213749132,\n      \"estimatedUnitCost\": 9119.73873636708,\n      \"associatedJobs\": \"string\",\n      \"associatedJobStatuses\": \"string\",\n      \"jobTotalEstimatedLaborCost\": 712.661715189803,\n      \"jobTotalEstimatedMachineCost\": 8952.288989278959,\n      \"jobTotalEstimatedMaterialCost\": 149.66392421678742,\n      \"jobTotalEstimatedOPCost\": 4028.2179399023653,\n      \"jobTotalEstimatedCost\": 4298.7196619282095,\n      \"actualAvgUnitCost\": 8801.00091646048,\n      \"actualAvgMaterialUnitCost\": 5964.925856608587,\n      \"actualAvgLaborUnitCost\": 4664.9405209484385,\n      \"actualAvgMachineUnitCost\": 9685.501423917873,\n      \"actualAvgOPUnitCost\": 7442.031607073164,\n      \"jobActualTotalCost\": 8302.931588957257,\n      \"totalQuantityProduced\": 4357.521815350072,\n      \"hasInvoice\": \"string\",\n      \"totalQuantityInvoicedIssued\": 4684.8010031356835,\n      \"invoiceNumbers\": \"string\",\n      \"invoiceStatuses\": \"string\",\n      \"invoiceLinesSubtotal\": 5617.132037662679,\n      \"quantityShipped\": 805.7125689879274,\n      \"quantityToShip\": 5291.837565547322,\n      \"valueShipped\": 4123.580812552869,\n      \"valueToShip\": 5345.423142049257,\n      \"associatedShipmentNumbers\": \"string\",\n      \"associatedShipmentStatuses\": \"string\",\n      \"associatedShipmentMethods\": \"string\",\n      \"hasReturn\": \"string\",\n      \"quantityToReturn\": 7813.53131314081,\n      \"refundReason\": \"string\"\n    }\n  ],\n  \"hasNextPage\": true,\n  \"hasPreviousPage\": false,\n  \"page\": 5932,\n  \"pageSize\": 2525,\n  \"totalCount\": 7961,\n  \"totalPages\": 2254\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "546f765a-3e98-4c18-b897-e3a4c529a130",
+              "name": "The viewer lacks one of the required permissions (View Sales Order, View Customer, View Job, View Invoices, and View Shipments).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "sales-order-lines",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"orderedDateFrom\": \"<dateTime>\",\n  \"orderedDateTo\": \"<dateTime>\",\n  \"deliveryDueDateFrom\": \"<dateTime>\",\n  \"deliveryDueDateTo\": \"<dateTime>\",\n  \"salesOrderStatus\": \"<string>\",\n  \"customerName\": \"<string>\",\n  \"accountingCode\": \"<string>\",\n  \"unshippedOnly\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "521b7452-f41a-426c-bc10-caddc95eb315",
+          "name": "Lists report-ready shipment line rows from the shipping reporting view, including pre-computed\ndollar columns ($ shipped, $ unshipped, total $ ordered, unit price) so callers do not need to\nhand-join shipments to sales-order line items.",
+          "request": {
+            "name": "Lists report-ready shipment line rows from the shipping reporting view, including pre-computed\ndollar columns ($ shipped, $ unshipped, total $ ordered, unit price) so callers do not need to\nhand-join shipments to sales-order line items.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "reporting",
+                "shipping",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipByDateFrom\": \"<dateTime>\",\n  \"shipByDateTo\": \"<dateTime>\",\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "571572d2-0076-4744-b8ba-b024dbfcdcf3",
+              "name": "A page of shipping report rows with the total matching count.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "shipping",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"shipByDateFrom\": \"<dateTime>\",\n  \"shipByDateTo\": \"<dateTime>\",\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"shipmentName\": \"string\",\n      \"status\": \"string\",\n      \"packingStatus\": \"string\",\n      \"shipmentType\": \"string\",\n      \"shipByDate\": \"1976-06-19T02:31:27.001Z\",\n      \"shippedDate\": \"1973-12-14T12:52:13.491Z\",\n      \"isLate\": 2728,\n      \"isOnTime\": 1110,\n      \"daysLate\": 1739,\n      \"trackingNumber\": \"string\",\n      \"recipientName\": \"string\",\n      \"recipientCustomerCode\": \"string\",\n      \"shipToName\": \"string\",\n      \"shipToCity\": \"string\",\n      \"shipToState\": \"string\",\n      \"shipToCountry\": \"string\",\n      \"customerPONumber\": \"string\",\n      \"purchaseOrder\": \"string\",\n      \"salesOrder\": \"string\",\n      \"shippedByName\": \"string\",\n      \"shippingCost\": 4582.8663792325415,\n      \"shippingCharge\": 2973.176637992275,\n      \"shippingCostNeedsInvoice\": false,\n      \"shippingMethod\": \"string\",\n      \"itemName\": \"string\",\n      \"description\": \"string\",\n      \"itemCategory\": \"string\",\n      \"accountingCodeName\": \"string\",\n      \"accountingClass\": \"string\",\n      \"itemTags\": \"string\",\n      \"quantityShipped\": 6316.5624999549245,\n      \"totalQtyOrdered\": 9909.409596622663,\n      \"totalQtyShipped\": 7036.39605256319,\n      \"unitPrice\": 4013.341802291103,\n      \"quantityToShip\": 5428.628149699844,\n      \"totalDollarsOrdered\": 4059.1875778909293,\n      \"dollarsShipped\": 1595.4044848399308,\n      \"dollarsUnshipped\": 3954.7963242397886,\n      \"quantityInvoiced\": 2000.2198402533022,\n      \"unitOfMeasureName\": \"string\",\n      \"quantityPacked\": 8934.078071618134,\n      \"linePackingStatus\": \"string\",\n      \"isReady\": false,\n      \"openJobs\": \"string\",\n      \"qtyShippedLate\": 5162.3665803519225,\n      \"dollarsShippedLate\": 2477.9199732199677,\n      \"qtyShippedOnTime\": 9859.101931462217,\n      \"dollarsShippedOnTime\": 2588.9998792990386,\n      \"createdByName\": \"string\",\n      \"modifiedByName\": \"string\"\n    },\n    {\n      \"shipmentName\": \"string\",\n      \"status\": \"string\",\n      \"packingStatus\": \"string\",\n      \"shipmentType\": \"string\",\n      \"shipByDate\": \"1951-11-26T03:50:52.763Z\",\n      \"shippedDate\": \"1969-12-27T23:42:51.302Z\",\n      \"isLate\": 2584,\n      \"isOnTime\": 9966,\n      \"daysLate\": 4286,\n      \"trackingNumber\": \"string\",\n      \"recipientName\": \"string\",\n      \"recipientCustomerCode\": \"string\",\n      \"shipToName\": \"string\",\n      \"shipToCity\": \"string\",\n      \"shipToState\": \"string\",\n      \"shipToCountry\": \"string\",\n      \"customerPONumber\": \"string\",\n      \"purchaseOrder\": \"string\",\n      \"salesOrder\": \"string\",\n      \"shippedByName\": \"string\",\n      \"shippingCost\": 1248.7947844627213,\n      \"shippingCharge\": 9607.539250763113,\n      \"shippingCostNeedsInvoice\": false,\n      \"shippingMethod\": \"string\",\n      \"itemName\": \"string\",\n      \"description\": \"string\",\n      \"itemCategory\": \"string\",\n      \"accountingCodeName\": \"string\",\n      \"accountingClass\": \"string\",\n      \"itemTags\": \"string\",\n      \"quantityShipped\": 4714.783681530646,\n      \"totalQtyOrdered\": 575.082793948184,\n      \"totalQtyShipped\": 1272.1281584917754,\n      \"unitPrice\": 91.38996504757024,\n      \"quantityToShip\": 5489.961540616178,\n      \"totalDollarsOrdered\": 2506.327087238438,\n      \"dollarsShipped\": 7855.366400710304,\n      \"dollarsUnshipped\": 5755.669013149995,\n      \"quantityInvoiced\": 529.8149761864323,\n      \"unitOfMeasureName\": \"string\",\n      \"quantityPacked\": 5683.37087423808,\n      \"linePackingStatus\": \"string\",\n      \"isReady\": false,\n      \"openJobs\": \"string\",\n      \"qtyShippedLate\": 7561.676732927803,\n      \"dollarsShippedLate\": 6649.132227134498,\n      \"qtyShippedOnTime\": 6685.927611003804,\n      \"dollarsShippedOnTime\": 4361.256993678419,\n      \"createdByName\": \"string\",\n      \"modifiedByName\": \"string\"\n    }\n  ],\n  \"hasNextPage\": false,\n  \"hasPreviousPage\": false,\n  \"page\": 7960,\n  \"pageSize\": 1188,\n  \"totalCount\": 2127,\n  \"totalPages\": 7574\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1948fa6b-d4b9-4a73-9e5a-661bd2494f8c",
+              "name": "The viewer lacks the View Shipments permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "shipping",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"shipByDateFrom\": \"<dateTime>\",\n  \"shipByDateTo\": \"<dateTime>\",\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e5931b1-4100-4b77-ad89-167ee5883cc7",
+          "name": "Lists report-ready time-clock rows from the time-clock reporting view, including clock-in/clock-out\ntimes, computed shift hours, reason and clock codes, and override-audit context so callers do not\nneed to hand-join timer entries to their reason and clock-code tags.",
+          "request": {
+            "name": "Lists report-ready time-clock rows from the time-clock reporting view, including clock-in/clock-out\ntimes, computed shift hours, reason and clock codes, and override-audit context so callers do not\nneed to hand-join timer entries to their reason and clock-code tags.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "reporting",
+                "time-clock",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startedFrom\": \"<dateTime>\",\n  \"startedTo\": \"<dateTime>\",\n  \"employee\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e8746eb7-b6c8-45cd-b7d0-84bc4f828443",
+              "name": "A page of time-clock report rows with the total matching count.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "time-clock",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"startedFrom\": \"<dateTime>\",\n  \"startedTo\": \"<dateTime>\",\n  \"employee\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"employee\": \"string\",\n      \"overridden\": \"string\",\n      \"type\": \"string\",\n      \"started\": \"1963-08-04T13:06:54.841Z\",\n      \"stopped\": \"1965-01-26T00:03:47.059Z\",\n      \"shiftHoursWorked\": 8385.479734180917,\n      \"reason\": \"string\",\n      \"clockCode\": \"string\",\n      \"createdByName\": \"string\",\n      \"modifiedByName\": \"string\",\n      \"startedOnOverrideByName\": \"string\",\n      \"stoppedOnOverrideByName\": \"string\"\n    },\n    {\n      \"employee\": \"string\",\n      \"overridden\": \"string\",\n      \"type\": \"string\",\n      \"started\": \"1957-05-23T12:22:38.892Z\",\n      \"stopped\": \"2022-10-10T12:04:00.746Z\",\n      \"shiftHoursWorked\": 97.60807383199399,\n      \"reason\": \"string\",\n      \"clockCode\": \"string\",\n      \"createdByName\": \"string\",\n      \"modifiedByName\": \"string\",\n      \"startedOnOverrideByName\": \"string\",\n      \"stoppedOnOverrideByName\": \"string\"\n    }\n  ],\n  \"hasNextPage\": true,\n  \"hasPreviousPage\": true,\n  \"page\": 6451,\n  \"pageSize\": 6291,\n  \"totalCount\": 237,\n  \"totalPages\": 7942\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d58136a-4ef4-47ba-9f90-1a5d3459e837",
+              "name": "The viewer lacks the View Time Management permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "reporting",
+                    "time-clock",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"startedFrom\": \"<dateTime>\",\n  \"startedTo\": \"<dateTime>\",\n  \"employee\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "17bc6867-33f3-4b20-8c02-fd0179061a93",
+    "name": "Fulcrum Public Accounting Code Reporting API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

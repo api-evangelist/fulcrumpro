@@ -1,0 +1,167 @@
+{
+  "item": [
+    {
+      "id": "45ebb85a-33a5-4f54-ad52-a98d4da4ab1f",
+      "name": "Invoice Note",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a072afd7-8cfe-43e1-86da-b9b92aba21da",
+          "name": "TO BE REMOVED 08/18/2023 - Get a list of notes for an invoice",
+          "request": {
+            "name": "TO BE REMOVED 08/18/2023 - Get a list of notes for an invoice",
+            "description": {
+              "content": "Use root /note API instead",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "notes",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "640ab59e-8a4d-49e0-97d0-02d0b6919d01",
+              "name": "List of notes for the given invoice id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "notes",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"body\": \"string\"\n  },\n  {\n    \"body\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bde3791c-1ed9-4148-a5be-239d98896a42",
+              "name": "The invoice did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "notes",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "42718b63-0afb-4c05-856b-54034c04b022",
+    "name": "Fulcrum Public Accounting Code Invoice Note API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

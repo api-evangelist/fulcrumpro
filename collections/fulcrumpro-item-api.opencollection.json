@@ -1,0 +1,261 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Item API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Item",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Add a revision to an item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/revision",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a revision to an item"
+        },
+        {
+          "info": {
+            "name": "Create a new item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new item"
+        },
+        {
+          "info": {
+            "name": "Get a specific item",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a specific item"
+        },
+        {
+          "info": {
+            "name": "Update a specific item",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific item"
+        },
+        {
+          "info": {
+            "name": "Partially update an item",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update an item"
+        },
+        {
+          "info": {
+            "name": "Get the can-make quantities for an item. Returns how much of this item can be produced\nfrom current subcomponent inventory (on-hand and available).",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/can-make",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the can-make quantities for an item. Returns how much of this item can be produced\nfrom current subcomponent inventory (on-hand and available)."
+        },
+        {
+          "info": {
+            "name": "TO BE REMOVED 11/02/2023 - Find items based on search parameters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use V2 which includes a list of number filters"
+        },
+        {
+          "info": {
+            "name": "Find items based on search parameters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/list/v2",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Find items based on search parameters."
+        },
+        {
+          "info": {
+            "name": "TO BE REMOVED 10/13/2023 - Pick inventory against a specific item.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/inventory/pick",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use /inventory/pick API instead"
+        },
+        {
+          "info": {
+            "name": "TO BE REMOVED 10/13/2023 - Receive inventory against a specific item.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/inventory/receive",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use /inventory/receive API instead"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

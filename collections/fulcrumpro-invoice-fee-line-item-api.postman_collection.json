@@ -1,0 +1,681 @@
+{
+  "item": [
+    {
+      "id": "4bba75e6-f011-4240-ad4a-3cc00ab8fb22",
+      "name": "Invoice Fee Line Item",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d324e447-4dcd-4c75-84bf-f563ab0e2ebe",
+          "name": "Get a specific fee line item for an invoice",
+          "request": {
+            "name": "Get a specific fee line item for an invoice",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "fee-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d34993fc-326d-491c-93e9-c01f325b6a90",
+              "name": "Fee line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "fee-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"price\": 7622.789248527065,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"quantity\": 1817.9694202890794,\n  \"unitOfMeasure\": \"notApplicable\",\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"isTaxable\": false,\n  \"overrideTaxRate\": true,\n  \"taxCodeId\": \"stringstringstringstring\",\n  \"taxRate\": 2647.491664058522,\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1958-09-25T23:08:07.631Z\",\n      \"lastSyncedUtc\": \"1983-08-22T01:32:12.402Z\"\n    }\n  },\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"number\": 5063\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2c39400d-8491-4019-99ac-929bf8bfa6b5",
+              "name": "Invoice or fee line items did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "fee-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "24e42976-67bf-4673-b1ad-b20fb1bfd9af",
+          "name": "Partially update a specific fee line item for a purchase order",
+          "request": {
+            "name": "Partially update a specific fee line item for a purchase order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "fee-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "676e0253-d4ff-4a20-8046-2546f833ee36",
+              "name": "Fee line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "fee-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"price\": 7622.789248527065,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"quantity\": 1817.9694202890794,\n  \"unitOfMeasure\": \"notApplicable\",\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"isTaxable\": false,\n  \"overrideTaxRate\": true,\n  \"taxCodeId\": \"stringstringstringstring\",\n  \"taxRate\": 2647.491664058522,\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1958-09-25T23:08:07.631Z\",\n      \"lastSyncedUtc\": \"1983-08-22T01:32:12.402Z\"\n    }\n  },\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"number\": 5063\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "35e6c6f4-445a-4d30-9551-e91987de26aa",
+              "name": "Invoice or line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "fee-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8ec2cffc-8ca3-4d33-9fb8-908be9afed66",
+          "name": "Update a specific fee line item for an invoice",
+          "request": {
+            "name": "Update a specific fee line item for an invoice",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "fee-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0367436f-eaa0-4606-a12c-3b712a501d2e",
+              "name": "Fee line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "fee-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"price\": 9002.647800408351,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"quantity\": 5347.529418496691,\n  \"unitOfMeasure\": \"yard\",\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"isTaxable\": false,\n  \"overrideTaxRate\": true,\n  \"taxCodeId\": \"stringstringstringstring\",\n  \"taxRate\": 5568.921468504768,\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_2\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"number\": 6090\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7345bc9d-66d2-4e2e-9dfd-04d13c0b6429",
+              "name": "Invoice or line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "fee-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e621a44-9fd6-4aa4-ab9f-a6c941f92279",
+          "name": "Get a list of fee lines items for an invoice",
+          "request": {
+            "name": "Get a list of fee lines items for an invoice",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "fee-line-items",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "60976d40-0a94-47de-aab2-530eb43feb45",
+              "name": "List of fee line items for the given invoice id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "fee-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"price\": 994.1522245646483,\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"quantity\": 6142.491498082715,\n    \"unitOfMeasure\": \"notApplicable\",\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"isTaxable\": true,\n    \"overrideTaxRate\": true,\n    \"taxCodeId\": \"stringstringstringstring\",\n    \"taxRate\": 4096.787764461357,\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_1\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n    \"number\": 2855\n  },\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"price\": 7460.771082448075,\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"quantity\": 2519.6853813079333,\n    \"unitOfMeasure\": \"linearFeet\",\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"isTaxable\": true,\n    \"overrideTaxRate\": false,\n    \"taxCodeId\": \"stringstringstringstring\",\n    \"taxRate\": 2793.230297874459,\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_1\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_2\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_3\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n    \"number\": 1702\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "408d14ab-676d-4aa5-b831-24af1b817225",
+              "name": "The invoice did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "fee-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "2fa89cbb-3694-4af6-bdc6-eb6c49bea0e7",
+    "name": "Fulcrum Public Accounting Code Invoice Fee Line Item API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

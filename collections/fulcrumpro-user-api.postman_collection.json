@@ -1,0 +1,292 @@
+{
+  "item": [
+    {
+      "id": "219cd5fe-4f70-4236-b307-59d490cea19d",
+      "name": "User",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "832ec6e8-08e0-4ef0-b83b-05eb8867b3c2",
+          "name": "Get a specific user",
+          "request": {
+            "name": "Get a specific user",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "users",
+                ":userId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "userId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4842b9f6-c272-4c2f-94b3-6ff141e6431d",
+              "name": "The user for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "users",
+                    ":userId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"employeeId\": \"string\",\n  \"firstName\": \"string\",\n  \"lastName\": \"string\",\n  \"emailAddress\": \"IDOKZuXw7@YCuqOglWkQ.fn\",\n  \"phoneNumber\": \"string\",\n  \"roles\": [\n    \"string\",\n    \"string\"\n  ],\n  \"deleted\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "41e65e32-fd92-4b88-9698-567fd23464e5",
+              "name": "User order did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "users",
+                    ":userId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0bdf0354-04a7-4b9e-9288-987c164d1376",
+          "name": "Find users based on search parameters.",
+          "request": {
+            "name": "Find users based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "users",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"emailAddress\": \"<string>\",\n  \"phoneNumber\": \"<string>\",\n  \"roles\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"omniSearch\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1fab3259-82fa-4f8e-a6bd-a4e130a18e39",
+              "name": "List of users matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "users",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"emailAddress\": \"<string>\",\n  \"phoneNumber\": \"<string>\",\n  \"roles\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"omniSearch\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstring\",\n    \"firstName\": \"string\",\n    \"lastName\": \"string\",\n    \"emailAddress\": \"pZI4rHUU7m@vTMKJWPdwqsCCMUUFTi.dy\",\n    \"phoneNumber\": \"string\",\n    \"roleIds\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      }\n    ],\n    \"deleted\": true\n  },\n  {\n    \"id\": \"stringstringstringstring\",\n    \"firstName\": \"string\",\n    \"lastName\": \"string\",\n    \"emailAddress\": \"2nMG@oBfcWqVxrbRBdN.feq\",\n    \"phoneNumber\": \"string\",\n    \"roleIds\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      }\n    ],\n    \"deleted\": false\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "91f47254-eb52-433a-a58f-3fcf8adbe54b",
+    "name": "Fulcrum Public Accounting Code User API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

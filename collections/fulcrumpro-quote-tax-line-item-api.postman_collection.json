@@ -1,0 +1,846 @@
+{
+  "item": [
+    {
+      "id": "76d71e9c-541c-42d1-8916-ee353edf2150",
+      "name": "Quote Tax Line Item",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0c29318e-73fc-4fef-be6b-9e6f7df172eb",
+          "name": "Create a tax line item on a Quote",
+          "request": {
+            "name": "Create a tax line item on a Quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId",
+                "tax-line-items"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"taxCodeId\": \"<string>\",\n  \"taxRate\": \"<double>\",\n  \"avalaraOptions\": {\n    \"address\": {\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"name\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"address3\": \"<string>\",\n      \"stateProvince\": \"<string>\",\n      \"country\": \"<string>\",\n      \"phone\": \"<tel>\",\n      \"email\": \"<email>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7cdf2285-a844-4c90-b3dd-9303514438c3",
+              "name": "Tax line item added to Quote",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"taxCodeId\": \"<string>\",\n  \"taxRate\": \"<double>\",\n  \"avalaraOptions\": {\n    \"address\": {\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"name\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"address3\": \"<string>\",\n      \"stateProvince\": \"<string>\",\n      \"country\": \"<string>\",\n      \"phone\": \"<tel>\",\n      \"email\": \"<email>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f41cb0b2-f160-465c-bd82-956bc72f7141",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"taxCodeId\": \"<string>\",\n  \"taxRate\": \"<double>\",\n  \"avalaraOptions\": {\n    \"address\": {\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"name\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"address3\": \"<string>\",\n      \"stateProvince\": \"<string>\",\n      \"country\": \"<string>\",\n      \"phone\": \"<tel>\",\n      \"email\": \"<email>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "714c1a2f-c1c7-4fb1-a384-1b46eb91e62f",
+          "name": "Delete a specific tax line item for a Quote",
+          "request": {
+            "name": "Delete a specific tax line item for a Quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId",
+                "tax-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "eea43d48-5a5d-4830-a260-533a7116a368",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fc9ed093-bdb1-4faa-9047-5c8dd6f911ca",
+              "name": "Tax line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "61655cda-57a1-4a90-ad52-80b163a9fe2f",
+              "name": "Quote did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2eb732e-19e9-4d86-8a06-212add02b387",
+          "name": "Get a specific tax line item for a Quote",
+          "request": {
+            "name": "Get a specific tax line item for a Quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId",
+                "tax-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e3eb7cb7-3011-4d5e-8728-27d4b89c70e0",
+              "name": "Tax line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"description\": \"string\",\n  \"taxCodeId\": \"stringstringstringstring\",\n  \"taxRate\": 4820.284186754289,\n  \"avalaraOptions\": {\n    \"address\": {\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"name\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"address3\": \"<string>\",\n      \"stateProvince\": \"<string>\",\n      \"country\": \"<string>\",\n      \"phone\": \"<tel>\",\n      \"email\": \"<email>\"\n    }\n  },\n  \"number\": 592\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5901c1f6-35c4-462b-9592-0e1524c0e16f",
+              "name": "Quote or tax line items did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ded49853-62cc-48c9-8428-97646a16bef9",
+          "name": "Update a specific tax line item for a Quote",
+          "request": {
+            "name": "Update a specific tax line item for a Quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId",
+                "tax-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"taxCodeId\": \"<string>\",\n  \"taxRate\": \"<double>\",\n  \"avalaraOptions\": {\n    \"address\": {\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"name\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"address3\": \"<string>\",\n      \"stateProvince\": \"<string>\",\n      \"country\": \"<string>\",\n      \"phone\": \"<tel>\",\n      \"email\": \"<email>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dca94d3b-7005-407e-ae55-00696e4e46ba",
+              "name": "Tax line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"taxCodeId\": \"<string>\",\n  \"taxRate\": \"<double>\",\n  \"avalaraOptions\": {\n    \"address\": {\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"name\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"address3\": \"<string>\",\n      \"stateProvince\": \"<string>\",\n      \"country\": \"<string>\",\n      \"phone\": \"<tel>\",\n      \"email\": \"<email>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"description\": \"string\",\n  \"taxCodeId\": \"stringstringstringstring\",\n  \"taxRate\": 4820.284186754289,\n  \"avalaraOptions\": {\n    \"address\": {\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"name\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"address3\": \"<string>\",\n      \"stateProvince\": \"<string>\",\n      \"country\": \"<string>\",\n      \"phone\": \"<tel>\",\n      \"email\": \"<email>\"\n    }\n  },\n  \"number\": 592\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e087a433-afab-4b0b-9d10-90fb05ee82c2",
+              "name": "Quote or tax line items did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"taxCodeId\": \"<string>\",\n  \"taxRate\": \"<double>\",\n  \"avalaraOptions\": {\n    \"address\": {\n      \"address1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"name\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"address3\": \"<string>\",\n      \"stateProvince\": \"<string>\",\n      \"country\": \"<string>\",\n      \"phone\": \"<tel>\",\n      \"email\": \"<email>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "622dd92a-37fb-4346-9b2e-c0a9ed629ef5",
+          "name": "Get a list of tax lines items for a Quote",
+          "request": {
+            "name": "Get a list of tax lines items for a Quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId",
+                "tax-line-items",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b3f5780e-046a-417d-9ff8-0cbbc90dcc34",
+              "name": "List of tax line items for the given Quote id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"description\": \"string\",\n    \"taxCodeId\": \"stringstringstringstring\",\n    \"taxRate\": 435.7799140780516,\n    \"avalaraOptions\": {\n      \"address\": {\n        \"address1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"name\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"address3\": \"<string>\",\n        \"stateProvince\": \"<string>\",\n        \"country\": \"<string>\",\n        \"phone\": \"<tel>\",\n        \"email\": \"<email>\"\n      }\n    },\n    \"number\": 8068\n  },\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"description\": \"string\",\n    \"taxCodeId\": \"stringstringstringstring\",\n    \"taxRate\": 5423.72084012914,\n    \"avalaraOptions\": {\n      \"address\": {\n        \"address1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"name\": \"<string>\",\n        \"address2\": \"<string>\",\n        \"address3\": \"<string>\",\n        \"stateProvince\": \"<string>\",\n        \"country\": \"<string>\",\n        \"phone\": \"<tel>\",\n        \"email\": \"<email>\"\n      }\n    },\n    \"number\": 9972\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b297d91e-c10f-4a8e-9ca2-20b1f076eb57",
+              "name": "The Quote did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "tax-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "96abe56a-6cd5-47c8-864d-7c11f78ecff2",
+    "name": "Fulcrum Public Accounting Code Quote Tax Line Item API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

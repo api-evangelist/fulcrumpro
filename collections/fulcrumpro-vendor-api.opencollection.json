@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Vendor API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Vendor",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new vendor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/vendors",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new vendor"
+        },
+        {
+          "info": {
+            "name": "Update a specific vendor",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.fulcrumpro.com/api/vendors/:vendorId",
+            "params": [
+              {
+                "name": "vendorId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific vendor"
+        },
+        {
+          "info": {
+            "name": "Partially update a vendor",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.fulcrumpro.com/api/vendors/:vendorId",
+            "params": [
+              {
+                "name": "vendorId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a vendor"
+        },
+        {
+          "info": {
+            "name": "Get a vendor.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/vendors/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a vendor."
+        },
+        {
+          "info": {
+            "name": "Find vendors based on search parameters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/vendors/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Find vendors based on search parameters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

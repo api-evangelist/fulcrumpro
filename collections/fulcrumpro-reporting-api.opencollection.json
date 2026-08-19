@@ -1,0 +1,346 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Reporting API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reporting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists report-ready on-hand inventory rows from the inventory reporting view, including per-unit and\nextended valuation (material/labor/machine/OP), lot and location context, and item categorization\nso callers do not need to hand-join inventory to lots, items, and their details. Returns exactly\none row per (item, lot, location), so summing on-hand quantity or value across the rows does not\nover-count a lot.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/reporting/inventory/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists report-ready on-hand inventory rows from the inventory reporting view, including per-unit and\nextended valuation (material/labor/machine/OP), lot and location context, and item categorization\nso callers do not need to hand-join inventory to lots, items, and their details. Returns exactly\none row per (item, lot, location), so summing on-hand quantity or value across the rows does not\nover-count a lot."
+        },
+        {
+          "info": {
+            "name": "Lists report-ready invoice-line rows from the invoice reporting view, including line type,\npricing, tax, and aging detail joined to sales-order and shipment context so callers do not need\nto hand-join invoices to invoice line items, sales orders, and shipments.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/reporting/invoice/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists report-ready invoice-line rows from the invoice reporting view, including line type,\npricing, tax, and aging detail joined to sales-order and shipment context so callers do not need\nto hand-join invoices to invoice line items, sales orders, and shipments."
+        },
+        {
+          "info": {
+            "name": "Lists report-ready per-operator operation rows from the job-activity-by-operator reporting view,\nincluding setup/labor/machine time and cost, run-by-run quantities, rates, and job/routing context\nso callers do not need to hand-join jobs to items-to-make, operations, timers, and job logs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/reporting/job-activity-by-operator/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists report-ready per-operator operation rows from the job-activity-by-operator reporting view,\nincluding setup/labor/machine time and cost, run-by-run quantities, rates, and job/routing context\nso callers do not need to hand-join jobs to items-to-make, operations, timers, and job logs."
+        },
+        {
+          "info": {
+            "name": "Lists report-ready job-operation rows from the job-activity reporting view, including schedule,\ntimer, completion-progress, and routing context so callers do not need to hand-join jobs to\nitems-to-make, operations, timers, and scheduling data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/reporting/job-activity/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists report-ready job-operation rows from the job-activity reporting view, including schedule,\ntimer, completion-progress, and routing context so callers do not need to hand-join jobs to\nitems-to-make, operations, timers, and scheduling data."
+        },
+        {
+          "info": {
+            "name": "Lists report-ready quote rows from the quote reporting view, including totals, cost, status, and\nlifecycle dates, so callers do not need to hand-assemble quote-level summary data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/reporting/quote/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists report-ready quote rows from the quote reporting view, including totals, cost, status, and\nlifecycle dates, so callers do not need to hand-assemble quote-level summary data."
+        },
+        {
+          "info": {
+            "name": "Lists report-ready sales-order line rows from the sales-order line-items reporting view,\nincluding pre-computed cost, invoice, ship, and return columns so callers do not need to\nhand-join sales orders to line items, jobs, invoices, shipments, and returns.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/reporting/sales-order-lines/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists report-ready sales-order line rows from the sales-order line-items reporting view,\nincluding pre-computed cost, invoice, ship, and return columns so callers do not need to\nhand-join sales orders to line items, jobs, invoices, shipments, and returns."
+        },
+        {
+          "info": {
+            "name": "Lists report-ready shipment line rows from the shipping reporting view, including pre-computed\ndollar columns ($ shipped, $ unshipped, total $ ordered, unit price) so callers do not need to\nhand-join shipments to sales-order line items.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/reporting/shipping/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists report-ready shipment line rows from the shipping reporting view, including pre-computed\ndollar columns ($ shipped, $ unshipped, total $ ordered, unit price) so callers do not need to\nhand-join shipments to sales-order line items."
+        },
+        {
+          "info": {
+            "name": "Lists report-ready time-clock rows from the time-clock reporting view, including clock-in/clock-out\ntimes, computed shift hours, reason and clock codes, and override-audit context so callers do not\nneed to hand-join timer entries to their reason and clock-code tags.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/reporting/time-clock/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lists report-ready time-clock rows from the time-clock reporting view, including clock-in/clock-out\ntimes, computed shift hours, reason and clock codes, and override-audit context so callers do not\nneed to hand-join timer entries to their reason and clock-code tags."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

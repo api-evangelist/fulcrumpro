@@ -1,0 +1,622 @@
+{
+  "item": [
+    {
+      "id": "9463def6-ca41-4076-8d4d-c4e9e04fdd00",
+      "name": "Department",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "15be6aff-0304-4698-a3db-ffdb4608baa3",
+          "name": "Create a department.",
+          "request": {
+            "name": "Create a department.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "departments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"workCenterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f7e0dc86-1090-4f66-8869-53d2d77e7e8c",
+              "name": "Department created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "departments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"workCenterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"strin\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "07b2a0fd-29f1-4dbd-a422-596f2106b54e",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "departments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"workCenterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81d61316-c44c-4569-99ef-a923c29c2e5d",
+          "name": "Get a department.",
+          "request": {
+            "name": "Get a department.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "departments",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "88086a0f-a7a5-4445-bc6f-45e58163e2e6",
+              "name": "The department for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "departments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"deleted\": false,\n  \"workCenters\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"departmentId\": \"stringstringstringstring\",\n      \"setupRate\": 2288.3507919779054,\n      \"runRate\": 5315.065039668149,\n      \"laborRate\": 6747.444736911896,\n      \"overheadRate\": 9682.561410794175,\n      \"machineRate\": 1741.0169679399567,\n      \"deleted\": false,\n      \"equipment\": [\n        {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\",\n          \"workCenterId\": \"stringstringstringstring\",\n          \"manufacturer\": \"string\",\n          \"modelNumber\": \"string\",\n          \"serialNumber\": \"string\",\n          \"canRunUnattended\": true,\n          \"unlimitedCapacity\": true,\n          \"status\": \"good\",\n          \"notes\": \"string\",\n          \"deleted\": true\n        },\n        {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"st\",\n          \"workCenterId\": \"stringstringstringstring\",\n          \"manufacturer\": \"string\",\n          \"modelNumber\": \"string\",\n          \"serialNumber\": \"string\",\n          \"canRunUnattended\": false,\n          \"unlimitedCapacity\": true,\n          \"status\": \"outOfService\",\n          \"notes\": \"string\",\n          \"deleted\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"departmentId\": \"stringstringstringstring\",\n      \"setupRate\": 3523.8919894584174,\n      \"runRate\": 6412.21484892507,\n      \"laborRate\": 994.7089123316377,\n      \"overheadRate\": 7869.241215850873,\n      \"machineRate\": 1064.521483956178,\n      \"deleted\": true,\n      \"equipment\": [\n        {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"st\",\n          \"description\": \"string\",\n          \"workCenterId\": \"stringstringstringstring\",\n          \"manufacturer\": \"st\",\n          \"modelNumber\": \"string\",\n          \"serialNumber\": \"string\",\n          \"canRunUnattended\": false,\n          \"unlimitedCapacity\": false,\n          \"status\": \"good\",\n          \"notes\": \"string\",\n          \"deleted\": false\n        },\n        {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\",\n          \"workCenterId\": \"stringstringstringstring\",\n          \"manufacturer\": \"string\",\n          \"modelNumber\": \"string\",\n          \"serialNumber\": \"string\",\n          \"canRunUnattended\": true,\n          \"unlimitedCapacity\": false,\n          \"status\": \"bad\",\n          \"notes\": \"string\",\n          \"deleted\": true\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a93631fa-69bb-4c5c-942f-088373b5d8a2",
+              "name": "Department did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "departments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b7bae44-711e-47b2-93c7-76d32b752b29",
+          "name": "Update a department.",
+          "request": {
+            "name": "Update a department.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "departments",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"workCenterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5115a0fb-7980-4742-96b7-8cca6aac056d",
+              "name": "The updated department",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "departments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"workCenterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"deleted\": true,\n  \"workCenters\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"departmentId\": \"stringstringstringstring\",\n      \"setupRate\": 3164.23058739947,\n      \"runRate\": 7319.120663405345,\n      \"laborRate\": 2925.710494280087,\n      \"overheadRate\": 6612.181706829045,\n      \"machineRate\": 3638.877171127519,\n      \"deleted\": true,\n      \"equipment\": [\n        {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\",\n          \"workCenterId\": \"stringstringstringstring\",\n          \"manufacturer\": \"string\",\n          \"modelNumber\": \"string\",\n          \"serialNumber\": \"string\",\n          \"canRunUnattended\": true,\n          \"unlimitedCapacity\": true,\n          \"status\": \"outOfService\",\n          \"notes\": \"string\",\n          \"deleted\": true\n        },\n        {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\",\n          \"workCenterId\": \"stringstringstringstring\",\n          \"manufacturer\": \"string\",\n          \"modelNumber\": \"string\",\n          \"serialNumber\": \"string\",\n          \"canRunUnattended\": false,\n          \"unlimitedCapacity\": true,\n          \"status\": \"good\",\n          \"notes\": \"string\",\n          \"deleted\": false\n        }\n      ]\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"departmentId\": \"stringstringstringstring\",\n      \"setupRate\": 9613.373674049357,\n      \"runRate\": 8300.102314842881,\n      \"laborRate\": 9502.176882381396,\n      \"overheadRate\": 1011.0653261041624,\n      \"machineRate\": 2199.099957122733,\n      \"deleted\": false,\n      \"equipment\": [\n        {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\",\n          \"workCenterId\": \"stringstringstringstring\",\n          \"manufacturer\": \"string\",\n          \"modelNumber\": \"string\",\n          \"serialNumber\": \"string\",\n          \"canRunUnattended\": false,\n          \"unlimitedCapacity\": true,\n          \"status\": \"good\",\n          \"notes\": \"string\",\n          \"deleted\": false\n        },\n        {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\",\n          \"workCenterId\": \"stringstringstringstring\",\n          \"manufacturer\": \"string\",\n          \"modelNumber\": \"string\",\n          \"serialNumber\": \"string\",\n          \"canRunUnattended\": false,\n          \"unlimitedCapacity\": false,\n          \"status\": \"bad\",\n          \"notes\": \"string\",\n          \"deleted\": false\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "26670b2b-680b-4713-b90b-1a0883c1d299",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "departments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"workCenterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "93ec83b1-e887-4ab3-8e55-c94d024208e1",
+              "name": "Department did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "departments",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"workCenterIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9c7669a5-3cc5-47f5-a36d-b87713047371",
+          "name": "Find departments based on search parameters.",
+          "request": {
+            "name": "Find departments based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "departments",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bb3ca6ae-a1da-4d24-8eee-98ca31c10406",
+              "name": "List of departments matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "departments",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"deleted\": false,\n    \"workCenters\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"departmentId\": \"stringstringstringstring\",\n        \"setupRate\": 3224.8173511080213,\n        \"runRate\": 8403.142142311595,\n        \"laborRate\": 86.84311943744416,\n        \"overheadRate\": 9530.231449339535,\n        \"machineRate\": 5836.011105420248,\n        \"deleted\": true,\n        \"equipment\": [\n          {\n            \"id\": \"stringstringstringstring\",\n            \"name\": \"st\",\n            \"description\": \"string\",\n            \"workCenterId\": \"stringstringstringstring\",\n            \"manufacturer\": \"string\",\n            \"modelNumber\": \"string\",\n            \"serialNumber\": \"string\",\n            \"canRunUnattended\": true,\n            \"unlimitedCapacity\": false,\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notes\": \"string\",\n            \"deleted\": false\n          },\n          {\n            \"id\": \"stringstringstringstring\",\n            \"name\": \"string\",\n            \"description\": \"string\",\n            \"workCenterId\": \"stringstringstringstring\",\n            \"manufacturer\": \"string\",\n            \"modelNumber\": \"string\",\n            \"serialNumber\": \"string\",\n            \"canRunUnattended\": true,\n            \"unlimitedCapacity\": true,\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notes\": \"string\",\n            \"deleted\": true\n          }\n        ]\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"departmentId\": \"stringstringstringstring\",\n        \"setupRate\": 8470.983221806675,\n        \"runRate\": 7509.334460257605,\n        \"laborRate\": 4087.373304671923,\n        \"overheadRate\": 2937.646583707363,\n        \"machineRate\": 2033.7741023697654,\n        \"deleted\": true,\n        \"equipment\": [\n          {\n            \"id\": \"stringstringstringstring\",\n            \"name\": \"string\",\n            \"description\": \"string\",\n            \"workCenterId\": \"stringstringstringstring\",\n            \"manufacturer\": \"string\",\n            \"modelNumber\": \"string\",\n            \"serialNumber\": \"string\",\n            \"canRunUnattended\": true,\n            \"unlimitedCapacity\": true,\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notes\": \"string\",\n            \"deleted\": false\n          },\n          {\n            \"id\": \"stringstringstringstring\",\n            \"name\": \"string\",\n            \"description\": \"string\",\n            \"workCenterId\": \"stringstringstringstring\",\n            \"manufacturer\": \"string\",\n            \"modelNumber\": \"string\",\n            \"serialNumber\": \"string\",\n            \"canRunUnattended\": true,\n            \"unlimitedCapacity\": false,\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notes\": \"string\",\n            \"deleted\": true\n          }\n        ]\n      }\n    ]\n  },\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"deleted\": true,\n    \"workCenters\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"departmentId\": \"stringstringstringstring\",\n        \"setupRate\": 1857.1699586257928,\n        \"runRate\": 4236.9557310355995,\n        \"laborRate\": 231.48765140228122,\n        \"overheadRate\": 9092.542982568248,\n        \"machineRate\": 1762.6484509789964,\n        \"deleted\": true,\n        \"equipment\": [\n          {\n            \"id\": \"stringstringstringstring\",\n            \"name\": \"string\",\n            \"description\": \"string\",\n            \"workCenterId\": \"stringstringstringstring\",\n            \"manufacturer\": \"string\",\n            \"modelNumber\": \"string\",\n            \"serialNumber\": \"string\",\n            \"canRunUnattended\": true,\n            \"unlimitedCapacity\": true,\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notes\": \"string\",\n            \"deleted\": true\n          },\n          {\n            \"id\": \"stringstringstringstring\",\n            \"name\": \"string\",\n            \"description\": \"string\",\n            \"workCenterId\": \"stringstringstringstring\",\n            \"manufacturer\": \"string\",\n            \"modelNumber\": \"string\",\n            \"serialNumber\": \"string\",\n            \"canRunUnattended\": false,\n            \"unlimitedCapacity\": true,\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notes\": \"string\",\n            \"deleted\": false\n          }\n        ]\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"departmentId\": \"stringstringstringstring\",\n        \"setupRate\": 4779.186099963859,\n        \"runRate\": 6091.387009337105,\n        \"laborRate\": 9921.876972062668,\n        \"overheadRate\": 1046.5018971278662,\n        \"machineRate\": 1721.8741023836726,\n        \"deleted\": false,\n        \"equipment\": [\n          {\n            \"id\": \"stringstringstringstring\",\n            \"name\": \"string\",\n            \"description\": \"string\",\n            \"workCenterId\": \"stringstringstringstring\",\n            \"manufacturer\": \"string\",\n            \"modelNumber\": \"string\",\n            \"serialNumber\": \"string\",\n            \"canRunUnattended\": false,\n            \"unlimitedCapacity\": true,\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notes\": \"string\",\n            \"deleted\": true\n          },\n          {\n            \"id\": \"stringstringstringstring\",\n            \"name\": \"string\",\n            \"description\": \"string\",\n            \"workCenterId\": \"stringstringstringstring\",\n            \"manufacturer\": \"string\",\n            \"modelNumber\": \"string\",\n            \"serialNumber\": \"string\",\n            \"canRunUnattended\": true,\n            \"unlimitedCapacity\": true,\n            \"status\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notes\": \"string\",\n            \"deleted\": true\n          }\n        ]\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f8f483f3-cee1-4d52-8869-a06c9447ea9b",
+    "name": "Fulcrum Public Accounting Code Department API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

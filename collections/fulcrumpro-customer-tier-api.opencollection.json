@@ -1,0 +1,77 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Customer Tier API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customer Tier",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a customer tier.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/customer-tiers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a customer tier."
+        },
+        {
+          "info": {
+            "name": "Find customer tiers based on search parameters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/customer-tiers/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Find customer tiers based on search parameters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,211 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Attachment API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Attachment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an attachment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/attachments",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "File",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "Detail.Owner.Type",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "Detail.Owner.Id",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "Detail.Description",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "Detail.IsNoteAttachment",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "Detail.Parent.Type",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "Detail.Parent.Id",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "Detail.Metadata",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Create an attachment"
+        },
+        {
+          "info": {
+            "name": "Create an attachment based on a remote data endpoint.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/attachments/remote",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an attachment based on a remote data endpoint."
+        },
+        {
+          "info": {
+            "name": "Get a specific attachment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/attachments/:attachmentId",
+            "params": [
+              {
+                "name": "attachmentId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a specific attachment"
+        },
+        {
+          "info": {
+            "name": "Delete a specific attachment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.fulcrumpro.com/api/attachments/:attachmentId",
+            "params": [
+              {
+                "name": "attachmentId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a specific attachment"
+        },
+        {
+          "info": {
+            "name": "Download a specific attachment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/attachments/:attachmentId/download",
+            "params": [
+              {
+                "name": "attachmentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "fileName",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Download a specific attachment"
+        },
+        {
+          "info": {
+            "name": "Download attachment(s) for a given filter in ZIP format",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/attachments/download",
+            "params": [
+              {
+                "name": "fileName",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Download attachment(s) for a given filter in ZIP format"
+        },
+        {
+          "info": {
+            "name": "Find attachments based on search parameters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/attachments/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Find attachments based on search parameters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

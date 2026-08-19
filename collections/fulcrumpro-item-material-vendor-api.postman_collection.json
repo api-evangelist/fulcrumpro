@@ -1,0 +1,552 @@
+{
+  "item": [
+    {
+      "id": "06abf30c-6d21-464a-8510-ab5e169b1055",
+      "name": "Item Material Vendor",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a82ed9db-5e7f-4eb7-998f-c820b057b2bc",
+          "name": "Get a list of vendors for a material-based item",
+          "request": {
+            "name": "Get a list of vendors for a material-based item",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "material-vendors",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5570afec-890d-46f2-8caf-1f6827fa5f5b",
+              "name": "List of vendors for the given item id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "material-vendors",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstringstringstring\",\n    \"vendorId\": \"stringstringstringstring\",\n    \"vendorItemNumber\": \"string\",\n    \"vendorItemName\": \"string\",\n    \"notes\": \"string\"\n  },\n  {\n    \"id\": \"stringstringstringstringstringstring\",\n    \"vendorId\": \"stringstringstringstring\",\n    \"vendorItemNumber\": \"string\",\n    \"vendorItemName\": \"string\",\n    \"notes\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "86b88561-b772-401c-90ee-a2bb2f584072",
+              "name": "The item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "material-vendors",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e60c04b5-1414-4234-95a5-fbb77198c4da",
+          "name": "Create a new item vendor",
+          "request": {
+            "name": "Create a new item vendor",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "material-vendors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendorId\": \"<string>\",\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "90c5652b-c87e-42d8-a51a-4ae1dacb4964",
+              "name": "Material-based item vendor created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "material-vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorId\": \"<string>\",\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54a81a51-d200-47c8-b1fe-3633c60d6226",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "material-vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorId\": \"<string>\",\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e85c73fe-fe36-40c3-934c-de9250dd91a1",
+              "name": "Item with the given id did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "material-vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorId\": \"<string>\",\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d314eb75-7a49-4c6a-a8c4-dcb2c965747d",
+          "name": "Update a specific item material vendor",
+          "request": {
+            "name": "Update a specific item material vendor",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "material-vendors",
+                ":materialVendorId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) The id of the item to modify vendors for"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "materialVendorId",
+                  "description": "(Required) The id of the material-item vendor."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ef45c564-a7a6-49a2-ab2f-2d0109e26051",
+              "name": "Update successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "material-vendors",
+                    ":materialVendorId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) The id of the item to modify vendors for"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "materialVendorId",
+                      "description": "(Required) The id of the material-item vendor."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstringstringstring\",\n  \"vendorId\": \"stringstringstringstring\",\n  \"vendorItemNumber\": \"string\",\n  \"vendorItemName\": \"string\",\n  \"notes\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee2d4eca-d6d8-49e9-bb42-94761e029968",
+              "name": "Material did not exist or no vendor existed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "material-vendors",
+                    ":materialVendorId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) The id of the item to modify vendors for"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "materialVendorId",
+                      "description": "(Required) The id of the material-item vendor."
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "03929ef5-11d3-43be-ab60-32aac4bc59e5",
+    "name": "Fulcrum Public Accounting Code Item Material Vendor API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

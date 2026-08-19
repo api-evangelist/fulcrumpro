@@ -1,0 +1,224 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Job Item To Make Operation API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Job Item To Make Operation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Adds additional quantity completed to a job operation without completing the operation.\nEach call will increment the quantity completed by the specified amount.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/:itemToMakeId/operations/:operationId/add-quantity-completed",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the job"
+              },
+              {
+                "name": "itemToMakeId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the item to make"
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the operation"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This is a non-idempotent action. Multiple calls with the same parameters will result in \nthe quantity being added multiple times. Implement appropriate client-side controls to \nprevent duplicate submissions."
+        },
+        {
+          "info": {
+            "name": "Get a specific operation for an item to make on a job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/:itemToMakeId/operations/:operationId",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemToMakeId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a specific operation for an item to make on a job"
+        },
+        {
+          "info": {
+            "name": "Get a specific operation for an item to make on a job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/:itemToMakeId/operations/:operationId",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemToMakeId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a specific operation for an item to make on a job"
+        },
+        {
+          "info": {
+            "name": "Get a list of operations for an item to make on a job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/:itemToMakeId/operations/list",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemToMakeId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a list of operations for an item to make on a job"
+        },
+        {
+          "info": {
+            "name": "Get a list of required items for an operation on a job item to make",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/:itemToMakeId/operations/:operationId/items-required/list",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemToMakeId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a list of required items for an operation on a job item to make"
+        },
+        {
+          "info": {
+            "name": "Get a list of required materials for an operation on a job item to make",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/:itemToMakeId/operations/:operationId/materials-required/list",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemToMakeId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a list of required materials for an operation on a job item to make"
+        },
+        {
+          "info": {
+            "name": "Pick a specific item for a specific item to make on a job.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/:itemToMakeId/operations/:operationId/pick",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemToMakeId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Pick a specific item for a specific item to make on a job."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

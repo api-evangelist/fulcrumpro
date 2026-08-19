@@ -1,0 +1,683 @@
+{
+  "item": [
+    {
+      "id": "8c85565b-622b-4069-bd1a-0a7f23d11cce",
+      "name": "Item Customer",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "63cbafe9-3d44-4620-9ff7-0fc498badf59",
+          "name": "Create a new item customer",
+          "request": {
+            "name": "Create a new item customer",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "customers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"<string>\",\n  \"customerItemNumber\": \"<string>\",\n  \"customerItemName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d33a30e4-097a-4e09-a739-d06a8478630b",
+              "name": "Item customer created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "customers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"<string>\",\n  \"customerItemNumber\": \"<string>\",\n  \"customerItemName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8546f6f6-73bf-41df-857b-e5af0b76ab7a",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "customers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"<string>\",\n  \"customerItemNumber\": \"<string>\",\n  \"customerItemName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "17b2ac49-12ad-4e7c-8c0b-312e40d0c8f2",
+              "name": "Item with the given id did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "customers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"<string>\",\n  \"customerItemNumber\": \"<string>\",\n  \"customerItemName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0da228f0-aed4-43e3-91f0-c726e890a238",
+          "name": "Delete a specific item customer",
+          "request": {
+            "name": "Delete a specific item customer",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "customers",
+                ":itemCustomerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) The id of the item to remove a customer from"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemCustomerId",
+                  "description": "(Required) The id of the item customer to delete"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bc0100cf-f2fc-404b-91f1-99094b62f222",
+              "name": "Delete successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "customers",
+                    ":itemCustomerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) The id of the item to remove a customer from"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemCustomerId",
+                      "description": "(Required) The id of the item customer to delete"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "335acdbe-9e82-49f3-af80-d74db06d9729",
+              "name": "Item did not exist or no customer existed at the specified id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "customers",
+                    ":itemCustomerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) The id of the item to remove a customer from"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemCustomerId",
+                      "description": "(Required) The id of the item customer to delete"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "97854308-03b5-45a1-a81f-9193f77bd25d",
+          "name": "Update a specific item customer",
+          "request": {
+            "name": "Update a specific item customer",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "customers",
+                ":itemCustomerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) The id of the item to modify customers for"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemCustomerId",
+                  "description": "(Required) The id of the item customer."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerItemNumber\": \"<string>\",\n  \"customerItemName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fdf3eac2-a142-4e9e-86b8-89454fa97cec",
+              "name": "Update successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "customers",
+                    ":itemCustomerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) The id of the item to modify customers for"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemCustomerId",
+                      "description": "(Required) The id of the item customer."
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerItemNumber\": \"<string>\",\n  \"customerItemName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5b3990cf-3560-4fce-99bc-e5ac75e293c3",
+              "name": "Item did not exist or no customer existed at the specified id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "customers",
+                    ":itemCustomerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) The id of the item to modify customers for"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemCustomerId",
+                      "description": "(Required) The id of the item customer."
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerItemNumber\": \"<string>\",\n  \"customerItemName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8d69dc4f-1025-4119-9625-28101cf0e171",
+          "name": "Get a list of customers for an item",
+          "request": {
+            "name": "Get a list of customers for an item",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "customers",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0a7e8aeb-f8e2-44fd-b501-3472399c1ebb",
+              "name": "List of customers for the given item id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "customers",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"customerId\": \"stringstringstringstring\",\n    \"id\": \"stringstringstringstringstringstring\",\n    \"priceBreaks\": [\n      {\n        \"type\": \"price\",\n        \"quantity\": 4745,\n        \"price\": 1598.4664040504747,\n        \"margin\": 6655.492592960104,\n        \"currencyCode\": \"string\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"customerId\": \"stringstringstringstring\",\n        \"customerTierId\": \"stringstringstringstring\",\n        \"unitOfMeasureName\": \"string\"\n      },\n      {\n        \"type\": \"operation\",\n        \"quantity\": 3705,\n        \"price\": 4367.002240597191,\n        \"margin\": 1568.8173911855042,\n        \"currencyCode\": \"string\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"customerId\": \"stringstringstringstring\",\n        \"customerTierId\": \"stringstringstringstring\",\n        \"unitOfMeasureName\": \"string\"\n      }\n    ],\n    \"customerItemNumber\": \"string\",\n    \"customerItemName\": \"string\",\n    \"unitOfMeasureName\": \"string\"\n  },\n  {\n    \"customerId\": \"stringstringstringstring\",\n    \"id\": \"stringstringstringstringstringstring\",\n    \"priceBreaks\": [\n      {\n        \"type\": \"cost\",\n        \"quantity\": 6844,\n        \"price\": 5845.526174792895,\n        \"margin\": 6514.535604064538,\n        \"currencyCode\": \"string\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"customerId\": \"stringstringstringstring\",\n        \"customerTierId\": \"stringstringstringstring\",\n        \"unitOfMeasureName\": \"string\"\n      },\n      {\n        \"type\": \"shopRate\",\n        \"quantity\": 5048,\n        \"price\": 6391.043721304494,\n        \"margin\": 2475.6058930420863,\n        \"currencyCode\": \"string\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"customerId\": \"stringstringstringstring\",\n        \"customerTierId\": \"stringstringstringstring\",\n        \"unitOfMeasureName\": \"string\"\n      }\n    ],\n    \"customerItemNumber\": \"string\",\n    \"customerItemName\": \"string\",\n    \"unitOfMeasureName\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c40f446c-f1b5-4ece-9f04-abf493e7f2d2",
+              "name": "The item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "customers",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d66d983b-11d4-485b-945b-0687867415bc",
+    "name": "Fulcrum Public Accounting Code Item Customer API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

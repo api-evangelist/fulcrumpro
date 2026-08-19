@@ -1,0 +1,292 @@
+{
+  "item": [
+    {
+      "id": "068d722f-7c36-4f3b-9095-7dd2b812a720",
+      "name": "Custom Field",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1b7cbd82-7290-4f19-8851-c19dcf4926b6",
+          "name": "Get a custom field.",
+          "request": {
+            "name": "Get a custom field.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "custom-fields",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bc85dd44-e3b7-40a5-889f-e13a749805ba",
+              "name": "The custom field for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-fields",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"label\": \"string\",\n  \"module\": \"quote_Part_LineItem\",\n  \"name\": \"string\",\n  \"required\": true,\n  \"type\": \"list\",\n  \"options\": [\n    \"string\",\n    \"string\"\n  ],\n  \"prepend\": \"string\",\n  \"append\": \"string\",\n  \"helpText\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1849dd7d-e0a2-45e0-984a-7c477303e8dc",
+              "name": "Custom field did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-fields",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9cc90ee6-322b-4cae-bcd8-4ed7d5a7e018",
+          "name": "Find custom fields based on search parameters.",
+          "request": {
+            "name": "Find custom fields based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "custom-fields",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"module\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7d9da2e9-4b63-4f6b-bd59-6ec429221e4a",
+              "name": "List of custom fields matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "custom-fields",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"module\": \"<string>\",\n  \"type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstring\",\n    \"label\": \"string\",\n    \"module\": \"<string>\",\n    \"name\": \"string\",\n    \"required\": false,\n    \"type\": \"<string>\",\n    \"options\": [\n      \"string\",\n      \"string\"\n    ],\n    \"prepend\": \"string\",\n    \"append\": \"string\",\n    \"helpText\": \"string\"\n  },\n  {\n    \"id\": \"stringstringstringstring\",\n    \"label\": \"string\",\n    \"module\": \"<string>\",\n    \"name\": \"string\",\n    \"required\": false,\n    \"type\": \"<string>\",\n    \"options\": [\n      \"string\",\n      \"string\"\n    ],\n    \"prepend\": \"string\",\n    \"append\": \"string\",\n    \"helpText\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3e615576-bc72-4e78-b200-c8a9d9d82af6",
+    "name": "Fulcrum Public Accounting Code Custom Field API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,681 @@
+{
+  "item": [
+    {
+      "id": "772e4811-c32e-4015-a83d-00d2b51088e3",
+      "name": "Purchase Order Vendor Credit Line Item",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "87123389-15b7-4436-84f5-38ac83351c1f",
+          "name": "Get a specific vendor credit line item for a purchase order",
+          "request": {
+            "name": "Get a specific vendor credit line item for a purchase order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "purchase-orders",
+                ":purchaseOrderId",
+                "vendor-credit-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "purchaseOrderId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "231bc7d0-46b2-45b5-8b25-a7fe1acd24ed",
+              "name": "Vendor credit line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "vendor-credit-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"itemId\": \"stringstringstringstring\",\n  \"lineItemId\": \"stringstringstringstringstringstring\",\n  \"name\": \"string\",\n  \"quantity\": 3177.1105898855344,\n  \"vendorCredit\": 4273.020517118986,\n  \"purchaseOrderId\": \"stringstringstringstringstringstring\",\n  \"description\": \"string\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1989-04-28T11:44:18.723Z\",\n      \"lastSyncedUtc\": \"1976-01-30T20:56:35.981Z\"\n    },\n    \"key_1\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1995-10-26T11:03:02.386Z\",\n      \"lastSyncedUtc\": \"2004-09-07T06:01:23.792Z\"\n    }\n  },\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"number\": 141\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72a05806-6e06-42e2-80bf-0bc9544e2681",
+              "name": "Purchase order or line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "vendor-credit-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5bcd7485-b37d-4677-9829-a51a5a86f02c",
+          "name": "Partially update a specific vendor credit line item for a purchase order",
+          "request": {
+            "name": "Partially update a specific vendor credit line item for a purchase order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "purchase-orders",
+                ":purchaseOrderId",
+                "vendor-credit-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "purchaseOrderId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b8ed150e-bfa4-4e66-be9e-24e783d28bc5",
+              "name": "Vendor credit line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "vendor-credit-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"itemId\": \"stringstringstringstring\",\n  \"lineItemId\": \"stringstringstringstringstringstring\",\n  \"name\": \"string\",\n  \"quantity\": 3177.1105898855344,\n  \"vendorCredit\": 4273.020517118986,\n  \"purchaseOrderId\": \"stringstringstringstringstringstring\",\n  \"description\": \"string\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1989-04-28T11:44:18.723Z\",\n      \"lastSyncedUtc\": \"1976-01-30T20:56:35.981Z\"\n    },\n    \"key_1\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1995-10-26T11:03:02.386Z\",\n      \"lastSyncedUtc\": \"2004-09-07T06:01:23.792Z\"\n    }\n  },\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"number\": 141\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2c61f1e-ba34-402e-83e5-0a46b3286741",
+              "name": "Purchase order or line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "vendor-credit-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ff074629-3b1a-4db8-a5f1-edc63b5566b9",
+          "name": "Update a specific vendor credit line item for a purchase order",
+          "request": {
+            "name": "Update a specific vendor credit line item for a purchase order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "purchase-orders",
+                ":purchaseOrderId",
+                "vendor-credit-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "purchaseOrderId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ee4145c1-034e-44dc-b60d-7037de40401c",
+              "name": "Vendor credit line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "vendor-credit-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_2\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"itemId\": \"stringstringstringstring\",\n  \"lineItemId\": \"stringstringstringstringstringstring\",\n  \"name\": \"string\",\n  \"quantity\": 6674.661248014893,\n  \"vendorCredit\": 2363.15353288714,\n  \"purchaseOrderId\": \"stringstringstringstringstringstring\",\n  \"description\": \"string\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"number\": 543\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "674e5528-0ece-40d4-8c8a-1f395131f588",
+              "name": "Purchase order or line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "vendor-credit-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_2\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d65b12c2-d981-4efd-8674-83bf1f1b6277",
+          "name": "Get a list of vendor credit line items for a specific purchase order",
+          "request": {
+            "name": "Get a list of vendor credit line items for a specific purchase order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "purchase-orders",
+                ":purchaseOrderId",
+                "vendor-credit-line-items",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "purchaseOrderId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0ca1d146-9201-4f2b-a501-2a2af9164ec2",
+              "name": "List of vendor credit line items for the given purchase order id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "vendor-credit-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"itemId\": \"stringstringstringstring\",\n    \"lineItemId\": \"stringstringstringstringstringstring\",\n    \"name\": \"string\",\n    \"quantity\": 7488.747974304967,\n    \"vendorCredit\": 2557.2127094527364,\n    \"purchaseOrderId\": \"stringstringstringstringstringstring\",\n    \"description\": \"string\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_1\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"number\": 5351\n  },\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"itemId\": \"stringstringstringstring\",\n    \"lineItemId\": \"stringstringstringstringstringstring\",\n    \"name\": \"string\",\n    \"quantity\": 6478.546823763933,\n    \"vendorCredit\": 5821.884684911962,\n    \"purchaseOrderId\": \"stringstringstringstringstringstring\",\n    \"description\": \"string\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_1\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"number\": 6115\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b806336-803e-4589-b8a3-0ed4d7b04c7d",
+              "name": "Purchase order did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "vendor-credit-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ffdc084c-7aa0-4f4b-b624-b8ee909544de",
+    "name": "Fulcrum Public Accounting Code Purchase Order Vendor Credit Line Item API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

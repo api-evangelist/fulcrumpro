@@ -1,0 +1,330 @@
+{
+  "item": [
+    {
+      "id": "82601ef8-dcdc-4937-a696-a7ada7a9e684",
+      "name": "Job Tracking Timers",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "959badc4-e37f-414c-aca5-ea43ad51d915",
+          "name": "Finds job tracking timers based on search parameters",
+          "request": {
+            "name": "Finds job tracking timers based on search parameters",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "job-tracking-timers",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"runningTimersOnly\": \"<boolean>\",\n  \"types\": [\n    \"<string>\"\n  ],\n  \"createdBeforeUtc\": \"<dateTime>\",\n  \"createdAfterUtc\": \"<dateTime>\",\n  \"modifiedBeforeUtc\": \"<dateTime>\",\n  \"modifiedAfterUtc\": \"<dateTime>\",\n  \"startedBeforeUtc\": \"<dateTime>\",\n  \"startedAfterUtc\": \"<dateTime>\",\n  \"stoppedBeforeUtc\": \"<dateTime>\",\n  \"stoppedAfterUtc\": \"<dateTime>\",\n  \"stoppedBeforeUtcOriginal\": \"<dateTime>\",\n  \"stoppedAfterUtcOriginal\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "66f019fc-9f1e-436a-9bec-7c652e4a87a4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "job-tracking-timers",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"runningTimersOnly\": \"<boolean>\",\n  \"types\": [\n    \"<string>\"\n  ],\n  \"createdBeforeUtc\": \"<dateTime>\",\n  \"createdAfterUtc\": \"<dateTime>\",\n  \"modifiedBeforeUtc\": \"<dateTime>\",\n  \"modifiedAfterUtc\": \"<dateTime>\",\n  \"startedBeforeUtc\": \"<dateTime>\",\n  \"startedAfterUtc\": \"<dateTime>\",\n  \"stoppedBeforeUtc\": \"<dateTime>\",\n  \"stoppedAfterUtc\": \"<dateTime>\",\n  \"stoppedBeforeUtcOriginal\": \"<dateTime>\",\n  \"stoppedAfterUtcOriginal\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"createdUtc\": \"1997-08-18T09:57:34.306Z\",\n      \"id\": \"stringstringstringstring\",\n      \"segments\": [\n        {\n          \"id\": \"441c1985-27e6-4a85-b9e7-9369c3a3ff32\",\n          \"startedOnUtc\": \"2003-10-08T06:05:38.810Z\",\n          \"stoppedOnUtc\": \"2007-12-15T12:35:07.213Z\",\n          \"isRunning\": false,\n          \"details\": {\n            \"timeInSeconds\": 2734.8624449810445,\n            \"timeInSecondsWeighted\": 4761.409065776729,\n            \"multiplier\": 5930.9098236569125\n          }\n        },\n        {\n          \"id\": \"aca1bcd7-a0aa-e188-63dc-c9a02e7db186\",\n          \"startedOnUtc\": \"1979-02-04T20:52:38.244Z\",\n          \"stoppedOnUtc\": \"1995-05-17T23:44:14.226Z\",\n          \"isRunning\": false,\n          \"details\": {\n            \"timeInSeconds\": 8362.586552205637,\n            \"timeInSecondsWeighted\": 3951.8951223578515,\n            \"multiplier\": 6134.701470205668\n          }\n        }\n      ],\n      \"startedOnUtc\": \"1956-05-24T00:33:17.395Z\",\n      \"startedOnUtcOriginal\": \"1949-04-12T18:45:14.658Z\",\n      \"type\": \"<string>\",\n      \"jobId\": \"string\",\n      \"jobName\": \"string\",\n      \"itemToMakeId\": \"string\",\n      \"itemToMakeItemId\": \"string\",\n      \"itemToMakeName\": \"string\",\n      \"itemToMakeDescription\": \"string\",\n      \"jobOperationId\": \"string\",\n      \"jobOperationName\": \"string\",\n      \"jobOperationDescription\": \"string\",\n      \"startedById\": \"string\",\n      \"stoppedOnUtc\": \"2012-07-18T22:08:43.232Z\",\n      \"stoppedOnUtcOriginal\": \"2000-03-05T18:02:43.635Z\",\n      \"isRunning\": false,\n      \"modifiedUtc\": \"1967-10-10T02:21:06.173Z\",\n      \"elapsedTimeInSeconds\": 373.4915739496914,\n      \"operationTimeInSeconds\": 2951.4769441809085,\n      \"laborTimeInSeconds\": 1977.6926673322248,\n      \"machineTimeInSeconds\": 763.3230177404305,\n      \"externalReferences\": {\n        \"key_0\": {\n          \"externalId\": \"string\",\n          \"type\": \"string\",\n          \"displayId\": \"string\",\n          \"status\": \"string\",\n          \"url\": \"string\",\n          \"modifiedUtc\": \"1950-06-20T07:17:15.538Z\",\n          \"lastSyncedUtc\": \"1990-02-27T19:29:33.483Z\"\n        }\n      },\n      \"details\": {\n        \"timeInSeconds\": 2603.1784486040087,\n        \"timeInSecondsWeighted\": 658.1313143862589,\n        \"rateHourlyInPrimaryCurrency\": 7954.580265768717,\n        \"cost\": 637.5532114683757\n      }\n    },\n    {\n      \"createdUtc\": \"1947-01-28T03:42:07.951Z\",\n      \"id\": \"stringstringstringstring\",\n      \"segments\": [\n        {\n          \"id\": \"101cd61b-e2df-af8a-e6ef-7186c60021b3\",\n          \"startedOnUtc\": \"1961-11-24T14:16:44.580Z\",\n          \"stoppedOnUtc\": \"2025-07-03T16:30:53.541Z\",\n          \"isRunning\": true,\n          \"details\": {\n            \"timeInSeconds\": 1308.5073490649247,\n            \"timeInSecondsWeighted\": 4498.648282822295,\n            \"multiplier\": 1265.1867618152412\n          }\n        },\n        {\n          \"id\": \"c3fda67e-c4f1-d9f6-1052-e7f7ba260ca6\",\n          \"startedOnUtc\": \"2000-12-19T23:46:27.623Z\",\n          \"stoppedOnUtc\": \"2004-01-07T02:02:17.920Z\",\n          \"isRunning\": false,\n          \"details\": {\n            \"timeInSeconds\": 2267.634433941925,\n            \"timeInSecondsWeighted\": 175.03115604191487,\n            \"multiplier\": 2761.3938633184807\n          }\n        }\n      ],\n      \"startedOnUtc\": \"1963-01-10T07:40:23.190Z\",\n      \"startedOnUtcOriginal\": \"2001-12-10T18:47:15.967Z\",\n      \"type\": \"<string>\",\n      \"jobId\": \"string\",\n      \"jobName\": \"string\",\n      \"itemToMakeId\": \"string\",\n      \"itemToMakeItemId\": \"string\",\n      \"itemToMakeName\": \"string\",\n      \"itemToMakeDescription\": \"string\",\n      \"jobOperationId\": \"string\",\n      \"jobOperationName\": \"string\",\n      \"jobOperationDescription\": \"string\",\n      \"startedById\": \"string\",\n      \"stoppedOnUtc\": \"1966-01-28T05:36:50.085Z\",\n      \"stoppedOnUtcOriginal\": \"1971-09-18T10:05:38.569Z\",\n      \"isRunning\": false,\n      \"modifiedUtc\": \"2012-05-19T18:22:14.150Z\",\n      \"elapsedTimeInSeconds\": 3421.2626769337317,\n      \"operationTimeInSeconds\": 2122.429103482392,\n      \"laborTimeInSeconds\": 1724.1333394351743,\n      \"machineTimeInSeconds\": 8681.245808195417,\n      \"externalReferences\": {\n        \"key_0\": {\n          \"externalId\": \"string\",\n          \"type\": \"s\",\n          \"displayId\": \"string\",\n          \"status\": \"string\",\n          \"url\": \"string\",\n          \"modifiedUtc\": \"2008-04-08T13:44:26.575Z\",\n          \"lastSyncedUtc\": \"2016-01-06T18:33:53.524Z\"\n        }\n      },\n      \"details\": {\n        \"timeInSeconds\": 379.695488326971,\n        \"timeInSecondsWeighted\": 8969.67304181728,\n        \"rateHourlyInPrimaryCurrency\": 849.28057966154,\n        \"cost\": 1841.2801283306012\n      }\n    }\n  ],\n  \"hasNextPage\": true,\n  \"hasPreviousPage\": true,\n  \"page\": 829,\n  \"pageSize\": 5383,\n  \"totalCount\": 2677,\n  \"totalPages\": 6623\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3f7b7a84-faa7-47a9-9b87-0798d50f043f",
+          "name": "Starts a job tracking timer.",
+          "request": {
+            "name": "Starts a job tracking timer.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "job-tracking-timers",
+                "start"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemToMakeId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"operationId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0980e32d-622d-4896-863d-4fd961fb4398",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "job-tracking-timers",
+                    "start"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemToMakeId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"operationId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a74acd6-9439-4f34-8d10-551d78fc04a7",
+          "name": "Stops a job tracking timer",
+          "request": {
+            "name": "Stops a job tracking timer",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "job-tracking-timers",
+                "stop"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timerId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b09cde82-f696-431a-86e1-cb54532b3f04",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "job-tracking-timers",
+                    "stop"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timerId\": \"<string>\",\n  \"userId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0f501ed6-df16-41ba-8f3b-0a7909a605d9",
+    "name": "Fulcrum Public Accounting Code Job Tracking Timers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

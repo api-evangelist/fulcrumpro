@@ -1,0 +1,722 @@
+{
+  "item": [
+    {
+      "id": "292d894a-4c45-4a38-92a5-a4966161c0fc",
+      "name": "Inventory",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4022342b-da01-4207-9de4-5a62d03357d0",
+          "name": "Find inventory based on search parameters.",
+          "request": {
+            "name": "Find inventory based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lotIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"locationIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "14eda680-ddf3-48b1-a6d2-ce37be7efeae",
+              "name": "List of locations matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lotIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"locationIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstring\",\n    \"itemId\": \"stringstringstringstring\",\n    \"itemNumber\": \"string\",\n    \"onHandQuantity\": 478.9664214724165,\n    \"quantity\": 8097.041980374751,\n    \"lotId\": \"stringstringstringstring\",\n    \"locationId\": \"stringstringstringstring\",\n    \"itemDescription\": \"string\"\n  },\n  {\n    \"id\": \"stringstringstringstring\",\n    \"itemId\": \"stringstringstringstring\",\n    \"itemNumber\": \"string\",\n    \"onHandQuantity\": 1175.5684009854228,\n    \"quantity\": 8829.414401610427,\n    \"lotId\": \"stringstringstringstring\",\n    \"locationId\": \"stringstringstringstring\",\n    \"itemDescription\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d722ed2f-30d4-4760-97f1-f2a9775fa28b",
+          "name": "Returns on hand counts by item.  Excludes reserved inventory counts by default, but can be included by passing in the ```includeReserved``` query parameter.\nNOTE: If the response does not contain an item identifier, it means there is no quantity on hand.",
+          "request": {
+            "name": "Returns on hand counts by item.  Excludes reserved inventory counts by default, but can be included by passing in the ```includeReserved``` query parameter.\nNOTE: If the response does not contain an item identifier, it means there is no quantity on hand.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory",
+                "byItem"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "includeReserved",
+                  "value": "false",
+                  "description": "Whether to included reserved inventory into the counts"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ee97f799-c007-498f-b6e0-5ed3b4814d5b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "byItem"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeReserved",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 9887.034259776286,\n  \"key_1\": 2831.4281281436083\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d80537d7-1a88-4a50-aff5-a0b0c529837f",
+          "name": "Override an inventory's quantity.",
+          "request": {
+            "name": "Override an inventory's quantity.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory",
+                "override"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cfc05229-13ee-43f3-b813-62db4c4e95d5",
+              "name": "Inventory override was successfully processed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "override"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1f520efc-7b17-4afb-9690-373eef78fea5",
+              "name": "Validation issues with the request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "override"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4d365948-8df0-4a3b-a0f4-f9f51d2bbc37",
+              "name": "An unspecified error occurred with the request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "override"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "120fa4c7-c2b5-4d6b-a31c-04ca09e7cffc",
+          "name": "Pick inventory against a specific item.",
+          "request": {
+            "name": "Pick inventory against a specific item.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory",
+                "pick"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"secondaryType\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "489ccf22-edf7-4f37-9e11-d86149d7c311",
+              "name": "Inventory transaction processed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "pick"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"secondaryType\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5ab3ba36-fd77-49d8-8def-a1e81bcc4baf",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "pick"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"secondaryType\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "63a9352f-a4b3-4b58-81e5-9e19f899078a",
+          "name": "Returns quantity available by item. This is the on hand + incoming supply - demand.\nNOTE: If the response does not contain an item identifier, it means there is no quantity on hand.",
+          "request": {
+            "name": "Returns quantity available by item. This is the on hand + incoming supply - demand.\nNOTE: If the response does not contain an item identifier, it means there is no quantity on hand.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory",
+                "availableByItem"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "aa0bcece-5c74-46df-b6bf-0d18ba2f4c03",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "availableByItem"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 9887.034259776286,\n  \"key_1\": 2831.4281281436083\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e74b011-192c-4625-813a-fe13284da5bc",
+          "name": "Receive inventory for a specific item.",
+          "request": {
+            "name": "Receive inventory for a specific item.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory",
+                "receive"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"secondaryType\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"lotNumber\": \"<string>\",\n  \"note\": \"<string>\",\n  \"laborValue\": \"<double>\",\n  \"machineValue\": \"<double>\",\n  \"outsideProcessingValue\": \"<double>\",\n  \"materialValue\": \"<double>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2e60a333-874c-4cb9-aae3-461ea6b7d801",
+              "name": "Inventory transaction processed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "receive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"secondaryType\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"lotNumber\": \"<string>\",\n  \"note\": \"<string>\",\n  \"laborValue\": \"<double>\",\n  \"machineValue\": \"<double>\",\n  \"outsideProcessingValue\": \"<double>\",\n  \"materialValue\": \"<double>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5e669ba4-5714-44d6-bf52-ad89fee6a2f5",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory",
+                    "receive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"secondaryType\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"lotNumber\": \"<string>\",\n  \"note\": \"<string>\",\n  \"laborValue\": \"<double>\",\n  \"machineValue\": \"<double>\",\n  \"outsideProcessingValue\": \"<double>\",\n  \"materialValue\": \"<double>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e816e856-b532-4921-8591-6d7b909f857a",
+    "name": "Fulcrum Public Accounting Code Inventory API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

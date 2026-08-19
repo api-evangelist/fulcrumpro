@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Receiving Receipt API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Receiving Receipt",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a receipt for a specific purchase or sales order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a receipt for a specific purchase or sales order"
+        },
+        {
+          "info": {
+            "name": "Get a specific receipt on a purchase or sales order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts/:receiptId",
+            "params": [
+              {
+                "name": "receiptId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a specific receipt on a purchase or sales order"
+        },
+        {
+          "info": {
+            "name": "Update a specific receipt for a purchase or sales order",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts/:receiptId",
+            "params": [
+              {
+                "name": "receiptId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific receipt for a purchase or sales order"
+        },
+        {
+          "info": {
+            "name": "Partially update a specific receipt for a purchase or sales order",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts/:receiptId",
+            "params": [
+              {
+                "name": "receiptId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a specific receipt for a purchase or sales order"
+        },
+        {
+          "info": {
+            "name": "Get a list of receipts for purchase and sales orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a list of receipts for purchase and sales orders"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

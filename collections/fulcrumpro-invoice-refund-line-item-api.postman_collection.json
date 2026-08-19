@@ -1,0 +1,681 @@
+{
+  "item": [
+    {
+      "id": "81f0feb8-f791-4aa6-8534-4d077f459a8d",
+      "name": "Invoice Refund Line Item",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ed89ce33-8018-4aa3-929f-619229c44857",
+          "name": "Get a specific refund line item for an invoice",
+          "request": {
+            "name": "Get a specific refund line item for an invoice",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "refund-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "74f06a16-359f-401a-ade0-c45819ec9ed3",
+              "name": "Refund line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "refund-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"itemId\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"price\": 8121.474581982379,\n  \"quantity\": 2945.2808504920004,\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"description\": \"string\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1991-07-07T03:41:49.021Z\",\n      \"lastSyncedUtc\": \"1964-08-09T21:36:45.105Z\"\n    },\n    \"key_1\": {\n      \"externalId\": \"string\",\n      \"type\": \"\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1990-04-01T01:19:33.597Z\",\n      \"lastSyncedUtc\": \"1958-11-20T23:42:08.479Z\"\n    }\n  },\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"number\": 4713\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b385efeb-660c-4dc2-bbea-30006714d5a0",
+              "name": "Invoice or line items did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "refund-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "409471b4-84bf-4d4c-87d7-db1d7de3df8b",
+          "name": "Partially update a specific refund line item for a purchase order",
+          "request": {
+            "name": "Partially update a specific refund line item for a purchase order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "refund-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "88f2cc4f-a577-4565-b11c-66b73b8821e1",
+              "name": "Refund line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "refund-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"itemId\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"price\": 8121.474581982379,\n  \"quantity\": 2945.2808504920004,\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"description\": \"string\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1991-07-07T03:41:49.021Z\",\n      \"lastSyncedUtc\": \"1964-08-09T21:36:45.105Z\"\n    },\n    \"key_1\": {\n      \"externalId\": \"string\",\n      \"type\": \"\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1990-04-01T01:19:33.597Z\",\n      \"lastSyncedUtc\": \"1958-11-20T23:42:08.479Z\"\n    }\n  },\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"number\": 4713\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "507c47d3-9fd4-4288-9c67-aac8e5305436",
+              "name": "Invoice or line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "refund-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fc663e9f-5d58-4c1b-bc58-576d0494927f",
+          "name": "Update a specific refund line item for an invoice",
+          "request": {
+            "name": "Update a specific refund line item for an invoice",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "refund-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "90c6180e-4ee0-4b0d-a54f-d091f1c9bfe6",
+              "name": "Refund line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "refund-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"itemId\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"price\": 3900.1232650855554,\n  \"quantity\": 2964.317025032478,\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"description\": \"string\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"number\": 9106\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a84b3b03-f5fe-4a88-9992-6f86707753e1",
+              "name": "Invoice or line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "refund-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cd8362fd-a368-41b3-a7a7-7558022968c8",
+          "name": "Get a list of refund lines items for an invoice",
+          "request": {
+            "name": "Get a list of refund lines items for an invoice",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "refund-line-items",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "af655eb5-33fb-4b75-8fa3-6e6921175d93",
+              "name": "List of refund line items for the given invoice id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "refund-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"itemId\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"price\": 9172.29541500829,\n    \"quantity\": 5393.219637770319,\n    \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n    \"description\": \"string\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_1\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_2\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"number\": 4641\n  },\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"itemId\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"price\": 9416.070660589538,\n    \"quantity\": 4822.83635064652,\n    \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n    \"description\": \"string\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_1\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"number\": 1085\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc6e032b-bb90-4f9b-b0b2-93663d6f815e",
+              "name": "The invoice did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "refund-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "290484f6-dea7-4c24-9c09-b570e5b9b53a",
+    "name": "Fulcrum Public Accounting Code Invoice Refund Line Item API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

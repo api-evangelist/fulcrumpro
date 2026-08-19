@@ -1,0 +1,420 @@
+{
+  "item": [
+    {
+      "id": "f479eff0-403a-4a6d-b850-77d17b3a0290",
+      "name": "Inventory Lot",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "57c3a442-a7a6-49df-906b-a81f4c9b4bff",
+          "name": "Create a new inventory lot.",
+          "request": {
+            "name": "Create a new inventory lot.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory-lots"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"<string>\",\n  \"name\": \"<string>\",\n  \"expirationDate\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b5f5b11b-67d8-4d4e-8164-47431a07a4b7",
+              "name": "Item created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory-lots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"name\": \"<string>\",\n  \"expirationDate\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7958eeb4-a38f-4265-91b0-07c1d667e836",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory-lots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"name\": \"<string>\",\n  \"expirationDate\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "79a9e996-e738-4e76-90a0-7ef9ee9d3ce2",
+          "name": "Get an inventory lot.",
+          "request": {
+            "name": "Get an inventory lot.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory-lots",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "420da133-76b9-4abe-9193-e98e3d54b0d2",
+              "name": "The inventory lot for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory-lots",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"custom\": true,\n  \"id\": \"stringstringstringstring\",\n  \"itemId\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"system\": false,\n  \"quantity\": 7803.487904143749,\n  \"expirationDate\": \"2014-11-15T14:27:45.343Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1b24b3d8-1641-4e67-9c82-4398d2517bdf",
+              "name": "Inventory lot did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory-lots",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "86955551-b1e2-4f5b-8626-671e64d786ef",
+          "name": "Find inventory lots based on search parameters.",
+          "request": {
+            "name": "Find inventory lots based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory-lots",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"system\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "97b563c3-9e18-4a59-a7ba-0fdd6ff5d789",
+              "name": "List of inventory lots matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory-lots",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"system\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"custom\": false,\n    \"id\": \"stringstringstringstring\",\n    \"itemId\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"system\": true,\n    \"quantity\": 4036.2983604351075,\n    \"expirationDate\": \"1968-04-04T12:22:29.723Z\"\n  },\n  {\n    \"custom\": true,\n    \"id\": \"stringstringstringstring\",\n    \"itemId\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"system\": true,\n    \"quantity\": 3024.3500218609374,\n    \"expirationDate\": \"1971-03-26T06:23:18.158Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a230ad0e-2576-45dc-a658-b103a70b9daf",
+    "name": "Fulcrum Public Accounting Code Inventory Lot API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

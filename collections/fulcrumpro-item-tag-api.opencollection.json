@@ -1,0 +1,150 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Item Tag API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Item Tag",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an item category",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/item-tags/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get an item category"
+        },
+        {
+          "info": {
+            "name": "Find item tags based on search parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/item-tags/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Find item tags based on search parameters"
+        },
+        {
+          "info": {
+            "name": "Attach a tag to an item. This operation is idempotent - attaching a tag that is already present is a no-op.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/tags/:tagId",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item to tag."
+              },
+              {
+                "name": "tagId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the tag to attach. Please reference the /api/item-tags/list endpoint."
+              }
+            ]
+          },
+          "docs": "Attach a tag to an item. This operation is idempotent - attaching a tag that is already present is a no-op."
+        },
+        {
+          "info": {
+            "name": "Detach a tag from an item. This operation is idempotent - detaching a tag that is not present is a no-op.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/tags/:tagId",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item to modify."
+              },
+              {
+                "name": "tagId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the tag to detach."
+              }
+            ]
+          },
+          "docs": "Detach a tag from an item. This operation is idempotent - detaching a tag that is not present is a no-op."
+        },
+        {
+          "info": {
+            "name": "Replace the complete set of tags on an item. Tags currently on the item that are not in the request are removed.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/tags",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item to modify."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Replace the complete set of tags on an item. Tags currently on the item that are not in the request are removed."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

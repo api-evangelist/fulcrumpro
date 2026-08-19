@@ -1,0 +1,1052 @@
+{
+  "item": [
+    {
+      "id": "81123575-54d5-4b77-83ad-003a3267056b",
+      "name": "Attachment",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b2053d72-1217-4111-b6d1-d3e840687497",
+          "name": "Create an attachment",
+          "request": {
+            "name": "Create an attachment",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "attachments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "Detail.IsNoteAttachment",
+                  "value": "<boolean>",
+                  "type": "text",
+                  "description": "(Required) Indicates whether this attachment is bound to a note."
+                },
+                {
+                  "key": "File",
+                  "type": "file",
+                  "description": "(Required) The file itself"
+                },
+                {
+                  "key": "Detail.Owner.Type",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "Detail.Owner.Id",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "The primary owner id of this attachment."
+                },
+                {
+                  "key": "Detail.Description",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "File description"
+                },
+                {
+                  "key": "Detail.Parent.Type",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": ""
+                },
+                {
+                  "key": "Detail.Parent.Id",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "The primary owner id of this attachment."
+                },
+                {
+                  "key": "Detail.Metadata",
+                  "value": "{\"key_0\":\"<string>\"}",
+                  "type": "text",
+                  "description": "Metadata to associate to the attachment."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1ebf52b7-4b97-44a3-ad26-943eca3f4388",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) Indicates whether this attachment is bound to a note.",
+                        "type": "text/plain"
+                      },
+                      "key": "Detail.IsNoteAttachment",
+                      "value": "<boolean>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) The file itself",
+                        "type": "text/plain"
+                      },
+                      "key": "File",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "Detail.Owner.Type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "The primary owner id of this attachment.",
+                        "type": "text/plain"
+                      },
+                      "key": "Detail.Owner.Id",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "File description",
+                        "type": "text/plain"
+                      },
+                      "key": "Detail.Description",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "Detail.Parent.Type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "The primary owner id of this attachment.",
+                        "type": "text/plain"
+                      },
+                      "key": "Detail.Parent.Id",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "Metadata to associate to the attachment.",
+                        "type": "text/plain"
+                      },
+                      "key": "Detail.Metadata",
+                      "value": "{\"key_0\":\"<string>\",\"key_1\":\"<string>\",\"key_2\":\"<string>\"}",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1ab58d69-64a4-4b76-a899-2516e489776d",
+          "name": "Create an attachment based on a remote data endpoint.",
+          "request": {
+            "name": "Create an attachment based on a remote data endpoint.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "attachments",
+                "remote"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accessUrl\": \"<uri>\",\n  \"fileName\": \"<string>\",\n  \"owner\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"parent\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6028006f-5f7a-47b8-979e-d5ddfdb5e1d2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    "remote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"accessUrl\": \"<uri>\",\n  \"fileName\": \"<string>\",\n  \"owner\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"parent\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5efe0297-6894-492d-93e0-f3cb3d66ce75",
+          "name": "Delete a specific attachment",
+          "request": {
+            "name": "Delete a specific attachment",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "attachments",
+                ":attachmentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "attachmentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a5706b46-a895-406f-b21f-78fe647bc090",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    ":attachmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "38c5d35a-9690-4763-a1f0-7541f6c3f1a4",
+              "name": "Attachment did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    ":attachmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "253ddcbf-7101-4048-89ec-bea7b10d0117",
+              "name": "Attachment record had an invalid Id value",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    ":attachmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Gone",
+              "code": 410,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "92a7984f-9bad-4c45-9942-66aadf26ac94",
+          "name": "Get a specific attachment",
+          "request": {
+            "name": "Get a specific attachment",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "attachments",
+                ":attachmentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "attachmentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "44410124-8f76-47ef-9ab4-372730ffb4fb",
+              "name": "The attachment for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    ":attachmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"fileId\": \"string\",\n  \"id\": \"stringstringstringstring\",\n  \"owner\": {\n    \"type\": \"salesOrder\",\n    \"id\": \"stringstringstringstring\"\n  },\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"type\": \"certification\",\n  \"format\": \"document\",\n  \"size\": 9937,\n  \"createdUtc\": \"1990-07-02T14:11:06.847Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "96506efc-7199-4f04-b1cc-5b2a1661e5ad",
+              "name": "Attachment did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    ":attachmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0fbcaaec-6ab8-477f-a3da-b1cc7a9e6c4d",
+          "name": "Download a specific attachment",
+          "request": {
+            "name": "Download a specific attachment",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "attachments",
+                ":attachmentId",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fileName",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "attachmentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e36483b0-5116-4345-9b6b-8afef75b607e",
+              "name": "The attachment for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    ":attachmentId",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileName",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6a69b2b4-bcaf-44fc-9a22-2495caf4857c",
+              "name": "Attachment did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    ":attachmentId",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileName",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "attachmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0d491f0b-fe7d-4aaf-9cc3-6a3279dee955",
+          "name": "Download attachment(s) for a given filter in ZIP format",
+          "request": {
+            "name": "Download attachment(s) for a given filter in ZIP format",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "attachments",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fileName",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"owner\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"owners\": [\n    {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"attachmentIds\": [\n    \"<string>\"\n  ],\n  \"formats\": [\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f419c0ae-bd87-4421-8400-b7d38258089f",
+              "name": "The attachments for the given filter",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileName",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"owner\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"owners\": [\n    {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"attachmentIds\": [\n    \"<string>\"\n  ],\n  \"formats\": [\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "28c4e0d5-027d-4fe1-b8da-6c56a58ea8c7",
+              "name": "File extension not supported",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileName",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"owner\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"owners\": [\n    {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"attachmentIds\": [\n    \"<string>\"\n  ],\n  \"formats\": [\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "15d0cc5b-001f-4705-aefe-7c633693b3b1",
+              "name": "No attachments exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fileName",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"owner\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"owners\": [\n    {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"attachmentIds\": [\n    \"<string>\"\n  ],\n  \"formats\": [\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f1750ff5-4c93-4860-b279-7beb03266591",
+          "name": "Find attachments based on search parameters.",
+          "request": {
+            "name": "Find attachments based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "attachments",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"owner\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"owners\": [\n    {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"attachmentIds\": [\n    \"<string>\"\n  ],\n  \"formats\": [\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c79ccbd5-bfc1-438b-a2f2-7faa7e075197",
+              "name": "List of attachments matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "attachments",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"owner\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"owners\": [\n    {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    }\n  ],\n  \"attachmentIds\": [\n    \"<string>\"\n  ],\n  \"formats\": [\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"fileId\": \"string\",\n    \"id\": \"stringstringstringstring\",\n    \"owner\": {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"type\": \"certification\",\n    \"format\": \"<string>\",\n    \"size\": 7128,\n    \"createdUtc\": \"2007-11-21T22:17:40.922Z\"\n  },\n  {\n    \"fileId\": \"string\",\n    \"id\": \"stringstringstringstring\",\n    \"owner\": {\n      \"type\": \"<string>\",\n      \"id\": \"<string>\"\n    },\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"type\": \"certification\",\n    \"format\": \"<string>\",\n    \"size\": 9313,\n    \"createdUtc\": \"1970-07-07T13:38:17.752Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e299429e-a555-4fa5-9588-0f9b78a6bcb8",
+    "name": "Fulcrum Public Accounting Code Attachment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

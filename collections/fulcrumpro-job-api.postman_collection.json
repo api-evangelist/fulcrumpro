@@ -1,0 +1,1172 @@
+{
+  "item": [
+    {
+      "id": "ece80823-7223-48e4-bbec-5a410d570316",
+      "name": "Job",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e70c738f-dd58-4498-bd5a-749a597de022",
+          "name": "Cancel a specific job",
+          "request": {
+            "name": "Cancel a specific job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a852f898-8b06-4ea4-802b-9d7a2f089dee",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "80321a41-55de-45f6-a5c7-0ee5ff1ff9b9",
+              "name": "Job did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6cd4cf98-1060-46ca-a7ab-66df663475b6",
+          "name": "Create a new job",
+          "request": {
+            "name": "Create a new job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantityToMake\": \"<double>\",\n  \"nameOfJob\": \"<string>\",\n  \"customerId\": \"<string>\",\n  \"autoSchedule\": \"<boolean>\",\n  \"note\": \"<string>\",\n  \"priority\": \"<string>\",\n  \"productionDueDate\": \"<dateTime>\",\n  \"earliestStartDate\": \"<dateTime>\",\n  \"salesOrderId\": \"<string>\",\n  \"salesOrderLineItemId\": \"<string>\",\n  \"salesOrderLineItemNameOverride\": \"<string>\",\n  \"itemToMakeId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1dfdba1b-1e54-4b60-b1e6-39d89d4a6057",
+              "name": "Job created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"quantityToMake\": \"<double>\",\n  \"nameOfJob\": \"<string>\",\n  \"customerId\": \"<string>\",\n  \"autoSchedule\": \"<boolean>\",\n  \"note\": \"<string>\",\n  \"priority\": \"<string>\",\n  \"productionDueDate\": \"<dateTime>\",\n  \"earliestStartDate\": \"<dateTime>\",\n  \"salesOrderId\": \"<string>\",\n  \"salesOrderLineItemId\": \"<string>\",\n  \"salesOrderLineItemNameOverride\": \"<string>\",\n  \"itemToMakeId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b45b66c8-c0f8-471f-8ea1-a88e60a52322",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"quantityToMake\": \"<double>\",\n  \"nameOfJob\": \"<string>\",\n  \"customerId\": \"<string>\",\n  \"autoSchedule\": \"<boolean>\",\n  \"note\": \"<string>\",\n  \"priority\": \"<string>\",\n  \"productionDueDate\": \"<dateTime>\",\n  \"earliestStartDate\": \"<dateTime>\",\n  \"salesOrderId\": \"<string>\",\n  \"salesOrderLineItemId\": \"<string>\",\n  \"salesOrderLineItemNameOverride\": \"<string>\",\n  \"itemToMakeId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8af501f7-04c8-4efc-b767-f80f4a043bb8",
+          "name": "Get a specific job",
+          "request": {
+            "name": "Get a specific job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6276473c-f818-4cd7-ac0e-25140ec7ac17",
+              "name": "The job for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"number\": 4003,\n  \"parentItemId\": \"stringstringstringstring\",\n  \"priority\": \"<string>\",\n  \"quantityToMake\": 1450.0523470787418,\n  \"status\": \"draft\",\n  \"workOrderIds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"workOrders\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 307\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 6842\n    }\n  ],\n  \"productionDueDate\": \"1984-08-08T03:24:09.115Z\",\n  \"earliestStartDate\": \"2004-12-10T15:42:27.141Z\",\n  \"salesOrderId\": \"stringstringstringstring\",\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"createdUtc\": \"1966-08-16T17:31:50.436Z\",\n  \"originalScheduledStartUtc\": \"1994-03-21T03:32:09.017Z\",\n  \"originalScheduledEndUtc\": \"1970-06-07T20:05:53.101Z\",\n  \"scheduledStartUtc\": \"1963-09-29T15:05:02.362Z\",\n  \"scheduledEndUtc\": \"1990-03-27T18:16:48.170Z\",\n  \"completedOnUtc\": \"2024-08-10T15:29:50.241Z\",\n  \"cancelledOnUtc\": \"1970-01-29T18:47:56.694Z\",\n  \"revenue\": 9297.638597456282,\n  \"notes\": \"string\",\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "03b0230b-c2ea-4a10-b807-79fbaa2fba12",
+              "name": "Job did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "45244610-798c-478d-8c1b-0a8e5a26d158",
+          "name": "Partially update a job",
+          "request": {
+            "name": "Partially update a job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b128e5bc-84b9-4fb6-8719-decfd44a36f4",
+              "name": "Job item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"number\": 6297,\n  \"parentItemId\": \"stringstringstringstring\",\n  \"priority\": \"<string>\",\n  \"quantityToMake\": 9578.011169035208,\n  \"status\": \"needsReview\",\n  \"workOrderIds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"workOrders\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 393\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 5333\n    }\n  ],\n  \"productionDueDate\": \"1991-10-11T22:35:39.774Z\",\n  \"earliestStartDate\": \"2007-01-03T09:11:12.252Z\",\n  \"salesOrderId\": \"stringstringstringstring\",\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"createdUtc\": \"1954-08-08T22:58:56.443Z\",\n  \"originalScheduledStartUtc\": \"2002-01-30T13:58:47.691Z\",\n  \"originalScheduledEndUtc\": \"2023-05-24T05:04:59.853Z\",\n  \"scheduledStartUtc\": \"1973-07-21T00:31:35.827Z\",\n  \"scheduledEndUtc\": \"1974-05-19T00:43:08.119Z\",\n  \"completedOnUtc\": \"1965-02-05T12:53:50.140Z\",\n  \"cancelledOnUtc\": \"1967-07-29T09:49:13.399Z\",\n  \"revenue\": 9199.496745041919,\n  \"notes\": \"string\",\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eece1ec0-f417-432a-be9c-3c7b25c86de1",
+              "name": "Job did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "204f5f9c-4d32-43be-a6f6-61b13b7e15e7",
+          "name": "Update a job",
+          "request": {
+            "name": "Update a job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"priority\": \"<string>\",\n  \"quantityToMake\": \"<double>\",\n  \"productionDueDate\": \"<dateTime>\",\n  \"earliestStartDate\": \"<dateTime>\",\n  \"notes\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4665ea0e-8d79-45af-adf7-e73dd6c726bc",
+              "name": "Job item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"priority\": \"<string>\",\n  \"quantityToMake\": \"<double>\",\n  \"productionDueDate\": \"<dateTime>\",\n  \"earliestStartDate\": \"<dateTime>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"number\": 6297,\n  \"parentItemId\": \"stringstringstringstring\",\n  \"priority\": \"<string>\",\n  \"quantityToMake\": 9578.011169035208,\n  \"status\": \"needsReview\",\n  \"workOrderIds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"workOrders\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 393\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 5333\n    }\n  ],\n  \"productionDueDate\": \"1991-10-11T22:35:39.774Z\",\n  \"earliestStartDate\": \"2007-01-03T09:11:12.252Z\",\n  \"salesOrderId\": \"stringstringstringstring\",\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"createdUtc\": \"1954-08-08T22:58:56.443Z\",\n  \"originalScheduledStartUtc\": \"2002-01-30T13:58:47.691Z\",\n  \"originalScheduledEndUtc\": \"2023-05-24T05:04:59.853Z\",\n  \"scheduledStartUtc\": \"1973-07-21T00:31:35.827Z\",\n  \"scheduledEndUtc\": \"1974-05-19T00:43:08.119Z\",\n  \"completedOnUtc\": \"1965-02-05T12:53:50.140Z\",\n  \"cancelledOnUtc\": \"1967-07-29T09:49:13.399Z\",\n  \"revenue\": 9199.496745041919,\n  \"notes\": \"string\",\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "201c86b5-12e9-4304-87eb-b89f366d10fc",
+              "name": "Job did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"priority\": \"<string>\",\n  \"quantityToMake\": \"<double>\",\n  \"productionDueDate\": \"<dateTime>\",\n  \"earliestStartDate\": \"<dateTime>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84267890-ab42-45f3-b501-b7973a5c9e68",
+          "name": "Get a specific job's tracking information",
+          "request": {
+            "name": "Get a specific job's tracking information",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "tracking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "363991c1-ae50-4884-beb2-47374bd14e02",
+              "name": "The job for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "tracking"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"number\": 4875,\n  \"parentItemId\": \"stringstringstringstring\",\n  \"priority\": \"<string>\",\n  \"quantityToMake\": 151.4031496076773,\n  \"status\": \"approved\",\n  \"workOrderIds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"workOrders\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 8164\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 9683\n    }\n  ],\n  \"productionDueDate\": \"2004-01-15T05:27:27.814Z\",\n  \"earliestStartDate\": \"1977-12-22T08:16:37.171Z\",\n  \"salesOrderId\": \"stringstringstringstring\",\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n  \"createdUtc\": \"1987-06-08T13:48:28.299Z\",\n  \"originalScheduledStartUtc\": \"2005-12-27T11:28:59.830Z\",\n  \"originalScheduledEndUtc\": \"1984-12-11T14:26:13.870Z\",\n  \"scheduledStartUtc\": \"2004-07-29T11:01:38.343Z\",\n  \"scheduledEndUtc\": \"1999-11-28T12:56:27.133Z\",\n  \"completedOnUtc\": \"1969-01-02T19:28:30.097Z\",\n  \"cancelledOnUtc\": \"2020-03-03T19:45:52.929Z\",\n  \"revenue\": 9267.122645663858,\n  \"notes\": \"string\",\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"previousOperations\": [\n    {\n      \"itemToMake\": {\n        \"depth\": 5426,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": true,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 9198.421124655284,\n        \"status\": \"new\",\n        \"quantityMade\": 461.9543704301499,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"1973-03-01T15:01:37.649Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 493,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"estimated\",\n          \"quantityScrapped\": 8657\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"1972-11-21T10:31:08.255Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 8265,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"inProgressJob\",\n          \"quantityScrapped\": 5535\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"string\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": true,\n        \"order\": 7097,\n        \"status\": \"complete\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"1973-02-07T22:21:36.423Z\",\n        \"originalScheduledEndUtc\": \"1974-01-25T11:38:56.196Z\",\n        \"scheduledStartUtc\": \"1982-08-26T14:32:11.232Z\",\n        \"scheduledEndUtc\": \"1989-12-14T12:37:38.180Z\",\n        \"completedOnUtc\": \"1953-01-29T06:19:42.651Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 571,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 2946.3816017654785,\n        \"estimatedSetupTimeBasis\": \"perUnit\",\n        \"estimatedRunTimeInSeconds\": 6829.239168014416,\n        \"estimatedRunTimeBasis\": \"fixed\",\n        \"estimatedMachineTimeInSeconds\": 845.473743780758,\n        \"estimatedMachineTimeBasis\": \"perUnit\",\n        \"estimatedLaborTimeInSeconds\": 2145.410036542008,\n        \"estimatedLaborTimeBasis\": \"unitsPerHour\",\n        \"isMachineTimeOnly\": false,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": false,\n        \"hasAssociatedRework\": true,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 6388,\n          \"quantityScrapped\": 4812,\n          \"hasScrapMaterials\": false,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"2022-04-26T00:19:45.470Z\"\n        }\n      }\n    },\n    {\n      \"itemToMake\": {\n        \"depth\": 1353,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": true,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 7590.293996799708,\n        \"status\": \"complete\",\n        \"quantityMade\": 9301.809922224562,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"1992-11-27T13:47:57.457Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 619,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"cancelledJob\",\n          \"quantityScrapped\": 5053\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"1975-10-20T02:55:14.761Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 842,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"completedJob\",\n          \"quantityScrapped\": 4050\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"string\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": true,\n        \"order\": 332,\n        \"status\": \"cancelled\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"2002-01-14T02:21:47.057Z\",\n        \"originalScheduledEndUtc\": \"1991-11-03T12:11:29.492Z\",\n        \"scheduledStartUtc\": \"2000-11-18T05:58:36.148Z\",\n        \"scheduledEndUtc\": \"1970-10-30T19:40:30.544Z\",\n        \"completedOnUtc\": \"1949-11-07T00:44:35.324Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 645,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 9149.888753844147,\n        \"estimatedSetupTimeBasis\": \"perUnit\",\n        \"estimatedRunTimeInSeconds\": 4151.259409685825,\n        \"estimatedRunTimeBasis\": \"perUnit\",\n        \"estimatedMachineTimeInSeconds\": 9214.703852585873,\n        \"estimatedMachineTimeBasis\": \"fixed\",\n        \"estimatedLaborTimeInSeconds\": 2894.9257131571494,\n        \"estimatedLaborTimeBasis\": \"fixed\",\n        \"isMachineTimeOnly\": true,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": false,\n        \"hasAssociatedRework\": false,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 172,\n          \"quantityScrapped\": 1163,\n          \"hasScrapMaterials\": false,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"2023-04-04T00:10:08.585Z\"\n        }\n      }\n    }\n  ],\n  \"currentOperations\": [\n    {\n      \"itemToMake\": {\n        \"depth\": 1257,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": false,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 4593.798776637771,\n        \"status\": \"new\",\n        \"quantityMade\": 775.5115962996783,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"1972-10-04T02:13:59.700Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 2384,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"estimated\",\n          \"quantityScrapped\": 3975\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"2012-04-23T00:53:04.546Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 2368,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"inProgressJob\",\n          \"quantityScrapped\": 5314\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"string\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": false,\n        \"order\": 9891,\n        \"status\": \"cancelled\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"2013-03-29T02:51:13.016Z\",\n        \"originalScheduledEndUtc\": \"1996-09-04T12:28:15.066Z\",\n        \"scheduledStartUtc\": \"2026-01-29T20:23:39.624Z\",\n        \"scheduledEndUtc\": \"2020-05-24T04:12:02.116Z\",\n        \"completedOnUtc\": \"1969-05-24T19:19:54.304Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 3427,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 6338.5110316694445,\n        \"estimatedSetupTimeBasis\": \"perUnit\",\n        \"estimatedRunTimeInSeconds\": 645.4314579951704,\n        \"estimatedRunTimeBasis\": \"fixed\",\n        \"estimatedMachineTimeInSeconds\": 7319.289807126123,\n        \"estimatedMachineTimeBasis\": \"perUnit\",\n        \"estimatedLaborTimeInSeconds\": 8419.864075259151,\n        \"estimatedLaborTimeBasis\": \"perUnit\",\n        \"isMachineTimeOnly\": true,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": true,\n        \"hasAssociatedRework\": false,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 6615,\n          \"quantityScrapped\": 7914,\n          \"hasScrapMaterials\": true,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"1949-03-19T10:47:46.772Z\"\n        }\n      }\n    },\n    {\n      \"itemToMake\": {\n        \"depth\": 2274,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": true,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 6303.083169590968,\n        \"status\": \"cancelled\",\n        \"quantityMade\": 4017.549851102301,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"1953-07-17T22:11:08.983Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 3440,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"inProgressJob\",\n          \"quantityScrapped\": 9651\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"2013-09-30T15:17:24.167Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 1694,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"inProgressJob\",\n          \"quantityScrapped\": 7102\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"string\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": false,\n        \"order\": 8123,\n        \"status\": \"complete\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"1989-11-29T03:18:44.918Z\",\n        \"originalScheduledEndUtc\": \"1981-02-16T04:56:18.332Z\",\n        \"scheduledStartUtc\": \"1984-06-23T07:56:34.331Z\",\n        \"scheduledEndUtc\": \"1959-11-21T08:32:20.445Z\",\n        \"completedOnUtc\": \"1967-03-16T05:31:48.974Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 6215,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 5449.7456081040755,\n        \"estimatedSetupTimeBasis\": \"perUnit\",\n        \"estimatedRunTimeInSeconds\": 2541.5104784805208,\n        \"estimatedRunTimeBasis\": \"unitsPerHour\",\n        \"estimatedMachineTimeInSeconds\": 2421.894195460159,\n        \"estimatedMachineTimeBasis\": \"unitsPerHour\",\n        \"estimatedLaborTimeInSeconds\": 5047.349357587657,\n        \"estimatedLaborTimeBasis\": \"perUnit\",\n        \"isMachineTimeOnly\": false,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": false,\n        \"hasAssociatedRework\": false,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 4158,\n          \"quantityScrapped\": 6499,\n          \"hasScrapMaterials\": false,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"2023-05-02T21:33:56.499Z\"\n        }\n      }\n    }\n  ],\n  \"nextOperations\": [\n    {\n      \"itemToMake\": {\n        \"depth\": 1191,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": true,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 1428.3111237549128,\n        \"status\": \"complete\",\n        \"quantityMade\": 7491.8324849468945,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"1969-02-21T17:46:05.151Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 3925,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"estimated\",\n          \"quantityScrapped\": 5991\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"2009-04-30T04:57:24.940Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 3899,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"estimated\",\n          \"quantityScrapped\": 2750\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"strin\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": true,\n        \"order\": 2001,\n        \"status\": \"cancelled\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"1961-02-02T05:01:33.953Z\",\n        \"originalScheduledEndUtc\": \"1986-06-04T06:56:13.849Z\",\n        \"scheduledStartUtc\": \"1998-12-14T07:33:36.828Z\",\n        \"scheduledEndUtc\": \"2022-03-20T02:11:01.428Z\",\n        \"completedOnUtc\": \"1994-10-25T19:53:31.562Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {},\n          \"key_3\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 6000,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 3972.4110226136822,\n        \"estimatedSetupTimeBasis\": \"perUnit\",\n        \"estimatedRunTimeInSeconds\": 1704.9015730237038,\n        \"estimatedRunTimeBasis\": \"fixed\",\n        \"estimatedMachineTimeInSeconds\": 8950.413991482925,\n        \"estimatedMachineTimeBasis\": \"fixed\",\n        \"estimatedLaborTimeInSeconds\": 7185.078783821465,\n        \"estimatedLaborTimeBasis\": \"perUnit\",\n        \"isMachineTimeOnly\": false,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": true,\n        \"hasAssociatedRework\": true,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 1427,\n          \"quantityScrapped\": 8992,\n          \"hasScrapMaterials\": false,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"2016-03-23T22:35:10.815Z\"\n        }\n      }\n    },\n    {\n      \"itemToMake\": {\n        \"depth\": 4588,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": false,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 5231.504609329637,\n        \"status\": \"working\",\n        \"quantityMade\": 6295.582941850414,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"2009-10-05T13:04:00.188Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 9016,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"cancelledJob\",\n          \"quantityScrapped\": 5278\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"1995-10-05T19:00:47.851Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 6586,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"completedJob\",\n          \"quantityScrapped\": 2590\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"string\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": false,\n        \"order\": 1018,\n        \"status\": \"paused\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"1950-08-13T13:13:06.867Z\",\n        \"originalScheduledEndUtc\": \"1980-02-07T22:10:29.708Z\",\n        \"scheduledStartUtc\": \"2024-03-28T19:18:08.736Z\",\n        \"scheduledEndUtc\": \"1968-04-24T08:10:10.522Z\",\n        \"completedOnUtc\": \"1999-04-22T21:02:59.472Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 109,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 544.6635127326749,\n        \"estimatedSetupTimeBasis\": \"perUnit\",\n        \"estimatedRunTimeInSeconds\": 6075.682632866265,\n        \"estimatedRunTimeBasis\": \"unitsPerHour\",\n        \"estimatedMachineTimeInSeconds\": 3850.7507371967145,\n        \"estimatedMachineTimeBasis\": \"fixed\",\n        \"estimatedLaborTimeInSeconds\": 7583.688730551572,\n        \"estimatedLaborTimeBasis\": \"unitsPerHour\",\n        \"isMachineTimeOnly\": true,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": true,\n        \"hasAssociatedRework\": true,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 6665,\n          \"quantityScrapped\": 2927,\n          \"hasScrapMaterials\": true,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"2013-12-18T22:34:02.595Z\"\n        }\n      }\n    }\n  ],\n  \"pendingOperations\": [\n    {\n      \"itemToMake\": {\n        \"depth\": 4836,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": false,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 6643.3667325385095,\n        \"status\": \"cancelled\",\n        \"quantityMade\": 1608.6676018302926,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"2011-07-14T17:27:37.205Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 1813,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"inProgressJob\",\n          \"quantityScrapped\": 8144\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"1955-01-07T06:22:42.122Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 6540,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"completedJob\",\n          \"quantityScrapped\": 7167\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"string\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": true,\n        \"order\": 1925,\n        \"status\": \"cancelled\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"1996-05-15T07:15:54.836Z\",\n        \"originalScheduledEndUtc\": \"1995-05-01T18:47:37.725Z\",\n        \"scheduledStartUtc\": \"1992-04-24T08:57:39.243Z\",\n        \"scheduledEndUtc\": \"1982-12-12T06:06:54.024Z\",\n        \"completedOnUtc\": \"2016-05-24T03:21:41.136Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 7985,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 1236.8247124172094,\n        \"estimatedSetupTimeBasis\": \"fixed\",\n        \"estimatedRunTimeInSeconds\": 9366.991756101435,\n        \"estimatedRunTimeBasis\": \"perUnit\",\n        \"estimatedMachineTimeInSeconds\": 2598.6431397072984,\n        \"estimatedMachineTimeBasis\": \"fixed\",\n        \"estimatedLaborTimeInSeconds\": 4397.99297558335,\n        \"estimatedLaborTimeBasis\": \"perUnit\",\n        \"isMachineTimeOnly\": false,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": false,\n        \"hasAssociatedRework\": false,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 7618,\n          \"quantityScrapped\": 7796,\n          \"hasScrapMaterials\": false,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"1951-04-12T18:37:12.820Z\"\n        }\n      }\n    },\n    {\n      \"itemToMake\": {\n        \"depth\": 4107,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": false,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 1570.4223650692295,\n        \"status\": \"cancelled\",\n        \"quantityMade\": 5487.2866840123725,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"1962-05-27T06:25:13.879Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 8914,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"inProgressJob\",\n          \"quantityScrapped\": 4986\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"1981-06-30T15:43:48.624Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 6991,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"cancelledJob\",\n          \"quantityScrapped\": 7955\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"string\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": false,\n        \"order\": 4930,\n        \"status\": \"ready\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"1958-04-14T03:45:19.278Z\",\n        \"originalScheduledEndUtc\": \"2002-06-09T02:34:11.460Z\",\n        \"scheduledStartUtc\": \"2024-10-01T02:40:45.094Z\",\n        \"scheduledEndUtc\": \"2021-10-21T00:57:34.912Z\",\n        \"completedOnUtc\": \"1959-12-22T07:52:03.616Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 9893,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 4323.622883241655,\n        \"estimatedSetupTimeBasis\": \"perUnit\",\n        \"estimatedRunTimeInSeconds\": 6466.006416994244,\n        \"estimatedRunTimeBasis\": \"perUnit\",\n        \"estimatedMachineTimeInSeconds\": 4435.477852252077,\n        \"estimatedMachineTimeBasis\": \"unitsPerHour\",\n        \"estimatedLaborTimeInSeconds\": 6235.388408244487,\n        \"estimatedLaborTimeBasis\": \"perUnit\",\n        \"isMachineTimeOnly\": true,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": false,\n        \"hasAssociatedRework\": true,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 6141,\n          \"quantityScrapped\": 2214,\n          \"hasScrapMaterials\": false,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"2015-04-21T16:34:32.086Z\"\n        }\n      }\n    }\n  ],\n  \"cancelledOperations\": [\n    {\n      \"itemToMake\": {\n        \"depth\": 9639,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": true,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 709.7072032175256,\n        \"status\": \"cancelled\",\n        \"quantityMade\": 4882.886373051663,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"2023-07-14T13:10:04.986Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 1071,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"cancelledJob\",\n          \"quantityScrapped\": 2422\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"1952-07-13T18:38:37.209Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 3743,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"completedJob\",\n          \"quantityScrapped\": 3136\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"string\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": false,\n        \"order\": 1583,\n        \"status\": \"cancelled\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"1955-08-09T09:57:22.782Z\",\n        \"originalScheduledEndUtc\": \"2010-11-02T20:17:37.078Z\",\n        \"scheduledStartUtc\": \"2014-02-05T14:49:02.559Z\",\n        \"scheduledEndUtc\": \"2016-12-29T15:09:07.124Z\",\n        \"completedOnUtc\": \"1985-03-04T17:44:08.672Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 7400,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 5896.766387097918,\n        \"estimatedSetupTimeBasis\": \"fixed\",\n        \"estimatedRunTimeInSeconds\": 4623.1493573669095,\n        \"estimatedRunTimeBasis\": \"unitsPerHour\",\n        \"estimatedMachineTimeInSeconds\": 2221.9805233903367,\n        \"estimatedMachineTimeBasis\": \"unitsPerHour\",\n        \"estimatedLaborTimeInSeconds\": 752.8465724791322,\n        \"estimatedLaborTimeBasis\": \"unitsPerHour\",\n        \"isMachineTimeOnly\": true,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": false,\n        \"hasAssociatedRework\": false,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 1895,\n          \"quantityScrapped\": 3420,\n          \"hasScrapMaterials\": false,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"1988-06-23T12:14:54.774Z\"\n        }\n      }\n    },\n    {\n      \"itemToMake\": {\n        \"depth\": 2975,\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isCustom\": false,\n        \"itemId\": \"stringstringstringstring\",\n        \"quantityToMake\": 9648.965264719762,\n        \"status\": \"working\",\n        \"quantityMade\": 6845.683179354234,\n        \"routingNotes\": \"string\",\n        \"costBreakdown\": {\n          \"calculatedOn\": \"1967-06-06T18:00:52.386Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 2385,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"cancelledJob\",\n          \"quantityScrapped\": 9999\n        },\n        \"costBreakdownEstimated\": {\n          \"calculatedOn\": \"1969-07-01T14:53:14.159Z\",\n          \"componentLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"componentOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulative\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cumulativeOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"id\": \"stringstringstringstring\",\n          \"itemLabor\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemMaterial\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"itemOutsideProcessing\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"lines\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quantity\": 680,\n          \"shopRateMachine\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateRun\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"shopRateSetup\": {\n            \"perUnit\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"total\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"time\": {\n            \"labor\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"machine\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"setup\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"type\": \"estimated\",\n          \"quantityScrapped\": 4745\n        },\n        \"itemReference\": {\n          \"id\": \"stringstringstringstring\",\n          \"number\": \"string\",\n          \"revision\": \"string\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        }\n      },\n      \"operation\": {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"isOutsideProcessing\": false,\n        \"order\": 7215,\n        \"status\": \"pending\",\n        \"systemOperationId\": \"stringstringstringstring\",\n        \"originalScheduledStartUtc\": \"1965-12-20T05:54:01.790Z\",\n        \"originalScheduledEndUtc\": \"1986-02-14T04:53:18.855Z\",\n        \"scheduledStartUtc\": \"1977-08-17T15:47:23.158Z\",\n        \"scheduledEndUtc\": \"1999-06-20T07:56:11.719Z\",\n        \"completedOnUtc\": \"1974-02-02T03:35:55.337Z\",\n        \"completedById\": \"string\",\n        \"scheduledEquipmentId\": \"string\",\n        \"scheduledEquipmentName\": \"string\",\n        \"customFields\": {\n          \"key_0\": {}\n        },\n        \"instructions\": \"string\",\n        \"name\": \"string\",\n        \"leadTimeInDays\": 2827,\n        \"associatedPurchaseOrderIds\": [\n          \"string\",\n          \"string\"\n        ],\n        \"estimatedSetupTimeInSeconds\": 2869.9919170879953,\n        \"estimatedSetupTimeBasis\": \"perUnit\",\n        \"estimatedRunTimeInSeconds\": 5870.256512436364,\n        \"estimatedRunTimeBasis\": \"fixed\",\n        \"estimatedMachineTimeInSeconds\": 3951.830901288239,\n        \"estimatedMachineTimeBasis\": \"fixed\",\n        \"estimatedLaborTimeInSeconds\": 1551.5214928522103,\n        \"estimatedLaborTimeBasis\": \"unitsPerHour\",\n        \"isMachineTimeOnly\": true,\n        \"workOrderId\": \"stringstringstringstring\",\n        \"isRework\": false,\n        \"hasAssociatedRework\": false,\n        \"rework\": {\n          \"reasonId\": \"string\",\n          \"reason\": \"string\",\n          \"notes\": \"string\",\n          \"quantityToRework\": 6351,\n          \"quantityScrapped\": 4104,\n          \"hasScrapMaterials\": true,\n          \"createdByUserId\": \"string\",\n          \"createdUtc\": \"1999-09-27T06:21:45.496Z\"\n        }\n      }\n    }\n  ],\n  \"estimatedSetupTimeInSeconds\": 4856.808333593409,\n  \"estimatedRunTimeInSeconds\": 1837.1923947608327,\n  \"estimatedLaborTimeInSeconds\": 3660.342295110851,\n  \"estimatedMachineTimeInSeconds\": 9558.652511279992,\n  \"elapsedSetupTimeInSeconds\": 4798.319944191871,\n  \"elapsedRunTimeInSeconds\": 7198.378689781622,\n  \"elapsedLaborTimeInSeconds\": 1684.708146933901,\n  \"elapsedMachineTimeInSeconds\": 5598.203584063778,\n  \"customerName\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d84444f-70d8-41ee-80d5-e7c33d4d7c4a",
+              "name": "Job did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "tracking"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2daee119-e2d3-4baf-bdb1-a745382eeab3",
+          "name": "Find jobs based on search parameters.",
+          "request": {
+            "name": "Find jobs based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jobIds\": [\n    \"<string>\"\n  ],\n  \"numbers\": [\n    \"<integer>\"\n  ],\n  \"jobNames\": [\n    \"<string>\"\n  ],\n  \"status\": \"<string>\",\n  \"statuses\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"parentItemId\": \"<string>\",\n  \"hasIncompleteOperations\": \"<boolean>\",\n  \"salesOrderId\": \"<string>\",\n  \"createdBeforeUtc\": \"<dateTime>\",\n  \"createdAfterUtc\": \"<dateTime>\",\n  \"modifiedBeforeUtc\": \"<dateTime>\",\n  \"modifiedAfterUtc\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "922e41fd-8950-454b-8fe4-9718be2b5ec0",
+              "name": "List of jobs matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"jobIds\": [\n    \"<string>\"\n  ],\n  \"numbers\": [\n    \"<integer>\"\n  ],\n  \"jobNames\": [\n    \"<string>\"\n  ],\n  \"status\": \"<string>\",\n  \"statuses\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"parentItemId\": \"<string>\",\n  \"hasIncompleteOperations\": \"<boolean>\",\n  \"salesOrderId\": \"<string>\",\n  \"createdBeforeUtc\": \"<dateTime>\",\n  \"createdAfterUtc\": \"<dateTime>\",\n  \"modifiedBeforeUtc\": \"<dateTime>\",\n  \"modifiedAfterUtc\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"number\": 9263,\n    \"parentItemId\": \"stringstringstringstring\",\n    \"priority\": \"<string>\",\n    \"quantityToMake\": 6776.167374793648,\n    \"status\": \"<string>\",\n    \"workOrderIds\": [\n      \"string\",\n      \"string\"\n    ],\n    \"workOrders\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"number\": 8719\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"number\": 1941\n      }\n    ],\n    \"productionDueDate\": \"2006-04-11T08:01:27.397Z\",\n    \"earliestStartDate\": \"1969-10-07T21:44:00.114Z\",\n    \"salesOrderId\": \"stringstringstringstring\",\n    \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n    \"createdUtc\": \"1968-11-16T08:50:04.239Z\",\n    \"originalScheduledStartUtc\": \"2017-07-24T18:36:39.478Z\",\n    \"originalScheduledEndUtc\": \"2008-06-12T23:24:11.982Z\",\n    \"scheduledStartUtc\": \"1986-09-05T15:34:46.348Z\",\n    \"scheduledEndUtc\": \"1994-08-06T20:40:07.897Z\",\n    \"completedOnUtc\": \"1991-01-31T05:22:52.374Z\",\n    \"cancelledOnUtc\": \"1949-04-14T10:31:53.047Z\",\n    \"revenue\": 3572.9111870186157,\n    \"notes\": \"string\",\n    \"customFields\": {\n      \"key_0\": {}\n    }\n  },\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"number\": 7572,\n    \"parentItemId\": \"stringstringstringstring\",\n    \"priority\": \"<string>\",\n    \"quantityToMake\": 7851.604470375149,\n    \"status\": \"<string>\",\n    \"workOrderIds\": [\n      \"string\",\n      \"string\"\n    ],\n    \"workOrders\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"number\": 934\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"number\": 7912\n      }\n    ],\n    \"productionDueDate\": \"2009-12-05T23:57:16.534Z\",\n    \"earliestStartDate\": \"1966-08-23T10:00:10.594Z\",\n    \"salesOrderId\": \"stringstringstringstring\",\n    \"salesOrderLineItemId\": \"stringstringstringstringstringstring\",\n    \"createdUtc\": \"2009-11-18T00:16:01.068Z\",\n    \"originalScheduledStartUtc\": \"2008-09-07T22:46:38.390Z\",\n    \"originalScheduledEndUtc\": \"1986-03-09T04:26:09.952Z\",\n    \"scheduledStartUtc\": \"2023-12-19T13:37:55.034Z\",\n    \"scheduledEndUtc\": \"2006-02-15T11:17:23.844Z\",\n    \"completedOnUtc\": \"2008-01-22T03:58:56.319Z\",\n    \"cancelledOnUtc\": \"1968-08-18T20:41:20.679Z\",\n    \"revenue\": 2155.6186337614304,\n    \"notes\": \"string\",\n    \"customFields\": {\n      \"key_0\": {}\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "af0ad6a2-b886-4cb9-9ce1-13fff6ae8931",
+          "name": "Update a job status",
+          "request": {
+            "name": "Update a job status",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"createPOs\": \"<boolean>\",\n  \"isInitialDataImport\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3ce3a985-15b9-4189-b783-9af93aa1f97e",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\",\n  \"createPOs\": \"<boolean>\",\n  \"isInitialDataImport\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9c89a627-d16b-4a67-a613-560edd33c600",
+              "name": "Job cannot be moved to requested status",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\",\n  \"createPOs\": \"<boolean>\",\n  \"isInitialDataImport\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4d6c0df9-f07b-46f0-8344-1cbe253432fe",
+              "name": "Job did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\",\n  \"createPOs\": \"<boolean>\",\n  \"isInitialDataImport\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5da95b02-9310-4a25-89b1-8013484abcef",
+    "name": "Fulcrum Public Accounting Code Job API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

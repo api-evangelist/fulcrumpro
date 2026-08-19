@@ -1,0 +1,516 @@
+{
+  "item": [
+    {
+      "id": "cc24fe32-3935-4a02-914d-b2538b72e4b8",
+      "name": "Sales Order Discount Line Item",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "22eec8ff-a007-4055-b1e3-5c927440b197",
+          "name": "Get the discount line item for a sales order",
+          "request": {
+            "name": "Get the discount line item for a sales order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "sales-orders",
+                ":salesOrderId",
+                "discount-line-item"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "salesOrderId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "87cb6a45-6b37-40a0-955f-1b168825cf22",
+              "name": "Discount line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sales-orders",
+                    ":salesOrderId",
+                    "discount-line-item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "salesOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"amount\": 3582.570432103386,\n  \"id\": \"stringstringstringstringstringstring\",\n  \"isPercentage\": true,\n  \"name\": \"string\",\n  \"description\": \"str\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"strin\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1985-07-05T22:47:07.798Z\",\n      \"lastSyncedUtc\": \"2002-11-10T03:27:40.835Z\"\n    },\n    \"key_1\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1967-10-06T20:26:50.001Z\",\n      \"lastSyncedUtc\": \"2000-08-04T18:28:40.199Z\"\n    },\n    \"key_2\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1998-11-16T08:26:13.566Z\",\n      \"lastSyncedUtc\": \"2018-11-14T17:27:49.741Z\"\n    }\n  },\n  \"absoluteAmount\": 4221.053221285783,\n  \"number\": 1608,\n  \"price\": 1584.6369409187344\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10c5c9e3-c09c-4926-ad0d-492e0199475f",
+              "name": "Discount line item does not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sales-orders",
+                    ":salesOrderId",
+                    "discount-line-item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "salesOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2120a095-644e-4840-bf3d-0bee268b96da",
+              "name": "Sales order did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sales-orders",
+                    ":salesOrderId",
+                    "discount-line-item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "salesOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b324d10e-2916-4529-a2f4-429680d25513",
+          "name": "Update the discount line item for a sales order",
+          "request": {
+            "name": "Update the discount line item for a sales order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "sales-orders",
+                ":salesOrderId",
+                "discount-line-item"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "salesOrderId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<double>\",\n  \"isPercentage\": \"<boolean>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e5b16522-a07f-42a4-b6c4-67b40bd82f9d",
+              "name": "Discount line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sales-orders",
+                    ":salesOrderId",
+                    "discount-line-item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "salesOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"isPercentage\": \"<boolean>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"amount\": 5733.0265159237,\n  \"id\": \"stringstringstringstringstringstring\",\n  \"isPercentage\": false,\n  \"name\": \"string\",\n  \"description\": \"st\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"absoluteAmount\": 1038.980730830469,\n  \"number\": 889,\n  \"price\": 9701.49517931653\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f67249e1-2c15-4cb7-9a97-6ae676d7c144",
+              "name": "Sales order or discount line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sales-orders",
+                    ":salesOrderId",
+                    "discount-line-item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "salesOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<double>\",\n  \"isPercentage\": \"<boolean>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7614eed7-a0bb-424c-9260-322ffcea449c",
+          "name": "Delete the discount line item for a sales order",
+          "request": {
+            "name": "Delete the discount line item for a sales order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "sales-orders",
+                ":salesOrderId",
+                "discount-line-item"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "salesOrderId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0c298810-521b-41b0-afbe-dfb34eea7844",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sales-orders",
+                    ":salesOrderId",
+                    "discount-line-item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "salesOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "47e01906-a3a9-4770-a782-fe1a697cb60f",
+              "name": "Discount line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sales-orders",
+                    ":salesOrderId",
+                    "discount-line-item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "salesOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "70538c55-26d9-44e2-bd13-e63897c46982",
+              "name": "Sales order did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sales-orders",
+                    ":salesOrderId",
+                    "discount-line-item"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "salesOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "9a5792b8-0068-44c4-84c3-b436580c15b8",
+    "name": "Fulcrum Public Accounting Code Sales Order Discount Line Item API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

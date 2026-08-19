@@ -1,0 +1,473 @@
+{
+  "item": [
+    {
+      "id": "da4a9350-24eb-44ad-aaa9-728c2030e49d",
+      "name": "Purchase Order Line Item",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b8b8e5e1-b50b-47ca-b639-ebc85d07c2a9",
+          "name": "Get a specific line item for a purchase order of generic type",
+          "request": {
+            "name": "Get a specific line item for a purchase order of generic type",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "purchase-orders",
+                ":purchaseOrderId",
+                "line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "purchaseOrderId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2357fe00-4fc9-4b3c-a6d3-bfd92c5988b0",
+              "name": "Line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"isTaxable\": false,\n  \"preDiscountSubTotal\": 338.175574086339,\n  \"price\": 5684.205933086344,\n  \"quantity\": 979.5189650143976,\n  \"subTotal\": 6309.835985430164,\n  \"type\": \"tax\",\n  \"discountedPrice\": 3030.4120289702173,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1977-03-14T07:05:05.782Z\",\n      \"lastSyncedUtc\": \"1992-12-04T21:18:55.187Z\"\n    }\n  },\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"taxCodeId\": \"stringstringstringstring\",\n  \"lineItemId\": \"string\",\n  \"expectedReceiveDate\": \"1958-11-16T11:27:00.835Z\",\n  \"isPercentageDiscount\": false,\n  \"discountAmount\": 5747.83710107716,\n  \"number\": 9941\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e20d8b8-bc2e-4ade-a313-ba9bd054c739",
+              "name": "Purchase order or line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a503c7b-a934-4503-808c-500be24beb08",
+          "name": "Get a list of lines items for a purchase order, regardless of type",
+          "request": {
+            "name": "Get a list of lines items for a purchase order, regardless of type",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "purchase-orders",
+                ":purchaseOrderId",
+                "line-items",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "purchaseOrderId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8e04be23-5539-488c-ba74-2ff6cb0c0905",
+              "name": "List of all line items for the given purchase order id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"isTaxable\": true,\n    \"preDiscountSubTotal\": 3868.8110719056544,\n    \"price\": 4816.861817004612,\n    \"quantity\": 7500.449149665282,\n    \"subTotal\": 1711.798752540099,\n    \"type\": \"fee\",\n    \"discountedPrice\": 4478.203330058739,\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"string\",\n        \"type\": \"string\",\n        \"displayId\": \"string\",\n        \"status\": \"string\",\n        \"url\": \"string\",\n        \"modifiedUtc\": \"1957-02-14T19:56:21.777Z\",\n        \"lastSyncedUtc\": \"2011-08-17T02:26:36.802Z\"\n      }\n    },\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"taxCodeId\": \"stringstringstringstring\",\n    \"lineItemId\": \"string\",\n    \"expectedReceiveDate\": \"1974-06-06T16:12:14.633Z\",\n    \"isPercentageDiscount\": true,\n    \"discountAmount\": 8711.550184915415,\n    \"number\": 6972\n  },\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"isTaxable\": false,\n    \"preDiscountSubTotal\": 4617.379444882688,\n    \"price\": 7988.858959192699,\n    \"quantity\": 9109.454513235158,\n    \"subTotal\": 6282.575015274212,\n    \"type\": \"vendorCredit\",\n    \"discountedPrice\": 7839.563237579796,\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"string\",\n        \"type\": \"string\",\n        \"displayId\": \"string\",\n        \"status\": \"string\",\n        \"url\": \"string\",\n        \"modifiedUtc\": \"2007-07-11T10:31:44.664Z\",\n        \"lastSyncedUtc\": \"1954-04-12T04:58:26.368Z\"\n      }\n    },\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"taxCodeId\": \"stringstringstringstring\",\n    \"lineItemId\": \"string\",\n    \"expectedReceiveDate\": \"2021-02-08T05:32:42.063Z\",\n    \"isPercentageDiscount\": true,\n    \"discountAmount\": 3983.9485853582078,\n    \"number\": 6317\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83632b18-a968-4eaa-93f1-8e3868b1a23e",
+              "name": "The purchase order did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8d445714-2e54-471b-9949-5d4da82d72d5",
+          "name": "Get tax allocations for a specific line item on a purchase order",
+          "request": {
+            "name": "Get tax allocations for a specific line item on a purchase order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "purchase-orders",
+                ":purchaseOrderId",
+                "line-items",
+                ":lineItemId",
+                "tax-allocations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "purchaseOrderId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8598118c-cd9e-4d29-bfb4-0464691e3dbf",
+              "name": "Tax allocation data for the line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "line-items",
+                    ":lineItemId",
+                    "tax-allocations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"appliedTaxes\": [\n    {\n      \"taxAmount\": 5715.947521645436,\n      \"taxLineItemId\": \"stringstringstringstringstringstring\",\n      \"taxCodeId\": \"stringstringstringstring\",\n      \"taxCodeCode\": \"string\",\n      \"taxRate\": 7689.839902009844\n    },\n    {\n      \"taxAmount\": 4165.043158547292,\n      \"taxLineItemId\": \"stringstringstringstringstringstring\",\n      \"taxCodeId\": \"stringstringstringstring\",\n      \"taxCodeCode\": \"string\",\n      \"taxRate\": 4254.6819927461775\n    }\n  ],\n  \"totalTax\": 1597.1846124858857\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b966518f-2b2b-4428-8c2e-a52caa097167",
+              "name": "Purchase order or line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "purchase-orders",
+                    ":purchaseOrderId",
+                    "line-items",
+                    ":lineItemId",
+                    "tax-allocations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "purchaseOrderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "dc68d6d7-7827-4297-83bf-4e1a8327ff23",
+    "name": "Fulcrum Public Accounting Code Purchase Order Line Item API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

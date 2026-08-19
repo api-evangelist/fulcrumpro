@@ -1,0 +1,107 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Material API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Material",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Activate materials based on ids",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/materials/activate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Activate materials based on ids"
+        },
+        {
+          "info": {
+            "name": "Get a material. DEPRECATED: use POST /v2/materials/get instead, which accepts the\nmaterial id in the request body. This endpoint fails for material ids that contain\n'/' characters (e.g. \"SS-301-CR 1/2 HD\") because ASP.NET Core routing cannot match\nURL-encoded forward slashes in path segments.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/materials/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a material. DEPRECATED: use POST /v2/materials/get instead, which accepts the\nmaterial id in the request body. This endpoint fails for material ids that contain\n'/' characters (e.g. \"SS-301-CR 1/2 HD\") because ASP.NET Core routing cannot match\nURL-encoded forward slashes in path segments."
+        },
+        {
+          "info": {
+            "name": "Get a material by id. Use this endpoint instead of the path-based v1 when\nyour material ids may contain '/' characters, which ASP.NET Core routing\ncannot match once URL-encoded.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/v2/materials/get",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a material by id. Use this endpoint instead of the path-based v1 when\nyour material ids may contain '/' characters, which ASP.NET Core routing\ncannot match once URL-encoded."
+        },
+        {
+          "info": {
+            "name": "Find materials based on search parameters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/materials/list",
+            "params": [
+              {
+                "name": "Sort.Field",
+                "value": "",
+                "type": "query",
+                "description": "Sort field"
+              },
+              {
+                "name": "Sort.Dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction"
+              },
+              {
+                "name": "Skip",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to skip."
+              },
+              {
+                "name": "Take",
+                "value": "",
+                "type": "query",
+                "description": "Number of records to return (maximum)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Find materials based on search parameters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Job Item To Make API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Job Item To Make",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a specific item to make on a job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/:itemToMakeId",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemToMakeId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "includeCostBreakdown",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a specific item to make on a job"
+        },
+        {
+          "info": {
+            "name": "Get a list of items to make on a job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/list",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "includeCostBreakdown",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a list of items to make on a job"
+        },
+        {
+          "info": {
+            "name": "Get the cost breakdowns for specific item to make on a job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/jobs/:jobId/items-to-make/:itemToMakeId/cost-breakdown",
+            "params": [
+              {
+                "name": "jobId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "itemToMakeId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the cost breakdowns for specific item to make on a job"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

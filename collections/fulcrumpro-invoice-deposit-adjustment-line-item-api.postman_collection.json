@@ -1,0 +1,317 @@
+{
+  "item": [
+    {
+      "id": "5c46de4b-5574-4504-964c-8abb490f816c",
+      "name": "Invoice Deposit Adjustment Line Item",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e2ac1396-6b25-4968-88a7-8b15197bb872",
+          "name": "Get a specific deposit adjustment line item for an invoice",
+          "request": {
+            "name": "Get a specific deposit adjustment line item for an invoice",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "deposit-adjustment-line-items",
+                ":lineItemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "lineItemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e74a781f-8279-423a-82e4-06ae38fc7554",
+              "name": "Deposit adjustment line item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "deposit-adjustment-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"id\": \"stringstringstringstringstringstring\",\n  \"price\": 6129.918729924632,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"stri\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"2003-08-15T11:25:43.049Z\",\n      \"lastSyncedUtc\": \"2018-02-09T04:02:30.524Z\"\n    }\n  },\n  \"salesOrderLineItemId\": \"stringstringstringstringstringstring\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7de58caa-6256-4653-9d04-3bca386da2aa",
+              "name": "Invoice or deposit adjustment line item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "deposit-adjustment-line-items",
+                    ":lineItemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "lineItemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1760b98f-2033-4dca-bb0b-8745c91c19d4",
+          "name": "Get a list of deposit adjustment lines items for an invoice",
+          "request": {
+            "name": "Get a list of deposit adjustment lines items for an invoice",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "invoices",
+                ":invoiceId",
+                "deposit-adjustment-line-items",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "invoiceId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "36eb850e-8dd5-4bb2-8923-4b92a29a39fd",
+              "name": "List of deposit adjustment line items for the given invoice id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "deposit-adjustment-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"price\": 6680.193510598179,\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"string\",\n        \"type\": \"strin\",\n        \"displayId\": \"string\",\n        \"status\": \"string\",\n        \"url\": \"string\",\n        \"modifiedUtc\": \"2015-12-26T06:14:55.176Z\",\n        \"lastSyncedUtc\": \"2018-08-04T15:55:00.411Z\"\n      }\n    },\n    \"salesOrderLineItemId\": \"stringstringstringstringstringstring\"\n  },\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"id\": \"stringstringstringstringstringstring\",\n    \"price\": 6641.928195489967,\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"string\",\n        \"type\": \"string\",\n        \"displayId\": \"string\",\n        \"status\": \"string\",\n        \"url\": \"string\",\n        \"modifiedUtc\": \"2023-04-05T18:42:13.809Z\",\n        \"lastSyncedUtc\": \"1954-12-03T16:40:36.811Z\"\n      }\n    },\n    \"salesOrderLineItemId\": \"stringstringstringstringstringstring\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d106259-87f7-4d73-b49a-b7ebd853f9a8",
+              "name": "The invoice did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "invoices",
+                    ":invoiceId",
+                    "deposit-adjustment-line-items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "invoiceId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "dab365ed-5a8e-4025-8f3b-e7ca7a0d5527",
+    "name": "Fulcrum Public Accounting Code Invoice Deposit Adjustment Line Item API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

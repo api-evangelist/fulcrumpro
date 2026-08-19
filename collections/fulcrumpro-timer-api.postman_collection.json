@@ -1,0 +1,680 @@
+{
+  "item": [
+    {
+      "id": "6c143bd3-2514-416b-b99b-b8a7a6646d2a",
+      "name": "Timer",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "79651347-78a9-4ad4-801a-25f119f71d1d",
+          "name": "Creates a completed timer block retroactively. Unlike the start/stop endpoints, which stamp the server\ntime on receipt, this endpoint accepts explicit timestamps so integrations can submit a whole block of\ntime after the fact. Blocks may not be in the future, older than 30 days, or longer than 7 days.",
+          "request": {
+            "name": "Creates a completed timer block retroactively. Unlike the start/stop endpoints, which stamp the server\ntime on receipt, this endpoint accepts explicit timestamps so integrations can submit a whole block of\ntime after the fact. Blocks may not be in the future, older than 30 days, or longer than 7 days.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "timers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemToMakeId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"operationId\": \"<string>\",\n  \"startedOnUtc\": \"<dateTime>\",\n  \"stoppedOnUtc\": \"<dateTime>\",\n  \"type\": \"<string>\",\n  \"userId\": \"<string>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6575ddbe-d346-4b66-893c-f5eaba8a115d",
+              "name": "The created timer. When the operation already has a machine timer, a Machine block\n            is added to that timer as a segment and the combined timer is returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "timers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemToMakeId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"operationId\": \"<string>\",\n  \"startedOnUtc\": \"<dateTime>\",\n  \"stoppedOnUtc\": \"<dateTime>\",\n  \"type\": \"<string>\",\n  \"userId\": \"<string>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdUtc\": \"2010-10-02T13:30:03.497Z\",\n  \"id\": \"stringstringstringstring\",\n  \"segments\": [\n    {\n      \"id\": \"43ceb2c1-fb6e-d438-e1a1-f60a734ad4ad\",\n      \"startedOnUtc\": \"1984-04-18T03:39:11.494Z\",\n      \"stoppedOnUtc\": \"1971-02-24T02:49:57.719Z\",\n      \"isRunning\": false,\n      \"details\": {\n        \"timeInSeconds\": 5409.239418291877,\n        \"timeInSecondsWeighted\": 2208.4169600072933,\n        \"multiplier\": 7336.60910872411\n      }\n    },\n    {\n      \"id\": \"a60fc07a-fe6f-3c94-6d72-22bc31074e62\",\n      \"startedOnUtc\": \"2015-11-10T00:43:29.034Z\",\n      \"stoppedOnUtc\": \"1973-02-14T12:18:30.405Z\",\n      \"isRunning\": true,\n      \"details\": {\n        \"timeInSeconds\": 2930.866087569537,\n        \"timeInSecondsWeighted\": 2934.4474740135374,\n        \"multiplier\": 3199.2510695824903\n      }\n    }\n  ],\n  \"startedOnUtc\": \"2001-06-13T23:50:22.228Z\",\n  \"startedOnUtcOriginal\": \"2022-05-05T02:34:06.311Z\",\n  \"type\": \"<string>\",\n  \"jobId\": \"string\",\n  \"jobName\": \"string\",\n  \"itemToMakeId\": \"string\",\n  \"itemToMakeItemId\": \"string\",\n  \"itemToMakeName\": \"string\",\n  \"itemToMakeDescription\": \"string\",\n  \"jobOperationId\": \"string\",\n  \"jobOperationName\": \"string\",\n  \"jobOperationDescription\": \"string\",\n  \"startedById\": \"string\",\n  \"stoppedOnUtc\": \"2007-12-28T08:36:46.215Z\",\n  \"stoppedOnUtcOriginal\": \"1959-11-05T06:47:16.486Z\",\n  \"isRunning\": false,\n  \"modifiedUtc\": \"2008-09-19T01:43:37.697Z\",\n  \"elapsedTimeInSeconds\": 8975.719702404998,\n  \"operationTimeInSeconds\": 7143.166005762683,\n  \"laborTimeInSeconds\": 1749.7352779554576,\n  \"machineTimeInSeconds\": 5479.4511155068585,\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_2\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"details\": {\n    \"timeInSeconds\": 1620.8964759596456,\n    \"timeInSecondsWeighted\": 1916.2992912546506,\n    \"rateHourlyInPrimaryCurrency\": 9785.9950852738,\n    \"cost\": 7195.463035387543\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "58c89b9a-6bd0-4c5e-bbb9-04e67749b2ce",
+              "name": "The block failed validation (bad timestamps, disallowed type, or overlap with\n            existing machine time on the operation)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "timers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemToMakeId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"operationId\": \"<string>\",\n  \"startedOnUtc\": \"<dateTime>\",\n  \"stoppedOnUtc\": \"<dateTime>\",\n  \"type\": \"<string>\",\n  \"userId\": \"<string>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5156cc22-a450-400e-b804-e594c9bc8a44",
+              "name": "The job, item to make, operation, or user did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "timers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemToMakeId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"operationId\": \"<string>\",\n  \"startedOnUtc\": \"<dateTime>\",\n  \"stoppedOnUtc\": \"<dateTime>\",\n  \"type\": \"<string>\",\n  \"userId\": \"<string>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "78a425d2-ea81-4057-ba58-a3d1c19e778b",
+              "name": "A machine timer is currently running for the operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "timers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemToMakeId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"operationId\": \"<string>\",\n  \"startedOnUtc\": \"<dateTime>\",\n  \"stoppedOnUtc\": \"<dateTime>\",\n  \"type\": \"<string>\",\n  \"userId\": \"<string>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "741773bc-9308-4102-bf7f-8c27d5b1cb14",
+          "name": "Finds timers based on search parameters",
+          "request": {
+            "name": "Finds timers based on search parameters",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "timers",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"runningTimersOnly\": \"<boolean>\",\n  \"types\": [\n    \"<string>\"\n  ],\n  \"createdBeforeUtc\": \"<dateTime>\",\n  \"createdAfterUtc\": \"<dateTime>\",\n  \"modifiedBeforeUtc\": \"<dateTime>\",\n  \"modifiedAfterUtc\": \"<dateTime>\",\n  \"startedBeforeUtc\": \"<dateTime>\",\n  \"startedAfterUtc\": \"<dateTime>\",\n  \"stoppedBeforeUtc\": \"<dateTime>\",\n  \"stoppedAfterUtc\": \"<dateTime>\",\n  \"stoppedBeforeUtcOriginal\": \"<dateTime>\",\n  \"stoppedAfterUtcOriginal\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e0ff978b-3e17-4021-a10b-a5372f30ba83",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "timers",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<string>\",\n  \"jobId\": \"<string>\",\n  \"runningTimersOnly\": \"<boolean>\",\n  \"types\": [\n    \"<string>\"\n  ],\n  \"createdBeforeUtc\": \"<dateTime>\",\n  \"createdAfterUtc\": \"<dateTime>\",\n  \"modifiedBeforeUtc\": \"<dateTime>\",\n  \"modifiedAfterUtc\": \"<dateTime>\",\n  \"startedBeforeUtc\": \"<dateTime>\",\n  \"startedAfterUtc\": \"<dateTime>\",\n  \"stoppedBeforeUtc\": \"<dateTime>\",\n  \"stoppedAfterUtc\": \"<dateTime>\",\n  \"stoppedBeforeUtcOriginal\": \"<dateTime>\",\n  \"stoppedAfterUtcOriginal\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"createdUtc\": \"2019-08-14T04:43:19.416Z\",\n      \"id\": \"stringstringstringstring\",\n      \"segments\": [\n        {\n          \"id\": \"7d0b693a-465f-8f09-6fff-55f7ac9b4d77\",\n          \"startedOnUtc\": \"1948-07-17T10:45:58.098Z\",\n          \"stoppedOnUtc\": \"1993-12-25T08:07:30.763Z\",\n          \"isRunning\": false,\n          \"details\": {\n            \"timeInSeconds\": 6601.329959534031,\n            \"timeInSecondsWeighted\": 9895.81821030715,\n            \"multiplier\": 6682.916709493293\n          }\n        },\n        {\n          \"id\": \"3857ed38-4b94-df6c-b409-680bb96bcb6d\",\n          \"startedOnUtc\": \"1995-12-08T10:28:36.935Z\",\n          \"stoppedOnUtc\": \"2013-09-24T11:23:12.604Z\",\n          \"isRunning\": true,\n          \"details\": {\n            \"timeInSeconds\": 8189.696904053625,\n            \"timeInSecondsWeighted\": 6072.135137951797,\n            \"multiplier\": 9526.868238089859\n          }\n        }\n      ],\n      \"startedOnUtc\": \"1994-12-18T20:40:10.359Z\",\n      \"startedOnUtcOriginal\": \"1981-02-01T21:31:36.965Z\",\n      \"type\": \"<string>\",\n      \"jobId\": \"string\",\n      \"jobName\": \"string\",\n      \"itemToMakeId\": \"string\",\n      \"itemToMakeItemId\": \"string\",\n      \"itemToMakeName\": \"string\",\n      \"itemToMakeDescription\": \"string\",\n      \"jobOperationId\": \"string\",\n      \"jobOperationName\": \"string\",\n      \"jobOperationDescription\": \"string\",\n      \"startedById\": \"string\",\n      \"stoppedOnUtc\": \"1962-04-08T11:10:48.692Z\",\n      \"stoppedOnUtcOriginal\": \"1971-02-17T10:47:58.344Z\",\n      \"isRunning\": true,\n      \"modifiedUtc\": \"1951-10-06T00:08:25.501Z\",\n      \"elapsedTimeInSeconds\": 5568.057207570138,\n      \"operationTimeInSeconds\": 3722.768815850089,\n      \"laborTimeInSeconds\": 8759.917042781508,\n      \"machineTimeInSeconds\": 8191.34382202404,\n      \"externalReferences\": {\n        \"key_0\": {\n          \"externalId\": \"<string>\",\n          \"type\": \"<string>\",\n          \"displayId\": \"<string>\",\n          \"status\": \"<string>\",\n          \"url\": \"<string>\",\n          \"modifiedUtc\": \"<dateTime>\",\n          \"lastSyncedUtc\": \"<dateTime>\"\n        }\n      },\n      \"details\": {\n        \"timeInSeconds\": 2931.3572811115587,\n        \"timeInSecondsWeighted\": 3773.7137699232126,\n        \"rateHourlyInPrimaryCurrency\": 5282.535210274366,\n        \"cost\": 7165.933001319624\n      }\n    },\n    {\n      \"createdUtc\": \"1971-12-17T03:40:40.785Z\",\n      \"id\": \"stringstringstringstring\",\n      \"segments\": [\n        {\n          \"id\": \"c74aaab0-e932-a68c-db74-1ee28839a4bc\",\n          \"startedOnUtc\": \"1990-09-19T05:18:00.213Z\",\n          \"stoppedOnUtc\": \"1997-03-14T19:50:16.363Z\",\n          \"isRunning\": true,\n          \"details\": {\n            \"timeInSeconds\": 8907.957346077616,\n            \"timeInSecondsWeighted\": 500.5646606744063,\n            \"multiplier\": 6558.863065870385\n          }\n        },\n        {\n          \"id\": \"ba072355-965d-fb2d-b687-9342196fc2a0\",\n          \"startedOnUtc\": \"2026-04-30T20:50:10.666Z\",\n          \"stoppedOnUtc\": \"1966-01-11T02:02:41.170Z\",\n          \"isRunning\": true,\n          \"details\": {\n            \"timeInSeconds\": 4585.58049739504,\n            \"timeInSecondsWeighted\": 6820.64566952131,\n            \"multiplier\": 2554.2389521136956\n          }\n        }\n      ],\n      \"startedOnUtc\": \"1955-09-08T15:12:21.346Z\",\n      \"startedOnUtcOriginal\": \"1980-04-24T00:40:54.528Z\",\n      \"type\": \"<string>\",\n      \"jobId\": \"string\",\n      \"jobName\": \"string\",\n      \"itemToMakeId\": \"string\",\n      \"itemToMakeItemId\": \"string\",\n      \"itemToMakeName\": \"string\",\n      \"itemToMakeDescription\": \"string\",\n      \"jobOperationId\": \"string\",\n      \"jobOperationName\": \"string\",\n      \"jobOperationDescription\": \"string\",\n      \"startedById\": \"string\",\n      \"stoppedOnUtc\": \"2018-12-12T14:11:00.193Z\",\n      \"stoppedOnUtcOriginal\": \"1951-09-25T18:19:31.379Z\",\n      \"isRunning\": true,\n      \"modifiedUtc\": \"1952-11-13T02:31:17.357Z\",\n      \"elapsedTimeInSeconds\": 8118.837418347757,\n      \"operationTimeInSeconds\": 4975.876195924048,\n      \"laborTimeInSeconds\": 1216.930033816902,\n      \"machineTimeInSeconds\": 8950.805437782075,\n      \"externalReferences\": {\n        \"key_0\": {\n          \"externalId\": \"<string>\",\n          \"type\": \"<string>\",\n          \"displayId\": \"<string>\",\n          \"status\": \"<string>\",\n          \"url\": \"<string>\",\n          \"modifiedUtc\": \"<dateTime>\",\n          \"lastSyncedUtc\": \"<dateTime>\"\n        },\n        \"key_1\": {\n          \"externalId\": \"<string>\",\n          \"type\": \"<string>\",\n          \"displayId\": \"<string>\",\n          \"status\": \"<string>\",\n          \"url\": \"<string>\",\n          \"modifiedUtc\": \"<dateTime>\",\n          \"lastSyncedUtc\": \"<dateTime>\"\n        },\n        \"key_2\": {\n          \"externalId\": \"<string>\",\n          \"type\": \"<string>\",\n          \"displayId\": \"<string>\",\n          \"status\": \"<string>\",\n          \"url\": \"<string>\",\n          \"modifiedUtc\": \"<dateTime>\",\n          \"lastSyncedUtc\": \"<dateTime>\"\n        },\n        \"key_3\": {\n          \"externalId\": \"<string>\",\n          \"type\": \"<string>\",\n          \"displayId\": \"<string>\",\n          \"status\": \"<string>\",\n          \"url\": \"<string>\",\n          \"modifiedUtc\": \"<dateTime>\",\n          \"lastSyncedUtc\": \"<dateTime>\"\n        }\n      },\n      \"details\": {\n        \"timeInSeconds\": 7622.184197695654,\n        \"timeInSecondsWeighted\": 1180.110024024299,\n        \"rateHourlyInPrimaryCurrency\": 8504.23169858241,\n        \"cost\": 6501.686500134124\n      }\n    }\n  ],\n  \"hasNextPage\": false,\n  \"hasPreviousPage\": false,\n  \"page\": 546,\n  \"pageSize\": 343,\n  \"totalCount\": 9948,\n  \"totalPages\": 2713\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eebf7cac-7806-479f-9752-39060dd2812c",
+          "name": "Partially update a timer",
+          "request": {
+            "name": "Partially update a timer",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "timers",
+                ":timerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "timerId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5de56842-c193-4acc-b8f3-dcfc16614908",
+              "name": "Timer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "timers",
+                    ":timerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timerId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdUtc\": \"1985-08-17T08:59:24.506Z\",\n  \"id\": \"stringstringstringstring\",\n  \"segments\": [\n    {\n      \"id\": \"8a6be29c-28b4-d799-a063-8623c01fc083\",\n      \"startedOnUtc\": \"1992-08-16T02:27:16.702Z\",\n      \"stoppedOnUtc\": \"1994-07-09T08:15:24.547Z\",\n      \"isRunning\": true,\n      \"details\": {\n        \"timeInSeconds\": 3116.8623965905626,\n        \"timeInSecondsWeighted\": 7103.999543922327,\n        \"multiplier\": 1771.5965324940541\n      }\n    },\n    {\n      \"id\": \"6ce46ec2-b71f-2331-1757-3ee43bc1edb0\",\n      \"startedOnUtc\": \"1970-01-16T22:25:22.353Z\",\n      \"stoppedOnUtc\": \"2002-12-08T22:51:57.418Z\",\n      \"isRunning\": true,\n      \"details\": {\n        \"timeInSeconds\": 8656.491367487388,\n        \"timeInSecondsWeighted\": 8744.196130561231,\n        \"multiplier\": 9553.70932263966\n      }\n    }\n  ],\n  \"startedOnUtc\": \"2004-05-14T07:47:23.203Z\",\n  \"startedOnUtcOriginal\": \"1984-04-08T13:00:53.246Z\",\n  \"type\": \"<string>\",\n  \"jobId\": \"string\",\n  \"jobName\": \"string\",\n  \"itemToMakeId\": \"string\",\n  \"itemToMakeItemId\": \"string\",\n  \"itemToMakeName\": \"string\",\n  \"itemToMakeDescription\": \"string\",\n  \"jobOperationId\": \"string\",\n  \"jobOperationName\": \"string\",\n  \"jobOperationDescription\": \"string\",\n  \"startedById\": \"string\",\n  \"stoppedOnUtc\": \"1951-06-06T17:56:24.287Z\",\n  \"stoppedOnUtcOriginal\": \"1994-01-23T01:28:48.000Z\",\n  \"isRunning\": false,\n  \"modifiedUtc\": \"2013-01-28T12:35:04.565Z\",\n  \"elapsedTimeInSeconds\": 4056.262891274971,\n  \"operationTimeInSeconds\": 2610.091197961223,\n  \"laborTimeInSeconds\": 5796.243838415224,\n  \"machineTimeInSeconds\": 3859.593812644848,\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"details\": {\n    \"timeInSeconds\": 4474.591108539099,\n    \"timeInSecondsWeighted\": 3152.8684268283123,\n    \"rateHourlyInPrimaryCurrency\": 2932.9515800859485,\n    \"cost\": 9928.759768046311\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5882d09e-c49d-451e-bea1-45e059567e11",
+              "name": "Timer did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "timers",
+                    ":timerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timerId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dd935da9-fa25-44d8-b57c-b851a25d8b46",
+          "name": "Update a specific timer",
+          "request": {
+            "name": "Update a specific timer",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "timers",
+                ":timerId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "timerId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c0402217-ca9d-4420-91ce-ac5fccdcd4c1",
+              "name": "Timer",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "timers",
+                    ":timerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timerId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdUtc\": \"1985-08-17T08:59:24.506Z\",\n  \"id\": \"stringstringstringstring\",\n  \"segments\": [\n    {\n      \"id\": \"8a6be29c-28b4-d799-a063-8623c01fc083\",\n      \"startedOnUtc\": \"1992-08-16T02:27:16.702Z\",\n      \"stoppedOnUtc\": \"1994-07-09T08:15:24.547Z\",\n      \"isRunning\": true,\n      \"details\": {\n        \"timeInSeconds\": 3116.8623965905626,\n        \"timeInSecondsWeighted\": 7103.999543922327,\n        \"multiplier\": 1771.5965324940541\n      }\n    },\n    {\n      \"id\": \"6ce46ec2-b71f-2331-1757-3ee43bc1edb0\",\n      \"startedOnUtc\": \"1970-01-16T22:25:22.353Z\",\n      \"stoppedOnUtc\": \"2002-12-08T22:51:57.418Z\",\n      \"isRunning\": true,\n      \"details\": {\n        \"timeInSeconds\": 8656.491367487388,\n        \"timeInSecondsWeighted\": 8744.196130561231,\n        \"multiplier\": 9553.70932263966\n      }\n    }\n  ],\n  \"startedOnUtc\": \"2004-05-14T07:47:23.203Z\",\n  \"startedOnUtcOriginal\": \"1984-04-08T13:00:53.246Z\",\n  \"type\": \"<string>\",\n  \"jobId\": \"string\",\n  \"jobName\": \"string\",\n  \"itemToMakeId\": \"string\",\n  \"itemToMakeItemId\": \"string\",\n  \"itemToMakeName\": \"string\",\n  \"itemToMakeDescription\": \"string\",\n  \"jobOperationId\": \"string\",\n  \"jobOperationName\": \"string\",\n  \"jobOperationDescription\": \"string\",\n  \"startedById\": \"string\",\n  \"stoppedOnUtc\": \"1951-06-06T17:56:24.287Z\",\n  \"stoppedOnUtcOriginal\": \"1994-01-23T01:28:48.000Z\",\n  \"isRunning\": false,\n  \"modifiedUtc\": \"2013-01-28T12:35:04.565Z\",\n  \"elapsedTimeInSeconds\": 4056.262891274971,\n  \"operationTimeInSeconds\": 2610.091197961223,\n  \"laborTimeInSeconds\": 5796.243838415224,\n  \"machineTimeInSeconds\": 3859.593812644848,\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"details\": {\n    \"timeInSeconds\": 4474.591108539099,\n    \"timeInSecondsWeighted\": 3152.8684268283123,\n    \"rateHourlyInPrimaryCurrency\": 2932.9515800859485,\n    \"cost\": 9928.759768046311\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa539443-c796-44de-82ce-7cfb8de313ba",
+              "name": "Timer did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "timers",
+                    ":timerId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "timerId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c7697e0c-22c1-4cb4-a9ac-bdd768f02354",
+    "name": "Fulcrum Public Accounting Code Timer API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

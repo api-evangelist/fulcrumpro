@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code ScrapReport API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ScrapReport",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns scrap entries logged within the supplied date range. Both\ndates are optional; the Domain layer defaults to the prior 90 days\nwhen neither is supplied.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/scrap-reports",
+            "params": [
+              {
+                "name": "startDateUtc",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start of the report window (UTC). Defaults to today minus 90 days when omitted."
+              },
+              {
+                "name": "endDateUtc",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end of the report window (UTC). Defaults to tomorrow when omitted."
+              }
+            ]
+          },
+          "docs": "Returns scrap entries logged within the supplied date range. Both\ndates are optional; the Domain layer defaults to the prior 90 days\nwhen neither is supplied."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

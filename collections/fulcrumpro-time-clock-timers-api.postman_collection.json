@@ -1,0 +1,330 @@
+{
+  "item": [
+    {
+      "id": "7b353408-e09d-4935-8c98-a044541d8d08",
+      "name": "Time Clock Timers",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "739824b0-f444-4092-b2a1-b2610a5dddf7",
+          "name": "Clocks in a specific user",
+          "request": {
+            "name": "Clocks in a specific user",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "time-clock-timers",
+                "clock-in"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ea2161f0-0374-480b-b49e-bc3aa7d9707c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-clock-timers",
+                    "clock-in"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cbf57461-c145-412e-9bc8-e22162642350",
+          "name": "Clocks out a specific user",
+          "request": {
+            "name": "Clocks out a specific user",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "time-clock-timers",
+                "clock-out"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9f4472b3-4b5c-44be-ad9f-e780942d30f2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-clock-timers",
+                    "clock-out"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b4d1525-2a24-4ea3-933d-efeac62bc70c",
+          "name": "Finds daily time clocks based on search parameters",
+          "request": {
+            "name": "Finds daily time clocks based on search parameters",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "time-clock-timers",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<string>\",\n  \"startedDateRange\": {\n    \"start\": \"<dateTime>\",\n    \"end\": \"<dateTime>\"\n  },\n  \"stoppedDateRange\": {\n    \"start\": \"<dateTime>\",\n    \"end\": \"<dateTime>\"\n  },\n  \"runningTimersOnly\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c133e388-3416-4031-9d1f-5523fe0dcbd6",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-clock-timers",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"<string>\",\n  \"startedDateRange\": {\n    \"start\": \"<dateTime>\",\n    \"end\": \"<dateTime>\"\n  },\n  \"stoppedDateRange\": {\n    \"start\": \"<dateTime>\",\n    \"end\": \"<dateTime>\"\n  },\n  \"runningTimersOnly\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"startedById\": \"string\",\n      \"startedOnUtc\": \"2003-03-28T11:00:21.533Z\",\n      \"stoppedOnUtc\": \"1983-10-12T21:11:52.369Z\",\n      \"type\": \"setup\",\n      \"isRunning\": true,\n      \"reasonCodeId\": \"string\",\n      \"clockInCodeId\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"startedById\": \"string\",\n      \"startedOnUtc\": \"1965-04-08T16:47:32.537Z\",\n      \"stoppedOnUtc\": \"2021-04-20T05:25:27.792Z\",\n      \"type\": \"labor\",\n      \"isRunning\": false,\n      \"reasonCodeId\": \"string\",\n      \"clockInCodeId\": \"string\"\n    }\n  ],\n  \"hasNextPage\": false,\n  \"hasPreviousPage\": false,\n  \"page\": 9086,\n  \"pageSize\": 1188,\n  \"totalCount\": 5715,\n  \"totalPages\": 698\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "58fd8538-56ab-40cd-99a0-74889189a36b",
+    "name": "Fulcrum Public Accounting Code Time Clock Timers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

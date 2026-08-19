@@ -1,0 +1,252 @@
+{
+  "item": [
+    {
+      "id": "981eb3c0-c3bb-4d7e-b6fd-77c65984e76e",
+      "name": "User Status",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "581557f1-8b79-47d7-82fb-528a4bff49a4",
+          "name": "Gets a status object for a user that displays various timer metrics (jobs/ops clocked into, whether on break, etc)",
+          "request": {
+            "name": "Gets a status object for a user that displays various timer metrics (jobs/ops clocked into, whether on break, etc)",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "users",
+                ":userId",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "userId",
+                  "description": "(Required) The user identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ca05c131-8159-48fd-ba53-942f634525f8",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "users",
+                    ":userId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userId",
+                      "description": "(Required) The user identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"firstName\": \"string\",\n  \"lastName\": \"string\",\n  \"isOnBreak\": true,\n  \"breakStartAtUtc\": \"2002-12-25T22:26:17.810Z\",\n  \"elapsedBreakTimeInSeconds\": 4625.666065945049,\n  \"isClockedIn\": true,\n  \"clockedInAtUtc\": \"2011-12-25T13:43:33.578Z\",\n  \"elapsedClockedInTimeInSeconds\": 3093.9592102848646,\n  \"jobs\": [\n    {\n      \"jobId\": \"string\",\n      \"jobName\": \"string\",\n      \"operationId\": \"string\",\n      \"operationName\": \"string\",\n      \"elapsedTimeInSeconds\": 978.3735165671748,\n      \"estimatedTimeToCompleteInSeconds\": 8666.929765061795\n    },\n    {\n      \"jobId\": \"string\",\n      \"jobName\": \"string\",\n      \"operationId\": \"string\",\n      \"operationName\": \"string\",\n      \"elapsedTimeInSeconds\": 6416.797622381072,\n      \"estimatedTimeToCompleteInSeconds\": 2174.135574883029\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f51f92a2-aecf-4e19-a9d8-cbcd4cc96b3a",
+              "name": "User did not exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "users",
+                    ":userId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userId",
+                      "description": "(Required) The user identifier"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "65c1666e-c9a8-4715-b064-e512d46d4b91",
+          "name": "Gets a list of user status objects based on parameters",
+          "request": {
+            "name": "Gets a list of user status objects based on parameters",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "users",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4209c109-1372-4b24-8ea8-aee0712b70aa",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "users",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"firstName\": \"string\",\n    \"lastName\": \"string\",\n    \"isOnBreak\": false,\n    \"breakStartAtUtc\": \"2019-07-19T06:47:03.102Z\",\n    \"elapsedBreakTimeInSeconds\": 1322.8548028644716,\n    \"isClockedIn\": true,\n    \"clockedInAtUtc\": \"2005-01-03T07:47:41.068Z\",\n    \"elapsedClockedInTimeInSeconds\": 7602.931829133009,\n    \"jobs\": [\n      {\n        \"jobId\": \"string\",\n        \"jobName\": \"string\",\n        \"operationId\": \"string\",\n        \"operationName\": \"string\",\n        \"elapsedTimeInSeconds\": 2320.625131701767,\n        \"estimatedTimeToCompleteInSeconds\": 8758.473457690152\n      },\n      {\n        \"jobId\": \"string\",\n        \"jobName\": \"string\",\n        \"operationId\": \"string\",\n        \"operationName\": \"string\",\n        \"elapsedTimeInSeconds\": 1885.3269711458042,\n        \"estimatedTimeToCompleteInSeconds\": 9980.917585665646\n      }\n    ]\n  },\n  {\n    \"firstName\": \"string\",\n    \"lastName\": \"string\",\n    \"isOnBreak\": false,\n    \"breakStartAtUtc\": \"1976-09-19T18:37:04.171Z\",\n    \"elapsedBreakTimeInSeconds\": 875.1833685785493,\n    \"isClockedIn\": false,\n    \"clockedInAtUtc\": \"1968-07-28T16:23:11.804Z\",\n    \"elapsedClockedInTimeInSeconds\": 7599.045450782799,\n    \"jobs\": [\n      {\n        \"jobId\": \"string\",\n        \"jobName\": \"string\",\n        \"operationId\": \"string\",\n        \"operationName\": \"string\",\n        \"elapsedTimeInSeconds\": 7932.6983362473065,\n        \"estimatedTimeToCompleteInSeconds\": 2283.1309658483656\n      },\n      {\n        \"jobId\": \"string\",\n        \"jobName\": \"string\",\n        \"operationId\": \"string\",\n        \"operationName\": \"string\",\n        \"elapsedTimeInSeconds\": 8146.8522783836725,\n        \"estimatedTimeToCompleteInSeconds\": 9471.937121843644\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "2223fa90-2116-4a0a-8278-cca182ea8fee",
+    "name": "Fulcrum Public Accounting Code User Status API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

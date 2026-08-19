@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Item Customer API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Item Customer",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new item customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/customers",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new item customer"
+        },
+        {
+          "info": {
+            "name": "Update a specific item customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/customers/:itemCustomerId",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item to modify customers for"
+              },
+              {
+                "name": "itemCustomerId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item customer."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific item customer"
+        },
+        {
+          "info": {
+            "name": "Delete a specific item customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/customers/:itemCustomerId",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item to remove a customer from"
+              },
+              {
+                "name": "itemCustomerId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item customer to delete"
+              }
+            ]
+          },
+          "docs": "Delete a specific item customer"
+        },
+        {
+          "info": {
+            "name": "Get a list of customers for an item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/customers/list",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a list of customers for an item"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

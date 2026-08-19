@@ -1,0 +1,602 @@
+{
+  "item": [
+    {
+      "id": "2bbc82ba-ffa1-490d-87e3-e38b669d4669",
+      "name": "Shipments",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6a44ba5a-56db-4dbb-a625-179a8c0cd5f9",
+          "name": "Get a specific shipment. Includes the scheduled ship by date and, once shipped, the actual shipped date.",
+          "request": {
+            "name": "Get a specific shipment. Includes the scheduled ship by date and, once shipped, the actual shipped date.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "shipments",
+                ":shipmentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "shipmentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fe61d5e6-082f-46b1-aac0-a94cb2748612",
+              "name": "The shipment for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "shipments",
+                    ":shipmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "shipmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"number\": 6285,\n  \"packingStatus\": \"overPacked\",\n  \"status\": \"pending\",\n  \"trackingNumber\": \"string\",\n  \"shipByDate\": \"2014-09-17T05:00:07.531Z\",\n  \"shippedDate\": \"1967-09-08T03:03:52.922Z\",\n  \"shippedDateOverride\": \"2022-03-24T04:37:20.425Z\",\n  \"notes\": \"string\",\n  \"displayNotesToCustomer\": true,\n  \"shippingMethod\": {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\"\n  },\n  \"shippingAccount\": {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\"\n  },\n  \"shippingCost\": 825.3341158531247,\n  \"shippingCharge\": 6321.998157569064,\n  \"address\": {\n    \"address1\": \"string\",\n    \"city\": \"string\",\n    \"postalCode\": \"string\",\n    \"name\": \"string\",\n    \"address2\": \"string\",\n    \"address3\": \"string\",\n    \"stateProvince\": \"string\",\n    \"country\": \"string\",\n    \"phone\": \"string\",\n    \"email\": \"FIiw@lBVYKCHtKDgVVAFWSMAKg.qt\"\n  },\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"st\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1974-07-18T15:03:58.723Z\",\n      \"lastSyncedUtc\": \"1969-06-21T07:15:55.159Z\"\n    },\n    \"key_1\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1958-12-15T16:07:05.190Z\",\n      \"lastSyncedUtc\": \"2002-10-04T20:25:43.401Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "621d8dfd-1e2c-4c32-990c-c450953b3b24",
+              "name": "Shipment did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "shipments",
+                    ":shipmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "shipmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "06917dca-a783-430d-bc16-250d007fafdc",
+          "name": "Partially update a Shipment",
+          "request": {
+            "name": "Partially update a Shipment",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "shipments",
+                ":shipmentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "shipmentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "883168d2-2520-41df-b426-c7255194ae30",
+              "name": "Shipment item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "shipments",
+                    ":shipmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "shipmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"number\": 6285,\n  \"packingStatus\": \"overPacked\",\n  \"status\": \"pending\",\n  \"trackingNumber\": \"string\",\n  \"shipByDate\": \"2014-09-17T05:00:07.531Z\",\n  \"shippedDate\": \"1967-09-08T03:03:52.922Z\",\n  \"shippedDateOverride\": \"2022-03-24T04:37:20.425Z\",\n  \"notes\": \"string\",\n  \"displayNotesToCustomer\": true,\n  \"shippingMethod\": {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\"\n  },\n  \"shippingAccount\": {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\"\n  },\n  \"shippingCost\": 825.3341158531247,\n  \"shippingCharge\": 6321.998157569064,\n  \"address\": {\n    \"address1\": \"string\",\n    \"city\": \"string\",\n    \"postalCode\": \"string\",\n    \"name\": \"string\",\n    \"address2\": \"string\",\n    \"address3\": \"string\",\n    \"stateProvince\": \"string\",\n    \"country\": \"string\",\n    \"phone\": \"string\",\n    \"email\": \"FIiw@lBVYKCHtKDgVVAFWSMAKg.qt\"\n  },\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"st\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1974-07-18T15:03:58.723Z\",\n      \"lastSyncedUtc\": \"1969-06-21T07:15:55.159Z\"\n    },\n    \"key_1\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1958-12-15T16:07:05.190Z\",\n      \"lastSyncedUtc\": \"2002-10-04T20:25:43.401Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56eafee0-b632-42ee-bca3-a0d84aa48007",
+              "name": "Shipment did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "shipments",
+                    ":shipmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "shipmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "479db274-231d-49bc-9083-f1cdbe1c3402",
+          "name": "Update a specific shipment",
+          "request": {
+            "name": "Update a specific shipment",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "shipments",
+                ":shipmentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "shipmentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipByDate\": \"<dateTime>\",\n  \"notes\": \"<string>\",\n  \"displayNotesToCustomer\": \"<boolean>\",\n  \"trackingNumber\": \"<string>\",\n  \"shippingMethodId\": \"<string>\",\n  \"shippedDate\": \"<dateTime>\",\n  \"shippedDateOverride\": \"<dateTime>\",\n  \"shippingCost\": \"<double>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fc2db238-3aa3-42de-8aa7-ac0c889fb14e",
+              "name": "Shipment",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "shipments",
+                    ":shipmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "shipmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"shipByDate\": \"<dateTime>\",\n  \"notes\": \"<string>\",\n  \"displayNotesToCustomer\": \"<boolean>\",\n  \"trackingNumber\": \"<string>\",\n  \"shippingMethodId\": \"<string>\",\n  \"shippedDate\": \"<dateTime>\",\n  \"shippedDateOverride\": \"<dateTime>\",\n  \"shippingCost\": \"<double>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"number\": 6285,\n  \"packingStatus\": \"overPacked\",\n  \"status\": \"pending\",\n  \"trackingNumber\": \"string\",\n  \"shipByDate\": \"2014-09-17T05:00:07.531Z\",\n  \"shippedDate\": \"1967-09-08T03:03:52.922Z\",\n  \"shippedDateOverride\": \"2022-03-24T04:37:20.425Z\",\n  \"notes\": \"string\",\n  \"displayNotesToCustomer\": true,\n  \"shippingMethod\": {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\"\n  },\n  \"shippingAccount\": {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\"\n  },\n  \"shippingCost\": 825.3341158531247,\n  \"shippingCharge\": 6321.998157569064,\n  \"address\": {\n    \"address1\": \"string\",\n    \"city\": \"string\",\n    \"postalCode\": \"string\",\n    \"name\": \"string\",\n    \"address2\": \"string\",\n    \"address3\": \"string\",\n    \"stateProvince\": \"string\",\n    \"country\": \"string\",\n    \"phone\": \"string\",\n    \"email\": \"FIiw@lBVYKCHtKDgVVAFWSMAKg.qt\"\n  },\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"st\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1974-07-18T15:03:58.723Z\",\n      \"lastSyncedUtc\": \"1969-06-21T07:15:55.159Z\"\n    },\n    \"key_1\": {\n      \"externalId\": \"string\",\n      \"type\": \"string\",\n      \"displayId\": \"string\",\n      \"status\": \"string\",\n      \"url\": \"string\",\n      \"modifiedUtc\": \"1958-12-15T16:07:05.190Z\",\n      \"lastSyncedUtc\": \"2002-10-04T20:25:43.401Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "184adb35-b689-4d83-b83a-c91d5d373e8e",
+              "name": "Shipment did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "shipments",
+                    ":shipmentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "shipmentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"shipByDate\": \"<dateTime>\",\n  \"notes\": \"<string>\",\n  \"displayNotesToCustomer\": \"<boolean>\",\n  \"trackingNumber\": \"<string>\",\n  \"shippingMethodId\": \"<string>\",\n  \"shippedDate\": \"<dateTime>\",\n  \"shippedDateOverride\": \"<dateTime>\",\n  \"shippingCost\": \"<double>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1d50d874-f2c6-4b43-876e-374a9e440d56",
+          "name": "Finds shipments based on search parameters",
+          "request": {
+            "name": "Finds shipments based on search parameters",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "shipments",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipmentStatus\": \"<string>\",\n  \"packingStatus\": \"<string>\",\n  \"salesOrderId\": \"<string>\",\n  \"purchaseOrderId\": \"<string>\",\n  \"shipmentType\": \"<string>\",\n  \"shipmentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"shipByDateBefore\": \"<dateTime>\",\n  \"shipByDateAfter\": \"<dateTime>\",\n  \"shippedDateBefore\": \"<dateTime>\",\n  \"shippedDateAfter\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "205e2b84-23cf-42ed-b99a-f0193e8082fe",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "shipments",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"shipmentStatus\": \"<string>\",\n  \"packingStatus\": \"<string>\",\n  \"salesOrderId\": \"<string>\",\n  \"purchaseOrderId\": \"<string>\",\n  \"shipmentType\": \"<string>\",\n  \"shipmentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"shipByDateBefore\": \"<dateTime>\",\n  \"shipByDateAfter\": \"<dateTime>\",\n  \"shippedDateBefore\": \"<dateTime>\",\n  \"shippedDateAfter\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 2393,\n      \"packingStatus\": \"<string>\",\n      \"status\": \"<string>\",\n      \"trackingNumber\": \"string\",\n      \"shipByDate\": \"2022-10-02T01:57:49.832Z\",\n      \"shippedDate\": \"2020-01-12T06:23:49.480Z\",\n      \"shippedDateOverride\": \"1976-09-24T21:30:57.072Z\",\n      \"notes\": \"string\",\n      \"displayNotesToCustomer\": true,\n      \"shippingMethod\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"shippingAccount\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"shippingCost\": 4537.106715780802,\n      \"shippingCharge\": 7133.4093095661165,\n      \"address\": {\n        \"address1\": \"string\",\n        \"city\": \"string\",\n        \"postalCode\": \"string\",\n        \"name\": \"st\",\n        \"address2\": \"string\",\n        \"address3\": \"string\",\n        \"stateProvince\": \"string\",\n        \"country\": \"string\",\n        \"phone\": \"string\",\n        \"email\": \"69JB2ahKZVD@TygRdTeKZEIBOjootEEuKMcQAGdZ.sibt\"\n      },\n      \"customFields\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      },\n      \"externalReferences\": {\n        \"key_0\": {\n          \"externalId\": \"string\",\n          \"type\": \"string\",\n          \"displayId\": \"string\",\n          \"status\": \"string\",\n          \"url\": \"string\",\n          \"modifiedUtc\": \"2005-07-18T12:34:25.612Z\",\n          \"lastSyncedUtc\": \"1987-07-05T07:31:42.751Z\"\n        },\n        \"key_1\": {\n          \"externalId\": \"string\",\n          \"type\": \"string\",\n          \"displayId\": \"string\",\n          \"status\": \"string\",\n          \"url\": \"string\",\n          \"modifiedUtc\": \"2017-05-05T03:51:41.427Z\",\n          \"lastSyncedUtc\": \"1965-12-20T04:14:31.651Z\"\n        }\n      }\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"number\": 393,\n      \"packingStatus\": \"<string>\",\n      \"status\": \"<string>\",\n      \"trackingNumber\": \"string\",\n      \"shipByDate\": \"1960-11-25T00:05:23.827Z\",\n      \"shippedDate\": \"2013-04-21T08:30:20.959Z\",\n      \"shippedDateOverride\": \"2016-07-04T08:04:25.731Z\",\n      \"notes\": \"string\",\n      \"displayNotesToCustomer\": false,\n      \"shippingMethod\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"shippingAccount\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"shippingCost\": 9670.553142512386,\n      \"shippingCharge\": 4921.881840979545,\n      \"address\": {\n        \"address1\": \"string\",\n        \"city\": \"string\",\n        \"postalCode\": \"string\",\n        \"name\": \"string\",\n        \"address2\": \"string\",\n        \"address3\": \"string\",\n        \"stateProvince\": \"string\",\n        \"country\": \"string\",\n        \"phone\": \"string\",\n        \"email\": \"LaFX29cs@hWfFFrnnz.znwm\"\n      },\n      \"customFields\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      },\n      \"externalReferences\": {\n        \"key_0\": {\n          \"externalId\": \"string\",\n          \"type\": \"string\",\n          \"displayId\": \"string\",\n          \"status\": \"string\",\n          \"url\": \"string\",\n          \"modifiedUtc\": \"1993-01-25T15:10:09.737Z\",\n          \"lastSyncedUtc\": \"2019-08-29T03:11:29.044Z\"\n        },\n        \"key_1\": {\n          \"externalId\": \"string\",\n          \"type\": \"string\",\n          \"displayId\": \"string\",\n          \"status\": \"string\",\n          \"url\": \"string\",\n          \"modifiedUtc\": \"1958-01-05T03:50:58.666Z\",\n          \"lastSyncedUtc\": \"2008-05-23T17:40:26.576Z\"\n        },\n        \"key_2\": {\n          \"externalId\": \"string\",\n          \"type\": \"string\",\n          \"displayId\": \"string\",\n          \"status\": \"string\",\n          \"url\": \"string\",\n          \"modifiedUtc\": \"1990-03-21T12:50:13.256Z\",\n          \"lastSyncedUtc\": \"1987-09-21T23:32:59.100Z\"\n        }\n      }\n    }\n  ],\n  \"hasNextPage\": true,\n  \"hasPreviousPage\": true,\n  \"page\": 7865,\n  \"pageSize\": 9296,\n  \"totalCount\": 5351,\n  \"totalPages\": 1381\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "164019df-fea2-46b2-a263-ef31912f2710",
+    "name": "Fulcrum Public Accounting Code Shipments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

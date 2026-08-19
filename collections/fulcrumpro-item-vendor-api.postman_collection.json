@@ -1,0 +1,542 @@
+{
+  "item": [
+    {
+      "id": "b912282c-aedb-42a0-bc62-1f0ad9546e9c",
+      "name": "Item Vendor",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d080af0f-6c34-4722-80f5-9bad54e25391",
+          "name": "Create a new item vendor",
+          "request": {
+            "name": "Create a new item vendor",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "vendors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendorId\": \"<string>\",\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"price\": \"<double>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\",\n  \"notes\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dbcb6b8a-822a-44e7-9628-518199f5c72f",
+              "name": "Item vendor created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorId\": \"<string>\",\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"price\": \"<double>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d811eef-94ab-4f8b-9631-e4c8411e1258",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorId\": \"<string>\",\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"price\": \"<double>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "915bbe01-f4e1-4685-8b7c-d28015b53409",
+              "name": "Item with the given id did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "vendors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorId\": \"<string>\",\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"price\": \"<double>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fab80c44-3843-4224-9220-fe423952dc2e",
+          "name": "Get a list of vendors for an item",
+          "request": {
+            "name": "Get a list of vendors for an item",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "vendors",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8615e48a-ed7f-46a7-8a4f-f359082e4090",
+              "name": "List of vendors for the given item id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "vendors",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstringstringstring\",\n    \"priceBreaks\": [\n      {\n        \"type\": \"cost\",\n        \"quantity\": 8568,\n        \"price\": 9261.00530324978,\n        \"margin\": 4662.270595091676,\n        \"currencyCode\": \"string\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"customerId\": \"stringstringstringstring\",\n        \"customerTierId\": \"stringstringstringstring\",\n        \"unitOfMeasureName\": \"string\"\n      },\n      {\n        \"type\": \"cost\",\n        \"quantity\": 7155,\n        \"price\": 8966.153384600068,\n        \"margin\": 5254.237068024529,\n        \"currencyCode\": \"string\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"customerId\": \"stringstringstringstring\",\n        \"customerTierId\": \"stringstringstringstring\",\n        \"unitOfMeasureName\": \"string\"\n      }\n    ],\n    \"vendorId\": \"stringstringstringstring\",\n    \"vendorItemNumber\": \"string\",\n    \"vendorItemName\": \"string\",\n    \"price\": 2525.0705365352023,\n    \"isPrimary\": true,\n    \"leadTimeInDays\": 5232,\n    \"unitOfMeasureName\": \"string\",\n    \"unitQuantity\": 8053.651191030625,\n    \"inventoryUnitQuantity\": 1224.5343134304476,\n    \"notes\": \"string\"\n  },\n  {\n    \"id\": \"stringstringstringstringstringstring\",\n    \"priceBreaks\": [\n      {\n        \"type\": \"margin\",\n        \"quantity\": 2014,\n        \"price\": 8622.450730808194,\n        \"margin\": 1599.9030530553982,\n        \"currencyCode\": \"string\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"customerId\": \"stringstringstringstring\",\n        \"customerTierId\": \"stringstringstringstring\",\n        \"unitOfMeasureName\": \"string\"\n      },\n      {\n        \"type\": \"operation\",\n        \"quantity\": 9469,\n        \"price\": 3793.020441389694,\n        \"margin\": 9128.616209409298,\n        \"currencyCode\": \"string\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"customerId\": \"stringstringstringstring\",\n        \"customerTierId\": \"stringstringstringstring\",\n        \"unitOfMeasureName\": \"string\"\n      }\n    ],\n    \"vendorId\": \"stringstringstringstring\",\n    \"vendorItemNumber\": \"string\",\n    \"vendorItemName\": \"st\",\n    \"price\": 8788.369765257903,\n    \"isPrimary\": true,\n    \"leadTimeInDays\": 5947,\n    \"unitOfMeasureName\": \"string\",\n    \"unitQuantity\": 3262.4849170162806,\n    \"inventoryUnitQuantity\": 9759.741077103863,\n    \"notes\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61529bd7-8204-407e-9533-d910158283f0",
+              "name": "The item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "vendors",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b873026-2959-4019-9e80-7a7c12204711",
+          "name": "Update a specific item vendor",
+          "request": {
+            "name": "Update a specific item vendor",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "vendors",
+                ":itemVendorId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) The id of the item to modify vendors for"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemVendorId",
+                  "description": "(Required) The id of the item vendor."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"price\": \"<double>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\",\n  \"notes\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8bebbf8f-a7f9-41f9-b992-693c2f5a52e4",
+              "name": "Update successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "vendors",
+                    ":itemVendorId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) The id of the item to modify vendors for"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemVendorId",
+                      "description": "(Required) The id of the item vendor."
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"price\": \"<double>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f31ad534-def4-43e7-bba5-39467d7e9d52",
+              "name": "Item did not exist or no vendor existed at the specified index",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "vendors",
+                    ":itemVendorId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) The id of the item to modify vendors for"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemVendorId",
+                      "description": "(Required) The id of the item vendor."
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"vendorItemNumber\": \"<string>\",\n  \"vendorItemName\": \"<string>\",\n  \"price\": \"<double>\",\n  \"isPrimary\": \"<boolean>\",\n  \"leadTimeInDays\": \"<integer>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "854e5b7b-a468-4299-9001-2612e93a5b0e",
+    "name": "Fulcrum Public Accounting Code Item Vendor API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

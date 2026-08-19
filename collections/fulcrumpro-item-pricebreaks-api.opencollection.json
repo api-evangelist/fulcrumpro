@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Item PriceBreaks API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Item PriceBreaks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List purchase price breaks for an item.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/purchase-price-breaks/list",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "List purchase price breaks for an item."
+        },
+        {
+          "info": {
+            "name": "List sales price breaks for an item, including the item's base price, customer-specific\nprice breaks, and customer-tier price breaks.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/sales-price-breaks/list",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "List sales price breaks for an item, including the item's base price, customer-specific\nprice breaks, and customer-tier price breaks."
+        },
+        {
+          "info": {
+            "name": "Create or update a purchase price break for an item. The price break is identified by\nthe combination of (item, vendor, currency, unit of measure): if a match exists it is\nreplaced, otherwise a new price break is created.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/purchase-price-breaks",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update a purchase price break for an item. The price break is identified by\nthe combination of (item, vendor, currency, unit of measure): if a match exists it is\nreplaced, otherwise a new price break is created."
+        },
+        {
+          "info": {
+            "name": "Create or update a sales price break for an item. The price break is identified by\nthe combination of (item, customer, customer tier, currency, sales unit of measure):\nif a match exists it is replaced, otherwise a new price break is created.\n            \nCustomer and customer tier are mutually exclusive. Leaving both null upserts the\nitem's base price.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.fulcrumpro.com/api/items/:itemId/sales-price-breaks",
+            "params": [
+              {
+                "name": "itemId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the item."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update a sales price break for an item. The price break is identified by\nthe combination of (item, customer, customer tier, currency, sales unit of measure):\nif a match exists it is replaced, otherwise a new price break is created.\n            \nCustomer and customer tier are mutually exclusive. Leaving both null upserts the\nitem's base price."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

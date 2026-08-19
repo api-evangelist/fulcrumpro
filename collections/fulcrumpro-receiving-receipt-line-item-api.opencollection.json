@@ -1,0 +1,140 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Receiving Receipt Line Item API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Receiving Receipt Line Item",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a specific line item for a receipt on a purchase or sales order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts/:receiptId/line-items/:lineId",
+            "params": [
+              {
+                "name": "receiptId",
+                "value": "",
+                "type": "path",
+                "description": "The receiving id"
+              },
+              {
+                "name": "lineId",
+                "value": "",
+                "type": "path",
+                "description": "This will match on the line item id (from the purchase order or sales order) or the line id of the specific receiving"
+              }
+            ]
+          },
+          "docs": "Get a specific line item for a receipt on a purchase or sales order"
+        },
+        {
+          "info": {
+            "name": "Update a specific receipt line item for a purchase or sales order receiving",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts/:receiptId/line-items/:lineId",
+            "params": [
+              {
+                "name": "receiptId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "lineId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific receipt line item for a purchase or sales order receiving"
+        },
+        {
+          "info": {
+            "name": "Partially update a specific receipt for a purchase or sales order",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts/:receiptId/line-items/:lineId",
+            "params": [
+              {
+                "name": "receiptId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "lineId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a specific receipt for a purchase or sales order"
+        },
+        {
+          "info": {
+            "name": "Roll back a specific line item for a receipt on a purchase or sales order",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts/:receiptId/line-items/:lineId",
+            "params": [
+              {
+                "name": "receiptId",
+                "value": "",
+                "type": "path",
+                "description": "The receiving id"
+              },
+              {
+                "name": "lineId",
+                "value": "",
+                "type": "path",
+                "description": "This will match on the line item id (from the purchase order or sales order) or the line id of the specific receiving"
+              }
+            ]
+          },
+          "docs": "Roll back a specific line item for a receipt on a purchase or sales order"
+        },
+        {
+          "info": {
+            "name": "List line items for a receipt on a purchase or sales order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/receiving/receipts/:receiptId/line-items/list",
+            "params": [
+              {
+                "name": "receiptId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List line items for a receipt on a purchase or sales order"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,505 @@
+{
+  "item": [
+    {
+      "id": "50771f03-d1af-4752-ad85-5dc612d39f50",
+      "name": "Job Item To Make",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bfc9ca1e-b2b7-4ee6-926f-b4fd2bbe60e9",
+          "name": "Get a specific item to make on a job",
+          "request": {
+            "name": "Get a specific item to make on a job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                ":itemToMakeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "includeCostBreakdown",
+                  "value": "false"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemToMakeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0cd1313d-67a0-41e9-acd8-551b4035ca9c",
+              "name": "The item to make for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCostBreakdown",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"depth\": 948,\n  \"id\": \"stringstringstringstringstringstring\",\n  \"isCustom\": true,\n  \"itemId\": \"stringstringstringstring\",\n  \"quantityToMake\": 1391.3755345928803,\n  \"status\": \"complete\",\n  \"quantityMade\": 4765.356807735542,\n  \"routingNotes\": \"string\",\n  \"costBreakdown\": {\n    \"calculatedOn\": \"2022-12-22T15:15:00.219Z\",\n    \"componentLabor\": {\n      \"perUnit\": 2782.0542033340066,\n      \"total\": 4877.228983741147\n    },\n    \"componentMachine\": {\n      \"perUnit\": 214.86415968386297,\n      \"total\": 3896.7022965705532\n    },\n    \"componentMaterial\": {\n      \"perUnit\": 2808.4419866042977,\n      \"total\": 1442.210232639386\n    },\n    \"componentOutsideProcessing\": {\n      \"perUnit\": 988.490593168061,\n      \"total\": 8780.988894594731\n    },\n    \"cumulative\": {\n      \"perUnit\": 9046.075781617135,\n      \"total\": 2064.9459617668986\n    },\n    \"cumulativeLabor\": {\n      \"perUnit\": 2944.2799602499135,\n      \"total\": 7093.315934654503\n    },\n    \"cumulativeMachine\": {\n      \"perUnit\": 7994.771827571141,\n      \"total\": 1591.4746324005912\n    },\n    \"cumulativeMaterial\": {\n      \"perUnit\": 5640.583787319429,\n      \"total\": 9438.00466382991\n    },\n    \"cumulativeOutsideProcessing\": {\n      \"perUnit\": 7090.3680407763295,\n      \"total\": 3354.3493991417126\n    },\n    \"id\": \"stringstringstringstring\",\n    \"itemLabor\": {\n      \"perUnit\": 3123.5597185141705,\n      \"total\": 5408.619821944706\n    },\n    \"itemMachine\": {\n      \"perUnit\": 5103.271282088825,\n      \"total\": 7259.707754180314\n    },\n    \"itemMaterial\": {\n      \"perUnit\": 3249.430433599124,\n      \"total\": 6601.911107200551\n    },\n    \"itemOutsideProcessing\": {\n      \"perUnit\": 7805.218855995882,\n      \"total\": 4571.171171635076\n    },\n    \"lines\": [\n      {\n        \"cost\": 541.3046054336868,\n        \"costType\": \"labor\",\n        \"name\": \"string\",\n        \"operationType\": \"outsideProcessing\",\n        \"quantity\": 6235.929608616386,\n        \"itemId\": \"stringstringstringstring\",\n        \"itemName\": \"string\",\n        \"accountingCodeId\": \"stringstringstringstring\",\n        \"operationInformation\": {\n          \"operationId\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"timeInSeconds\": 933.8458514546766,\n          \"timeInHours\": 517.1039271865308,\n          \"ratePerSecond\": 1905.7350971470867,\n          \"ratePerHour\": 6193.33452713101\n        }\n      },\n      {\n        \"cost\": 7104.0947056861705,\n        \"costType\": \"outsideProcessing\",\n        \"name\": \"string\",\n        \"operationType\": \"outsideProcessing\",\n        \"quantity\": 2876.163521092744,\n        \"itemId\": \"stringstringstringstring\",\n        \"itemName\": \"string\",\n        \"accountingCodeId\": \"stringstringstringstring\",\n        \"operationInformation\": {\n          \"operationId\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"timeInSeconds\": 7575.798145717927,\n          \"timeInHours\": 4981.552591833987,\n          \"ratePerSecond\": 6727.490678471014,\n          \"ratePerHour\": 2149.8276422013164\n        }\n      }\n    ],\n    \"quantity\": 1759,\n    \"shopRateMachine\": {\n      \"perUnit\": 8561.598839344955,\n      \"total\": 4272.933542190121\n    },\n    \"shopRateRun\": {\n      \"perUnit\": 5418.329948016007,\n      \"total\": 1188.3782451100478\n    },\n    \"shopRateSetup\": {\n      \"perUnit\": 6336.947809653216,\n      \"total\": 1140.5836351983135\n    },\n    \"time\": {\n      \"labor\": 3985.4194971709444,\n      \"machine\": 2134.366433123346,\n      \"setup\": 76.83794568093872\n    },\n    \"type\": \"estimated\",\n    \"quantityScrapped\": 7559\n  },\n  \"costBreakdownEstimated\": {\n    \"calculatedOn\": \"2024-04-18T19:07:44.485Z\",\n    \"componentLabor\": {\n      \"perUnit\": 1779.5804006568162,\n      \"total\": 5338.643680711605\n    },\n    \"componentMachine\": {\n      \"perUnit\": 1439.8888790406784,\n      \"total\": 452.9370861137927\n    },\n    \"componentMaterial\": {\n      \"perUnit\": 4324.072606984003,\n      \"total\": 90.32302398809588\n    },\n    \"componentOutsideProcessing\": {\n      \"perUnit\": 5129.780790375982,\n      \"total\": 7084.864926567779\n    },\n    \"cumulative\": {\n      \"perUnit\": 5130.9943877183105,\n      \"total\": 9015.045579261212\n    },\n    \"cumulativeLabor\": {\n      \"perUnit\": 3434.0284913708374,\n      \"total\": 5053.83404168163\n    },\n    \"cumulativeMachine\": {\n      \"perUnit\": 7223.952139515714,\n      \"total\": 3574.323834389912\n    },\n    \"cumulativeMaterial\": {\n      \"perUnit\": 7654.514744905007,\n      \"total\": 6728.042022536622\n    },\n    \"cumulativeOutsideProcessing\": {\n      \"perUnit\": 2180.2135975494484,\n      \"total\": 4132.32760636664\n    },\n    \"id\": \"stringstringstringstring\",\n    \"itemLabor\": {\n      \"perUnit\": 9413.198551908383,\n      \"total\": 4241.621270833705\n    },\n    \"itemMachine\": {\n      \"perUnit\": 1423.0212792071873,\n      \"total\": 8158.861650596716\n    },\n    \"itemMaterial\": {\n      \"perUnit\": 9212.479990830718,\n      \"total\": 815.734130629171\n    },\n    \"itemOutsideProcessing\": {\n      \"perUnit\": 2367.001446435857,\n      \"total\": 7172.706954654207\n    },\n    \"lines\": [\n      {\n        \"cost\": 5823.666105795356,\n        \"costType\": \"componentLabor\",\n        \"name\": \"string\",\n        \"operationType\": \"outsideProcessing\",\n        \"quantity\": 1443.259484440963,\n        \"itemId\": \"stringstringstringstring\",\n        \"itemName\": \"string\",\n        \"accountingCodeId\": \"stringstringstringstring\",\n        \"operationInformation\": {\n          \"operationId\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"timeInSeconds\": 3556.205171240364,\n          \"timeInHours\": 3723.621830831164,\n          \"ratePerSecond\": 4316.769847273706,\n          \"ratePerHour\": 1602.0030359363525\n        }\n      },\n      {\n        \"cost\": 9821.081873270943,\n        \"costType\": \"overhead\",\n        \"name\": \"string\",\n        \"operationType\": \"outsideProcessing\",\n        \"quantity\": 3135.747868681349,\n        \"itemId\": \"stringstringstringstring\",\n        \"itemName\": \"string\",\n        \"accountingCodeId\": \"stringstringstringstring\",\n        \"operationInformation\": {\n          \"operationId\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"timeInSeconds\": 3850.485290350194,\n          \"timeInHours\": 2672.1725348812984,\n          \"ratePerSecond\": 2325.7430011479796,\n          \"ratePerHour\": 7123.51778129923\n        }\n      }\n    ],\n    \"quantity\": 6479,\n    \"shopRateMachine\": {\n      \"perUnit\": 8767.918790481315,\n      \"total\": 8129.279762505274\n    },\n    \"shopRateRun\": {\n      \"perUnit\": 7255.961948667044,\n      \"total\": 9099.955099445697\n    },\n    \"shopRateSetup\": {\n      \"perUnit\": 3104.871450340149,\n      \"total\": 3533.410945798343\n    },\n    \"time\": {\n      \"labor\": 9132.241698082646,\n      \"machine\": 2398.742108671661,\n      \"setup\": 3571.322966095712\n    },\n    \"type\": \"cancelledJob\",\n    \"quantityScrapped\": 9325\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ac3cd55-125b-4048-8327-2a64b9a807be",
+              "name": "Job or item to make did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCostBreakdown",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3052a3ee-7f3e-4963-b2a1-32e82c8586b1",
+          "name": "Get a list of items to make on a job",
+          "request": {
+            "name": "Get a list of items to make on a job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "includeCostBreakdown",
+                  "value": "false"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ead1c77f-3823-4aa3-83cb-1741bd05dd35",
+              "name": "The items to make for the given job id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCostBreakdown",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"depth\": 4,\n    \"id\": \"stringstringstringstringstringstring\",\n    \"isCustom\": true,\n    \"itemId\": \"stringstringstringstring\",\n    \"quantityToMake\": 2837.0864964952325,\n    \"status\": \"complete\",\n    \"quantityMade\": 6202.5683221854315,\n    \"routingNotes\": \"string\",\n    \"costBreakdown\": {\n      \"calculatedOn\": \"2009-04-14T17:37:00.327Z\",\n      \"componentLabor\": {\n        \"perUnit\": 3157.862708125282,\n        \"total\": 6452.215155469491\n      },\n      \"componentMachine\": {\n        \"perUnit\": 2240.471872763179,\n        \"total\": 5031.147075881266\n      },\n      \"componentMaterial\": {\n        \"perUnit\": 3820.3291403481844,\n        \"total\": 1325.5496960298697\n      },\n      \"componentOutsideProcessing\": {\n        \"perUnit\": 8662.163635788613,\n        \"total\": 4836.827230443985\n      },\n      \"cumulative\": {\n        \"perUnit\": 3337.622018461034,\n        \"total\": 116.20523770706326\n      },\n      \"cumulativeLabor\": {\n        \"perUnit\": 5378.622462682599,\n        \"total\": 9160.655675283473\n      },\n      \"cumulativeMachine\": {\n        \"perUnit\": 115.19278685739765,\n        \"total\": 6239.288069992343\n      },\n      \"cumulativeMaterial\": {\n        \"perUnit\": 7983.382500836421,\n        \"total\": 199.21174662361207\n      },\n      \"cumulativeOutsideProcessing\": {\n        \"perUnit\": 9569.135717225836,\n        \"total\": 844.3190258981404\n      },\n      \"id\": \"stringstringstringstring\",\n      \"itemLabor\": {\n        \"perUnit\": 5609.663625925958,\n        \"total\": 4537.019800938486\n      },\n      \"itemMachine\": {\n        \"perUnit\": 2374.179145685782,\n        \"total\": 3584.548078074756\n      },\n      \"itemMaterial\": {\n        \"perUnit\": 1782.8420994323312,\n        \"total\": 5589.517746689743\n      },\n      \"itemOutsideProcessing\": {\n        \"perUnit\": 170.87190674137776,\n        \"total\": 6738.378571379409\n      },\n      \"lines\": [\n        {\n          \"cost\": 8189.110591725429,\n          \"costType\": \"nestPartMaterialScrap\",\n          \"name\": \"string\",\n          \"operationType\": \"setup\",\n          \"quantity\": 4611.926932956165,\n          \"itemId\": \"stringstringstringstring\",\n          \"itemName\": \"string\",\n          \"accountingCodeId\": \"stringstringstringstring\",\n          \"operationInformation\": {\n            \"operationId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInSeconds\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInHours\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerSecond\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"cost\": 285.0778961727507,\n          \"costType\": \"componentMaterial\",\n          \"name\": \"string\",\n          \"operationType\": \"setup\",\n          \"quantity\": 8604.218727454132,\n          \"itemId\": \"stringstringstringstring\",\n          \"itemName\": \"string\",\n          \"accountingCodeId\": \"stringstringstringstring\",\n          \"operationInformation\": {\n            \"operationId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInSeconds\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInHours\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerSecond\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"quantity\": 7882,\n      \"shopRateMachine\": {\n        \"perUnit\": 4228.919831151279,\n        \"total\": 5461.249463238513\n      },\n      \"shopRateRun\": {\n        \"perUnit\": 5638.8121291184,\n        \"total\": 8424.790274676554\n      },\n      \"shopRateSetup\": {\n        \"perUnit\": 6985.100129973217,\n        \"total\": 838.5478059962803\n      },\n      \"time\": {\n        \"labor\": 4981.91564482904,\n        \"machine\": 9141.688053570488,\n        \"setup\": 5751.219012708531\n      },\n      \"type\": \"estimated\",\n      \"quantityScrapped\": 8814\n    },\n    \"costBreakdownEstimated\": {\n      \"calculatedOn\": \"1952-01-11T09:44:06.856Z\",\n      \"componentLabor\": {\n        \"perUnit\": 9406.91489423989,\n        \"total\": 3437.812598185467\n      },\n      \"componentMachine\": {\n        \"perUnit\": 6524.688669954274,\n        \"total\": 1322.1774695447475\n      },\n      \"componentMaterial\": {\n        \"perUnit\": 9777.622341554183,\n        \"total\": 6521.1973377348895\n      },\n      \"componentOutsideProcessing\": {\n        \"perUnit\": 8531.757698390984,\n        \"total\": 1932.0091985998845\n      },\n      \"cumulative\": {\n        \"perUnit\": 834.9095033868059,\n        \"total\": 9767.8063064221\n      },\n      \"cumulativeLabor\": {\n        \"perUnit\": 8670.446931644454,\n        \"total\": 2715.926689586181\n      },\n      \"cumulativeMachine\": {\n        \"perUnit\": 3671.974575761231,\n        \"total\": 7025.894163189309\n      },\n      \"cumulativeMaterial\": {\n        \"perUnit\": 9157.911933009826,\n        \"total\": 159.5000709533756\n      },\n      \"cumulativeOutsideProcessing\": {\n        \"perUnit\": 4322.81062017909,\n        \"total\": 5726.312762125728\n      },\n      \"id\": \"stringstringstringstring\",\n      \"itemLabor\": {\n        \"perUnit\": 7088.852178317426,\n        \"total\": 3862.7032673328354\n      },\n      \"itemMachine\": {\n        \"perUnit\": 4925.154872625448,\n        \"total\": 4638.064986720358\n      },\n      \"itemMaterial\": {\n        \"perUnit\": 6807.211116905642,\n        \"total\": 8769.02371431465\n      },\n      \"itemOutsideProcessing\": {\n        \"perUnit\": 4994.621554672234,\n        \"total\": 7178.879158790471\n      },\n      \"lines\": [\n        {\n          \"cost\": 2147.5319225573885,\n          \"costType\": \"componentMaterial\",\n          \"name\": \"string\",\n          \"operationType\": \"labor\",\n          \"quantity\": 8541.95347096576,\n          \"itemId\": \"stringstringstringstring\",\n          \"itemName\": \"string\",\n          \"accountingCodeId\": \"stringstringstringstring\",\n          \"operationInformation\": {\n            \"operationId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInSeconds\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInHours\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerSecond\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"cost\": 7373.5793921683035,\n          \"costType\": \"machine\",\n          \"name\": \"string\",\n          \"operationType\": \"machine\",\n          \"quantity\": 224.42228299696666,\n          \"itemId\": \"stringstringstringstring\",\n          \"itemName\": \"string\",\n          \"accountingCodeId\": \"stringstringstringstring\",\n          \"operationInformation\": {\n            \"operationId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInSeconds\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInHours\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerSecond\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"quantity\": 2422,\n      \"shopRateMachine\": {\n        \"perUnit\": 8142.881477503849,\n        \"total\": 6986.858651270268\n      },\n      \"shopRateRun\": {\n        \"perUnit\": 210.34452246444403,\n        \"total\": 7906.7976388550105\n      },\n      \"shopRateSetup\": {\n        \"perUnit\": 5036.384870927401,\n        \"total\": 3477.4469071162084\n      },\n      \"time\": {\n        \"labor\": 2076.271284958624,\n        \"machine\": 741.0297877198846,\n        \"setup\": 6112.625259484814\n      },\n      \"type\": \"inProgressJob\",\n      \"quantityScrapped\": 9863\n    }\n  },\n  {\n    \"depth\": 4920,\n    \"id\": \"stringstringstringstringstringstring\",\n    \"isCustom\": false,\n    \"itemId\": \"stringstringstringstring\",\n    \"quantityToMake\": 1054.5927573995439,\n    \"status\": \"complete\",\n    \"quantityMade\": 9874.186540778457,\n    \"routingNotes\": \"string\",\n    \"costBreakdown\": {\n      \"calculatedOn\": \"2014-11-02T18:39:59.283Z\",\n      \"componentLabor\": {\n        \"perUnit\": 396.5389774573369,\n        \"total\": 1544.0621201803551\n      },\n      \"componentMachine\": {\n        \"perUnit\": 9206.56573514287,\n        \"total\": 6219.983192647287\n      },\n      \"componentMaterial\": {\n        \"perUnit\": 8097.943028870738,\n        \"total\": 9728.953149874591\n      },\n      \"componentOutsideProcessing\": {\n        \"perUnit\": 9110.499320185598,\n        \"total\": 6969.090632740935\n      },\n      \"cumulative\": {\n        \"perUnit\": 4812.943996442681,\n        \"total\": 7498.981807507007\n      },\n      \"cumulativeLabor\": {\n        \"perUnit\": 9107.162932831505,\n        \"total\": 7511.3446287987\n      },\n      \"cumulativeMachine\": {\n        \"perUnit\": 6642.527678034839,\n        \"total\": 6939.284235161218\n      },\n      \"cumulativeMaterial\": {\n        \"perUnit\": 6795.075251534215,\n        \"total\": 1415.326663445472\n      },\n      \"cumulativeOutsideProcessing\": {\n        \"perUnit\": 448.0513122287577,\n        \"total\": 158.33678801498996\n      },\n      \"id\": \"stringstringstringstring\",\n      \"itemLabor\": {\n        \"perUnit\": 1339.9520379703245,\n        \"total\": 484.83528794020293\n      },\n      \"itemMachine\": {\n        \"perUnit\": 8848.44536500313,\n        \"total\": 6708.549727165486\n      },\n      \"itemMaterial\": {\n        \"perUnit\": 8793.226845309999,\n        \"total\": 8857.958291895064\n      },\n      \"itemOutsideProcessing\": {\n        \"perUnit\": 5613.124957997937,\n        \"total\": 1430.6330248839927\n      },\n      \"lines\": [\n        {\n          \"cost\": 7669.354480219001,\n          \"costType\": \"setup\",\n          \"name\": \"string\",\n          \"operationType\": \"machine\",\n          \"quantity\": 3649.856340081907,\n          \"itemId\": \"stringstringstringstring\",\n          \"itemName\": \"string\",\n          \"accountingCodeId\": \"stringstringstringstring\",\n          \"operationInformation\": {\n            \"operationId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInSeconds\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInHours\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerSecond\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"cost\": 1345.9037182946608,\n          \"costType\": \"labor\",\n          \"name\": \"string\",\n          \"operationType\": \"setup\",\n          \"quantity\": 1886.7065666928372,\n          \"itemId\": \"stringstringstringstring\",\n          \"itemName\": \"string\",\n          \"accountingCodeId\": \"stringstringstringstring\",\n          \"operationInformation\": {\n            \"operationId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInSeconds\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInHours\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerSecond\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"quantity\": 8307,\n      \"shopRateMachine\": {\n        \"perUnit\": 8433.427007279057,\n        \"total\": 3153.1560190568252\n      },\n      \"shopRateRun\": {\n        \"perUnit\": 1176.6866772206708,\n        \"total\": 9577.553514841265\n      },\n      \"shopRateSetup\": {\n        \"perUnit\": 6144.098982348204,\n        \"total\": 4166.251852950551\n      },\n      \"time\": {\n        \"labor\": 7319.684448225513,\n        \"machine\": 220.6802455967971,\n        \"setup\": 2536.395470342143\n      },\n      \"type\": \"inProgressJob\",\n      \"quantityScrapped\": 1029\n    },\n    \"costBreakdownEstimated\": {\n      \"calculatedOn\": \"2000-04-26T08:08:18.816Z\",\n      \"componentLabor\": {\n        \"perUnit\": 6855.279120411799,\n        \"total\": 8049.818206021693\n      },\n      \"componentMachine\": {\n        \"perUnit\": 4493.932384421636,\n        \"total\": 1746.4519442146564\n      },\n      \"componentMaterial\": {\n        \"perUnit\": 1104.822644337934,\n        \"total\": 7975.291093940486\n      },\n      \"componentOutsideProcessing\": {\n        \"perUnit\": 2884.6160694742653,\n        \"total\": 4466.8903975009825\n      },\n      \"cumulative\": {\n        \"perUnit\": 1426.399282002363,\n        \"total\": 6565.882440616243\n      },\n      \"cumulativeLabor\": {\n        \"perUnit\": 2277.3543594231214,\n        \"total\": 968.7612396429835\n      },\n      \"cumulativeMachine\": {\n        \"perUnit\": 889.373829747333,\n        \"total\": 1971.233073077888\n      },\n      \"cumulativeMaterial\": {\n        \"perUnit\": 3382.0523786132285,\n        \"total\": 2769.9004923957427\n      },\n      \"cumulativeOutsideProcessing\": {\n        \"perUnit\": 2783.541541738196,\n        \"total\": 3318.43933608293\n      },\n      \"id\": \"stringstringstringstring\",\n      \"itemLabor\": {\n        \"perUnit\": 3380.2103067501334,\n        \"total\": 1730.1992440778058\n      },\n      \"itemMachine\": {\n        \"perUnit\": 598.6252477467924,\n        \"total\": 554.0641790232359\n      },\n      \"itemMaterial\": {\n        \"perUnit\": 7849.290349480609,\n        \"total\": 8417.623216519756\n      },\n      \"itemOutsideProcessing\": {\n        \"perUnit\": 8219.16695390012,\n        \"total\": 2874.0237173237383\n      },\n      \"lines\": [\n        {\n          \"cost\": 9990.798689001205,\n          \"costType\": \"overhead\",\n          \"name\": \"s\",\n          \"operationType\": \"labor\",\n          \"quantity\": 396.7185552627461,\n          \"itemId\": \"stringstringstringstring\",\n          \"itemName\": \"string\",\n          \"accountingCodeId\": \"stringstringstringstring\",\n          \"operationInformation\": {\n            \"operationId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInSeconds\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInHours\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerSecond\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"cost\": 3853.5266859451,\n          \"costType\": \"nestPartMaterialScrap\",\n          \"name\": \"string\",\n          \"operationType\": \"labor\",\n          \"quantity\": 6567.182165532857,\n          \"itemId\": \"stringstringstringstring\",\n          \"itemName\": \"string\",\n          \"accountingCodeId\": \"stringstringstringstring\",\n          \"operationInformation\": {\n            \"operationId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInSeconds\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeInHours\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerSecond\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratePerHour\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"quantity\": 9102,\n      \"shopRateMachine\": {\n        \"perUnit\": 9862.276671229292,\n        \"total\": 959.8525023365012\n      },\n      \"shopRateRun\": {\n        \"perUnit\": 3653.702025307548,\n        \"total\": 9475.94032604293\n      },\n      \"shopRateSetup\": {\n        \"perUnit\": 7712.526197645076,\n        \"total\": 724.6973288863634\n      },\n      \"time\": {\n        \"labor\": 6014.283523548527,\n        \"machine\": 3475.518714862843,\n        \"setup\": 4868.195362419384\n      },\n      \"type\": \"estimated\",\n      \"quantityScrapped\": 6000\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "471fa8a6-ea48-4741-9ce5-e5eab2ff7249",
+              "name": "Job did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeCostBreakdown",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c2947664-0dd9-40eb-ab4d-34680aed8339",
+          "name": "Get the cost breakdowns for specific item to make on a job",
+          "request": {
+            "name": "Get the cost breakdowns for specific item to make on a job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                ":itemToMakeId",
+                "cost-breakdown"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemToMakeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e13ec392-dc9e-49e2-a228-bfbc2657f844",
+              "name": "The item to make for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "cost-breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"costBreakdown\": {\n    \"calculatedOn\": \"1993-02-11T16:11:51.264Z\",\n    \"componentLabor\": {\n      \"perUnit\": 6440.330121186648,\n      \"total\": 720.8434931950625\n    },\n    \"componentMachine\": {\n      \"perUnit\": 6996.5686023024455,\n      \"total\": 3842.712063148901\n    },\n    \"componentMaterial\": {\n      \"perUnit\": 1475.481255194432,\n      \"total\": 6951.927341038675\n    },\n    \"componentOutsideProcessing\": {\n      \"perUnit\": 1479.6176443669929,\n      \"total\": 9984.28092730505\n    },\n    \"cumulative\": {\n      \"perUnit\": 2424.7710177229796,\n      \"total\": 5375.910055979753\n    },\n    \"cumulativeLabor\": {\n      \"perUnit\": 2436.0329097538192,\n      \"total\": 8713.413485548816\n    },\n    \"cumulativeMachine\": {\n      \"perUnit\": 5913.663420036337,\n      \"total\": 8616.506975493343\n    },\n    \"cumulativeMaterial\": {\n      \"perUnit\": 1440.223475491542,\n      \"total\": 4395.243577807182\n    },\n    \"cumulativeOutsideProcessing\": {\n      \"perUnit\": 2626.8780801096204,\n      \"total\": 3375.0711945843527\n    },\n    \"id\": \"stringstringstringstring\",\n    \"itemLabor\": {\n      \"perUnit\": 1315.374718814526,\n      \"total\": 9672.742423551446\n    },\n    \"itemMachine\": {\n      \"perUnit\": 8768.936789135736,\n      \"total\": 5552.257535592773\n    },\n    \"itemMaterial\": {\n      \"perUnit\": 447.10520019853874,\n      \"total\": 3511.6256666546174\n    },\n    \"itemOutsideProcessing\": {\n      \"perUnit\": 5847.923886494725,\n      \"total\": 6257.584983874251\n    },\n    \"lines\": [\n      {\n        \"cost\": 6555.152814135182,\n        \"costType\": \"outsideProcessing\",\n        \"name\": \"string\",\n        \"operationType\": \"outsideProcessing\",\n        \"quantity\": 1302.0525771626578,\n        \"itemId\": \"stringstringstringstring\",\n        \"itemName\": \"string\",\n        \"accountingCodeId\": \"stringstringstringstring\",\n        \"operationInformation\": {\n          \"operationId\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"timeInSeconds\": 2087.610227600679,\n          \"timeInHours\": 1166.0104722189867,\n          \"ratePerSecond\": 8685.411732650822,\n          \"ratePerHour\": 7352.683162590511\n        }\n      },\n      {\n        \"cost\": 7887.802149252021,\n        \"costType\": \"nestPartMaterialScrap\",\n        \"name\": \"string\",\n        \"operationType\": \"outsideProcessing\",\n        \"quantity\": 8555.295253017523,\n        \"itemId\": \"stringstringstringstring\",\n        \"itemName\": \"string\",\n        \"accountingCodeId\": \"stringstringstringstring\",\n        \"operationInformation\": {\n          \"operationId\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"timeInSeconds\": 5410.9312480096205,\n          \"timeInHours\": 8960.810711078844,\n          \"ratePerSecond\": 4852.790230389512,\n          \"ratePerHour\": 9806.696653821822\n        }\n      }\n    ],\n    \"quantity\": 3469,\n    \"shopRateMachine\": {\n      \"perUnit\": 806.0148329034489,\n      \"total\": 6282.090236510366\n    },\n    \"shopRateRun\": {\n      \"perUnit\": 2245.5670152624753,\n      \"total\": 5303.642596362578\n    },\n    \"shopRateSetup\": {\n      \"perUnit\": 4775.214608814289,\n      \"total\": 8020.126428215794\n    },\n    \"time\": {\n      \"labor\": 2366.1856591591536,\n      \"machine\": 7020.143675574043,\n      \"setup\": 6861.426501983844\n    },\n    \"type\": \"inProgressJob\",\n    \"quantityScrapped\": 7025\n  },\n  \"costBreakdownEstimated\": {\n    \"calculatedOn\": \"2018-01-26T21:15:36.781Z\",\n    \"componentLabor\": {\n      \"perUnit\": 6209.046079620842,\n      \"total\": 9232.018850786653\n    },\n    \"componentMachine\": {\n      \"perUnit\": 9911.111811991288,\n      \"total\": 6968.987301585505\n    },\n    \"componentMaterial\": {\n      \"perUnit\": 3287.376417448923,\n      \"total\": 7585.300222337604\n    },\n    \"componentOutsideProcessing\": {\n      \"perUnit\": 2420.2170670187515,\n      \"total\": 4185.050370374117\n    },\n    \"cumulative\": {\n      \"perUnit\": 5357.4675812417745,\n      \"total\": 5707.864428737067\n    },\n    \"cumulativeLabor\": {\n      \"perUnit\": 8073.809073037081,\n      \"total\": 7287.847914903615\n    },\n    \"cumulativeMachine\": {\n      \"perUnit\": 1793.9409320889588,\n      \"total\": 1939.4805759253097\n    },\n    \"cumulativeMaterial\": {\n      \"perUnit\": 703.6092879884992,\n      \"total\": 5556.895149172193\n    },\n    \"cumulativeOutsideProcessing\": {\n      \"perUnit\": 2166.335929729011,\n      \"total\": 8195.013003388343\n    },\n    \"id\": \"stringstringstringstring\",\n    \"itemLabor\": {\n      \"perUnit\": 2589.433755325904,\n      \"total\": 1359.775541920276\n    },\n    \"itemMachine\": {\n      \"perUnit\": 6902.867943869273,\n      \"total\": 1608.1021559712417\n    },\n    \"itemMaterial\": {\n      \"perUnit\": 5718.17978246973,\n      \"total\": 5500.931979451011\n    },\n    \"itemOutsideProcessing\": {\n      \"perUnit\": 7688.005169824127,\n      \"total\": 7310.222901655815\n    },\n    \"lines\": [\n      {\n        \"cost\": 416.18802998079406,\n        \"costType\": \"setup\",\n        \"name\": \"string\",\n        \"operationType\": \"setup\",\n        \"quantity\": 7819.835892762979,\n        \"itemId\": \"stringstringstringstring\",\n        \"itemName\": \"string\",\n        \"accountingCodeId\": \"stringstringstringstring\",\n        \"operationInformation\": {\n          \"operationId\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"timeInSeconds\": 7548.65466763067,\n          \"timeInHours\": 9569.868092040353,\n          \"ratePerSecond\": 6956.863840067546,\n          \"ratePerHour\": 1185.3656650658195\n        }\n      },\n      {\n        \"cost\": 8837.519703827038,\n        \"costType\": \"machine\",\n        \"name\": \"string\",\n        \"operationType\": \"labor\",\n        \"quantity\": 2241.0071153520284,\n        \"itemId\": \"stringstringstringstring\",\n        \"itemName\": \"string\",\n        \"accountingCodeId\": \"stringstringstringstring\",\n        \"operationInformation\": {\n          \"operationId\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"timeInSeconds\": 5245.563237573705,\n          \"timeInHours\": 3995.4495106393597,\n          \"ratePerSecond\": 3570.604326062412,\n          \"ratePerHour\": 2144.12128468388\n        }\n      }\n    ],\n    \"quantity\": 769,\n    \"shopRateMachine\": {\n      \"perUnit\": 510.05088994583116,\n      \"total\": 1079.1851285425037\n    },\n    \"shopRateRun\": {\n      \"perUnit\": 2327.1331826190744,\n      \"total\": 9211.510643931992\n    },\n    \"shopRateSetup\": {\n      \"perUnit\": 9633.870366304085,\n      \"total\": 8977.313085656871\n    },\n    \"time\": {\n      \"labor\": 1501.5336855598594,\n      \"machine\": 6515.643988314272,\n      \"setup\": 4871.843951517343\n    },\n    \"type\": \"completedJob\",\n    \"quantityScrapped\": 5395\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6afb0d87-c13c-4c15-b0c6-3927ef541df9",
+              "name": "Job or item to make did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "cost-breakdown"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "eb5017dd-5212-4cfa-ad3f-d9e5597be60d",
+    "name": "Fulcrum Public Accounting Code Job Item To Make API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

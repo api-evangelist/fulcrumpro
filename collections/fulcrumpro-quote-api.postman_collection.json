@@ -1,0 +1,1457 @@
+{
+  "item": [
+    {
+      "id": "f42eb8a7-9da2-44c1-85f0-bc9fc4841d45",
+      "name": "Quote",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "107ce8b7-0a79-4bee-bf20-a111121b2e0c",
+          "name": "Convert a quote to a sales order",
+          "request": {
+            "name": "Convert a quote to a sales order",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId",
+                "to-sales-order"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fa8c700c-2c0a-4bdb-95cc-f1d4c1ca5e4d",
+              "name": "Sales order created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "to-sales-order"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2596bddd-8d59-4bc1-b2ec-6f1ae8a8d4ff",
+              "name": "Validation issue or invalid/bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "to-sales-order"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5a550692-4aeb-446d-b479-c8023961ea2c",
+              "name": "Quote did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "to-sales-order"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9afbd926-139c-45b2-b3c3-49efbcf8bb75",
+          "name": "TO BE REMOVED 06/30/2025 - Create a new draft quote",
+          "request": {
+            "name": "TO BE REMOVED 06/30/2025 - Create a new draft quote",
+            "description": {
+              "content": "Please use provided route instead ==> quotes",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "quote"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"<string>\",\n  \"billingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"shippingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"contact\": {\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"cellPhone\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_2\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"salesPersonId\": \"<string>\",\n  \"crmOpportunity\": {\n    \"primaryKeyId\": \"<integer>\",\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdUtc\": \"<dateTime>\"\n  },\n  \"opportunity\": \"<string>\",\n  \"notesToCustomer\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ae4e40ee-2c3e-4180-8af0-90c49edab98c",
+              "name": "Quote created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"<string>\",\n  \"billingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"shippingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"contact\": {\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"cellPhone\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"salesPersonId\": \"<string>\",\n  \"crmOpportunity\": {\n    \"primaryKeyId\": \"<integer>\",\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdUtc\": \"<dateTime>\"\n  },\n  \"opportunity\": \"<string>\",\n  \"notesToCustomer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "43ee3819-297e-4083-9da7-f85ddaa68ee1",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"<string>\",\n  \"billingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"shippingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"contact\": {\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"cellPhone\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"salesPersonId\": \"<string>\",\n  \"crmOpportunity\": {\n    \"primaryKeyId\": \"<integer>\",\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdUtc\": \"<dateTime>\"\n  },\n  \"opportunity\": \"<string>\",\n  \"notesToCustomer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a1099223-935b-493b-b92c-b48169d6d328",
+          "name": "Create a new draft quote",
+          "request": {
+            "name": "Create a new draft quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"<string>\",\n  \"billingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"shippingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"contact\": {\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"cellPhone\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"salesPersonId\": \"<string>\",\n  \"crmOpportunity\": {\n    \"primaryKeyId\": \"<integer>\",\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdUtc\": \"<dateTime>\"\n  },\n  \"opportunity\": \"<string>\",\n  \"notesToCustomer\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0ab9e395-66f2-4220-a166-d2d4d8a8f9b8",
+              "name": "Quote created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"<string>\",\n  \"billingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"shippingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"contact\": {\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"cellPhone\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"salesPersonId\": \"<string>\",\n  \"crmOpportunity\": {\n    \"primaryKeyId\": \"<integer>\",\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdUtc\": \"<dateTime>\"\n  },\n  \"opportunity\": \"<string>\",\n  \"notesToCustomer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "968859fe-a313-4891-9f5c-26c277ce6920",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"<string>\",\n  \"billingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"shippingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"contact\": {\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"cellPhone\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"salesPersonId\": \"<string>\",\n  \"crmOpportunity\": {\n    \"primaryKeyId\": \"<integer>\",\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"createdUtc\": \"<dateTime>\"\n  },\n  \"opportunity\": \"<string>\",\n  \"notesToCustomer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8f74e3c1-daf0-4b9a-876d-01a5c7e98d22",
+          "name": "TO BE REMOVED 06/30/2025 - Delete a specific Quote",
+          "request": {
+            "name": "TO BE REMOVED 06/30/2025 - Delete a specific Quote",
+            "description": {
+              "content": "Please use provided route instead ==> quotes/{quoteId}",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "quote",
+                ":quoteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bb48b266-3165-4ef7-bf98-73c8dddc50d0",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quote",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "46699e60-ef6b-42b3-8a97-a5aff812a676",
+              "name": "Quote did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quote",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f1eeb1a4-a2c3-4196-bf5e-19f00c4c0021",
+          "name": "Delete a specific Quote",
+          "request": {
+            "name": "Delete a specific Quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "652589ad-b3bd-434b-8879-beb747c7c8b4",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4d138b5e-5452-4f12-bb96-fc11cb8796fd",
+              "name": "Quote did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9e16e34a-3f81-4a3c-a88c-9707f4b4ba58",
+          "name": "Get a specific Quote",
+          "request": {
+            "name": "Get a specific Quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "61ae7314-5e30-4e9d-a8ef-9dce67a74aa9",
+              "name": "The Quote for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdUtc\": \"2023-03-05T12:16:08.491Z\",\n  \"customerId\": \"stringstringstringstring\",\n  \"id\": \"stringstringstringstring\",\n  \"number\": 9798,\n  \"quotedDate\": \"1987-09-22T14:20:05.134Z\",\n  \"status\": \"won\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"totalInPrimaryCurrency\": 376.68286508180546,\n  \"currencyInfo\": {\n    \"id\": \"0d7bf95b-e23a-a578-98c1-b1658926f661\",\n    \"documentCurrencyCode\": \"string\",\n    \"primaryCurrencyCode\": \"string\",\n    \"exchangeRate\": 761.782316056342,\n    \"exchangeRateUpdatedOnUtc\": \"2013-10-20T20:01:22.694Z\",\n    \"exchangeRateError\": \"string\"\n  },\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"opportunity\": \"string\",\n  \"salesPersonId\": \"stringstringstringstring\",\n  \"billingAddress\": {\n    \"address1\": \"string\",\n    \"city\": \"string\",\n    \"postalCode\": \"string\",\n    \"name\": \"string\",\n    \"address2\": \"string\",\n    \"address3\": \"string\",\n    \"stateProvince\": \"string\",\n    \"country\": \"string\",\n    \"phone\": \"string\",\n    \"email\": \"oiGRnja3gA@rPKKngnxlYWRzXk.hx\"\n  },\n  \"shippingAddresses\": [\n    {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"K0pYDL2OBR@xQzWkhOaHsGKLaNFzqAIs.agrq\"\n    },\n    {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"OKw@BjPQzdI.dqcs\"\n    }\n  ],\n  \"companyId\": \"stringstringstringstring\",\n  \"paymentTermsId\": \"stringstringstringstring\",\n  \"paymentTerms\": {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\"\n  },\n  \"notesToCustomer\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9467312c-9bb4-4270-abcb-12378b64ade0",
+              "name": "Quote did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a31046bd-5173-42ca-b669-745fdaa02892",
+          "name": "Partially update a quote",
+          "request": {
+            "name": "Partially update a quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "019c01da-a068-408f-aea7-8bf2294f9ec6",
+              "name": "Quote item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdUtc\": \"1986-11-17T15:42:36.565Z\",\n  \"customerId\": \"stringstringstringstring\",\n  \"id\": \"stringstringstringstring\",\n  \"number\": 6055,\n  \"quotedDate\": \"1976-12-14T10:44:27.333Z\",\n  \"status\": \"approved\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"totalInPrimaryCurrency\": 5557.854669608569,\n  \"currencyInfo\": {\n    \"id\": \"dfb5a8a1-ccd9-5585-8de8-bbfac6e6d34d\",\n    \"documentCurrencyCode\": \"string\",\n    \"primaryCurrencyCode\": \"string\",\n    \"exchangeRate\": 8868.378539041809,\n    \"exchangeRateUpdatedOnUtc\": \"2000-08-23T00:39:56.595Z\",\n    \"exchangeRateError\": \"string\"\n  },\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"opportunity\": \"string\",\n  \"salesPersonId\": \"stringstringstringstring\",\n  \"billingAddress\": {\n    \"address1\": \"string\",\n    \"city\": \"string\",\n    \"postalCode\": \"string\",\n    \"name\": \"string\",\n    \"address2\": \"string\",\n    \"address3\": \"string\",\n    \"stateProvince\": \"string\",\n    \"country\": \"string\",\n    \"phone\": \"string\",\n    \"email\": \"KEV5Q@JDSwYVLjQClzuZVzOtJbKDiFXlCGG.gu\"\n  },\n  \"shippingAddresses\": [\n    {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"Yyw4XjF@EmJjN.vekn\"\n    },\n    {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"ylch3UsvkTu@PfIIeCunmEAYAKhbjVXneInQ.hb\"\n    }\n  ],\n  \"companyId\": \"stringstringstringstring\",\n  \"paymentTermsId\": \"stringstringstringstring\",\n  \"paymentTerms\": {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\"\n  },\n  \"notesToCustomer\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8f185091-2025-4215-a77e-3e447cf5f0b5",
+              "name": "Quote did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c84513cc-a65b-4dbe-b8d3-330cb5b385ac",
+          "name": "Update a quote",
+          "request": {
+            "name": "Update a quote",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"billingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"opportunity\": \"<string>\",\n  \"salesPersonId\": \"<string>\",\n  \"notesToCustomer\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e9a55a16-4b26-489c-b9c7-27388c2eb949",
+              "name": "Quote item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"billingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_2\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"opportunity\": \"<string>\",\n  \"salesPersonId\": \"<string>\",\n  \"notesToCustomer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdUtc\": \"1986-11-17T15:42:36.565Z\",\n  \"customerId\": \"stringstringstringstring\",\n  \"id\": \"stringstringstringstring\",\n  \"number\": 6055,\n  \"quotedDate\": \"1976-12-14T10:44:27.333Z\",\n  \"status\": \"approved\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"totalInPrimaryCurrency\": 5557.854669608569,\n  \"currencyInfo\": {\n    \"id\": \"dfb5a8a1-ccd9-5585-8de8-bbfac6e6d34d\",\n    \"documentCurrencyCode\": \"string\",\n    \"primaryCurrencyCode\": \"string\",\n    \"exchangeRate\": 8868.378539041809,\n    \"exchangeRateUpdatedOnUtc\": \"2000-08-23T00:39:56.595Z\",\n    \"exchangeRateError\": \"string\"\n  },\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"opportunity\": \"string\",\n  \"salesPersonId\": \"stringstringstringstring\",\n  \"billingAddress\": {\n    \"address1\": \"string\",\n    \"city\": \"string\",\n    \"postalCode\": \"string\",\n    \"name\": \"string\",\n    \"address2\": \"string\",\n    \"address3\": \"string\",\n    \"stateProvince\": \"string\",\n    \"country\": \"string\",\n    \"phone\": \"string\",\n    \"email\": \"KEV5Q@JDSwYVLjQClzuZVzOtJbKDiFXlCGG.gu\"\n  },\n  \"shippingAddresses\": [\n    {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"Yyw4XjF@EmJjN.vekn\"\n    },\n    {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"ylch3UsvkTu@PfIIeCunmEAYAKhbjVXneInQ.hb\"\n    }\n  ],\n  \"companyId\": \"stringstringstringstring\",\n  \"paymentTermsId\": \"stringstringstringstring\",\n  \"paymentTerms\": {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\"\n  },\n  \"notesToCustomer\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88b731c9-e05d-434d-b2f4-df03e123ddd9",
+              "name": "Quote did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"billingAddress\": {\n    \"address1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"name\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"stateProvince\": \"<string>\",\n    \"country\": \"<string>\",\n    \"shippingLeadTime\": \"<integer>\",\n    \"primaryBilling\": \"<boolean>\",\n    \"primaryShipping\": \"<boolean>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"notes\": \"<string>\"\n  },\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_2\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"opportunity\": \"<string>\",\n  \"salesPersonId\": \"<string>\",\n  \"notesToCustomer\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cfc07f31-3180-4ad2-a8ef-050856869832",
+          "name": "Find quotes based on search parameters.",
+          "request": {
+            "name": "Find quotes based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numbers\": [\n    \"<integer>\"\n  ],\n  \"externalReference\": {\n    \"key\": \"<string>\",\n    \"type\": \"<string>\",\n    \"externalId\": \"<string>\"\n  },\n  \"status\": \"<string>\",\n  \"modifiedAfterUtc\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "985703ce-0aed-497d-b495-47b8fdf395d9",
+              "name": "List of quotes matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"numbers\": [\n    \"<integer>\"\n  ],\n  \"externalReference\": {\n    \"key\": \"<string>\",\n    \"type\": \"<string>\",\n    \"externalId\": \"<string>\"\n  },\n  \"status\": \"<string>\",\n  \"modifiedAfterUtc\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"createdUtc\": \"2007-05-06T01:46:17.788Z\",\n    \"customerId\": \"stringstringstringstring\",\n    \"id\": \"stringstringstringstring\",\n    \"number\": 7992,\n    \"quotedDate\": \"2018-01-30T21:54:23.383Z\",\n    \"status\": \"<string>\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_1\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"totalInPrimaryCurrency\": 2934.7090911830132,\n    \"currencyInfo\": {\n      \"id\": \"8fb4a840-938e-8438-2b46-b11288c8e490\",\n      \"documentCurrencyCode\": \"string\",\n      \"primaryCurrencyCode\": \"string\",\n      \"exchangeRate\": 9390.112666424768,\n      \"exchangeRateUpdatedOnUtc\": \"1962-08-13T21:36:59.204Z\",\n      \"exchangeRateError\": \"string\"\n    },\n    \"customFields\": {\n      \"key_0\": {}\n    },\n    \"opportunity\": \"string\",\n    \"salesPersonId\": \"stringstringstringstring\",\n    \"billingAddress\": {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"R5M3kWTmcaR0@VfgWfeCTdOPpofyo.ud\"\n    },\n    \"shippingAddresses\": [\n      {\n        \"address1\": \"string\",\n        \"city\": \"string\",\n        \"postalCode\": \"str\",\n        \"name\": \"string\",\n        \"address2\": \"string\",\n        \"address3\": \"string\",\n        \"stateProvince\": \"string\",\n        \"country\": \"string\",\n        \"phone\": \"string\",\n        \"email\": \"tLt0aclEDRpdT@AnXTLGSWvHMaOUR.wh\"\n      },\n      {\n        \"address1\": \"string\",\n        \"city\": \"string\",\n        \"postalCode\": \"string\",\n        \"name\": \"string\",\n        \"address2\": \"string\",\n        \"address3\": \"string\",\n        \"stateProvince\": \"string\",\n        \"country\": \"string\",\n        \"phone\": \"string\",\n        \"email\": \"mXW@RbCFJnFluleNUpzUasFccBMkWgd.yd\"\n      }\n    ],\n    \"companyId\": \"stringstringstringstring\",\n    \"paymentTermsId\": \"stringstringstringstring\",\n    \"paymentTerms\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"notesToCustomer\": \"string\"\n  },\n  {\n    \"createdUtc\": \"1968-07-01T17:46:41.911Z\",\n    \"customerId\": \"stringstringstringstring\",\n    \"id\": \"stringstringstringstring\",\n    \"number\": 7361,\n    \"quotedDate\": \"1996-10-11T20:50:08.977Z\",\n    \"status\": \"<string>\",\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"totalInPrimaryCurrency\": 6715.114868197274,\n    \"currencyInfo\": {\n      \"id\": \"7c1aea63-c66c-280d-5660-f006587f2d82\",\n      \"documentCurrencyCode\": \"string\",\n      \"primaryCurrencyCode\": \"string\",\n      \"exchangeRate\": 2704.5612278462027,\n      \"exchangeRateUpdatedOnUtc\": \"1986-11-26T16:27:35.113Z\",\n      \"exchangeRateError\": \"string\"\n    },\n    \"customFields\": {\n      \"key_0\": {}\n    },\n    \"opportunity\": \"string\",\n    \"salesPersonId\": \"stringstringstringstring\",\n    \"billingAddress\": {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"hYuxEu9O0HUdR@yJqxhUhyOjdvRZOuXEGBClTNXFO.lcwn\"\n    },\n    \"shippingAddresses\": [\n      {\n        \"address1\": \"string\",\n        \"city\": \"strin\",\n        \"postalCode\": \"string\",\n        \"name\": \"str\",\n        \"address2\": \"string\",\n        \"address3\": \"string\",\n        \"stateProvince\": \"string\",\n        \"country\": \"string\",\n        \"phone\": \"string\",\n        \"email\": \"fkRPy@PmwmcvCyAZVMEf.nkbf\"\n      },\n      {\n        \"address1\": \"string\",\n        \"city\": \"string\",\n        \"postalCode\": \"string\",\n        \"name\": \"string\",\n        \"address2\": \"string\",\n        \"address3\": \"string\",\n        \"stateProvince\": \"string\",\n        \"country\": \"string\",\n        \"phone\": \"string\",\n        \"email\": \"MHdS4@hcmm.vues\"\n      }\n    ],\n    \"companyId\": \"stringstringstringstring\",\n    \"paymentTermsId\": \"stringstringstringstring\",\n    \"paymentTerms\": {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\"\n    },\n    \"notesToCustomer\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1fc569f9-d8ad-4286-a288-21a55a6226b0",
+          "name": "Update a quote status",
+          "request": {
+            "name": "Update a quote status",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "quotes",
+                ":quoteId",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "178a476a-1159-45d7-9aad-67f7ba948d48",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d0828a2a-1267-4c7d-bc27-2c28b9aa5d98",
+              "name": "invalid status change",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "33f33c1a-bc41-439d-8d15-f017ffca1748",
+              "name": "quote did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "quotes",
+                    ":quoteId",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "00ee2f28-1775-42b6-939f-d08f118f20bd",
+    "name": "Fulcrum Public Accounting Code Quote API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

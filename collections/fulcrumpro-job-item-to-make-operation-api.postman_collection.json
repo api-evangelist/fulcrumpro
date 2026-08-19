@@ -1,0 +1,1359 @@
+{
+  "item": [
+    {
+      "id": "0e54fc5b-e8ee-49ae-9ad4-cf02b039c1ae",
+      "name": "Job Item To Make Operation",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8dcc716c-74ba-4657-9698-7557b88d3400",
+          "name": "Adds additional quantity completed to a job operation without completing the operation.\nEach call will increment the quantity completed by the specified amount.",
+          "request": {
+            "name": "Adds additional quantity completed to a job operation without completing the operation.\nEach call will increment the quantity completed by the specified amount.",
+            "description": {
+              "content": "This is a non-idempotent action. Multiple calls with the same parameters will result in \nthe quantity being added multiple times. Implement appropriate client-side controls to \nprevent duplicate submissions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                ":itemToMakeId",
+                "operations",
+                ":operationId",
+                "add-quantity-completed"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) The ID of the job"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemToMakeId",
+                  "description": "(Required) The ID of the item to make"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "operationId",
+                  "description": "(Required) The ID of the operation"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"additionalQuantity\": \"<double>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "438c4c06-315c-45c6-aadc-530286477117",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId",
+                    "add-quantity-completed"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) The ID of the job"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) The ID of the item to make"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) The ID of the operation"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"additionalQuantity\": \"<double>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"additionalQuantityAdded\": 3217.1918699002476,\n  \"itemToMakeId\": \"string\",\n  \"jobId\": \"string\",\n  \"newTotalQuantityCompleted\": 7100.093446119386,\n  \"operationId\": \"string\",\n  \"operationStatus\": \"string\",\n  \"previousQuantityCompleted\": 9392.957459090088,\n  \"quantityRequired\": 9462.241304763687\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1c9a4062-9a86-429d-9a89-4cb8d7ccc98d",
+          "name": "Get a specific operation for an item to make on a job",
+          "request": {
+            "name": "Get a specific operation for an item to make on a job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                ":itemToMakeId",
+                "operations",
+                ":operationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemToMakeId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "operationId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f7eb09d3-4dd8-4079-9903-ed74a246103c",
+              "name": "The operation for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstringstringstring\",\n  \"isOutsideProcessing\": true,\n  \"order\": 3878,\n  \"status\": \"ready\",\n  \"systemOperationId\": \"stringstringstringstring\",\n  \"originalScheduledStartUtc\": \"1987-08-19T20:03:29.912Z\",\n  \"originalScheduledEndUtc\": \"1995-11-15T00:25:45.109Z\",\n  \"scheduledStartUtc\": \"1949-11-21T01:00:04.943Z\",\n  \"scheduledEndUtc\": \"2014-02-20T15:00:11.807Z\",\n  \"completedOnUtc\": \"2000-12-03T04:56:31.386Z\",\n  \"completedById\": \"string\",\n  \"scheduledEquipmentId\": \"string\",\n  \"scheduledEquipmentName\": \"string\",\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"instructions\": \"string\",\n  \"name\": \"string\",\n  \"leadTimeInDays\": 9365,\n  \"associatedPurchaseOrderIds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"estimatedSetupTimeInSeconds\": 7298.276070091802,\n  \"estimatedSetupTimeBasis\": \"fixed\",\n  \"estimatedRunTimeInSeconds\": 2371.340670301868,\n  \"estimatedRunTimeBasis\": \"fixed\",\n  \"estimatedMachineTimeInSeconds\": 6091.42522189815,\n  \"estimatedMachineTimeBasis\": \"fixed\",\n  \"estimatedLaborTimeInSeconds\": 1637.7681011511813,\n  \"estimatedLaborTimeBasis\": \"perUnit\",\n  \"isMachineTimeOnly\": false,\n  \"workOrderId\": \"stringstringstringstring\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "956ed4d4-3b43-4760-92c0-dcc4612829e1",
+              "name": "Job, item to make, or operation did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9ca45f7-e1dd-4171-8f31-9388bcb0d57f",
+          "name": "Get a specific operation for an item to make on a job",
+          "request": {
+            "name": "Get a specific operation for an item to make on a job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                ":itemToMakeId",
+                "operations",
+                ":operationId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemToMakeId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "operationId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7ac12a2e-ba47-4e37-afbd-08dc9d07d480",
+              "name": "The operation for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a1eead14-16d2-4420-82a3-298e30101e87",
+              "name": "Job, item to make, or operation did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customFields\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "de07336b-fd10-4ddc-a0f1-1ec83e3df07c",
+          "name": "Get a list of operations for an item to make on a job",
+          "request": {
+            "name": "Get a list of operations for an item to make on a job",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                ":itemToMakeId",
+                "operations",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemToMakeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0e115cae-c99e-4106-9bba-2aa5c06e634a",
+              "name": "The operations for the given item to make",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstringstringstring\",\n    \"isOutsideProcessing\": true,\n    \"order\": 3185,\n    \"status\": \"ready\",\n    \"systemOperationId\": \"stringstringstringstring\",\n    \"originalScheduledStartUtc\": \"2016-07-07T15:43:56.513Z\",\n    \"originalScheduledEndUtc\": \"2024-01-03T19:16:29.043Z\",\n    \"scheduledStartUtc\": \"1971-04-11T21:41:59.254Z\",\n    \"scheduledEndUtc\": \"2002-03-11T23:03:37.305Z\",\n    \"completedOnUtc\": \"2011-08-30T20:53:23.386Z\",\n    \"completedById\": \"string\",\n    \"scheduledEquipmentId\": \"string\",\n    \"scheduledEquipmentName\": \"string\",\n    \"customFields\": {\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {},\n      \"key_3\": {},\n      \"key_4\": {}\n    },\n    \"instructions\": \"string\",\n    \"name\": \"string\",\n    \"leadTimeInDays\": 2856,\n    \"associatedPurchaseOrderIds\": [\n      \"string\",\n      \"string\"\n    ],\n    \"estimatedSetupTimeInSeconds\": 3750.8076420463153,\n    \"estimatedSetupTimeBasis\": \"perUnit\",\n    \"estimatedRunTimeInSeconds\": 6539.734243726244,\n    \"estimatedRunTimeBasis\": \"fixed\",\n    \"estimatedMachineTimeInSeconds\": 2887.307871560507,\n    \"estimatedMachineTimeBasis\": \"unitsPerHour\",\n    \"estimatedLaborTimeInSeconds\": 1650.851924162685,\n    \"estimatedLaborTimeBasis\": \"perUnit\",\n    \"isMachineTimeOnly\": true,\n    \"workOrderId\": \"stringstringstringstring\"\n  },\n  {\n    \"id\": \"stringstringstringstringstringstring\",\n    \"isOutsideProcessing\": true,\n    \"order\": 8200,\n    \"status\": \"pending\",\n    \"systemOperationId\": \"stringstringstringstring\",\n    \"originalScheduledStartUtc\": \"2022-05-02T19:16:17.524Z\",\n    \"originalScheduledEndUtc\": \"1987-08-16T23:24:06.466Z\",\n    \"scheduledStartUtc\": \"1980-11-22T21:39:03.500Z\",\n    \"scheduledEndUtc\": \"1997-01-29T04:54:35.706Z\",\n    \"completedOnUtc\": \"2015-09-29T06:50:50.274Z\",\n    \"completedById\": \"string\",\n    \"scheduledEquipmentId\": \"string\",\n    \"scheduledEquipmentName\": \"string\",\n    \"customFields\": {\n      \"key_0\": {},\n      \"key_1\": {}\n    },\n    \"instructions\": \"string\",\n    \"name\": \"string\",\n    \"leadTimeInDays\": 7253,\n    \"associatedPurchaseOrderIds\": [\n      \"string\",\n      \"string\"\n    ],\n    \"estimatedSetupTimeInSeconds\": 5125.035300441877,\n    \"estimatedSetupTimeBasis\": \"perUnit\",\n    \"estimatedRunTimeInSeconds\": 5793.257792392495,\n    \"estimatedRunTimeBasis\": \"unitsPerHour\",\n    \"estimatedMachineTimeInSeconds\": 9293.60442390455,\n    \"estimatedMachineTimeBasis\": \"fixed\",\n    \"estimatedLaborTimeInSeconds\": 1462.5629307452682,\n    \"estimatedLaborTimeBasis\": \"unitsPerHour\",\n    \"isMachineTimeOnly\": true,\n    \"workOrderId\": \"stringstringstringstring\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dcdaf815-32af-42ed-90a1-dede55d26b19",
+              "name": "Job or item to make did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fb9b3c3a-f19b-4a44-b5e9-cf381deae9b8",
+          "name": "Get a list of required items for an operation on a job item to make",
+          "request": {
+            "name": "Get a list of required items for an operation on a job item to make",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                ":itemToMakeId",
+                "operations",
+                ":operationId",
+                "items-required",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemToMakeId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "operationId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3485a5fb-b480-4564-ad9c-00c8ad51baa6",
+              "name": "The required items for the given operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId",
+                    "items-required",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"itemId\": \"stringstringstringstring\",\n    \"itemNumber\": \"string\",\n    \"revision\": \"string\"\n  },\n  {\n    \"itemId\": \"stringstringstringstring\",\n    \"itemNumber\": \"string\",\n    \"revision\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "923d4c4f-7692-40a1-814b-7434dd13c439",
+              "name": "Job, item to make, or operation did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId",
+                    "items-required",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2c22d469-acdb-4e61-9472-8ea1a86183a1",
+          "name": "Get a list of required materials for an operation on a job item to make",
+          "request": {
+            "name": "Get a list of required materials for an operation on a job item to make",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                ":itemToMakeId",
+                "operations",
+                ":operationId",
+                "materials-required",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemToMakeId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "operationId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "66e6d7d4-519d-4c91-a1be-3e465c40150f",
+              "name": "The required materials for the given operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId",
+                    "materials-required",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\"\n  },\n  {\n    \"id\": \"strin\",\n    \"name\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c74666e2-a02c-4f06-9b2c-0edd9f7774e2",
+              "name": "Job, item to make, or operation did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId",
+                    "materials-required",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f2e42d73-62c2-47a7-bf21-7bb97b771926",
+          "name": "Pick a specific item for a specific item to make on a job.",
+          "request": {
+            "name": "Pick a specific item for a specific item to make on a job.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "jobs",
+                ":jobId",
+                "items-to-make",
+                ":itemToMakeId",
+                "operations",
+                ":operationId",
+                "pick"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "jobId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemToMakeId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "operationId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"locationId\": \"<string>\",\n  \"useDefaultLocation\": \"<boolean>\",\n  \"lotId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "80769019-bcb9-45a1-a26d-171a9ca1280c",
+              "name": "Inventory transaction processed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId",
+                    "pick"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"locationId\": \"<string>\",\n  \"useDefaultLocation\": \"<boolean>\",\n  \"lotId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "abdcb0aa-6076-46ec-8ff3-4a74d3dcde5b",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId",
+                    "pick"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"locationId\": \"<string>\",\n  \"useDefaultLocation\": \"<boolean>\",\n  \"lotId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "98895c08-3ff2-4ada-b7da-66f74af7d6b6",
+              "name": "The job, item to make, or operation did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "jobs",
+                    ":jobId",
+                    "items-to-make",
+                    ":itemToMakeId",
+                    "operations",
+                    ":operationId",
+                    "pick"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "jobId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemToMakeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "operationId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"locationId\": \"<string>\",\n  \"useDefaultLocation\": \"<boolean>\",\n  \"lotId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "55d2e890-a739-4729-8f8b-e785402f4f60",
+    "name": "Fulcrum Public Accounting Code Job Item To Make Operation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

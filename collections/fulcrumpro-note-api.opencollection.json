@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code Note API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Note",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new note on a parent document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/notes",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new note on a parent document"
+        },
+        {
+          "info": {
+            "name": "Get a specific note",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/notes/:noteId",
+            "params": [
+              {
+                "name": "noteId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a specific note"
+        },
+        {
+          "info": {
+            "name": "Find notes based on search parameters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/notes/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Find notes based on search parameters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

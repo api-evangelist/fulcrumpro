@@ -1,0 +1,166 @@
+{
+  "item": [
+    {
+      "id": "5abb5f06-1057-4ccd-8426-fcd68a3588fe",
+      "name": "Inventory Transactions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e24a0827-e77c-4c88-8662-b1a35bb1285a",
+          "name": "Finds inventory transactions based on search parameters",
+          "request": {
+            "name": "Finds inventory transactions based on search parameters",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "inventory-transactions",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateRange\": {\n    \"start\": \"<dateTime>\",\n    \"end\": \"<dateTime>\"\n  },\n  \"sourceType\": \"<string>\",\n  \"relatedEntityType\": \"<string>\",\n  \"relatedEntityId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "01eda2b4-0bb3-4b91-a8a0-35cb0fcced5f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "inventory-transactions",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateRange\": {\n    \"start\": \"<dateTime>\",\n    \"end\": \"<dateTime>\"\n  },\n  \"sourceType\": \"<string>\",\n  \"relatedEntityType\": \"<string>\",\n  \"relatedEntityId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"date\": \"1981-06-11T10:53:15.319Z\",\n      \"type\": \"setItemValue\",\n      \"secondaryType\": \"scrap\",\n      \"item\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"location\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"lot\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"quantity\": 1397.762443955941,\n      \"valueChange\": 1454.3178284035996,\n      \"qtyChange\": 4888.010365075735,\n      \"note\": \"string\",\n      \"value\": 224.56016753043428,\n      \"totalValue\": 3584.3651202329597\n    },\n    {\n      \"id\": \"string\",\n      \"date\": \"2011-04-10T23:39:14.809Z\",\n      \"type\": \"setItemValue\",\n      \"secondaryType\": \"stockAdjustmentIncrease\",\n      \"item\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"location\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"lot\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      \"quantity\": 4589.5276033763985,\n      \"valueChange\": 6632.345279720219,\n      \"qtyChange\": 7193.934448468109,\n      \"note\": \"string\",\n      \"value\": 2394.3683971026608,\n      \"totalValue\": 3843.9699030156617\n    }\n  ],\n  \"hasNextPage\": false,\n  \"hasPreviousPage\": true,\n  \"page\": 6158,\n  \"pageSize\": 4571,\n  \"totalCount\": 3602,\n  \"totalPages\": 9985\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6f68fd8c-6eb5-482c-ac15-f2e1531c6ac4",
+    "name": "Fulcrum Public Accounting Code Inventory Transactions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,292 @@
+{
+  "item": [
+    {
+      "id": "d617e22c-719d-4fe7-8446-16cc47bf290d",
+      "name": "CAPAs",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fcf4fc2f-1be3-4c24-a3e6-318103ba20f6",
+          "name": "Get a specific CAPA by id.",
+          "request": {
+            "name": "Get a specific CAPA by id.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "capas",
+                ":capaId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "capaId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4beb2fda-1612-4567-b50d-6488087f127a",
+              "name": "The CAPA for the given id.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "capas",
+                    ":capaId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "capaId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"capaType\": \"string\",\n  \"id\": \"stringstringstringstring\",\n  \"number\": 4906,\n  \"problemStatement\": \"string\",\n  \"status\": \"string\",\n  \"rootCauseAnalysis\": \"string\",\n  \"correctiveAction\": \"string\",\n  \"ncrId\": \"string\",\n  \"createdUtc\": \"1966-11-08T02:40:58.922Z\",\n  \"dueDate\": \"1984-01-21T11:26:20.266Z\",\n  \"closedUtc\": \"1979-04-16T02:09:57.377Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d66de49-91cb-4904-aa5d-9cc918eb9941",
+              "name": "A CAPA with that id does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "capas",
+                    ":capaId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "capaId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b0aba59-18c3-4bc7-9c7b-1e25c3d49d0e",
+          "name": "Finds CAPAs based on search parameters",
+          "request": {
+            "name": "Finds CAPAs based on search parameters",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "capas",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"ncrId\": \"<string>\",\n  \"createdUtc\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8a4e401f-60cc-43b5-98fc-3310d9041927",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "capas",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\",\n  \"type\": \"<string>\",\n  \"ncrId\": \"<string>\",\n  \"createdUtc\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"capaType\": \"string\",\n      \"id\": \"stringstringstringstring\",\n      \"number\": 4628,\n      \"problemStatement\": \"string\",\n      \"status\": \"string\",\n      \"rootCauseAnalysis\": \"string\",\n      \"correctiveAction\": \"string\",\n      \"ncrId\": \"string\",\n      \"createdUtc\": \"2022-05-25T07:14:22.452Z\",\n      \"dueDate\": \"1955-08-01T01:30:23.185Z\",\n      \"closedUtc\": \"2000-02-03T02:24:36.122Z\"\n    },\n    {\n      \"capaType\": \"string\",\n      \"id\": \"stringstringstringstring\",\n      \"number\": 9158,\n      \"problemStatement\": \"string\",\n      \"status\": \"string\",\n      \"rootCauseAnalysis\": \"string\",\n      \"correctiveAction\": \"string\",\n      \"ncrId\": \"string\",\n      \"createdUtc\": \"2008-04-30T09:47:26.182Z\",\n      \"dueDate\": \"1946-12-31T10:38:03.680Z\",\n      \"closedUtc\": \"2006-09-30T16:18:00.476Z\"\n    }\n  ],\n  \"hasNextPage\": true,\n  \"hasPreviousPage\": true,\n  \"page\": 9784,\n  \"pageSize\": 7017,\n  \"totalCount\": 8567,\n  \"totalPages\": 7870\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8a478861-afbe-4f5e-acbc-f4f1cf26e4dc",
+    "name": "Fulcrum Public Accounting Code CAPAs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

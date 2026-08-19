@@ -1,0 +1,1552 @@
+{
+  "item": [
+    {
+      "id": "6924631c-e162-414a-8468-75ca06a7dc11",
+      "name": "Item",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7958449e-f445-4e23-bdd7-9d809f1a656d",
+          "name": "Add a revision to an item",
+          "request": {
+            "name": "Add a revision to an item",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "revision"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"revision\": \"<string>\",\n  \"archiveSourceItem\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "71dbf92f-3299-466d-8caf-91bbf905556f",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "revision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"revision\": \"<string>\",\n  \"archiveSourceItem\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"str\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1fa35bb2-4193-40ab-b923-d6072e7ea2a3",
+              "name": "Item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "revision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"revision\": \"<string>\",\n  \"archiveSourceItem\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6b550ba7-0f5a-487f-a143-7c3d261b853a",
+              "name": "Item revision already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "revision"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"revision\": \"<string>\",\n  \"archiveSourceItem\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "49daa827-b09c-4242-8c5c-f4aaf66c4fe5",
+          "name": "Create a new item",
+          "request": {
+            "name": "Create a new item",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemOrigin\": \"<string>\",\n  \"number\": \"<string>\",\n  \"unitOfMeasureName\": \"<string>\",\n  \"unitTypeName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"revision\": \"<string>\",\n  \"isSellable\": \"<boolean>\",\n  \"isSingleUseItem\": \"<boolean>\",\n  \"isLotTracked\": \"<boolean>\",\n  \"accountingCodeId\": \"<string>\",\n  \"accountingCode2Id\": \"<string>\",\n  \"materialCodeId\": \"<string>\",\n  \"categoryId\": \"<string>\",\n  \"gradeId\": \"<string>\",\n  \"shapeId\": \"<string>\",\n  \"gaugeId\": \"<string>\",\n  \"width\": \"<double>\",\n  \"height\": \"<double>\",\n  \"length\": \"<double>\",\n  \"weight\": \"<double>\",\n  \"minimumStockOnHand\": \"<double>\",\n  \"minimumProductionQuantity\": \"<double>\",\n  \"internalNotes\": \"<string>\",\n  \"salesUnitOfMeasureConversions\": [\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    },\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    }\n  ],\n  \"isTaxable\": \"<boolean>\",\n  \"buildToOrder\": \"<boolean>\",\n  \"buildToStock\": \"<boolean>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "09c0a8fc-390e-4b8e-a1b9-9eb83b100f82",
+              "name": "Item created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemOrigin\": \"<string>\",\n  \"number\": \"<string>\",\n  \"unitOfMeasureName\": \"<string>\",\n  \"unitTypeName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"revision\": \"<string>\",\n  \"isSellable\": \"<boolean>\",\n  \"isSingleUseItem\": \"<boolean>\",\n  \"isLotTracked\": \"<boolean>\",\n  \"accountingCodeId\": \"<string>\",\n  \"accountingCode2Id\": \"<string>\",\n  \"materialCodeId\": \"<string>\",\n  \"categoryId\": \"<string>\",\n  \"gradeId\": \"<string>\",\n  \"shapeId\": \"<string>\",\n  \"gaugeId\": \"<string>\",\n  \"width\": \"<double>\",\n  \"height\": \"<double>\",\n  \"length\": \"<double>\",\n  \"weight\": \"<double>\",\n  \"minimumStockOnHand\": \"<double>\",\n  \"minimumProductionQuantity\": \"<double>\",\n  \"internalNotes\": \"<string>\",\n  \"salesUnitOfMeasureConversions\": [\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    },\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    }\n  ],\n  \"isTaxable\": \"<boolean>\",\n  \"buildToOrder\": \"<boolean>\",\n  \"buildToStock\": \"<boolean>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"str\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6353079e-d422-4964-a7ce-b9e1f5ae41e5",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"itemOrigin\": \"<string>\",\n  \"number\": \"<string>\",\n  \"unitOfMeasureName\": \"<string>\",\n  \"unitTypeName\": \"<string>\",\n  \"description\": \"<string>\",\n  \"revision\": \"<string>\",\n  \"isSellable\": \"<boolean>\",\n  \"isSingleUseItem\": \"<boolean>\",\n  \"isLotTracked\": \"<boolean>\",\n  \"accountingCodeId\": \"<string>\",\n  \"accountingCode2Id\": \"<string>\",\n  \"materialCodeId\": \"<string>\",\n  \"categoryId\": \"<string>\",\n  \"gradeId\": \"<string>\",\n  \"shapeId\": \"<string>\",\n  \"gaugeId\": \"<string>\",\n  \"width\": \"<double>\",\n  \"height\": \"<double>\",\n  \"length\": \"<double>\",\n  \"weight\": \"<double>\",\n  \"minimumStockOnHand\": \"<double>\",\n  \"minimumProductionQuantity\": \"<double>\",\n  \"internalNotes\": \"<string>\",\n  \"salesUnitOfMeasureConversions\": [\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    },\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    }\n  ],\n  \"isTaxable\": \"<boolean>\",\n  \"buildToOrder\": \"<boolean>\",\n  \"buildToStock\": \"<boolean>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aa295833-0e8d-408f-b52b-c5885fdc4084",
+          "name": "Get a specific item",
+          "request": {
+            "name": "Get a specific item",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e4be0c26-4171-4a29-a498-4d10505a9ff9",
+              "name": "The item for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"description\": \"string\",\n  \"id\": \"stringstringstringstring\",\n  \"itemOrigin\": \"<string>\",\n  \"number\": \"string\",\n  \"unitOfMeasureName\": \"string\",\n  \"unitTypeName\": \"string\",\n  \"revision\": {\n    \"isLatestRevision\": true,\n    \"revision\": \"string\"\n  },\n  \"barCodeNumber\": \"string\",\n  \"isSellable\": false,\n  \"isArchived\": false,\n  \"isNonInventory\": true,\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"accountingCode2Id\": \"stringstringstringstring\",\n  \"materialCodeId\": \"stringstringstringstring\",\n  \"gradeId\": \"stringstringstringstring\",\n  \"shapeId\": \"stringstringstringstring\",\n  \"gaugeId\": \"stringstringstringstring\",\n  \"categoryId\": \"string\",\n  \"width\": 4536.419448313862,\n  \"height\": 5023.881877051669,\n  \"length\": 7071.156503761545,\n  \"weight\": 4721.059512981731,\n  \"materialWeight\": 5181.491649987852,\n  \"minimumStockOnHand\": 7772.052988040064,\n  \"minimumProductionQuantity\": 9008.936397304107,\n  \"customFields\": {\n    \"key_0\": {}\n  },\n  \"tags\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"style\": \"dark\",\n      \"types\": [\n        \"chartOfAccounts\",\n        \"accountingCode\"\n      ],\n      \"description\": \"string\",\n      \"deleted\": false\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"style\": \"dark\",\n      \"types\": [\n        \"vendorOrderIssueCode\",\n        \"itemCategory\"\n      ],\n      \"description\": \"string\",\n      \"deleted\": true\n    }\n  ],\n  \"internalNotes\": \"string\",\n  \"salesUnitOfMeasureConversions\": [\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\",\n      \"multiplier\": 5300.7853577788455\n    },\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\",\n      \"multiplier\": 7821.357480805155\n    }\n  ],\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_2\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_3\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"isTaxable\": true,\n  \"buildToOrder\": true,\n  \"buildToStock\": true,\n  \"isSingleUseItem\": false,\n  \"isLotTracked\": false,\n  \"shipping\": {\n    \"class\": \"string\",\n    \"nmfc\": \"string\",\n    \"isHazmat\": true,\n    \"unitWeight\": 5864.967641686047,\n    \"tariffCode\": \"string\",\n    \"countryOfOrigin\": \"string\"\n  },\n  \"createdUtc\": \"2020-01-19T21:39:53.322Z\",\n  \"modifiedUtc\": \"1977-11-10T10:30:43.978Z\",\n  \"customerTiers\": [\n    {\n      \"customerTier\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\"\n      },\n      \"priceBreaks\": [\n        {\n          \"type\": \"margin\",\n          \"quantity\": 1329,\n          \"price\": 9975.323422124804,\n          \"margin\": 9784.431460327825,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"shopRate\",\n          \"quantity\": 6721,\n          \"price\": 6542.610690359367,\n          \"margin\": 3777.3397060830503,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ]\n    },\n    {\n      \"customerTier\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\"\n      },\n      \"priceBreaks\": [\n        {\n          \"type\": \"shopRate\",\n          \"quantity\": 2024,\n          \"price\": 6832.667711690799,\n          \"margin\": 5899.679911270216,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"margin\",\n          \"quantity\": 8682,\n          \"price\": 3283.8794162115014,\n          \"margin\": 9709.516445545567,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"materialDetails\": {\n    \"materialWidth\": 66.64891023938301,\n    \"materialLength\": 5347.233223899709,\n    \"materialThickness\": 5571.829996140076,\n    \"form\": \"squareBar\",\n    \"unit\": \"centimeter\",\n    \"materialId\": \"string\",\n    \"materialName\": \"string\",\n    \"isRemnant\": true\n  },\n  \"materialVendorDetails\": [\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"notes\": \"strin\"\n    },\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"notes\": \"string\"\n    }\n  ],\n  \"vendorDetails\": [\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"cost\",\n          \"quantity\": 8391,\n          \"price\": 4695.268182795198,\n          \"margin\": 2550.048540994283,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"margin\",\n          \"quantity\": 9536,\n          \"price\": 1738.1933664836824,\n          \"margin\": 8805.124352978348,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"price\": 7714.383698168228,\n      \"isPrimary\": true,\n      \"leadTimeInDays\": 6935,\n      \"unitOfMeasureName\": \"string\",\n      \"unitQuantity\": 2646.5662969687673,\n      \"inventoryUnitQuantity\": 8306.116754748073,\n      \"notes\": \"string\"\n    },\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"margin\",\n          \"quantity\": 9177,\n          \"price\": 3882.159741140754,\n          \"margin\": 9701.773018007692,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"price\",\n          \"quantity\": 3415,\n          \"price\": 4517.968112564542,\n          \"margin\": 715.9001531771625,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"price\": 1355.0381160287739,\n      \"isPrimary\": true,\n      \"leadTimeInDays\": 3092,\n      \"unitOfMeasureName\": \"string\",\n      \"unitQuantity\": 6940.082272366271,\n      \"inventoryUnitQuantity\": 546.7305862323235,\n      \"notes\": \"string\"\n    }\n  ],\n  \"customerDetails\": [\n    {\n      \"customerId\": \"stringstringstringstring\",\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"shopRate\",\n          \"quantity\": 5919,\n          \"price\": 3355.6084878622537,\n          \"margin\": 3437.2579019550653,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"margin\",\n          \"quantity\": 3583,\n          \"price\": 855.6824131940233,\n          \"margin\": 9680.823578132879,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"customerItemNumber\": \"string\",\n      \"customerItemName\": \"string\",\n      \"unitOfMeasureName\": \"string\"\n    },\n    {\n      \"customerId\": \"stringstringstringstring\",\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"price\",\n          \"quantity\": 2789,\n          \"price\": 2812.066389477985,\n          \"margin\": 1416.4650885743924,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"operation\",\n          \"quantity\": 7045,\n          \"price\": 56.487576741655054,\n          \"margin\": 6089.042512199031,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"customerItemNumber\": \"string\",\n      \"customerItemName\": \"string\",\n      \"unitOfMeasureName\": \"string\"\n    }\n  ],\n  \"qualityPlanStatus\": \"needsApproval\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6be2c364-db1d-4565-b4f6-67ead724d0ec",
+              "name": "Item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "83d7f6ba-da3a-4d7f-ade7-a2e2ae711f96",
+          "name": "Partially update an item",
+          "request": {
+            "name": "Partially update an item",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b77fc4da-5813-4035-a121-d2a2327be343",
+              "name": "Item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"description\": \"string\",\n  \"id\": \"stringstringstringstring\",\n  \"itemOrigin\": \"<string>\",\n  \"number\": \"string\",\n  \"unitOfMeasureName\": \"string\",\n  \"unitTypeName\": \"string\",\n  \"revision\": {\n    \"isLatestRevision\": false,\n    \"revision\": \"string\"\n  },\n  \"barCodeNumber\": \"string\",\n  \"isSellable\": true,\n  \"isArchived\": true,\n  \"isNonInventory\": false,\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"accountingCode2Id\": \"stringstringstringstring\",\n  \"materialCodeId\": \"stringstringstringstring\",\n  \"gradeId\": \"stringstringstringstring\",\n  \"shapeId\": \"stringstringstringstring\",\n  \"gaugeId\": \"stringstringstringstring\",\n  \"categoryId\": \"string\",\n  \"width\": 9845.067359688446,\n  \"height\": 1675.3216164132011,\n  \"length\": 3169.8965214524533,\n  \"weight\": 2968.141058547176,\n  \"materialWeight\": 5057.079857335463,\n  \"minimumStockOnHand\": 5670.00343609885,\n  \"minimumProductionQuantity\": 1562.979436481079,\n  \"customFields\": {\n    \"key_0\": {}\n  },\n  \"tags\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"style\": \"light\",\n      \"types\": [\n        \"vendorOrderIssueCode\",\n        \"breakReasonCode\"\n      ],\n      \"description\": \"string\",\n      \"deleted\": true\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"style\": \"light\",\n      \"types\": [\n        \"itemGrade\",\n        \"chartOfAccounts\"\n      ],\n      \"description\": \"string\",\n      \"deleted\": true\n    }\n  ],\n  \"internalNotes\": \"string\",\n  \"salesUnitOfMeasureConversions\": [\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\",\n      \"multiplier\": 4444.397883010177\n    },\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\",\n      \"multiplier\": 6162.610338223694\n    }\n  ],\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"isTaxable\": true,\n  \"buildToOrder\": false,\n  \"buildToStock\": false,\n  \"isSingleUseItem\": true,\n  \"isLotTracked\": true,\n  \"shipping\": {\n    \"class\": \"string\",\n    \"nmfc\": \"string\",\n    \"isHazmat\": false,\n    \"unitWeight\": 7483.410264621574,\n    \"tariffCode\": \"string\",\n    \"countryOfOrigin\": \"string\"\n  },\n  \"createdUtc\": \"1989-12-24T19:10:59.746Z\",\n  \"modifiedUtc\": \"1963-03-03T22:02:17.653Z\",\n  \"customerTiers\": [\n    {\n      \"customerTier\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\"\n      },\n      \"priceBreaks\": [\n        {\n          \"type\": \"shopRate\",\n          \"quantity\": 3862,\n          \"price\": 6523.471943619219,\n          \"margin\": 646.743398832702,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"cost\",\n          \"quantity\": 8563,\n          \"price\": 7761.229577717752,\n          \"margin\": 1178.7823512273133,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ]\n    },\n    {\n      \"customerTier\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\"\n      },\n      \"priceBreaks\": [\n        {\n          \"type\": \"cost\",\n          \"quantity\": 707,\n          \"price\": 9855.903194365144,\n          \"margin\": 6663.548797884991,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"price\",\n          \"quantity\": 1295,\n          \"price\": 3539.027611143103,\n          \"margin\": 8417.347523981862,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"materialDetails\": {\n    \"materialWidth\": 659.3567528284094,\n    \"materialLength\": 2588.776103484668,\n    \"materialThickness\": 2937.1267825070936,\n    \"form\": \"flatBar\",\n    \"unit\": \"foot\",\n    \"materialId\": \"string\",\n    \"materialName\": \"string\",\n    \"isRemnant\": true\n  },\n  \"materialVendorDetails\": [\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"notes\": \"string\"\n    },\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"notes\": \"string\"\n    }\n  ],\n  \"vendorDetails\": [\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"cost\",\n          \"quantity\": 5819,\n          \"price\": 397.2095886555882,\n          \"margin\": 741.5052708808267,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"cost\",\n          \"quantity\": 5656,\n          \"price\": 9965.686443818131,\n          \"margin\": 6444.987946489002,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"price\": 9246.99597370209,\n      \"isPrimary\": false,\n      \"leadTimeInDays\": 99,\n      \"unitOfMeasureName\": \"string\",\n      \"unitQuantity\": 3111.3728304751576,\n      \"inventoryUnitQuantity\": 4307.998676160073,\n      \"notes\": \"string\"\n    },\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"cost\",\n          \"quantity\": 9137,\n          \"price\": 9055.652725602433,\n          \"margin\": 3469.422011141546,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"price\",\n          \"quantity\": 7444,\n          \"price\": 4320.961488581925,\n          \"margin\": 6755.89192856611,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"price\": 9805.86236667188,\n      \"isPrimary\": false,\n      \"leadTimeInDays\": 1781,\n      \"unitOfMeasureName\": \"string\",\n      \"unitQuantity\": 4310.118675349337,\n      \"inventoryUnitQuantity\": 4963.247749381888,\n      \"notes\": \"string\"\n    }\n  ],\n  \"customerDetails\": [\n    {\n      \"customerId\": \"stringstringstringstring\",\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"operation\",\n          \"quantity\": 4895,\n          \"price\": 6311.13407817636,\n          \"margin\": 6949.391418141432,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"cost\",\n          \"quantity\": 7652,\n          \"price\": 8075.199798813086,\n          \"margin\": 9333.16343865527,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"customerItemNumber\": \"st\",\n      \"customerItemName\": \"string\",\n      \"unitOfMeasureName\": \"string\"\n    },\n    {\n      \"customerId\": \"stringstringstringstring\",\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"shopRate\",\n          \"quantity\": 2035,\n          \"price\": 5220.70825476891,\n          \"margin\": 1735.2061286919973,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"cost\",\n          \"quantity\": 408,\n          \"price\": 3426.75945317646,\n          \"margin\": 9971.747005147416,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"customerItemNumber\": \"string\",\n      \"customerItemName\": \"stri\",\n      \"unitOfMeasureName\": \"string\"\n    }\n  ],\n  \"qualityPlanStatus\": \"approved\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ffa9146-2998-4613-adca-f0114627a874",
+              "name": "Item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  },\n  {\n    \"op\": \"<string>\",\n    \"value\": \"<string>\",\n    \"path\": \"<string>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7495e143-6efc-46ea-bc0b-a3df8a71ff7f",
+          "name": "Update a specific item",
+          "request": {
+            "name": "Update a specific item",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"accountingCodeId\": \"<string>\",\n  \"accountingCode2Id\": \"<string>\",\n  \"materialCodeId\": \"<string>\",\n  \"gradeId\": \"<string>\",\n  \"shapeId\": \"<string>\",\n  \"gaugeId\": \"<string>\",\n  \"categoryId\": \"<string>\",\n  \"width\": \"<double>\",\n  \"height\": \"<double>\",\n  \"length\": \"<double>\",\n  \"weight\": \"<double>\",\n  \"minimumStockOnHand\": \"<double>\",\n  \"minimumProductionQuantity\": \"<double>\",\n  \"internalNotes\": \"<string>\",\n  \"salesUnitOfMeasureConversions\": [\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    },\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    }\n  ],\n  \"isTaxable\": \"<boolean>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b363f55c-ec9d-43d2-bb04-9d11657a3ed2",
+              "name": "Item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"accountingCodeId\": \"<string>\",\n  \"accountingCode2Id\": \"<string>\",\n  \"materialCodeId\": \"<string>\",\n  \"gradeId\": \"<string>\",\n  \"shapeId\": \"<string>\",\n  \"gaugeId\": \"<string>\",\n  \"categoryId\": \"<string>\",\n  \"width\": \"<double>\",\n  \"height\": \"<double>\",\n  \"length\": \"<double>\",\n  \"weight\": \"<double>\",\n  \"minimumStockOnHand\": \"<double>\",\n  \"minimumProductionQuantity\": \"<double>\",\n  \"internalNotes\": \"<string>\",\n  \"salesUnitOfMeasureConversions\": [\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    },\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    }\n  ],\n  \"isTaxable\": \"<boolean>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountingDetails\": {\n    \"classId\": \"stringstringstringstring\",\n    \"incomeAccountId\": \"stringstringstringstring\",\n    \"assetAccountId\": \"stringstringstringstring\",\n    \"expenseAccountId\": \"stringstringstringstring\",\n    \"cogsAccountId\": \"stringstringstringstring\"\n  },\n  \"description\": \"string\",\n  \"id\": \"stringstringstringstring\",\n  \"itemOrigin\": \"<string>\",\n  \"number\": \"string\",\n  \"unitOfMeasureName\": \"string\",\n  \"unitTypeName\": \"string\",\n  \"revision\": {\n    \"isLatestRevision\": false,\n    \"revision\": \"string\"\n  },\n  \"barCodeNumber\": \"string\",\n  \"isSellable\": true,\n  \"isArchived\": true,\n  \"isNonInventory\": false,\n  \"accountingCodeId\": \"stringstringstringstring\",\n  \"accountingCode2Id\": \"stringstringstringstring\",\n  \"materialCodeId\": \"stringstringstringstring\",\n  \"gradeId\": \"stringstringstringstring\",\n  \"shapeId\": \"stringstringstringstring\",\n  \"gaugeId\": \"stringstringstringstring\",\n  \"categoryId\": \"string\",\n  \"width\": 9845.067359688446,\n  \"height\": 1675.3216164132011,\n  \"length\": 3169.8965214524533,\n  \"weight\": 2968.141058547176,\n  \"materialWeight\": 5057.079857335463,\n  \"minimumStockOnHand\": 5670.00343609885,\n  \"minimumProductionQuantity\": 1562.979436481079,\n  \"customFields\": {\n    \"key_0\": {}\n  },\n  \"tags\": [\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"style\": \"light\",\n      \"types\": [\n        \"vendorOrderIssueCode\",\n        \"breakReasonCode\"\n      ],\n      \"description\": \"string\",\n      \"deleted\": true\n    },\n    {\n      \"id\": \"stringstringstringstring\",\n      \"name\": \"string\",\n      \"style\": \"light\",\n      \"types\": [\n        \"itemGrade\",\n        \"chartOfAccounts\"\n      ],\n      \"description\": \"string\",\n      \"deleted\": true\n    }\n  ],\n  \"internalNotes\": \"string\",\n  \"salesUnitOfMeasureConversions\": [\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\",\n      \"multiplier\": 4444.397883010177\n    },\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\",\n      \"multiplier\": 6162.610338223694\n    }\n  ],\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  },\n  \"isTaxable\": true,\n  \"buildToOrder\": false,\n  \"buildToStock\": false,\n  \"isSingleUseItem\": true,\n  \"isLotTracked\": true,\n  \"shipping\": {\n    \"class\": \"string\",\n    \"nmfc\": \"string\",\n    \"isHazmat\": false,\n    \"unitWeight\": 7483.410264621574,\n    \"tariffCode\": \"string\",\n    \"countryOfOrigin\": \"string\"\n  },\n  \"createdUtc\": \"1989-12-24T19:10:59.746Z\",\n  \"modifiedUtc\": \"1963-03-03T22:02:17.653Z\",\n  \"customerTiers\": [\n    {\n      \"customerTier\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\"\n      },\n      \"priceBreaks\": [\n        {\n          \"type\": \"shopRate\",\n          \"quantity\": 3862,\n          \"price\": 6523.471943619219,\n          \"margin\": 646.743398832702,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"cost\",\n          \"quantity\": 8563,\n          \"price\": 7761.229577717752,\n          \"margin\": 1178.7823512273133,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ]\n    },\n    {\n      \"customerTier\": {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"description\": \"string\"\n      },\n      \"priceBreaks\": [\n        {\n          \"type\": \"cost\",\n          \"quantity\": 707,\n          \"price\": 9855.903194365144,\n          \"margin\": 6663.548797884991,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"price\",\n          \"quantity\": 1295,\n          \"price\": 3539.027611143103,\n          \"margin\": 8417.347523981862,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"materialDetails\": {\n    \"materialWidth\": 659.3567528284094,\n    \"materialLength\": 2588.776103484668,\n    \"materialThickness\": 2937.1267825070936,\n    \"form\": \"flatBar\",\n    \"unit\": \"foot\",\n    \"materialId\": \"string\",\n    \"materialName\": \"string\",\n    \"isRemnant\": true\n  },\n  \"materialVendorDetails\": [\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"notes\": \"string\"\n    },\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"notes\": \"string\"\n    }\n  ],\n  \"vendorDetails\": [\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"cost\",\n          \"quantity\": 5819,\n          \"price\": 397.2095886555882,\n          \"margin\": 741.5052708808267,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"cost\",\n          \"quantity\": 5656,\n          \"price\": 9965.686443818131,\n          \"margin\": 6444.987946489002,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"price\": 9246.99597370209,\n      \"isPrimary\": false,\n      \"leadTimeInDays\": 99,\n      \"unitOfMeasureName\": \"string\",\n      \"unitQuantity\": 3111.3728304751576,\n      \"inventoryUnitQuantity\": 4307.998676160073,\n      \"notes\": \"string\"\n    },\n    {\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"cost\",\n          \"quantity\": 9137,\n          \"price\": 9055.652725602433,\n          \"margin\": 3469.422011141546,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"price\",\n          \"quantity\": 7444,\n          \"price\": 4320.961488581925,\n          \"margin\": 6755.89192856611,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"vendorId\": \"stringstringstringstring\",\n      \"vendorItemNumber\": \"string\",\n      \"vendorItemName\": \"string\",\n      \"price\": 9805.86236667188,\n      \"isPrimary\": false,\n      \"leadTimeInDays\": 1781,\n      \"unitOfMeasureName\": \"string\",\n      \"unitQuantity\": 4310.118675349337,\n      \"inventoryUnitQuantity\": 4963.247749381888,\n      \"notes\": \"string\"\n    }\n  ],\n  \"customerDetails\": [\n    {\n      \"customerId\": \"stringstringstringstring\",\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"operation\",\n          \"quantity\": 4895,\n          \"price\": 6311.13407817636,\n          \"margin\": 6949.391418141432,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"cost\",\n          \"quantity\": 7652,\n          \"price\": 8075.199798813086,\n          \"margin\": 9333.16343865527,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"customerItemNumber\": \"st\",\n      \"customerItemName\": \"string\",\n      \"unitOfMeasureName\": \"string\"\n    },\n    {\n      \"customerId\": \"stringstringstringstring\",\n      \"id\": \"stringstringstringstringstringstring\",\n      \"priceBreaks\": [\n        {\n          \"type\": \"shopRate\",\n          \"quantity\": 2035,\n          \"price\": 5220.70825476891,\n          \"margin\": 1735.2061286919973,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        },\n        {\n          \"type\": \"cost\",\n          \"quantity\": 408,\n          \"price\": 3426.75945317646,\n          \"margin\": 9971.747005147416,\n          \"currencyCode\": \"string\",\n          \"vendorId\": \"stringstringstringstring\",\n          \"customerId\": \"stringstringstringstring\",\n          \"customerTierId\": \"stringstringstringstring\",\n          \"unitOfMeasureName\": \"string\"\n        }\n      ],\n      \"customerItemNumber\": \"string\",\n      \"customerItemName\": \"stri\",\n      \"unitOfMeasureName\": \"string\"\n    }\n  ],\n  \"qualityPlanStatus\": \"approved\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ff88039-43ad-4cd0-ba23-b272de402bae",
+              "name": "Item did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"accountingCodeId\": \"<string>\",\n  \"accountingCode2Id\": \"<string>\",\n  \"materialCodeId\": \"<string>\",\n  \"gradeId\": \"<string>\",\n  \"shapeId\": \"<string>\",\n  \"gaugeId\": \"<string>\",\n  \"categoryId\": \"<string>\",\n  \"width\": \"<double>\",\n  \"height\": \"<double>\",\n  \"length\": \"<double>\",\n  \"weight\": \"<double>\",\n  \"minimumStockOnHand\": \"<double>\",\n  \"minimumProductionQuantity\": \"<double>\",\n  \"internalNotes\": \"<string>\",\n  \"salesUnitOfMeasureConversions\": [\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    },\n    {\n      \"destinationQuantity\": \"<double>\",\n      \"destinationUnitOfMeasureName\": \"<string>\",\n      \"sourceQuantity\": \"<double>\",\n      \"isCustom\": \"<boolean>\",\n      \"isDefault\": \"<boolean>\"\n    }\n  ],\n  \"isTaxable\": \"<boolean>\",\n  \"externalReferences\": {\n    \"key_0\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    },\n    \"key_1\": {\n      \"externalId\": \"<string>\",\n      \"type\": \"<string>\",\n      \"displayId\": \"<string>\",\n      \"status\": \"<string>\",\n      \"url\": \"<string>\",\n      \"modifiedUtc\": \"<dateTime>\",\n      \"lastSyncedUtc\": \"<dateTime>\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9b18340d-ac67-4b2f-8b97-546acc934bb8",
+          "name": "Get the can-make quantities for an item. Returns how much of this item can be produced\nfrom current subcomponent inventory (on-hand and available).",
+          "request": {
+            "name": "Get the can-make quantities for an item. Returns how much of this item can be produced\nfrom current subcomponent inventory (on-hand and available).",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "can-make"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "354a28e8-57e4-4d4f-a517-5af2a285f8a4",
+              "name": "The can-make quantities for the given item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "can-make"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"canMakeFromOnHand\": 1147.900513906741,\n  \"canMakeFromAvailable\": 3024.8499864239766\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eedcf0ef-a7ab-4e50-9016-f1acbc0a72f2",
+              "name": "Item is not a make item",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "can-make"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "028eaa89-a0a4-4ce4-9e60-e4d058fc0f58",
+              "name": "Item id provided was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "can-make"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b271ca1-add6-431f-8a6b-31342351885f",
+          "name": "TO BE REMOVED 11/02/2023 - Find items based on search parameters.",
+          "request": {
+            "name": "TO BE REMOVED 11/02/2023 - Find items based on search parameters.",
+            "description": {
+              "content": "Use V2 which includes a list of number filters",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "items",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"number\": \"<string>\",\n  \"revision\": \"<string>\",\n  \"customField\": {\n    \"key\": \"<string>\",\n    \"value\": \"<string>\"\n  },\n  \"latestRevision\": \"<boolean>\",\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"descriptionFilter\": \"<string>\",\n  \"isArchived\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6abf87ac-7ef0-45e2-9811-8dcf6944605b",
+              "name": "List of items matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"<string>\",\n  \"revision\": \"<string>\",\n  \"customField\": {\n    \"key\": \"<string>\",\n    \"value\": \"<string>\"\n  },\n  \"latestRevision\": \"<boolean>\",\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"descriptionFilter\": \"<string>\",\n  \"isArchived\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"description\": \"string\",\n    \"id\": \"stringstringstringstring\",\n    \"itemOrigin\": \"<string>\",\n    \"number\": \"string\",\n    \"unitOfMeasureName\": \"string\",\n    \"unitTypeName\": \"string\",\n    \"revision\": {\n      \"isLatestRevision\": true,\n      \"revision\": \"string\"\n    },\n    \"barCodeNumber\": \"string\",\n    \"isSellable\": false,\n    \"isArchived\": false,\n    \"isNonInventory\": false,\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"accountingCode2Id\": \"stringstringstringstring\",\n    \"materialCodeId\": \"stringstringstringstring\",\n    \"gradeId\": \"stringstringstringstring\",\n    \"shapeId\": \"stringstringstringstring\",\n    \"gaugeId\": \"stringstringstringstring\",\n    \"categoryId\": \"string\",\n    \"width\": 241.0527783864247,\n    \"height\": 3405.573703423488,\n    \"length\": 2552.632872123385,\n    \"weight\": 4589.450578170969,\n    \"materialWeight\": 1367.7765852188784,\n    \"minimumStockOnHand\": 3658.226369842732,\n    \"minimumProductionQuantity\": 6608.984664072025,\n    \"customFields\": {\n      \"key_0\": {},\n      \"key_1\": {}\n    },\n    \"tags\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"style\": \"secondary\",\n        \"types\": [\n          \"chartOfAccounts\",\n          \"itemCategory\"\n        ],\n        \"description\": \"string\",\n        \"deleted\": true\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"style\": \"info\",\n        \"types\": [\n          \"accountingCode\",\n          \"itemClass\"\n        ],\n        \"description\": \"string\",\n        \"deleted\": true\n      }\n    ],\n    \"internalNotes\": \"string\",\n    \"salesUnitOfMeasureConversions\": [\n      {\n        \"destinationQuantity\": \"<double>\",\n        \"destinationUnitOfMeasureName\": \"<string>\",\n        \"sourceQuantity\": \"<double>\",\n        \"isCustom\": \"<boolean>\",\n        \"isDefault\": \"<boolean>\",\n        \"multiplier\": 7261.859105627446\n      },\n      {\n        \"destinationQuantity\": \"<double>\",\n        \"destinationUnitOfMeasureName\": \"<string>\",\n        \"sourceQuantity\": \"<double>\",\n        \"isCustom\": \"<boolean>\",\n        \"isDefault\": \"<boolean>\",\n        \"multiplier\": 5607.540999051735\n      }\n    ],\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"isTaxable\": false,\n    \"buildToOrder\": true,\n    \"buildToStock\": false,\n    \"isSingleUseItem\": true,\n    \"isLotTracked\": true,\n    \"shipping\": {\n      \"class\": \"string\",\n      \"nmfc\": \"string\",\n      \"isHazmat\": false,\n      \"unitWeight\": 5994.367873593892,\n      \"tariffCode\": \"string\",\n      \"countryOfOrigin\": \"string\"\n    },\n    \"createdUtc\": \"2013-09-07T14:14:52.797Z\",\n    \"modifiedUtc\": \"2015-12-12T09:19:26.836Z\",\n    \"customerTiers\": [\n      {\n        \"customerTier\": {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 329,\n            \"price\": 3910.2499109746946,\n            \"margin\": 1200.4771804710456,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 50,\n            \"price\": 5513.787910725388,\n            \"margin\": 81.87334903750786,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ]\n      },\n      {\n        \"customerTier\": {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 3227,\n            \"price\": 7937.977804967856,\n            \"margin\": 3129.637091697104,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 8071,\n            \"price\": 6975.4058275499465,\n            \"margin\": 1130.5316851830494,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ]\n      }\n    ],\n    \"materialDetails\": {\n      \"materialWidth\": 9056.15407046156,\n      \"materialLength\": 1887.1085381556807,\n      \"materialThickness\": 9708.035409964628,\n      \"form\": \"plate\",\n      \"unit\": \"centimeter\",\n      \"materialId\": \"string\",\n      \"materialName\": \"string\",\n      \"isRemnant\": false\n    },\n    \"materialVendorDetails\": [\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"notes\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"notes\": \"string\"\n      }\n    ],\n    \"vendorDetails\": [\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 455,\n            \"price\": 5668.433849675136,\n            \"margin\": 3547.9874563514145,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 7512,\n            \"price\": 3392.6047170210472,\n            \"margin\": 8800.0302210057,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"price\": 1678.3933804599626,\n        \"isPrimary\": false,\n        \"leadTimeInDays\": 6193,\n        \"unitOfMeasureName\": \"string\",\n        \"unitQuantity\": 7354.513967680107,\n        \"inventoryUnitQuantity\": 8425.004542853389,\n        \"notes\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 1546,\n            \"price\": 7365.616242789524,\n            \"margin\": 974.1590338643857,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 9854,\n            \"price\": 725.9949454875702,\n            \"margin\": 6678.451027709906,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"price\": 6065.542831341051,\n        \"isPrimary\": false,\n        \"leadTimeInDays\": 1172,\n        \"unitOfMeasureName\": \"string\",\n        \"unitQuantity\": 897.0643934309908,\n        \"inventoryUnitQuantity\": 2353.9345412745847,\n        \"notes\": \"string\"\n      }\n    ],\n    \"customerDetails\": [\n      {\n        \"customerId\": \"stringstringstringstring\",\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 6122,\n            \"price\": 2913.6965571363517,\n            \"margin\": 4598.218690666859,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 8117,\n            \"price\": 2814.3259615748016,\n            \"margin\": 1683.6007657345897,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"customerItemNumber\": \"string\",\n        \"customerItemName\": \"string\",\n        \"unitOfMeasureName\": \"string\"\n      },\n      {\n        \"customerId\": \"stringstringstringstring\",\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 3342,\n            \"price\": 889.4839098591078,\n            \"margin\": 938.0793352429728,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 3957,\n            \"price\": 348.15109721831885,\n            \"margin\": 1397.888997376192,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"customerItemNumber\": \"string\",\n        \"customerItemName\": \"string\",\n        \"unitOfMeasureName\": \"string\"\n      }\n    ],\n    \"qualityPlanStatus\": \"approved\"\n  },\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"description\": \"string\",\n    \"id\": \"stringstringstringstring\",\n    \"itemOrigin\": \"<string>\",\n    \"number\": \"string\",\n    \"unitOfMeasureName\": \"string\",\n    \"unitTypeName\": \"string\",\n    \"revision\": {\n      \"isLatestRevision\": false,\n      \"revision\": \"string\"\n    },\n    \"barCodeNumber\": \"string\",\n    \"isSellable\": true,\n    \"isArchived\": false,\n    \"isNonInventory\": true,\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"accountingCode2Id\": \"stringstringstringstring\",\n    \"materialCodeId\": \"stringstringstringstring\",\n    \"gradeId\": \"stringstringstringstring\",\n    \"shapeId\": \"stringstringstringstring\",\n    \"gaugeId\": \"stringstringstringstring\",\n    \"categoryId\": \"string\",\n    \"width\": 3355.3810164064557,\n    \"height\": 4649.528197607945,\n    \"length\": 3422.1242373640657,\n    \"weight\": 9844.85733193775,\n    \"materialWeight\": 8659.517660559202,\n    \"minimumStockOnHand\": 1232.9676085623064,\n    \"minimumProductionQuantity\": 9113.204666177156,\n    \"customFields\": {\n      \"key_0\": {}\n    },\n    \"tags\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"style\": \"success\",\n        \"types\": [\n          \"refundReasonCode\",\n          \"accountingCode\"\n        ],\n        \"description\": \"string\",\n        \"deleted\": false\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"style\": \"info\",\n        \"types\": [\n          \"chartOfAccounts\",\n          \"accountingCode\"\n        ],\n        \"description\": \"string\",\n        \"deleted\": false\n      }\n    ],\n    \"internalNotes\": \"string\",\n    \"salesUnitOfMeasureConversions\": [\n      {\n        \"destinationQuantity\": \"<double>\",\n        \"destinationUnitOfMeasureName\": \"<string>\",\n        \"sourceQuantity\": \"<double>\",\n        \"isCustom\": \"<boolean>\",\n        \"isDefault\": \"<boolean>\",\n        \"multiplier\": 3136.366943674358\n      },\n      {\n        \"destinationQuantity\": \"<double>\",\n        \"destinationUnitOfMeasureName\": \"<string>\",\n        \"sourceQuantity\": \"<double>\",\n        \"isCustom\": \"<boolean>\",\n        \"isDefault\": \"<boolean>\",\n        \"multiplier\": 1929.0788170638307\n      }\n    ],\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_1\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"isTaxable\": false,\n    \"buildToOrder\": true,\n    \"buildToStock\": true,\n    \"isSingleUseItem\": false,\n    \"isLotTracked\": true,\n    \"shipping\": {\n      \"class\": \"string\",\n      \"nmfc\": \"string\",\n      \"isHazmat\": true,\n      \"unitWeight\": 3150.31573294857,\n      \"tariffCode\": \"string\",\n      \"countryOfOrigin\": \"string\"\n    },\n    \"createdUtc\": \"2024-05-04T04:50:15.624Z\",\n    \"modifiedUtc\": \"1979-02-26T18:21:21.881Z\",\n    \"customerTiers\": [\n      {\n        \"customerTier\": {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 7995,\n            \"price\": 2312.087601230276,\n            \"margin\": 6176.189960359475,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 5528,\n            \"price\": 2945.513673249525,\n            \"margin\": 3035.7130050636306,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ]\n      },\n      {\n        \"customerTier\": {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 2027,\n            \"price\": 2163.094902364784,\n            \"margin\": 3922.0732983615026,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 1910,\n            \"price\": 1850.786196331361,\n            \"margin\": 3369.5753680421826,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ]\n      }\n    ],\n    \"materialDetails\": {\n      \"materialWidth\": 5583.638891113846,\n      \"materialLength\": 3024.6814610100237,\n      \"materialThickness\": 2655.891270617676,\n      \"form\": \"halfRoundBar\",\n      \"unit\": \"inch\",\n      \"materialId\": \"string\",\n      \"materialName\": \"string\",\n      \"isRemnant\": false\n    },\n    \"materialVendorDetails\": [\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"notes\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"notes\": \"string\"\n      }\n    ],\n    \"vendorDetails\": [\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 1911,\n            \"price\": 7986.565624148465,\n            \"margin\": 7425.899515154879,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 7156,\n            \"price\": 7311.749739552846,\n            \"margin\": 7896.084150350995,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"price\": 6646.494903624057,\n        \"isPrimary\": true,\n        \"leadTimeInDays\": 6309,\n        \"unitOfMeasureName\": \"string\",\n        \"unitQuantity\": 9826.253656867486,\n        \"inventoryUnitQuantity\": 8743.679005059279,\n        \"notes\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 5296,\n            \"price\": 2804.1314584137845,\n            \"margin\": 3131.5191075066728,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 3595,\n            \"price\": 4561.8008182983895,\n            \"margin\": 6103.970283263741,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"price\": 6872.494162991224,\n        \"isPrimary\": true,\n        \"leadTimeInDays\": 3121,\n        \"unitOfMeasureName\": \"string\",\n        \"unitQuantity\": 3956.0062587303537,\n        \"inventoryUnitQuantity\": 2757.939469905918,\n        \"notes\": \"string\"\n      }\n    ],\n    \"customerDetails\": [\n      {\n        \"customerId\": \"stringstringstringstring\",\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 8413,\n            \"price\": 7952.408009974514,\n            \"margin\": 3178.371422377693,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 6840,\n            \"price\": 9155.357001110004,\n            \"margin\": 5735.452763992014,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"customerItemNumber\": \"string\",\n        \"customerItemName\": \"string\",\n        \"unitOfMeasureName\": \"string\"\n      },\n      {\n        \"customerId\": \"stringstringstringstring\",\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 8378,\n            \"price\": 6405.055649640031,\n            \"margin\": 7901.723971431284,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 1256,\n            \"price\": 4194.682700234602,\n            \"margin\": 6900.413460157467,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"customerItemNumber\": \"string\",\n        \"customerItemName\": \"string\",\n        \"unitOfMeasureName\": \"string\"\n      }\n    ],\n    \"qualityPlanStatus\": \"approved\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6bb847da-4f78-4f92-acac-2b1b2c7e61c0",
+          "name": "Find items based on search parameters.",
+          "request": {
+            "name": "Find items based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "items",
+                "list",
+                "v2"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numbers\": [\n    {\n      \"casingOption\": \"<string>\",\n      \"mode\": \"<string>\",\n      \"query\": \"<string>\",\n      \"revision\": \"<string>\"\n    },\n    {\n      \"casingOption\": \"<string>\",\n      \"mode\": \"<string>\",\n      \"query\": \"<string>\",\n      \"revision\": \"<string>\"\n    }\n  ],\n  \"customField\": {\n    \"key\": \"<string>\",\n    \"value\": \"<string>\"\n  },\n  \"customFields\": [\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ],\n  \"latestRevision\": \"<boolean>\",\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"descriptionFilter\": \"<string>\",\n  \"isArchived\": \"<boolean>\",\n  \"includeUsageData\": \"<boolean>\",\n  \"includeVendorData\": \"<boolean>\",\n  \"includeCustomerData\": \"<boolean>\",\n  \"includeCustomerTierData\": \"<boolean>\",\n  \"vendorId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "740df690-106f-49c7-93da-341db8ae1163",
+              "name": "List of items matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    "list",
+                    "v2"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"numbers\": [\n    {\n      \"casingOption\": \"<string>\",\n      \"mode\": \"<string>\",\n      \"query\": \"<string>\",\n      \"revision\": \"<string>\"\n    },\n    {\n      \"casingOption\": \"<string>\",\n      \"mode\": \"<string>\",\n      \"query\": \"<string>\",\n      \"revision\": \"<string>\"\n    }\n  ],\n  \"customField\": {\n    \"key\": \"<string>\",\n    \"value\": \"<string>\"\n  },\n  \"customFields\": [\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ],\n  \"latestRevision\": \"<boolean>\",\n  \"itemIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"descriptionFilter\": \"<string>\",\n  \"isArchived\": \"<boolean>\",\n  \"includeUsageData\": \"<boolean>\",\n  \"includeVendorData\": \"<boolean>\",\n  \"includeCustomerData\": \"<boolean>\",\n  \"includeCustomerTierData\": \"<boolean>\",\n  \"vendorId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"description\": \"string\",\n    \"id\": \"stringstringstringstring\",\n    \"itemOrigin\": \"<string>\",\n    \"number\": \"string\",\n    \"unitOfMeasureName\": \"string\",\n    \"unitTypeName\": \"string\",\n    \"revision\": {\n      \"isLatestRevision\": true,\n      \"revision\": \"string\"\n    },\n    \"barCodeNumber\": \"string\",\n    \"isSellable\": false,\n    \"isArchived\": true,\n    \"isNonInventory\": false,\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"accountingCode2Id\": \"stringstringstringstring\",\n    \"materialCodeId\": \"stringstringstringstring\",\n    \"gradeId\": \"stringstringstringstring\",\n    \"shapeId\": \"stringstringstringstring\",\n    \"gaugeId\": \"stringstringstringstring\",\n    \"categoryId\": \"string\",\n    \"width\": 4316.456461294789,\n    \"height\": 3617.00187567213,\n    \"length\": 590.4114342991495,\n    \"weight\": 1004.4854596622077,\n    \"materialWeight\": 2720.785225892077,\n    \"minimumStockOnHand\": 5103.210444638348,\n    \"minimumProductionQuantity\": 445.0444229662098,\n    \"customFields\": {\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    },\n    \"tags\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"style\": \"danger\",\n        \"types\": [\n          \"itemShippingContainer\",\n          \"itemClass\"\n        ],\n        \"description\": \"string\",\n        \"deleted\": false\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"style\": \"warning\",\n        \"types\": [\n          \"itemGrade\",\n          \"itemShippingContainer\"\n        ],\n        \"description\": \"string\",\n        \"deleted\": true\n      }\n    ],\n    \"internalNotes\": \"string\",\n    \"salesUnitOfMeasureConversions\": [\n      {\n        \"destinationQuantity\": \"<double>\",\n        \"destinationUnitOfMeasureName\": \"<string>\",\n        \"sourceQuantity\": \"<double>\",\n        \"isCustom\": \"<boolean>\",\n        \"isDefault\": \"<boolean>\",\n        \"multiplier\": 1545.4976793744625\n      },\n      {\n        \"destinationQuantity\": \"<double>\",\n        \"destinationUnitOfMeasureName\": \"<string>\",\n        \"sourceQuantity\": \"<double>\",\n        \"isCustom\": \"<boolean>\",\n        \"isDefault\": \"<boolean>\",\n        \"multiplier\": 1947.9978165844436\n      }\n    ],\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_1\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      },\n      \"key_2\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"isTaxable\": true,\n    \"buildToOrder\": true,\n    \"buildToStock\": true,\n    \"isSingleUseItem\": false,\n    \"isLotTracked\": true,\n    \"shipping\": {\n      \"class\": \"string\",\n      \"nmfc\": \"string\",\n      \"isHazmat\": true,\n      \"unitWeight\": 6256.954302993953,\n      \"tariffCode\": \"string\",\n      \"countryOfOrigin\": \"string\"\n    },\n    \"createdUtc\": \"2011-03-18T03:19:02.739Z\",\n    \"modifiedUtc\": \"1976-09-29T07:42:59.750Z\",\n    \"customerTiers\": [\n      {\n        \"customerTier\": {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 2041,\n            \"price\": 187.7674795884854,\n            \"margin\": 3433.4469544675017,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 243,\n            \"price\": 5238.024968381984,\n            \"margin\": 3010.0310168798396,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ]\n      },\n      {\n        \"customerTier\": {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 3259,\n            \"price\": 2416.799120533232,\n            \"margin\": 7348.665459080117,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 3287,\n            \"price\": 5389.509733375813,\n            \"margin\": 5997.879439355287,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ]\n      }\n    ],\n    \"materialDetails\": {\n      \"materialWidth\": 8237.43435938696,\n      \"materialLength\": 109.30724228734422,\n      \"materialThickness\": 494.72271375031187,\n      \"form\": \"halfRoundBar\",\n      \"unit\": \"yard\",\n      \"materialId\": \"string\",\n      \"materialName\": \"string\",\n      \"isRemnant\": false\n    },\n    \"materialVendorDetails\": [\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"notes\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"notes\": \"string\"\n      }\n    ],\n    \"vendorDetails\": [\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 258,\n            \"price\": 8122.591578658894,\n            \"margin\": 8412.009751998747,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 8184,\n            \"price\": 6352.956260952966,\n            \"margin\": 188.58395986853793,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"price\": 9075.490600300005,\n        \"isPrimary\": false,\n        \"leadTimeInDays\": 5344,\n        \"unitOfMeasureName\": \"string\",\n        \"unitQuantity\": 7588.209592075167,\n        \"inventoryUnitQuantity\": 3889.821413032402,\n        \"notes\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 8724,\n            \"price\": 9511.514408015697,\n            \"margin\": 2566.4687194226785,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 7901,\n            \"price\": 392.7627537568723,\n            \"margin\": 1990.6432502160787,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"price\": 8284.478275650528,\n        \"isPrimary\": false,\n        \"leadTimeInDays\": 1441,\n        \"unitOfMeasureName\": \"strin\",\n        \"unitQuantity\": 1776.9608123808089,\n        \"inventoryUnitQuantity\": 5604.778818473835,\n        \"notes\": \"string\"\n      }\n    ],\n    \"customerDetails\": [\n      {\n        \"customerId\": \"stringstringstringstring\",\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 7276,\n            \"price\": 8243.143466049885,\n            \"margin\": 3871.84341963135,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 1504,\n            \"price\": 808.1776319400802,\n            \"margin\": 3698.883704400674,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"customerItemNumber\": \"string\",\n        \"customerItemName\": \"st\",\n        \"unitOfMeasureName\": \"string\"\n      },\n      {\n        \"customerId\": \"stringstringstringstring\",\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 6479,\n            \"price\": 6034.094081325824,\n            \"margin\": 6925.894748754587,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 7854,\n            \"price\": 594.5762904061636,\n            \"margin\": 5181.980858457621,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"customerItemNumber\": \"string\",\n        \"customerItemName\": \"string\",\n        \"unitOfMeasureName\": \"string\"\n      }\n    ],\n    \"qualityPlanStatus\": \"needsApproval\",\n    \"usedByItems\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      }\n    ]\n  },\n  {\n    \"accountingDetails\": {\n      \"classId\": \"stringstringstringstring\",\n      \"incomeAccountId\": \"stringstringstringstring\",\n      \"assetAccountId\": \"stringstringstringstring\",\n      \"expenseAccountId\": \"stringstringstringstring\",\n      \"cogsAccountId\": \"stringstringstringstring\"\n    },\n    \"description\": \"string\",\n    \"id\": \"stringstringstringstring\",\n    \"itemOrigin\": \"<string>\",\n    \"number\": \"string\",\n    \"unitOfMeasureName\": \"string\",\n    \"unitTypeName\": \"string\",\n    \"revision\": {\n      \"isLatestRevision\": true,\n      \"revision\": \"string\"\n    },\n    \"barCodeNumber\": \"string\",\n    \"isSellable\": false,\n    \"isArchived\": false,\n    \"isNonInventory\": true,\n    \"accountingCodeId\": \"stringstringstringstring\",\n    \"accountingCode2Id\": \"stringstringstringstring\",\n    \"materialCodeId\": \"stringstringstringstring\",\n    \"gradeId\": \"stringstringstringstring\",\n    \"shapeId\": \"stringstringstringstring\",\n    \"gaugeId\": \"stringstringstringstring\",\n    \"categoryId\": \"string\",\n    \"width\": 6996.527032020254,\n    \"height\": 6046.977368197834,\n    \"length\": 744.3690678026271,\n    \"weight\": 7263.062401959639,\n    \"materialWeight\": 4406.2290628364135,\n    \"minimumStockOnHand\": 3492.8910233739653,\n    \"minimumProductionQuantity\": 9278.398620838198,\n    \"customFields\": {\n      \"key_0\": {}\n    },\n    \"tags\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"style\": \"success\",\n        \"types\": [\n          \"refundReasonCode\",\n          \"itemGauge\"\n        ],\n        \"description\": \"string\",\n        \"deleted\": true\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\",\n        \"style\": \"light\",\n        \"types\": [\n          \"refundReasonCode\",\n          \"itemClass\"\n        ],\n        \"description\": \"string\",\n        \"deleted\": true\n      }\n    ],\n    \"internalNotes\": \"string\",\n    \"salesUnitOfMeasureConversions\": [\n      {\n        \"destinationQuantity\": \"<double>\",\n        \"destinationUnitOfMeasureName\": \"<string>\",\n        \"sourceQuantity\": \"<double>\",\n        \"isCustom\": \"<boolean>\",\n        \"isDefault\": \"<boolean>\",\n        \"multiplier\": 8866.248291984903\n      },\n      {\n        \"destinationQuantity\": \"<double>\",\n        \"destinationUnitOfMeasureName\": \"<string>\",\n        \"sourceQuantity\": \"<double>\",\n        \"isCustom\": \"<boolean>\",\n        \"isDefault\": \"<boolean>\",\n        \"multiplier\": 2836.1528363432353\n      }\n    ],\n    \"externalReferences\": {\n      \"key_0\": {\n        \"externalId\": \"<string>\",\n        \"type\": \"<string>\",\n        \"displayId\": \"<string>\",\n        \"status\": \"<string>\",\n        \"url\": \"<string>\",\n        \"modifiedUtc\": \"<dateTime>\",\n        \"lastSyncedUtc\": \"<dateTime>\"\n      }\n    },\n    \"isTaxable\": true,\n    \"buildToOrder\": true,\n    \"buildToStock\": false,\n    \"isSingleUseItem\": true,\n    \"isLotTracked\": true,\n    \"shipping\": {\n      \"class\": \"string\",\n      \"nmfc\": \"string\",\n      \"isHazmat\": true,\n      \"unitWeight\": 9855.348057298252,\n      \"tariffCode\": \"string\",\n      \"countryOfOrigin\": \"string\"\n    },\n    \"createdUtc\": \"1969-06-16T22:58:20.344Z\",\n    \"modifiedUtc\": \"1959-05-01T18:19:51.301Z\",\n    \"customerTiers\": [\n      {\n        \"customerTier\": {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 1080,\n            \"price\": 7538.966085986919,\n            \"margin\": 5793.769477185678,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 3216,\n            \"price\": 1228.741634623326,\n            \"margin\": 5425.311908027527,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ]\n      },\n      {\n        \"customerTier\": {\n          \"id\": \"stringstringstringstring\",\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 8664,\n            \"price\": 4440.616556263181,\n            \"margin\": 4344.132744452879,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 3227,\n            \"price\": 4616.966901331049,\n            \"margin\": 3923.9757094548477,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ]\n      }\n    ],\n    \"materialDetails\": {\n      \"materialWidth\": 6967.118631761989,\n      \"materialLength\": 7471.588928250368,\n      \"materialThickness\": 7275.490890026764,\n      \"form\": \"rectBar\",\n      \"unit\": \"foot\",\n      \"materialId\": \"string\",\n      \"materialName\": \"string\",\n      \"isRemnant\": true\n    },\n    \"materialVendorDetails\": [\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"notes\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"notes\": \"string\"\n      }\n    ],\n    \"vendorDetails\": [\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 4766,\n            \"price\": 5783.044611432768,\n            \"margin\": 6689.491161886081,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 961,\n            \"price\": 64.19424243603866,\n            \"margin\": 6145.242777907176,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"stri\",\n        \"price\": 7365.585839341323,\n        \"isPrimary\": false,\n        \"leadTimeInDays\": 9265,\n        \"unitOfMeasureName\": \"string\",\n        \"unitQuantity\": 4141.320880995132,\n        \"inventoryUnitQuantity\": 9311.899490426387,\n        \"notes\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 2290,\n            \"price\": 6768.292388115555,\n            \"margin\": 1764.4358564492345,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 6657,\n            \"price\": 7710.957236333595,\n            \"margin\": 1835.4506889850331,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"vendorId\": \"stringstringstringstring\",\n        \"vendorItemNumber\": \"string\",\n        \"vendorItemName\": \"string\",\n        \"price\": 5742.113157803144,\n        \"isPrimary\": false,\n        \"leadTimeInDays\": 5688,\n        \"unitOfMeasureName\": \"string\",\n        \"unitQuantity\": 4884.766780424824,\n        \"inventoryUnitQuantity\": 6885.3645491858815,\n        \"notes\": \"string\"\n      }\n    ],\n    \"customerDetails\": [\n      {\n        \"customerId\": \"stringstringstringstring\",\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 8252,\n            \"price\": 8814.196585095986,\n            \"margin\": 2731.2371620826934,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 7016,\n            \"price\": 5678.615019092771,\n            \"margin\": 6291.439858353801,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"customerItemNumber\": \"string\",\n        \"customerItemName\": \"string\",\n        \"unitOfMeasureName\": \"string\"\n      },\n      {\n        \"customerId\": \"stringstringstringstring\",\n        \"id\": \"stringstringstringstringstringstring\",\n        \"priceBreaks\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 71,\n            \"price\": 3226.9607511412137,\n            \"margin\": 6920.382204535712,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quantity\": 3752,\n            \"price\": 9828.234322459619,\n            \"margin\": 2058.79926274418,\n            \"currencyCode\": \"string\",\n            \"vendorId\": \"stringstringstringstring\",\n            \"customerId\": \"stringstringstringstring\",\n            \"customerTierId\": \"stringstringstringstring\",\n            \"unitOfMeasureName\": \"string\"\n          }\n        ],\n        \"customerItemNumber\": \"string\",\n        \"customerItemName\": \"string\",\n        \"unitOfMeasureName\": \"string\"\n      }\n    ],\n    \"qualityPlanStatus\": \"needsApproval\",\n    \"usedByItems\": [\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      },\n      {\n        \"id\": \"stringstringstringstring\",\n        \"name\": \"string\"\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "84bb273a-d802-43b2-8669-db5858a327e1",
+          "name": "TO BE REMOVED 10/13/2023 - Pick inventory against a specific item.",
+          "request": {
+            "name": "TO BE REMOVED 10/13/2023 - Pick inventory against a specific item.",
+            "description": {
+              "content": "Use /inventory/pick API instead",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "inventory",
+                "pick"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"secondaryType\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"actionDate\": \"<dateTime>\",\n  \"source\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"relatedSource\": \"<string>\",\n  \"relatedEntityId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4376b306-28f5-432b-84fa-745e177f6142",
+              "name": "Inventory transaction processed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "inventory",
+                    "pick"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"secondaryType\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"actionDate\": \"<dateTime>\",\n  \"source\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"relatedSource\": \"<string>\",\n  \"relatedEntityId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "197c75a7-1980-4b9c-850d-51899f83f016",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "inventory",
+                    "pick"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"secondaryType\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"actionDate\": \"<dateTime>\",\n  \"source\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"relatedSource\": \"<string>\",\n  \"relatedEntityId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fe3c8d7a-7706-4fed-8bbd-4c906a564bf0",
+          "name": "TO BE REMOVED 10/13/2023 - Receive inventory against a specific item.",
+          "request": {
+            "name": "TO BE REMOVED 10/13/2023 - Receive inventory against a specific item.",
+            "description": {
+              "content": "Use /inventory/receive API instead",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "items",
+                ":itemId",
+                "inventory",
+                "receive"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"secondaryType\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"actionDate\": \"<dateTime>\",\n  \"source\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"relatedSource\": \"<string>\",\n  \"relatedEntityId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bf48185e-a2c7-4cfb-b9dd-25e947457e1f",
+              "name": "Inventory transaction processed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "inventory",
+                    "receive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"secondaryType\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"actionDate\": \"<dateTime>\",\n  \"source\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"relatedSource\": \"<string>\",\n  \"relatedEntityId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "76b83992-e766-49de-be4f-c0de0a3ea4fd",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "items",
+                    ":itemId",
+                    "inventory",
+                    "receive"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"secondaryType\": \"<string>\",\n  \"lotId\": \"<string>\",\n  \"locationId\": \"<string>\",\n  \"quantity\": \"<double>\",\n  \"actionDate\": \"<dateTime>\",\n  \"source\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"relatedSource\": \"<string>\",\n  \"relatedEntityId\": \"<string>\",\n  \"note\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0832a366-6fac-486c-ab9b-9839bafea037",
+    "name": "Fulcrum Public Accounting Code Item API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Fulcrum Public Accounting Code User Status API",
+    "version": "v1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Gets a status object for a user that displays various timer metrics (jobs/ops clocked into, whether on break, etc)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.fulcrumpro.com/api/users/:userId/status",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "The user identifier"
+              }
+            ]
+          },
+          "docs": "Gets a status object for a user that displays various timer metrics (jobs/ops clocked into, whether on break, etc)"
+        },
+        {
+          "info": {
+            "name": "Gets a list of user status objects based on parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.fulcrumpro.com/api/users/status",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Gets a list of user status objects based on parameters"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

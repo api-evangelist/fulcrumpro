@@ -1,0 +1,622 @@
+{
+  "item": [
+    {
+      "id": "56293955-6211-478d-843a-eafe88f8557c",
+      "name": "Equipment",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7bd38006-6e96-49b6-8186-e290300705ec",
+          "name": "Create a piece of equipment.",
+          "request": {
+            "name": "Create a piece of equipment.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "equipment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"workCenterId\": \"<string>\",\n  \"manufacturer\": \"<string>\",\n  \"modelNumber\": \"<string>\",\n  \"serialNumber\": \"<string>\",\n  \"canRunUnattended\": \"<boolean>\",\n  \"unlimitedCapacity\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9cd1c852-0b5b-4125-97c8-c0e2050b49d4",
+              "name": "Equipment created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "equipment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"workCenterId\": \"<string>\",\n  \"manufacturer\": \"<string>\",\n  \"modelNumber\": \"<string>\",\n  \"serialNumber\": \"<string>\",\n  \"canRunUnattended\": \"<boolean>\",\n  \"unlimitedCapacity\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "326f82ce-9072-4044-a5eb-f6b9292351b8",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "equipment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"workCenterId\": \"<string>\",\n  \"manufacturer\": \"<string>\",\n  \"modelNumber\": \"<string>\",\n  \"serialNumber\": \"<string>\",\n  \"canRunUnattended\": \"<boolean>\",\n  \"unlimitedCapacity\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a24c3420-88dd-4316-af01-1e02e42c72ac",
+          "name": "Get a piece of equipment.",
+          "request": {
+            "name": "Get a piece of equipment.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "equipment",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a53512ad-af40-4609-81bd-d725ba95ad6a",
+              "name": "The equipment for the given id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "equipment",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"workCenterId\": \"stringstringstringstring\",\n  \"manufacturer\": \"string\",\n  \"modelNumber\": \"string\",\n  \"serialNumber\": \"string\",\n  \"canRunUnattended\": false,\n  \"unlimitedCapacity\": true,\n  \"status\": \"<string>\",\n  \"notes\": \"string\",\n  \"deleted\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6038758-9436-49b1-bd90-a1fb16fa5975",
+              "name": "Equipment did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "equipment",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9308005d-6ab6-42d3-a413-76110fc597e9",
+          "name": "Update a piece of equipment.",
+          "request": {
+            "name": "Update a piece of equipment.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "equipment",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"workCenterId\": \"<string>\",\n  \"manufacturer\": \"<string>\",\n  \"modelNumber\": \"<string>\",\n  \"serialNumber\": \"<string>\",\n  \"canRunUnattended\": \"<boolean>\",\n  \"unlimitedCapacity\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed815422-4670-4965-b34d-3ed56921e70c",
+              "name": "The updated equipment",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "equipment",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"workCenterId\": \"<string>\",\n  \"manufacturer\": \"<string>\",\n  \"modelNumber\": \"<string>\",\n  \"serialNumber\": \"<string>\",\n  \"canRunUnattended\": \"<boolean>\",\n  \"unlimitedCapacity\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"workCenterId\": \"stringstringstringstring\",\n  \"manufacturer\": \"string\",\n  \"modelNumber\": \"string\",\n  \"serialNumber\": \"string\",\n  \"canRunUnattended\": false,\n  \"unlimitedCapacity\": true,\n  \"status\": \"<string>\",\n  \"notes\": \"string\",\n  \"deleted\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ae2626f-5479-451f-b916-176a5bec377a",
+              "name": "Validation issues with input",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "equipment",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"workCenterId\": \"<string>\",\n  \"manufacturer\": \"<string>\",\n  \"modelNumber\": \"<string>\",\n  \"serialNumber\": \"<string>\",\n  \"canRunUnattended\": \"<boolean>\",\n  \"unlimitedCapacity\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c5e37044-d51a-4bfc-abd7-f28b11419a3e",
+              "name": "Equipment did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "equipment",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"<string>\",\n  \"name\": \"<string>\",\n  \"workCenterId\": \"<string>\",\n  \"manufacturer\": \"<string>\",\n  \"modelNumber\": \"<string>\",\n  \"serialNumber\": \"<string>\",\n  \"canRunUnattended\": \"<boolean>\",\n  \"unlimitedCapacity\": \"<boolean>\",\n  \"status\": \"<string>\",\n  \"notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "540e3a90-80b5-4dd2-8964-1caf01bf51f1",
+          "name": "Find equipment based on search parameters.",
+          "request": {
+            "name": "Find equipment based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "equipment",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a83903b1-9531-41db-a49f-abd3d70d0e92",
+              "name": "List of equipment matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "equipment",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"workCenterId\": \"stringstringstringstring\",\n    \"manufacturer\": \"string\",\n    \"modelNumber\": \"string\",\n    \"serialNumber\": \"string\",\n    \"canRunUnattended\": true,\n    \"unlimitedCapacity\": false,\n    \"status\": \"<string>\",\n    \"notes\": \"string\",\n    \"deleted\": false\n  },\n  {\n    \"id\": \"stringstringstringstring\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"workCenterId\": \"stringstringstringstring\",\n    \"manufacturer\": \"string\",\n    \"modelNumber\": \"string\",\n    \"serialNumber\": \"string\",\n    \"canRunUnattended\": true,\n    \"unlimitedCapacity\": true,\n    \"status\": \"<string>\",\n    \"notes\": \"string\",\n    \"deleted\": true\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "9099743e-3aee-4753-bc3a-053fff182aae",
+    "name": "Fulcrum Public Accounting Code Equipment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

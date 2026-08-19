@@ -1,0 +1,292 @@
+{
+  "item": [
+    {
+      "id": "8ea1de2a-0a3b-404e-b58d-cf880ce22926",
+      "name": "Company Info",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fc09ae8c-6a10-41e9-8850-20e093a20c99",
+          "name": "Get info for a specific company.",
+          "request": {
+            "name": "Get info for a specific company.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "companies",
+                ":companyId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "companyId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "787d705e-d201-4eca-85d9-db280a36bfe5",
+              "name": "The info for the given company id",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "companies",
+                    ":companyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "companyId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"stringstringstringstring\",\n  \"isPrimary\": false,\n  \"name\": \"string\",\n  \"remitToAddress\": {\n    \"address1\": \"string\",\n    \"city\": \"string\",\n    \"postalCode\": \"string\",\n    \"name\": \"string\",\n    \"address2\": \"string\",\n    \"address3\": \"string\",\n    \"stateProvince\": \"string\",\n    \"country\": \"string\",\n    \"phone\": \"string\",\n    \"email\": \"XT4g5ltolZSZYO@JoKESxuocPstAFDqVHdMLlkmu.przj\"\n  },\n  \"shipToAddress\": {\n    \"address1\": \"string\",\n    \"city\": \"string\",\n    \"postalCode\": \"string\",\n    \"name\": \"string\",\n    \"address2\": \"string\",\n    \"address3\": \"string\",\n    \"stateProvince\": \"string\",\n    \"country\": \"string\",\n    \"phone\": \"string\",\n    \"email\": \"mrtQceuxpYOCb@gTjiDqdtpi.wc\"\n  },\n  \"websiteUrl\": \"https://RWIfhXweUiWIDBdNnjJTUIEMFTbb.mmvoPTd.iSUZHP+ZaoUK4tXtOXgw7wb2LMI6wzCU4JEFTdRXIJrn5C5u8PVOTDp4Wq2m.ZuFN\",\n  \"phoneNumber\": \"string\",\n  \"faxNumber\": \"string\",\n  \"email\": \"92YgigsQ@llhAAkfkAsQjvVGi.vq\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a31e4c60-5d76-4c41-a6c7-8d385cec6a36",
+              "name": "Company did not exist",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "companies",
+                    ":companyId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "companyId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "09485162-2454-4717-9673-bfb4032d30ef",
+          "name": "Find company information based on search parameters.",
+          "request": {
+            "name": "Find company information based on search parameters.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "companies",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "Sort.Field",
+                  "value": "<string>",
+                  "description": "Sort field"
+                },
+                {
+                  "disabled": false,
+                  "key": "Sort.Dir",
+                  "value": "<string>",
+                  "description": "Sort direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "Skip",
+                  "value": "<integer>",
+                  "description": "Number of records to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "Take",
+                  "value": "<integer>",
+                  "description": "Number of records to return (maximum)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isPrimary\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d0b46603-18a7-4c42-9746-df3a40705ce1",
+              "name": "List of company information sets matching the filters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "companies",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "Sort.Field",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Sort.Dir",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "Take",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isPrimary\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"stringstringstringstring\",\n    \"isPrimary\": false,\n    \"name\": \"string\",\n    \"remitToAddress\": {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"upXFj60tzkQIT@SBCeeHncXlUaQxit.dwh\"\n    },\n    \"shipToAddress\": {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"jpqlm@JnVwEqcthLRedPSgpwxsKkFBpiahpDamz.srb\"\n    },\n    \"websiteUrl\": \"https://ReUHOuyDyaTNrcWipiiDRpnHtY.pbnuvlD5U+NUpQwLAwU4X9i4nI8b1LE9I\",\n    \"phoneNumber\": \"string\",\n    \"faxNumber\": \"string\",\n    \"email\": \"npr-b@HGtahxBpvEveUVxCDxlXopXhL.eo\"\n  },\n  {\n    \"id\": \"stringstringstringstring\",\n    \"isPrimary\": false,\n    \"name\": \"string\",\n    \"remitToAddress\": {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"FwAc@ufbiHxv.vev\"\n    },\n    \"shipToAddress\": {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"postalCode\": \"string\",\n      \"name\": \"string\",\n      \"address2\": \"string\",\n      \"address3\": \"string\",\n      \"stateProvince\": \"string\",\n      \"country\": \"string\",\n      \"phone\": \"string\",\n      \"email\": \"PkkZO@IsHuFUENyoxhKm.wcx\"\n    },\n    \"websiteUrl\": \"http://yZOuUIajomIUoZvxQjdhgKolaan.fnniL.NZ55h21XV6TFZyEkTYhFPJiHD2rgLPcp2KKP691gnvGhN5kUFcHbE-l\",\n    \"phoneNumber\": \"string\",\n    \"faxNumber\": \"string\",\n    \"email\": \"Tos9w@bAOwuRQAjViuxZPSJbiThOfsrZkQQJE.ll\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.fulcrumpro.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "24d4a5cd-b7c8-4046-aed0-76c6fdd0f611",
+    "name": "Fulcrum Public Accounting Code Company Info API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}
