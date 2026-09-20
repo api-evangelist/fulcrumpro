@@ -1,0 +1,350 @@
+slug: fulcrumpro
+provider: Fulcrumpro
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 34
+edges:
+- tag: Purchase Order
+  spec_file: fulcrumpro-purchase-order-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.95
+  evidence: POST /api/purchase-orders 'Create a new draft purchase order'; POST /api/purchase-orders/{purchaseOrderId}/status
+    'Update a purchase order status'; schemas PurchaseOrderStatusEnum, PurchaseOrderReceivingStatusEnum
+  reason: Full lifecycle of purchase orders — create draft, update, status transitions, receiving status.
+    Plainly Purchase Order Management.
+- tag: Inventory
+  spec_file: fulcrumpro-inventory-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.9
+  evidence: POST /api/inventory/pick  PickInventory  Pick inventory against a specific item. / GET /api/inventory/availableByItem
+    ... on hand + incoming supply - demand
+  reason: Operations manage on-hand stock, availability, picking, receiving and quantity overrides for
+    items — squarely stock/inventory management. Spans several sub-capabilities (accuracy override, allocation,
+    stock levels) so the L1 is the honest level.
+- tag: NCRs
+  spec_file: fulcrumpro-ncrs-api-openapi.yml
+  capability_id: BC-720.40
+  capability_id_l1: BC-720
+  capability_name: Non-Conformance Management
+  confidence: 0.9
+  evidence: GET /api/ncrs/{ncrId} 'Get a specific NCR by id.'; POST /api/ncrs/list 'Finds NCRs based on
+    search parameters'; schema NCRNcrDto, CommonImpactDto
+  reason: NCR = non-conformance report, consistent with the vendor's stated AS9100D/ISO 9001 quality module.
+    Directly realises Non-Conformance Management.
+- tag: CAPAs
+  spec_file: fulcrumpro-capas-api-openapi.yml
+  capability_id: BC-720.40
+  capability_id_l1: BC-720
+  capability_name: Non-Conformance Management
+  confidence: 0.88
+  evidence: GET /api/capas/{capaId}  GetCapa  Get a specific CAPA by id; CAPACapaDto
+  reason: CAPA = Corrective and Preventive Action records, consistent with the vendor's AS9100D/ISO 9001
+    quality module. Maps directly to Non-Conformance Management, which explicitly covers CAPA. Read-only
+    access slightly limits scope.
+- tag: Customer
+  spec_file: fulcrumpro-customer-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.85
+  evidence: POST /api/customers  CreateCustomer  Create a new customer; CustomerUpdateDto; CommonExternalReferenceDto
+  reason: Full CRUD over the customer master record including external reference mapping for integration
+    — the canonical Customer Data Management surface.
+- tag: Purchase Order Fee Line Item
+  spec_file: fulcrumpro-purchase-order-fee-line-item-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.85
+  evidence: POST /api/purchase-orders/{purchaseOrderId}/fee-line-items — 'Create a fee line item on a
+    purchase order'
+  reason: Full CRUD over fee lines of a purchase order, with PurchaseOrderFeeLineItemCreateDto schemas
+    — maintenance of PO content, i.e. Purchase Order Management within procurement.
+- tag: Purchase Order Line Item
+  spec_file: fulcrumpro-purchase-order-line-item-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.85
+  evidence: '''Get a list of lines items for a purchase order, regardless of type'''
+  reason: Generic access to purchase order line items (PurchaseOrderLineItemDto, PurchaseOrderLineItemTypeEnum)
+    — clearly purchase order document management in procurement.
+- tag: Purchase Order Outside Processing Line Item
+  spec_file: fulcrumpro-purchase-order-outside-processing-line-item-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.85
+  evidence: '''Create an outside processing line item on a purchase order'' and PurchaseOrderEnumLineItemReceiptStatusEnum'
+  reason: Purchasing of outside/subcontract processing services as PO lines, including receipt status
+    — purchase order creation and execution.
+- tag: Purchase Order Part Line Item
+  spec_file: fulcrumpro-purchase-order-part-line-item-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.85
+  evidence: '''Create a part line item on a purchase order'' with PurchaseOrderPartLineItemCreateDto,
+    PurchaseOrderEnumLineItemReceiptStatusEnum'
+  reason: CRUD over material/part lines on purchase orders including receipt status — purchase order management
+    in the procure-to-pay flow.
+- tag: Quote
+  spec_file: fulcrumpro-quote-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.85
+  evidence: POST /api/quotes/{quoteId}/to-sales-order 'Convert a quote to a sales order'; 'Create a new
+    draft quote'; 'Update a quote status'
+  reason: Customer-facing quote lifecycle (create, status, convert to sales order) in a manufacturing
+    ERP — sales quoting, i.e. Quote & Configuration Management.
+- tag: Inventory Event
+  spec_file: fulcrumpro-inventory-event-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.8
+  evidence: GET /api/inventory-events/{inventoryEventId}  GetInventoryEvent  Get a specific inventory
+    event
+  reason: Retrieval and search of inventory movement events (InventoryEventType, InventoryEventsInventoryEventChangeDetails,
+    CommonCostDto) — the audit trail of stock changes, part of inventory management. No single L2 is clearly
+    named.
+- tag: Inventory Lot
+  spec_file: fulcrumpro-inventory-lot-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.8
+  evidence: POST /api/inventory-lots  CreateInventoryLot  Create a new inventory lot.
+  reason: Creation and lookup of inventory lots — lot/batch tracking of stock held. Clearly inventory
+    management; the specific L2 (accuracy vs allocation) is not determinable.
+- tag: Inventory Transactions
+  spec_file: fulcrumpro-inventory-transactions-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.8
+  evidence: POST /api/inventory-transactions/list  ListInventoryTransactions  Finds inventory transactions
+    based on search parameters
+  reason: Search over stock transaction records (InventoryTransactionDto, InventoryEventType, date-range
+    filters) — inventory movement history within inventory management.
+- tag: Invoice
+  spec_file: fulcrumpro-invoice-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.8
+  evidence: 'POST /api/invoices/{invoiceId}/status  StatusUpdateInvoice  Update an invoice status — schemas:
+    InvoiceDto, InvoiceStatusEnum, CurrencyInfoDto'
+  reason: ERP customer invoicing (vendor description lists 'sales orders ... and invoicing'); lifecycle
+    and status management of outbound invoices maps to Accounts Receivable Management. Small residual
+    risk these are supplier invoices (payables).
+- tag: Quote Fee Line Item
+  spec_file: fulcrumpro-quote-fee-line-item-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.8
+  evidence: '''Create a fee line item on a Quote'' — QuoteFeeLineItemCreateDto'
+  reason: CRUD over fee lines composing a customer quote — quote construction and pricing, i.e. Quote
+    & Configuration Management.
+- tag: Quote Part Line Item
+  spec_file: fulcrumpro-quote-part-line-item-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.8
+  evidence: '''Create a part line item on a Quote'' and ''Get the cost breakdown for a specific part line
+    item for a quote'''
+  reason: Quoted part lines with cost breakdown feed quote pricing for the customer; this is quote configuration
+    and pricing rather than internal cost accounting.
+- tag: Customer Address
+  spec_file: fulcrumpro-customer-address-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.78
+  evidence: POST /api/customers/{customerId}/addresses  CreateCustomerAddress  Create a new customer address
+  reason: Maintenance of address attributes hanging off the customer master record; part of customer master
+    data stewardship. Could also serve shipping logistics, hence slightly lower confidence.
+- tag: Customer Contact
+  spec_file: fulcrumpro-customer-contact-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.78
+  evidence: POST /api/customers/{customerId}/contacts  CreateCustomerContact  Create a new customer contact
+  reason: CRUD over contact persons attached to a customer record — customer master data maintenance rather
+    than sales engagement tracking.
+- tag: Inventory Event Details
+  spec_file: fulcrumpro-inventory-event-details-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.75
+  evidence: PUT /api/inventory-events/{inventoryEventId}/details  UpdateInventoryEventDetails  Update
+    a specific inventory event details
+  reason: Sub-resource of the inventory event record allowing detail updates on stock movements; belongs
+    to inventory management, though the surface is narrow and detail-level.
+- tag: Invoice Line Item
+  spec_file: fulcrumpro-invoice-line-item-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.75
+  evidence: '"Get a list of lines items for an invoice, regardless of type"; InvoiceLineItemTypeEnum'
+  reason: Generic read surface over invoice line items; clearly part of customer invoice management (AR
+    invoicing) in an ERP, not a technical utility.
+- tag: Item PriceBreaks
+  spec_file: fulcrumpro-item-pricebreaks-api-openapi.yml
+  capability_id: BC-440.20
+  capability_id_l1: BC-440
+  capability_name: Price List Management
+  confidence: 0.75
+  evidence: ListSalesPriceBreaks 'List sales price breaks for an item, including the item's base price,
+    customer-specific price breaks, and customer-tier price breaks'; UpsertPurchasePriceBreak
+  reason: Operations create, update and list quantity/tier-based sales and purchase prices per item, currency
+    and unit of measure — price book / price list maintenance. Mixed sales and purchase pricing keeps
+    it slightly below top confidence for the specific L2.
+- tag: Purchase Order Discount Line Item
+  spec_file: fulcrumpro-purchase-order-discount-line-item-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.75
+  evidence: GET /api/purchase-orders/{purchaseOrderId}/discount-line-item — 'Get the discount line item
+    for a purchase order'
+  reason: Operation reads a discount line on a purchase order document in a manufacturing ERP; this is
+    purchase order composition, i.e. Purchase Order Management. Single read-only operation keeps confidence
+    moderate.
+- tag: Receiving Receipt
+  spec_file: fulcrumpro-receiving-receipt-api-openapi.yml
+  capability_id: BC-500.40
+  capability_id_l1: BC-500
+  capability_name: Procure-to-Pay Operations Management
+  confidence: 0.75
+  evidence: Create a receipt for a specific purchase or sales order
+  reason: Goods receipt creation and maintenance against purchase orders is core procure-to-pay receiving
+    operations; the sales-order variant (returns receipts) is secondary.
+- tag: Chart Of Accounts
+  spec_file: fulcrumpro-chart-of-accounts-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.72
+  evidence: GET /api/chart-of-accounts/{id}  GetChartOfAccounts  Get an account class.; POST /api/chart-of-accounts/list  Find
+    accounts based on search parameters.
+  reason: Exposes the general-ledger account structure (chart of accounts / account classes), the core
+    artefact of General Ledger Management. Confidence moderated because the schemas are generic TagDto
+    structures and the surface is read-only.
+- tag: Receiving Receipt Line Item
+  spec_file: fulcrumpro-receiving-receipt-line-item-api-openapi.yml
+  capability_id: BC-500.40
+  capability_id_l1: BC-500
+  capability_name: Procure-to-Pay Operations Management
+  confidence: 0.72
+  evidence: Get a specific line item for a receipt on a purchase or sales order; Roll back a specific
+    line item for a receipt
+  reason: Line-level receiving detail (receipt lines, rollback of received quantities) is part of day-to-day
+    procure-to-pay receipt operations.
+- tag: Sales Order Tax Line Item
+  spec_file: fulcrumpro-sales-order-tax-line-item-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.72
+  evidence: POST /api/sales-orders/{salesOrderId}/tax-line-items 'Create a tax line item on a sales order';
+    schema SalesOrderTaxLineItemAvalaraOptions
+  reason: Manages sales-tax lines on customer orders with Avalara integration options — indirect tax (sales
+    tax/VAT) determination on transactions.
+- tag: Invoice Deposit Adjustment Line Item
+  spec_file: fulcrumpro-invoice-deposit-adjustment-line-item-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.7
+  evidence: GET /api/invoices/{invoiceId}/deposit-adjustment-line-items/{lineItemId}  GetDepositAdjustmentLineItem
+  reason: Line-item detail of customer invoices including accounting details (CommonAccountingDetailsDto),
+    i.e. deposit adjustments applied to receivable invoices. Narrow read-only sub-resource, hence moderate
+    confidence.
+- tag: Invoice Deposit Line Item
+  spec_file: fulcrumpro-invoice-deposit-line-item-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.7
+  evidence: POST /api/invoices/{invoiceId}/deposit-line-items/list  ListInvoiceDepositLineItem  Get a
+    list of deposit lines items for an invoice
+  reason: Customer-invoice deposit line items with accounting details — part of the receivable invoicing
+    surface. Read-only sub-resource, so confidence is moderate.
+- tag: Invoice Fee Line Item
+  spec_file: fulcrumpro-invoice-fee-line-item-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.7
+  evidence: '"Update a specific fee line item for an invoice"; schema InvoiceFeeLineItemDto, CommonAccountingDetailsDto'
+  reason: CRUD over fee lines on customer invoices — invoice composition and maintenance, which is customer
+    invoicing under accounts receivable management.
+- tag: Invoice Part Line Item
+  spec_file: fulcrumpro-invoice-part-line-item-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.7
+  evidence: '"Get a list of part lines items for an invoice"; InvoicePartLineItemUpdateDto'
+  reason: Maintains the part (goods) lines that make up a customer invoice — customer invoicing within
+    accounts receivable.
+- tag: Invoice Refund Line Item
+  spec_file: fulcrumpro-invoice-refund-line-item-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.7
+  evidence: '"Update a specific refund line item for an invoice"; InvoiceRefundLineItemDto'
+  reason: Refund/credit lines on customer invoices are invoice adjustments, part of customer invoicing
+    and receivables accounting.
+- tag: Purchase Order Custom Fields
+  spec_file: fulcrumpro-purchase-order-custom-fields-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.7
+  evidence: PUT /api/purchase-orders/{id}/custom-fields 'Update (selectively) custom fields on a purchase
+    order'
+  reason: Extension-field maintenance scoped explicitly to purchase order records, so it operates within
+    Purchase Order Management. Confidence reduced because the surface itself is a configuration/extensibility
+    mechanism rather than the PO business process.
+- tag: Quote Discount Line Item
+  spec_file: fulcrumpro-quote-discount-line-item-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.7
+  evidence: '''Update the discount line item for a quote'' — QuoteDiscountLineItemUpdateDto'
+  reason: Manages the discount line within a customer quote document; part of quote construction and pricing
+    on the quote, so Quote & Configuration Management fits better than enterprise discount policy management.
+- tag: Reporting
+  spec_file: fulcrumpro-reporting-api-openapi.yml
+  capability_id: BC-610.50
+  capability_id_l1: BC-610
+  capability_name: Analytics & BI Management
+  confidence: 0.7
+  evidence: Lists report-ready invoice-line rows from the invoice reporting view ... so callers do not
+    need to hand-assemble
+  reason: The tag exposes pre-built reporting views across inventory, invoices, job activity, quotes,
+    orders, shipping and time clock — i.e. delivery of operational reporting/BI datasets rather than any
+    single business process.
