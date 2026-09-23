@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Vendor Contact API
+  title: Fulcrum Public Vendor Contact API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -200,118 +200,6 @@ paths:
       - Vendor-Vendors-View Vendor
 components:
   schemas:
-    VendorContactUpdateDto:
-      required:
-      - firstName
-      type: object
-      properties:
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Last name
-          nullable: true
-        position:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Position / Job Title
-          nullable: true
-        phone:
-          type: string
-          description: Phone number
-          nullable: true
-        cellPhone:
-          type: string
-          description: Cellphone number
-          nullable: true
-        email:
-          type: string
-          description: Email address
-          format: email
-          nullable: true
-        fax:
-          type: string
-          description: Fax number
-          nullable: true
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Internal notes about this contact.
-          nullable: true
-        emailPurchaseOrders:
-          type: boolean
-          description: Whether this contact should receive purchase order emails. When omitted, the existing value is preserved.
-          nullable: true
-      additionalProperties: false
-      description: A vendor contact
-    VendorContactCreateDto:
-      required:
-      - firstName
-      type: object
-      properties:
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Last name
-          nullable: true
-        position:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Position / Job Title
-          nullable: true
-        phone:
-          type: string
-          description: Phone number
-          nullable: true
-        cellPhone:
-          type: string
-          description: Cellphone number
-          nullable: true
-        email:
-          type: string
-          description: Email address
-          format: email
-          nullable: true
-        fax:
-          type: string
-          description: Fax number
-          nullable: true
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Internal notes about this contact.
-          nullable: true
-        emailPurchaseOrders:
-          type: boolean
-          description: Whether this contact should receive purchase order emails.
-      additionalProperties: false
-      description: A vendor contact
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     VendorContactDto:
       required:
       - firstName
@@ -337,35 +225,168 @@ components:
         position:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Position / Job Title
-          nullable: true
         cellPhone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Cellphone number
-          nullable: true
         phone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Phone number
-          nullable: true
         email:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
           format: email
-          nullable: true
         fax:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Fax number
-          nullable: true
         notes:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Internal notes about this contact.
-          nullable: true
         emailPurchaseOrders:
           type: boolean
           description: Whether this contact should receive purchase order emails.
       additionalProperties: false
       description: A vendor contact
+    VendorContactCreateDto:
+      required:
+      - firstName
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Position / Job Title
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        cellPhone:
+          type:
+          - string
+          - 'null'
+          description: Cellphone number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+        fax:
+          type:
+          - string
+          - 'null'
+          description: Fax number
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Internal notes about this contact.
+        emailPurchaseOrders:
+          type: boolean
+          description: Whether this contact should receive purchase order emails.
+      additionalProperties: false
+      description: A vendor contact
+    VendorContactUpdateDto:
+      required:
+      - firstName
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Position / Job Title
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        cellPhone:
+          type:
+          - string
+          - 'null'
+          description: Cellphone number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+        fax:
+          type:
+          - string
+          - 'null'
+          description: Fax number
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Internal notes about this contact.
+        emailPurchaseOrders:
+          type:
+          - boolean
+          - 'null'
+          description: Whether this contact should receive purchase order emails. When omitted, the existing value is preserved.
+      additionalProperties: false
+      description: A vendor contact
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

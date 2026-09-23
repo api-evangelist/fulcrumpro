@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Shipment Line Items (V3) API
+  title: Fulcrum Public Shipment Line Items (V3) API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     post:
       tags:
       - Shipment Line Items (V3)
-      summary: Search for shipment line items based on parameters.
+      summary: Search for shipment line items based on parameters
       operationId: ListShipmentLineItems
       parameters:
       - name: Sort.Field
@@ -76,128 +76,6 @@ components:
       - shipped
       - cancelled
       type: string
-    ShippingDataPackingStatus:
-      enum:
-      - notPacked
-      - partiallyPacked
-      - fullyPacked
-      - overPacked
-      type: string
-    ShippingDataShipmentType:
-      enum:
-      - unknown
-      - standard
-      - outsideProcessing
-      type: string
-    ShipmentLineItemDto:
-      required:
-      - id
-      - packingStatus
-      - quantityToShip
-      - shipmentName
-      - shipmentType
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Shipment line item identifier
-        packingStatus:
-          $ref: '#/components/schemas/ShippingDataPackingStatus'
-        shipmentType:
-          $ref: '#/components/schemas/ShippingDataShipmentType'
-        quantityToShip:
-          type: number
-          description: The quantity to ship
-          format: double
-        shipmentName:
-          minLength: 1
-          type: string
-          description: The shipment name (eg. SHP-S0123-1)
-        shipmentStatus:
-          $ref: '#/components/schemas/ShippingDataShipmentStatus'
-        shipByDate:
-          type: string
-          description: The date the shipment this line item belongs to is scheduled to ship by
-          format: date-time
-          nullable: true
-        shippedDate:
-          type: string
-          description: The date the shipment this line item belongs to was actually shipped
-          format: date-time
-          nullable: true
-        shippedDateOverride:
-          type: string
-          description: The shipped date override of the shipment this line item belongs to
-          format: date-time
-          nullable: true
-        quantityInvoiced:
-          type: number
-          description: The quantity invoiced
-          format: double
-        quantityPacked:
-          type: number
-          description: The quantity packed
-          format: double
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The item identifier
-          nullable: true
-        shipmentId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The shipment identifier
-          nullable: true
-        salesOrderId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The sales order identifier
-          nullable: true
-        salesOrderLineItemId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The sales order line item identifier
-          nullable: true
-        purchaseOrderId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The purchase order identifier
-          nullable: true
-        purchaseOrderLineItemId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The purchase order line item identifier
-          nullable: true
-        quantityShipped:
-          type: number
-          description: The quantity shipped
-          format: double
-          readOnly: true
-        shippedFromLocations:
-          type: array
-          items:
-            type: string
-          description: The locations this line was shipped from
-        shippedFromLots:
-          type: array
-          items:
-            type: string
-          description: The lots this line was shipped from
-        packingDetails:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShipmentLineItemPackingDetailDto'
-          description: Packing details indicating how quantities were split amongst lots/locations.
-      additionalProperties: false
-      description: Shipment line item data transfer object
     DtoPagedResultDtoShipmentLineItemDto:
       required:
       - data
@@ -243,96 +121,240 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    ShipmentLineItemPackingDetailDto:
-      type: object
-      properties:
-        lotId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Lot identifier. Please reference /api/inventory-lots endpoint.
-          nullable: true
-        lotName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Lot name.
-          nullable: true
-        locationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Location identifier. Please reference /api/locations endpoint.
-          nullable: true
-        locationName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Location name.
-          nullable: true
-        quantityPacked:
-          minimum: 0
-          type: number
-          description: Quantity packed for this shipment line item that are associated to this lot.
-          format: double
-          nullable: true
-        box:
-          maxLength: 36
-          minLength: 0
-          type: string
-          description: Box identifier this packing detail was packed into. Free-form (e.g., "1", "A1").
-          nullable: true
-      additionalProperties: false
-      description: Packing detail associated to a shipment line item.
     ShipmentLineItemsListParameters:
       type: object
       properties:
         packingStatus:
           $ref: '#/components/schemas/ShippingDataPackingStatus'
         itemId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter shipment line items based on item identifier.
-          nullable: true
         shipmentId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter shipment line items based on shipment identifier.
-          nullable: true
         salesOrderId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter shipment line items based on sales order identifier.
-          nullable: true
         purchaseOrderId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter shipment line items based on purchase order identifier.
-          nullable: true
         salesOrderLineItemIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter shipment line items based on sales order line item(s) identifier.
-          nullable: true
         purchaseOrderLineItemIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter shipment line items based on purchase order line item identifier.
-          nullable: true
         shipmentIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter shipment line items based on shipment identifiers.
-          nullable: true
         shipmentType:
           $ref: '#/components/schemas/ShippingDataShipmentType'
       additionalProperties: false
       description: Parameters used for searching V3 shipment line items
+    ShipmentLineItemPackingDetailDto:
+      type: object
+      properties:
+        lotId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Lot identifier. Please reference /api/inventory-lots endpoint.
+        lotName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Lot name.
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Location identifier. Please reference /api/locations endpoint.
+        locationName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Location name.
+        quantityPacked:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Quantity packed for this shipment line item that are associated to this lot.
+          format: double
+        box:
+          maxLength: 36
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Box identifier this packing detail was packed into. Free-form (e.g., "1", "A1").
+      additionalProperties: false
+      description: Packing detail associated to a shipment line item.
+    ShippingDataShipmentType:
+      enum:
+      - unknown
+      - standard
+      - outsideProcessing
+      type: string
+    ShippingDataPackingStatus:
+      enum:
+      - notPacked
+      - partiallyPacked
+      - fullyPacked
+      - overPacked
+      type: string
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ShipmentLineItemDto:
+      required:
+      - id
+      - packingStatus
+      - quantityToShip
+      - shipmentName
+      - shipmentType
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Shipment line item identifier
+        packingStatus:
+          $ref: '#/components/schemas/ShippingDataPackingStatus'
+        shipmentType:
+          $ref: '#/components/schemas/ShippingDataShipmentType'
+        quantityToShip:
+          type: number
+          description: The quantity to ship
+          format: double
+        shipmentName:
+          minLength: 1
+          type: string
+          description: The shipment name (eg. SHP-S0123-1)
+        shipmentStatus:
+          $ref: '#/components/schemas/ShippingDataShipmentStatus'
+        shipByDate:
+          type:
+          - string
+          - 'null'
+          description: The date the shipment this line item belongs to is scheduled to ship by
+          format: date-time
+        shippedDate:
+          type:
+          - string
+          - 'null'
+          description: The date the shipment this line item belongs to was actually shipped
+          format: date-time
+        shippedDateOverride:
+          type:
+          - string
+          - 'null'
+          description: The shipped date override of the shipment this line item belongs to
+          format: date-time
+        quantityInvoiced:
+          type: number
+          description: The quantity invoiced
+          format: double
+        quantityPacked:
+          type: number
+          description: The quantity packed
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The item identifier
+        shipmentId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The shipment identifier
+        salesOrderId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The sales order identifier
+        salesOrderLineItemId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: The sales order line item identifier
+        purchaseOrderId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The purchase order identifier
+        purchaseOrderLineItemId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: The purchase order line item identifier
+        quantityShipped:
+          type: number
+          description: The quantity shipped
+          format: double
+          readOnly: true
+        shippedFromLocations:
+          type: array
+          items:
+            type: string
+          description: The locations this line was shipped from
+        shippedFromLots:
+          type: array
+          items:
+            type: string
+          description: The lots this line was shipped from
+        packingDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentLineItemPackingDetailDto'
+          description: Packing details indicating how quantities were split amongst lots/locations.
+      additionalProperties: false
+      description: Shipment line item data transfer object
   securitySchemes:
     bearer:
       type: http

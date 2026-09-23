@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Job Item To Make Operation API
+  title: Fulcrum Public Job Item To Make Operation API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,10 +11,12 @@ paths:
     post:
       tags:
       - Job Item To Make Operation
-      summary: 'Adds additional quantity completed to a job operation without completing the operation.
+      summary: Adds additional quantity completed to a job operation without completing the…
+      description: 'This is a non-idempotent action. Multiple calls with the same parameters will result in
 
-        Each call will increment the quantity completed by the specified amount.'
-      description: "This is a non-idempotent action. Multiple calls with the same parameters will result in \nthe quantity being added multiple times. Implement appropriate client-side controls to \nprevent duplicate submissions."
+        the quantity being added multiple times. Implement appropriate client-side controls to
+
+        prevent duplicate submissions.'
       operationId: AddQuantityCompletedToJobOperation
       parameters:
       - name: jobId
@@ -289,7 +291,7 @@ paths:
     post:
       tags:
       - Job Item To Make Operation
-      summary: Pick a specific item for a specific item to make on a job.
+      summary: Pick a specific item for a specific item to make on a job
       operationId: PickInventoryForJobItemToMakeOperation
       parameters:
       - name: jobId
@@ -340,6 +342,73 @@ paths:
       - Jobs-Jobs-Edit In Progress Job
 components:
   schemas:
+    JobItemToMakeOperationPickInventoryDto:
+      required:
+      - itemId
+      - quantity
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The identifier of the item to be picked. Please reference api/items endpoint
+        quantity:
+          type: number
+          description: Quantity of the item to pick.
+          format: double
+        locationId:
+          type:
+          - string
+          - 'null'
+          description: 'ID of the location to pick from. If not set or set to an empty string, will
+
+            pick from inventory not assigned to a location. Cannot be set if FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.UseDefaultLocation
+
+            is set to ```true```.'
+        useDefaultLocation:
+          type: boolean
+          description: 'If set to true, inventory will be picked from the default location for the item. If set to true,
+
+            FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.LocationId cannot be set.  If the item does not have a default location set and this
+
+            is set to true, will pick from inventory not assigned to a location.'
+        lotId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the lot to pick from.
+      additionalProperties: false
+      description: Pick event for an input item
+    DomainOperationsRouting_Step_SetupTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+    DomainOperationsRouting_Step_RunTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      - unitsPerHour
+      type: string
+    ItemToMakeOperationMaterialRequiredDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: 'Identifier of the material shape.
+
+            Please reference /api/material-shapes endpoint.'
+        name:
+          minLength: 1
+          type: string
+          description: Name of the material shape required
+      additionalProperties: false
+      description: Represents a required input material for a job operation
     JobItemToMakeOpStatusEnum:
       enum:
       - pending
@@ -363,24 +432,6 @@ components:
           format: double
       additionalProperties: false
       description: Request to add additional quantity completed to a job operation
-    ItemToMakeOperationMaterialRequiredDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: 'Identifier of the material shape.
-
-            Please reference /api/material-shapes endpoint.'
-        name:
-          minLength: 1
-          type: string
-          description: Name of the material shape required
-      additionalProperties: false
-      description: Represents a required input material for a job operation
     ItemToMakeOperationItemRequiredDto:
       required:
       - itemId
@@ -400,17 +451,12 @@ components:
           type: string
           description: Item number of the required item
         revision:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Revision of the required item
-          nullable: true
       additionalProperties: false
       description: Represents a required input item for a job operation
-    DomainOperationsRouting_Step_RunTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      - unitsPerHour
-      type: string
     ItemsToMakeOperationsAddQuantityCompletedResponse:
       required:
       - additionalQuantityAdded
@@ -457,57 +503,6 @@ components:
           description: The current status of the operation
       additionalProperties: false
       description: Response after adding additional quantity completed to a job operation
-    ItemToMakeOperationUpdateDto:
-      type: object
-      properties:
-        customFields:
-          type: object
-          additionalProperties: {}
-          description: The custom fields to update on the operation object
-          nullable: true
-      additionalProperties: false
-      description: Represents an routing operation on a job item to make
-    JobItemToMakeOperationPickInventoryDto:
-      required:
-      - itemId
-      - quantity
-      type: object
-      properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The identifier of the item to be picked. Please reference api/items endpoint
-        quantity:
-          type: number
-          description: Quantity of the item to pick.
-          format: double
-        locationId:
-          type: string
-          description: 'ID of the location to pick from. If not set or set to an empty string, will
-
-            pick from inventory not assigned to a location. Cannot be set if FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.UseDefaultLocation
-
-            is set to ```true```.'
-          nullable: true
-        useDefaultLocation:
-          type: boolean
-          description: 'If set to true, inventory will be picked from the default location for the item. If set to true,
-
-            FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.LocationId cannot be set.  If the item does not have a default location set and this
-
-            is set to true, will pick from inventory not assigned to a location.'
-        lotId:
-          type: string
-          description: The ID of the lot to pick from.
-          nullable: true
-      additionalProperties: false
-      description: Pick event for an input item
-    DomainOperationsRouting_Step_SetupTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
     ItemToMakeOperationDto:
       required:
       - id
@@ -540,95 +535,112 @@ components:
           type: boolean
           description: Denotes whether this is an outside processing operation
         originalScheduledStartUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The first scheduled start time.
           format: date-time
-          nullable: true
         originalScheduledEndUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The first scheduled end time.
           format: date-time
-          nullable: true
         scheduledStartUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Scheduled start datetime of the operation
           format: date-time
-          nullable: true
         scheduledEndUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Scheduled end datetime of the operation
           format: date-time
-          nullable: true
         completedOnUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The operation completion datetime.
           format: date-time
-          nullable: true
         completedById:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Operation completed user identifier. Please reference /api/users endpoint.
-          nullable: true
         scheduledEquipmentId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Identifier of the equipment that this operation is scheduled to run on
-          nullable: true
         scheduledEquipmentName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The name of the equipment that this operation is scheduled to run on.
-          nullable: true
         customFields:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties: {}
           description: The custom field data on the object
-          nullable: true
         instructions:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Instructions specific to the item to make operation.
-          nullable: true
         name:
-          type: string
+          type:
+          - string
+          - 'null'
           description: System operation name.
-          nullable: true
         leadTimeInDays:
           minimum: 0
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Number of days required between order and receipt. Only applicable for outside processing operations.
           format: int32
-          nullable: true
         associatedPurchaseOrderIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Associated purchase order IDs.
-          nullable: true
         estimatedSetupTimeInSeconds:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The estimated setup time in seconds for the operation.
           format: double
-          nullable: true
         estimatedSetupTimeBasis:
           $ref: '#/components/schemas/DomainOperationsRouting_Step_SetupTimeOption'
         estimatedRunTimeInSeconds:
-          type: number
+          type:
+          - number
+          - 'null'
           description: 'The estimated run time in seconds for the operation.
 
             Note: This is an obsolete field from when operation could not separate between machine (unattended) and labor (attended) time.'
           format: double
-          nullable: true
         estimatedRunTimeBasis:
           $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
         estimatedMachineTimeInSeconds:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The estimated machine time in seconds for the operation.
           format: double
-          nullable: true
         estimatedMachineTimeBasis:
           $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
         estimatedLaborTimeInSeconds:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The estimated labor time in seconds for the operation.
           format: double
-          nullable: true
         estimatedLaborTimeBasis:
           $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
         isMachineTimeOnly:
@@ -639,11 +651,23 @@ components:
         workOrderId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Identifier of work order that this operation is associated to, if applicable.
 
             Please reference api/work-orders endpoint.'
-          nullable: true
+      additionalProperties: false
+      description: Represents an routing operation on a job item to make
+    ItemToMakeOperationUpdateDto:
+      type: object
+      properties:
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: The custom fields to update on the operation object
       additionalProperties: false
       description: Represents an routing operation on a job item to make
   securitySchemes:

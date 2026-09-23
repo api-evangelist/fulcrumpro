@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code CAPAs API
+  title: Fulcrum Public CAP As API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     get:
       tags:
       - CAPAs
-      summary: Get a specific CAPA by id.
+      summary: Get a specific CAPA by id
       operationId: GetCapa
       parameters:
       - name: capaId
@@ -100,26 +100,30 @@ components:
       type: object
       properties:
         status:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Filter CAPAs by a specific status
 
             Accepted Values:
 
             Closed, Hold, New, Quality Review, Engineering Review'
-          nullable: true
         type:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter CAPAs by a specific type. Available values are configured per tenant in Quality settings (NCR dropdowns).
-          nullable: true
         ncrId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter CAPAs by a NCR Id
-          nullable: true
         createdUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter CAPAs created after a certain date
           format: date-time
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching CAPAs
     CommonEnumSortDirectionEnum:
@@ -201,40 +205,47 @@ components:
           type: string
           description: Problem statement
         status:
-          type: string
+          type:
+          - string
+          - 'null'
           description: CAPA Status
-          nullable: true
         rootCauseAnalysis:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Root cause analysis
-          nullable: true
         correctiveAction:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Corrective action
-          nullable: true
         ncrId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Related NCR ID
-          nullable: true
         createdUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Created Date
           format: date-time
-          nullable: true
         dueDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Completed Date
           format: date-time
-          nullable: true
         closedUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Completed Date
           format: date-time
-          nullable: true
       additionalProperties: false
       description: Represents an CAPA
   securitySchemes:

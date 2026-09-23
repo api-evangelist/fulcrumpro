@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Quote Tax Line Item API
+  title: Fulcrum Public Quote Tax Line Item API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -211,21 +211,24 @@ components:
         description:
           maxLength: 2000
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: Verbose description for this entity.
-          nullable: true
         taxCodeId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Tax code key identifier. Please reference /api/tax-rates endpoint.
-          nullable: true
         taxRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxRate will supercede the defined tax rate.
           format: double
-          nullable: true
         avalaraOptions:
           $ref: '#/components/schemas/DtoCommonAvalaraOptions'
         number:
@@ -236,120 +239,72 @@ components:
           $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Represents a tax line item on a Quote.
-    QuoteTaxLineItemCreateDto:
+    CommonAccountingDetailsDto:
       type: object
       properties:
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-          description: Verbose description for this entity.
-          nullable: true
-        taxCodeId:
+        classId:
           maxLength: 24
           minLength: 24
-          type: string
-          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
-
-            If FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId will be ignored.'
-          nullable: true
-        taxRate:
-          minimum: 0
-          type: number
-          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxRate will supercede the defined tax rate.
-          format: double
-          nullable: true
-        avalaraOptions:
-          $ref: '#/components/schemas/DtoCommonAvalaraOptions'
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
-      description: Represents a tax line item on a quote.
-    CommonAddressDto:
-      required:
-      - address1
-      - city
-      - postalCode
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-          nullable: true
-        address1:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary address line.
-        address2:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Second address line.
-          nullable: true
-        address3:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Third address line.
-          nullable: true
-        city:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address city
-        stateProvince:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address state/province.
-          nullable: true
-        postalCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Postal/zip code.
-        country:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Country identifier.
-          nullable: true
-        phone:
-          type: string
-          description: Phone number.
-          format: tel
-          nullable: true
-        email:
-          type: string
-          description: Email address
-          format: email
-          nullable: true
-      additionalProperties: false
-      description: Address definition
+      description: An object that contains all accounting details.
     QuoteTaxLineItemUpdateDto:
       type: object
       properties:
         description:
           maxLength: 2000
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: Verbose description for this entity.
-          nullable: true
         taxCodeId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
 
             If FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.TaxCodeId will be ignored.'
-          nullable: true
         taxRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.TaxRate will supercede the defined tax rate.
           format: double
-          nullable: true
         avalaraOptions:
           $ref: '#/components/schemas/DtoCommonAvalaraOptions'
       additionalProperties: false
@@ -361,6 +316,107 @@ components:
           $ref: '#/components/schemas/CommonAddressDto'
       additionalProperties: false
       description: Options for use with Avalara (if enabled).
+    CommonAddressDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Second address line.
+        address3:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Third address line.
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Address state/province.
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Country identifier.
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          format: tel
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: Address definition
+    QuoteTaxLineItemCreateDto:
+      type: object
+      properties:
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
+
+            If FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId will be ignored.'
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxRate will supercede the defined tax rate.
+          format: double
+        avalaraOptions:
+          $ref: '#/components/schemas/DtoCommonAvalaraOptions'
+      additionalProperties: false
+      description: Represents a tax line item on a quote.
     CreatedResponseDto:
       required:
       - id
@@ -372,41 +428,6 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CommonAccountingDetailsDto:
-      type: object
-      properties:
-        classId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-          nullable: true
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-          nullable: true
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-          nullable: true
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-          nullable: true
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-          nullable: true
-      additionalProperties: false
-      description: An object that contains all accounting details.
   securitySchemes:
     bearer:
       type: http

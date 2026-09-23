@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Company Info API
+  title: Fulcrum Public Company Info API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     get:
       tags:
       - Company Info
-      summary: Get info for a specific company.
+      summary: Get info for a specific company
       operationId: GetCompanyInfo
       parameters:
       - name: companyId
@@ -37,7 +37,7 @@ paths:
     post:
       tags:
       - Company Info
-      summary: Find company information based on search parameters.
+      summary: Find company information based on search parameters
       operationId: ListCompanyInfo
       parameters:
       - name: Sort.Field
@@ -123,25 +123,35 @@ components:
         remitToAddress:
           $ref: '#/components/schemas/CommonAddressDto'
         websiteUrl:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Company website
           format: uri
-          nullable: true
         phoneNumber:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Company phone number
-          nullable: true
         faxNumber:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Company fax number
-          nullable: true
         email:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Company email address
           format: email
-          nullable: true
       additionalProperties: false
       description: Company information
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     CommonAddressDto:
       required:
       - address1
@@ -152,9 +162,10 @@ components:
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-          nullable: true
         address1:
           maxLength: 200
           minLength: 1
@@ -163,15 +174,17 @@ components:
         address2:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Second address line.
-          nullable: true
         address3:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Third address line.
-          nullable: true
         city:
           maxLength: 200
           minLength: 1
@@ -180,9 +193,10 @@ components:
         stateProvince:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Address state/province.
-          nullable: true
         postalCode:
           maxLength: 200
           minLength: 1
@@ -191,34 +205,32 @@ components:
         country:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Country identifier.
-          nullable: true
         phone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Phone number.
           format: tel
-          nullable: true
         email:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
           format: email
-          nullable: true
       additionalProperties: false
       description: Address definition
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     CompanyInfoRequestFindParameters:
       type: object
       properties:
         isPrimary:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Filter on primary company info
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding company information.
   securitySchemes:

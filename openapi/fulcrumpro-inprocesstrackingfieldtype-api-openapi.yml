@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code InProcessTrackingFieldType API
+  title: Fulcrum Public In Process Tracking Field Type API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -96,6 +96,12 @@ paths:
                   $ref: '#/components/schemas/InProcessTrackingFieldTypeDto'
 components:
   schemas:
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     InProcessTrackingFieldTypeDto:
       required:
       - dataType
@@ -119,38 +125,36 @@ components:
           type: string
           description: Description of the in process tracking field
         dropDownOptions:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Options when the data type is a list type
-          nullable: true
         unitTypeName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The type of quantity when the data type is number
-          nullable: true
       additionalProperties: false
       description: Describes the type of in process tracking field
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     InProcessTrackingFieldTypeRequestFindParameters:
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter in process tracking fields based on their name.
-          nullable: true
         ids:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter in process tracking fields based on matching ids.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding in process tracking fields.
     DomainInProcessTrackingFieldDataType:

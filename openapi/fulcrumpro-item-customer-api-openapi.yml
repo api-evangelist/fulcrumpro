@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Item Customer API
+  title: Fulcrum Public Item Customer API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -162,56 +162,102 @@ paths:
       - ItemsAndInventory-Items-View Item
 components:
   schemas:
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    DomainPriceBreaksPriceBreakTypeEnum:
+      enum:
+      - price
+      - margin
+      - cost
+      - operation
+      - shopRate
+      type: string
     CommonPriceBreakDto:
       required:
       - type
       type: object
       properties:
         quantity:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Indicates at what quantity this price break becomes active.
           format: int32
-          nullable: true
         price:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The price "per unit" at this price break.
           format: double
-          nullable: true
         margin:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Margin
           format: double
-          nullable: true
         currencyCode:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Currency code associated to this price break.
-          nullable: true
         vendorId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Vendor identifier. Please reference /api/vendors endpoint.
-          nullable: true
         customerId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Customer identifier. Please reference /api/customers endpoint.
-          nullable: true
         customerTierId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Customer tier identifier. Please reference /api/customer-tiers endpoint.
-          nullable: true
         unitOfMeasureName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The unit of measurement.
-          nullable: true
         type:
           $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
       additionalProperties: false
       description: Price break definition
+    ItemCustomerUpdateDto:
+      type: object
+      properties:
+        customerItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item number for this customer.
+        customerItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this customer.
+      additionalProperties: false
+      description: Update an item customer association.
     ItemCustomerDto:
       required:
       - customerId
@@ -232,20 +278,23 @@ components:
         customerItemNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item number for this customer.
-          nullable: true
         customerItemName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item name for this customer.
-          nullable: true
         unitOfMeasureName:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The unit of measure name. This can be standard unit measurement names (Piece, Square foot, etc) or a custom measurement name.
-          nullable: true
         priceBreaks:
           type: array
           items:
@@ -253,23 +302,6 @@ components:
           description: Price breaks.
       additionalProperties: false
       description: Customer with additional context for an item.
-    ItemCustomerUpdateDto:
-      type: object
-      properties:
-        customerItemNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The item number for this customer.
-          nullable: true
-        customerItemName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The item name for this customer.
-          nullable: true
-      additionalProperties: false
-      description: Update an item customer association.
     ItemCustomerCreateDto:
       required:
       - customerId
@@ -283,36 +315,19 @@ components:
         customerItemNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item number for this customer.
-          nullable: true
         customerItemName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item name for this customer.
-          nullable: true
       additionalProperties: false
       description: Create a new item customer association.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    DomainPriceBreaksPriceBreakTypeEnum:
-      enum:
-      - price
-      - margin
-      - cost
-      - operation
-      - shopRate
-      type: string
   securitySchemes:
     bearer:
       type: http

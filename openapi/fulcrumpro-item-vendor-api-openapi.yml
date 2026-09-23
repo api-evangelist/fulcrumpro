@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Item Vendor API
+  title: Fulcrum Public Item Vendor API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -135,100 +135,6 @@ paths:
       - ItemsAndInventory-Items-Edit Item
 components:
   schemas:
-    CommonPriceBreakDto:
-      required:
-      - type
-      type: object
-      properties:
-        quantity:
-          type: integer
-          description: Indicates at what quantity this price break becomes active.
-          format: int32
-          nullable: true
-        price:
-          type: number
-          description: The price "per unit" at this price break.
-          format: double
-          nullable: true
-        margin:
-          type: number
-          description: Margin
-          format: double
-          nullable: true
-        currencyCode:
-          type: string
-          description: Currency code associated to this price break.
-          nullable: true
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor identifier. Please reference /api/vendors endpoint.
-          nullable: true
-        customerId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Customer identifier. Please reference /api/customers endpoint.
-          nullable: true
-        customerTierId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Customer tier identifier. Please reference /api/customer-tiers endpoint.
-          nullable: true
-        unitOfMeasureName:
-          type: string
-          description: The unit of measurement.
-          nullable: true
-        type:
-          $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
-      additionalProperties: false
-      description: Price break definition
-    ItemVendorCreateDto:
-      required:
-      - vendorId
-      type: object
-      properties:
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
-        vendorItemNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The item number for this vendor.
-          nullable: true
-        vendorItemName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The item name for this vendor.
-          nullable: true
-        price:
-          minimum: 0
-          type: number
-          description: The price of this item for this vendor.
-          format: double
-          nullable: true
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this item.
-        leadTimeInDays:
-          type: integer
-          description: Lead time for this vendor.
-          format: int32
-          nullable: true
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Notes on this association.
-          nullable: true
-      additionalProperties: false
-      description: Vendor with additional context for an item.
     ItemVendorDto:
       required:
       - id
@@ -249,44 +155,51 @@ components:
         vendorItemNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item number for this vendor.
-          nullable: true
         vendorItemName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item name for this vendor.
-          nullable: true
         price:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: The price of this item for this vendor.
           format: double
-          nullable: true
         isPrimary:
           type: boolean
           description: Signifies if this is the primary vendor for this item.
         leadTimeInDays:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Lead time for this vendor.
           format: int32
-          nullable: true
         unitOfMeasureName:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The unit of measure name. This can be standard unit measurement names (Piece, Square foot, etc) or a custom measurement name.
-          nullable: true
         unitQuantity:
-          type: number
+          type:
+          - number
+          - 'null'
           description: 'The vendor unit quantity for conversions. Ex: a FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity of 5 would indicate that 5 FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName of this item for this vendor are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity in the base inventory unit of measure.'
           format: double
-          nullable: true
         inventoryUnitQuantity:
-          type: number
+          type:
+          - number
+          - 'null'
           description: 'The inventory unit quantity for conversions. Ex: an FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity of 5 would indicate that 5 inventory units (Pieces, Foot, etc) of this item are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity units in FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName for this vendor.'
           format: double
-          nullable: true
         priceBreaks:
           type: array
           items:
@@ -295,9 +208,101 @@ components:
         notes:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes on this association.
-          nullable: true
+      additionalProperties: false
+      description: Vendor with additional context for an item.
+    ItemVendorUpdateDto:
+      type: object
+      properties:
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item number for this vendor.
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this vendor.
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The price of this item for this vendor.
+          format: double
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this item.
+        leadTimeInDays:
+          type:
+          - integer
+          - 'null'
+          description: Lead time for this vendor.
+          format: int32
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes on this association.
+      additionalProperties: false
+      description: Vendor with additional context for an item.
+    ItemVendorCreateDto:
+      required:
+      - vendorId
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item number for this vendor.
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this vendor.
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The price of this item for this vendor.
+          format: double
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this item.
+        leadTimeInDays:
+          type:
+          - integer
+          - 'null'
+          description: Lead time for this vendor.
+          format: int32
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes on this association.
       additionalProperties: false
       description: Vendor with additional context for an item.
     CreatedResponseDto:
@@ -319,43 +324,64 @@ components:
       - operation
       - shopRate
       type: string
-    ItemVendorUpdateDto:
+    CommonPriceBreakDto:
+      required:
+      - type
       type: object
       properties:
-        vendorItemNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The item number for this vendor.
-          nullable: true
-        vendorItemName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The item name for this vendor.
-          nullable: true
-        price:
-          minimum: 0
-          type: number
-          description: The price of this item for this vendor.
-          format: double
-          nullable: true
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this item.
-        leadTimeInDays:
-          type: integer
-          description: Lead time for this vendor.
+        quantity:
+          type:
+          - integer
+          - 'null'
+          description: Indicates at what quantity this price break becomes active.
           format: int32
-          nullable: true
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Notes on this association.
-          nullable: true
+        price:
+          type:
+          - number
+          - 'null'
+          description: The price "per unit" at this price break.
+          format: double
+        margin:
+          type:
+          - number
+          - 'null'
+          description: Margin
+          format: double
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: Currency code associated to this price break.
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Vendor identifier. Please reference /api/vendors endpoint.
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Customer identifier. Please reference /api/customers endpoint.
+        customerTierId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Customer tier identifier. Please reference /api/customer-tiers endpoint.
+        unitOfMeasureName:
+          type:
+          - string
+          - 'null'
+          description: The unit of measurement.
+        type:
+          $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
       additionalProperties: false
-      description: Vendor with additional context for an item.
+      description: Price break definition
   securitySchemes:
     bearer:
       type: http

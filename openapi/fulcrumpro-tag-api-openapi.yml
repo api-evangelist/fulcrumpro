@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Tag API
+  title: Fulcrum Public Tag API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     get:
       tags:
       - Tag
-      summary: Get a tag.
+      summary: Get a tag
       operationId: GetTag
       parameters:
       - name: id
@@ -37,7 +37,7 @@ paths:
     post:
       tags:
       - Tag
-      summary: Find tags based on search parameters.
+      summary: Find tags based on search parameters
       operationId: ListTag
       parameters:
       - name: Sort.Field
@@ -203,6 +203,11 @@ paths:
       - System-System Data-Manage System Data
 components:
   schemas:
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     CommonEnumTagTypeEnum:
       enum:
       - item
@@ -220,66 +225,6 @@ components:
       - chartOfAccounts
       type: string
       description: What the tag is used for (can be many).
-    TagCreateDto:
-      required:
-      - name
-      - style
-      - types
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-        style:
-          $ref: '#/components/schemas/CommonEnumStyleEnum'
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
-        types:
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
-          description: The type(s) of this tag.
-      additionalProperties: false
-      description: Represents a tag for creation
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    TagRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Filter tags based on their name.
-          nullable: true
-        ids:
-          type: array
-          items:
-            type: string
-          description: Filter tags based on matching ids.
-          nullable: true
-        types:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
-          description: Filter tags based on matching types.
-          nullable: true
-      additionalProperties: false
-      description: Parameters used for searching/finding accounting codes.
     TagDto:
       required:
       - id
@@ -303,20 +248,48 @@ components:
         description:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Descriptive name associated to the object
-          nullable: true
         types:
           type: array
           items:
             $ref: '#/components/schemas/CommonEnumTagTypeEnum'
           description: Represents where/how this tag is used.
         deleted:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Indicate if this tag has been deleted.
-          nullable: true
       additionalProperties: false
       description: Represents a tag
+    TagRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter tags based on their name.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter tags based on matching ids.
+        types:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
+          description: Filter tags based on matching types.
+      additionalProperties: false
+      description: Parameters used for searching/finding accounting codes.
     TagUpdateDto:
       required:
       - name
@@ -334,9 +307,10 @@ components:
         description:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Descriptive name associated to the object
-          nullable: true
         types:
           minItems: 1
           type: array
@@ -345,11 +319,15 @@ components:
           description: The type(s) of this tag.
       additionalProperties: false
       description: Represents a tag for update
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
     CreatedResponseDto:
       required:
       - id
@@ -361,6 +339,35 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    TagCreateDto:
+      required:
+      - name
+      - style
+      - types
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+        style:
+          $ref: '#/components/schemas/CommonEnumStyleEnum'
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+        types:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
+          description: The type(s) of this tag.
+      additionalProperties: false
+      description: Represents a tag for creation
     CommonEnumSortDirectionEnum:
       enum:
       - ascending

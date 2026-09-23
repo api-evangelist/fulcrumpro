@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Inventory API
+  title: Fulcrum Public Inventory API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     post:
       tags:
       - Inventory
-      summary: Find inventory based on search parameters.
+      summary: Find inventory based on search parameters
       operationId: ListInventory
       parameters:
       - name: Sort.Field
@@ -74,9 +74,7 @@ paths:
     get:
       tags:
       - Inventory
-      summary: 'Returns on hand counts by item.  Excludes reserved inventory counts by default, but can be included by passing in the ```includeReserved``` query parameter.
-
-        NOTE: If the response does not contain an item identifier, it means there is no quantity on hand.'
+      summary: Returns on hand counts by item.
       operationId: OnHandByItem
       parameters:
       - name: includeReserved
@@ -107,7 +105,7 @@ paths:
     post:
       tags:
       - Inventory
-      summary: Override an inventory's quantity.
+      summary: Override an inventory's quantity
       operationId: OverrideInventory
       requestBody:
         description: The parameters for the request
@@ -139,7 +137,7 @@ paths:
     post:
       tags:
       - Inventory
-      summary: Pick inventory against a specific item.
+      summary: Pick inventory against a specific item
       operationId: PickInventory
       requestBody:
         content:
@@ -168,9 +166,7 @@ paths:
     get:
       tags:
       - Inventory
-      summary: 'Returns quantity available by item. This is the on hand + incoming supply - demand.
-
-        NOTE: If the response does not contain an item identifier, it means there is no quantity on hand.'
+      summary: Returns quantity available by item.
       operationId: QuantityAvailableByItem
       responses:
         '200':
@@ -194,7 +190,7 @@ paths:
     post:
       tags:
       - Inventory
-      summary: Receive inventory for a specific item.
+      summary: Receive inventory for a specific item
       operationId: ReceiveInventory
       requestBody:
         content:
@@ -225,25 +221,78 @@ components:
       type: object
       properties:
         lotIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter inventory based on lot ids.
-          nullable: true
         itemIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter inventory based on item ids.
-          nullable: true
         locationIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter inventory based on location ids.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding inventory.
+    InventoryPickDto:
+      required:
+      - itemId
+      - quantity
+      - secondaryType
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item identifier. Please reference /api/items endpoint.
+        secondaryType:
+          $ref: '#/components/schemas/InventoryPickEventSecondaryType'
+        quantity:
+          type: number
+          description: Quantity of the item to pick.
+          format: double
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Location id that inventory is picked from. Please reference /api/locations endpoint
+        lotId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Lot identifier for this block of inventory. Please reference /api/inventory-lots endpoint
+        note:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes associated to this transaction.
+      additionalProperties: false
+      description: Pick event for item inventory.
+    InventoryPickEventSecondaryType:
+      enum:
+      - pick
+      - consume
+      - scrap
+      - stockAdjustmentDecrease
+      - otherDecrease
+      type: string
+      description: Secondary event type specifically for picking.
     InventoryReceiveDto:
       required:
       - itemId
@@ -265,61 +314,61 @@ components:
         locationId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Location id that inventory is received into. Please reference /api/locations endpoint
-          nullable: true
         lotId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Lot identifier for this block of inventory. Please reference /api/inventory-lots endpoint
-          nullable: true
         lotNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Lot name.
-          nullable: true
         note:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes associated to this transaction.
-          nullable: true
         laborValue:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Labor value associated (per unit).
           format: double
-          nullable: true
         machineValue:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Machine value associated (per unit).
           format: double
-          nullable: true
         outsideProcessingValue:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Outside processing value associated (per unit).
           format: double
-          nullable: true
         materialValue:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Material value associated (per unit).
           format: double
-          nullable: true
       additionalProperties: false
       description: Receive event for item inventory.
-    InventoryReceiveEventSecondaryType:
-      enum:
-      - receive
-      - found
-      - stockAdjustmentIncrease
-      - otherIncrease
-      type: string
-      description: Secondary event type specifically for receiving.
     InventoryOverrideDto:
       required:
       - itemId
@@ -336,17 +385,20 @@ components:
           description: The quantity to set the item's inventory level to.
           format: double
         lotId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The lot identifier to apply this override to
-          nullable: true
         locationId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The location identifier to apply this override to.  ```null``` signifies no location.
-          nullable: true
         note:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The note to add to the override transaction.
-          nullable: true
       additionalProperties: false
       description: Override event for item inventory
     InventoryDto:
@@ -366,15 +418,17 @@ components:
         lotId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: The lot Iid associated to this entity.
-          nullable: true
         locationId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: The location id associated to this entity.
-          nullable: true
         quantity:
           minimum: 0
           type: number
@@ -398,64 +452,26 @@ components:
         itemDescription:
           maxLength: 2000
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: The description of the item
-          nullable: true
       additionalProperties: false
       description: An item inventory record.
-    InventoryPickDto:
-      required:
-      - itemId
-      - quantity
-      - secondaryType
-      type: object
-      properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item identifier. Please reference /api/items endpoint.
-        secondaryType:
-          $ref: '#/components/schemas/InventoryPickEventSecondaryType'
-        quantity:
-          type: number
-          description: Quantity of the item to pick.
-          format: double
-        locationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Location id that inventory is picked from. Please reference /api/locations endpoint
-          nullable: true
-        lotId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Lot identifier for this block of inventory. Please reference /api/inventory-lots endpoint
-          nullable: true
-        note:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Notes associated to this transaction.
-          nullable: true
-      additionalProperties: false
-      description: Pick event for item inventory.
     CommonEnumSortDirectionEnum:
       enum:
       - ascending
       - descending
       type: string
       description: Specify sorting direction.
-    InventoryPickEventSecondaryType:
+    InventoryReceiveEventSecondaryType:
       enum:
-      - pick
-      - consume
-      - scrap
-      - stockAdjustmentDecrease
-      - otherDecrease
+      - receive
+      - found
+      - stockAdjustmentIncrease
+      - otherIncrease
       type: string
-      description: Secondary event type specifically for picking.
+      description: Secondary event type specifically for receiving.
   securitySchemes:
     bearer:
       type: http

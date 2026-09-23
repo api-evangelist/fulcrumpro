@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Shipping Method API
+  title: Fulcrum Public Shipping Method API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     get:
       tags:
       - Shipping Method
-      summary: Get a shipping method.
+      summary: Get a shipping method
       operationId: GetShippingMethod
       parameters:
       - name: id
@@ -37,7 +37,7 @@ paths:
     post:
       tags:
       - Shipping Method
-      summary: Find shipping methods based on search parameters.
+      summary: Find shipping methods based on search parameters
       operationId: ListShippingMethod
       parameters:
       - name: Sort.Field
@@ -96,29 +96,6 @@ paths:
                   $ref: '#/components/schemas/ShippingMethodDto'
 components:
   schemas:
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    ShippingMethodRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Filter shipping methods based on their name.
-          nullable: true
-        ids:
-          type: array
-          items:
-            type: string
-          description: Filter shipping methods based on matching ids.
-          nullable: true
-      additionalProperties: false
-      description: Parameters used for searching/finding shipping methods.
     ShippingMethodDto:
       required:
       - id
@@ -137,6 +114,31 @@ components:
           description: Identifying name. Must be unique.
       additionalProperties: false
       description: Shipping method definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ShippingMethodRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter shipping methods based on their name.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter shipping methods based on matching ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding shipping methods.
   securitySchemes:
     bearer:
       type: http

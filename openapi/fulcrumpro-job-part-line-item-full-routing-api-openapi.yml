@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Job Part Line Item Full Routing API
+  title: Fulcrum Public Job Part Line Item Full Routing API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -76,36 +76,42 @@ components:
           type: string
           description: Label describing the in process tracking field
         units:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The units used when this in process tracking field represents a number
-          nullable: true
         fieldTypeId:
           minLength: 1
           type: string
           description: The id of the field type for this in process tracking field
         targetValue:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The target or ideal value of an in process tracking field response
           format: double
-          nullable: true
         minimumValue:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The minimum acceptable value for a tracking field response
           format: double
-          nullable: true
         maximumValue:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The maximum acceptable value for a tracking field response
           format: double
-          nullable: true
         triggeringBooleanValue:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: The target value for booleans. Typically Yes/No for proceeding with next checkpoint
-          nullable: true
         triggeringDropdownValue:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The target value for multiple options
-          nullable: true
         required:
           type: boolean
           description: Whether the in process tracking field requires a response

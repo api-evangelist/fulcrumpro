@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Location API
+  title: Fulcrum Public Location API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -30,7 +30,7 @@ paths:
     get:
       tags:
       - Location
-      summary: Get a location.
+      summary: Get a location
       operationId: GetLocation
       parameters:
       - name: id
@@ -58,7 +58,7 @@ paths:
     post:
       tags:
       - Location
-      summary: Find locations based on search parameters.
+      summary: Find locations based on search parameters
       operationId: ListLocation
       parameters:
       - name: Sort.Field
@@ -119,12 +119,6 @@ paths:
       - ItemsAndInventory-Items-View Inventory
 components:
   schemas:
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     LocationDto:
       required:
       - id
@@ -144,26 +138,35 @@ components:
         description:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: A verbose description of the location.
-          nullable: true
         barcode:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Barcode identifier for this entity.
-          nullable: true
       additionalProperties: false
       description: Location definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     LocationRequestFindParameters:
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter locations based on their name.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding locations.
   securitySchemes:

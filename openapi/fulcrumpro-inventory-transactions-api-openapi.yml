@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Inventory Transactions API
+  title: Fulcrum Public Inventory Transactions API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -68,21 +68,100 @@ paths:
       - ItemsAndInventory-Items-View Inventory
 components:
   schemas:
+    V2InventoryDataEventSourceType:
+      enum:
+      - purchaseOrder
+      - job
+      - shipment
+      - shipmentLineItem
+      - shipping
+      - receiving
+      - item
+      - workOrder
+      - salesOrder
+      - jobOperation
+      - workOrderOperation
+      - fulfillment
+      - itemToMakeMaterialRemnant
+      - poRcvValueAdj
+      type: string
     DtoCommonDateRangeFilter:
       type: object
       properties:
         start:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Inclusive start date to filter by
           format: date-time
-          nullable: true
         end:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Inclusive end date to filter by
           format: date-time
-          nullable: true
       additionalProperties: false
       description: Date range used for filters
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    InventoryEventSecondaryType:
+      enum:
+      - pick
+      - receive
+      - override
+      - revert
+      - deposit
+      - create
+      - consume
+      - ship
+      - sold
+      - transferOut
+      - transferIn
+      - found
+      - expired
+      - damaged
+      - lost
+      - returnVendor
+      - returnStock
+      - receivedNoPo
+      - returnIncrease
+      - returnDecrease
+      - otherIncrease
+      - otherDecrease
+      - scrap
+      - waste
+      - transferredFromSalesOrder
+      - overrideItemValue
+      - transferFromLot
+      - transferToLot
+      - stockAdjustmentIncrease
+      - stockAdjustmentDecrease
+      - stockTake
+      type: string
+      description: Secondary, verbose description for an event.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     InventoryEventType:
       enum:
       - pick
@@ -93,6 +172,60 @@ components:
       - eventOverride
       type: string
       description: Primary inventory event type.
+    InventoryTransactionDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the transaction
+        date:
+          type: string
+          description: The date of the transaction
+          format: date-time
+        type:
+          $ref: '#/components/schemas/InventoryEventType'
+        secondaryType:
+          $ref: '#/components/schemas/InventoryEventSecondaryType'
+        item:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        location:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        lot:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        quantity:
+          type: number
+          description: The quantity of the transaction
+          format: double
+        valueChange:
+          type: number
+          description: The item value change caused by the transaction
+          format: double
+        qtyChange:
+          type: number
+          description: The item quantity change caused by the transaction
+          format: double
+        note:
+          type:
+          - string
+          - 'null'
+          description: The note on the transaction
+        value:
+          type:
+          - number
+          - 'null'
+          description: The per-unit value of the transaction
+          format: double
+        totalValue:
+          type:
+          - number
+          - 'null'
+          description: The total value of the transaction
+          format: double
+          readOnly: true
+      additionalProperties: false
+      description: An inventory transaction
     DtoPagedResultDtoInventoryTransactionDto:
       required:
       - data
@@ -138,117 +271,16 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    V2InventoryDataEventSourceType:
-      enum:
-      - purchaseOrder
-      - job
-      - shipment
-      - shipmentLineItem
-      - shipping
-      - receiving
-      - item
-      - workOrder
-      - salesOrder
-      - jobOperation
-      - workOrderOperation
-      - fulfillment
-      - itemToMakeMaterialRemnant
-      - poRcvValueAdj
-      type: string
-    InventoryTransactionDto:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id of the transaction
-          nullable: true
-        date:
-          type: string
-          description: The date of the transaction
-          format: date-time
-        type:
-          $ref: '#/components/schemas/InventoryEventType'
-        secondaryType:
-          $ref: '#/components/schemas/InventoryEventSecondaryType'
-        item:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        location:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        lot:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        quantity:
-          type: number
-          description: The quantity of the transaction
-          format: double
-        valueChange:
-          type: number
-          description: The item value change caused by the transaction
-          format: double
-        qtyChange:
-          type: number
-          description: The item quantity change caused by the transaction
-          format: double
-        note:
-          type: string
-          description: The note on the transaction
-          nullable: true
-        value:
-          type: number
-          description: The per-unit value of the transaction
-          format: double
-          nullable: true
-        totalValue:
-          type: number
-          description: The total value of the transaction
-          format: double
-          nullable: true
-          readOnly: true
-      additionalProperties: false
-      description: An inventory transaction
-    InventoryEventSecondaryType:
-      enum:
-      - pick
-      - receive
-      - override
-      - revert
-      - deposit
-      - create
-      - consume
-      - ship
-      - sold
-      - transferOut
-      - transferIn
-      - found
-      - expired
-      - damaged
-      - lost
-      - returnVendor
-      - returnStock
-      - receivedNoPo
-      - returnIncrease
-      - returnDecrease
-      - otherIncrease
-      - otherDecrease
-      - scrap
-      - waste
-      - transferredFromSalesOrder
-      - overrideItemValue
-      - transferFromLot
-      - transferToLot
-      - stockAdjustmentIncrease
-      - stockAdjustmentDecrease
-      - stockTake
-      type: string
-      description: Secondary, verbose description for an event.
     InventoryTransactionsListParameters:
       type: object
       properties:
         itemIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter inventory transactions based on item identifiers.
-          nullable: true
         dateRange:
           $ref: '#/components/schemas/DtoCommonDateRangeFilter'
         sourceType:
@@ -256,34 +288,12 @@ components:
         relatedEntityType:
           $ref: '#/components/schemas/V2InventoryDataEventSourceType'
         relatedEntityId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The transaction's related entity identifier
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching inventory transactions
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
   securitySchemes:
     bearer:
       type: http

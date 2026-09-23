@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Sales Order Refund Line Item API
+  title: Fulcrum Public Sales Order Refund Line Item API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -164,54 +164,6 @@ paths:
       - Orders-SalesOrders-Edit Sales Order
 components:
   schemas:
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the type of this identifier.
-          nullable: true
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-          nullable: true
-        status:
-          type: string
-          description: A status for the external reference
-          nullable: true
-        url:
-          type: string
-          description: An external url for the reference
-          nullable: true
-        modifiedUtc:
-          type: string
-          description: Date the external reference was modified
-          format: date-time
-          nullable: true
-        lastSyncedUtc:
-          type: string
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-          nullable: true
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
     SalesOrderRefundLineItemDto:
       required:
       - accountingDetails
@@ -240,9 +192,10 @@ components:
         description:
           maxLength: 2000
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: The refund line item description.  Defaults to the item's description if none specified.
-          nullable: true
         refundQuantity:
           minimum: 0
           type: number
@@ -256,30 +209,35 @@ components:
         accountingCodeId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-          nullable: true
         refundReasonCodeId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Refund reason code key identifier. Please reference /api/refund-reason-codes endpoint.
-          nullable: true
         isReturn:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Indicate if a return is expected.
-          nullable: true
         returnQuantity:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The quantity to be returned.
           format: double
-          nullable: true
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-          nullable: true
         number:
           type: integer
           description: Line number
@@ -288,6 +246,158 @@ components:
           $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Refund line item.
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    SalesOrderRefundLineItemUpdateDto:
+      required:
+      - refundAmount
+      - refundQuantity
+      type: object
+      properties:
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The refund line item description.
+        refundQuantity:
+          minimum: 0
+          type: number
+          description: The quantity to be refunded.
+          format: double
+        refundAmount:
+          minimum: 0
+          type: number
+          description: The refund amount.
+          format: double
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        refundReasonCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Refund reason code key identifier. Please reference /api/refund-reason-codes endpoint.
+        isReturn:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if a return is expected.
+        returnQuantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The quantity to be returned.
+          format: double
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Represents a refund line item on a sales order.
     CreatedResponseDto:
       required:
       - id
@@ -299,58 +409,6 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    SalesOrderRefundLineItemUpdateDto:
-      required:
-      - refundAmount
-      - refundQuantity
-      type: object
-      properties:
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-          description: The refund line item description.
-          nullable: true
-        refundQuantity:
-          minimum: 0
-          type: number
-          description: The quantity to be refunded.
-          format: double
-        refundAmount:
-          minimum: 0
-          type: number
-          description: The refund amount.
-          format: double
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-          nullable: true
-        refundReasonCodeId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Refund reason code key identifier. Please reference /api/refund-reason-codes endpoint.
-          nullable: true
-        isReturn:
-          type: boolean
-          description: Indicate if a return is expected.
-          nullable: true
-        returnQuantity:
-          minimum: 0
-          type: number
-          description: The quantity to be returned.
-          format: double
-          nullable: true
-        externalReferences:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-          nullable: true
-      additionalProperties: false
-      description: Represents a refund line item on a sales order.
     SalesOrderRefundLineItemCreateDto:
       required:
       - refundAmount
@@ -361,9 +419,10 @@ components:
         description:
           maxLength: 2000
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: The refund line item description.  Defaults to the item's description if none specified.
-          nullable: true
         refundedLineId:
           maxLength: 36
           minLength: 36
@@ -382,67 +441,37 @@ components:
         accountingCodeId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-          nullable: true
         refundReasonCodeId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Refund reason code key identifier. Please reference /api/refund-reason-codes endpoint.
-          nullable: true
         isReturn:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Indicate if a return is expected.
-          nullable: true
         returnQuantity:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The quantity to be returned.
           format: double
-          nullable: true
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-          nullable: true
       additionalProperties: false
       description: Represents a refund line item on a sales order.
-    CommonAccountingDetailsDto:
-      type: object
-      properties:
-        classId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-          nullable: true
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-          nullable: true
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-          nullable: true
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-          nullable: true
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-          nullable: true
-      additionalProperties: false
-      description: An object that contains all accounting details.
   securitySchemes:
     bearer:
       type: http

@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Item Category API
+  title: Fulcrum Public Item Category API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -37,7 +37,7 @@ paths:
     post:
       tags:
       - Item Category
-      summary: Find item categories based on search parameters.
+      summary: Find item categories based on search parameters
       operationId: ListItemCategory
       parameters:
       - name: Sort.Field
@@ -96,23 +96,6 @@ paths:
                   $ref: '#/components/schemas/TagDto'
 components:
   schemas:
-    CommonEnumTagTypeEnum:
-      enum:
-      - item
-      - accountingCode
-      - itemCategory
-      - itemShape
-      - itemMaterial
-      - itemGrade
-      - itemGauge
-      - itemShippingContainer
-      - itemClass
-      - breakReasonCode
-      - refundReasonCode
-      - vendorOrderIssueCode
-      - chartOfAccounts
-      type: string
-      description: What the tag is used for (can be many).
     TagDto:
       required:
       - id
@@ -136,35 +119,56 @@ components:
         description:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Descriptive name associated to the object
-          nullable: true
         types:
           type: array
           items:
             $ref: '#/components/schemas/CommonEnumTagTypeEnum'
           description: Represents where/how this tag is used.
         deleted:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Indicate if this tag has been deleted.
-          nullable: true
       additionalProperties: false
       description: Represents a tag
+    CommonEnumTagTypeEnum:
+      enum:
+      - item
+      - accountingCode
+      - itemCategory
+      - itemShape
+      - itemMaterial
+      - itemGrade
+      - itemGauge
+      - itemShippingContainer
+      - itemClass
+      - breakReasonCode
+      - refundReasonCode
+      - vendorOrderIssueCode
+      - chartOfAccounts
+      type: string
+      description: What the tag is used for (can be many).
     TagRequestFindParametersBase:
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter tags based on their name.
-          nullable: true
         ids:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter tags based on matching ids.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding accounting codes.
     CommonEnumSortDirectionEnum:

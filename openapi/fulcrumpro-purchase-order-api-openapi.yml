@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Purchase Order API
+  title: Fulcrum Public Purchase Order API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -166,7 +166,7 @@ paths:
     post:
       tags:
       - Purchase Order
-      summary: Find purchase orders based on search parameters.
+      summary: Find purchase orders based on search parameters
       operationId: ListPurchaseOrder
       parameters:
       - name: Sort.Field
@@ -266,111 +266,44 @@ paths:
       - Orders-PurchaseOrders-Edit Purchase Order
 components:
   schemas:
-    CommonExternalReferenceDto:
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    PurchaseOrderReceivingStatusEnum:
+      enum:
+      - notReceived
+      - partiallyReceived
+      - received
+      type: string
+      description: Purchase order receipt status
+    CommonExternalReferenceFindDto:
       required:
-      - externalId
+      - key
       type: object
       properties:
-        type:
+        key:
           maxLength: 50
           minLength: 0
           type: string
-          description: Specifies the type of this identifier.
-          nullable: true
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Arbitrary sub-key that can be used to qualify the value
         externalId:
           maxLength: 500
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-          nullable: true
-        status:
-          type: string
-          description: A status for the external reference
-          nullable: true
-        url:
-          type: string
-          description: An external url for the reference
-          nullable: true
-        modifiedUtc:
-          type: string
-          description: Date the external reference was modified
-          format: date-time
-          nullable: true
-        lastSyncedUtc:
-          type: string
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-          nullable: true
       additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    PurchaseOrderCreateDto:
-      required:
-      - type
-      - vendorId
-      type: object
-      properties:
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor Id
-        type:
-          $ref: '#/components/schemas/PurchaseOrderTypeEnum'
-        contactId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: 'Vendor Contact Id;
-
-            defaults to the Id of the first contact belonging to the input vendor'
-          nullable: true
-        companyInfoId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Company Information Id;
-
-            defaults to primary company info Id'
-          nullable: true
-        currencyCode:
-          type: string
-          description: 'Currency code override;
-
-            defaults to vendor currency code override, then the company''s primary currency code'
-          nullable: true
-        externalReferences:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: External references associated with this entity.
-          nullable: true
-        expectedReceiveDate:
-          type: string
-          description: PO Expected receipt date
-          format: date-time
-          nullable: true
-      additionalProperties: false
-      description: Details of purchase order to be created
+      description: Search parameter for identifier record(s) via their external identifiers.
     PurchaseOrderRequestUpdateStatus:
       required:
       - status
@@ -379,19 +312,151 @@ components:
         status:
           $ref: '#/components/schemas/PurchaseOrderStatusEnum'
         paidDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The date that the purchase order was paid. Should be provided in UTC. Will default to current date/time if not provided when applicable.
           format: date-time
-          nullable: true
       additionalProperties: false
       description: Update a purchase order status.
-    PurchaseOrderTypeEnum:
-      enum:
-      - standard
-      - outsideProcessing
-      - vendorCredit
-      type: string
-      description: Purchase order type
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    PurchaseOrderListDto:
+      required:
+      - id
+      - number
+      - receivingStatus
+      - status
+      - type
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        number:
+          minimum: 0
+          type: integer
+          description: Number
+          format: int32
+        issueDate:
+          type:
+          - string
+          - 'null'
+          description: PO creation date
+          format: date-time
+        orderDate:
+          type:
+          - string
+          - 'null'
+          description: PO order date (null until status set to Ordered)
+          format: date-time
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor Id
+        type:
+          $ref: '#/components/schemas/PurchaseOrderTypeEnum'
+        status:
+          $ref: '#/components/schemas/PurchaseOrderStatusEnum'
+        receivingStatus:
+          $ref: '#/components/schemas/PurchaseOrderReceivingStatusEnum'
+        expectedReceiveDate:
+          type:
+          - string
+          - 'null'
+          description: PO Expected receipt date
+          format: date-time
+        customFieldData:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: Custom Fields
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+        currencyCode:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: 'Currency code/denomination associated to this vendor.
+
+            If not provided, default to the primary currency code for the organization.'
+        vendorOrderNumber:
+          type:
+          - string
+          - 'null'
+          description: The vendor's purchase order number
+        vendorNote:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The vendor note is a string property that represents a note provided to the vendor.
+      additionalProperties: false
+      description: Represents a purchase order
     PurchaseOrderDto:
       required:
       - companyInfoId
@@ -415,30 +480,35 @@ components:
           description: Number
           format: int32
         issueDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: PO creation date
           format: date-time
-          nullable: true
         earliestReceiveDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Earliest Receive Date
           format: date-time
-          nullable: true
         orderDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: PO order date (null until status set to Ordered)
           format: date-time
-          nullable: true
         expectedReceiveDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: PO Expected receipt date
           format: date-time
-          nullable: true
         promiseDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: PO Promise date.
           format: date-time
-          nullable: true
         vendorId:
           maxLength: 24
           minLength: 24
@@ -452,9 +522,10 @@ components:
         paymentTermsId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
-          nullable: true
         paymentTerms:
           $ref: '#/components/schemas/CommonReferenceDto'
         type:
@@ -464,15 +535,17 @@ components:
         receivingStatus:
           $ref: '#/components/schemas/PurchaseOrderReceivingStatusEnum'
         vendorCredit:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Vendor credit applied to this purchase order, if applicable
           format: double
-          nullable: true
         discount:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Discount applied to this purchase order, if applicable
           format: double
-          nullable: true
         subTotal:
           type: number
           description: Total cost of this purchase order, sans tax (if applicable)
@@ -489,54 +562,201 @@ components:
         vendorNote:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The vendor note is a string property that represents a note provided to the vendor.
-          nullable: true
         notes:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Notes
-          nullable: true
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: External references associated with this entity.
-          nullable: true
         customFields:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties: {}
           description: Custom fields that have been defined on this entity.
-          nullable: true
         deleted:
           type: boolean
           description: Indicates whether this purchase order has been deleted
         currencyCode:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Currency code/denomination associated to this vendor.
 
             If not provided, default to the primary currency code for the organization.'
-          nullable: true
         vendorOrderNumber:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The vendor's purchase order number
-          nullable: true
       additionalProperties: false
       description: Represents a purchase order
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    PurchaseOrderStatusEnum:
+      enum:
+      - draft
+      - needsApproval
+      - approved
+      - ordered
+      - paid
+      - cancelled
+      type: string
+      description: Purchase order status
+    PurchaseOrderTypeEnum:
+      enum:
+      - standard
+      - outsideProcessing
+      - vendorCredit
+      type: string
+      description: Purchase order type
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    PurchaseOrderUpdateDto:
+      type: object
+      properties:
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        vendorNote:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The vendor note is a string property that represents a note provided to the vendor.
+        vendorOrderNumber:
+          type:
+          - string
+          - 'null'
+          description: Vendor order number associated to a third party system.
+        expectedReceiveDate:
+          type:
+          - string
+          - 'null'
+          description: PO Expected receipt date (UTC)
+          format: date-time
+        promiseDate:
+          type:
+          - string
+          - 'null'
+          description: PO Promise date (UTC).
+          format: date-time
+      additionalProperties: false
+      description: Represents an update on a purchase order.
+    PurchaseOrderCreateDto:
+      required:
+      - type
+      - vendorId
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor Id
+        type:
+          $ref: '#/components/schemas/PurchaseOrderTypeEnum'
+        contactId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: 'Vendor Contact Id;
+
+            defaults to the Id of the first contact belonging to the input vendor'
+        companyInfoId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Company Information Id;
+
+            defaults to primary company info Id'
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: 'Currency code override;
+
+            defaults to vendor currency code override, then the company''s primary currency code'
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+        expectedReceiveDate:
+          type:
+          - string
+          - 'null'
+          description: PO Expected receipt date
+          format: date-time
+      additionalProperties: false
+      description: Details of purchase order to be created
     PurchaseOrderRequestFindParameters:
       type: object
       properties:
         numbers:
           maxItems: 500
           minItems: 1
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: integer
             format: int32
           description: Filter purchase orders to only given numbers
-          nullable: true
         status:
           $ref: '#/components/schemas/PurchaseOrderStatusEnum'
         receivingStatus:
@@ -549,187 +769,12 @@ components:
         vendorId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: The vendor id.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding purchase orders.
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CommonExternalReferenceFindDto:
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
-        type:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Arbitrary sub-key that can be used to qualify the value
-          nullable: true
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-          nullable: true
-      additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
-    PurchaseOrderStatusEnum:
-      enum:
-      - draft
-      - needsApproval
-      - approved
-      - ordered
-      - paid
-      - cancelled
-      type: string
-      description: Purchase order status
-    PurchaseOrderReceivingStatusEnum:
-      enum:
-      - notReceived
-      - partiallyReceived
-      - received
-      type: string
-      description: Purchase order receipt status
-    PurchaseOrderListDto:
-      required:
-      - id
-      - number
-      - receivingStatus
-      - status
-      - type
-      - vendorId
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        number:
-          minimum: 0
-          type: integer
-          description: Number
-          format: int32
-        issueDate:
-          type: string
-          description: PO creation date
-          format: date-time
-          nullable: true
-        orderDate:
-          type: string
-          description: PO order date (null until status set to Ordered)
-          format: date-time
-          nullable: true
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor Id
-        type:
-          $ref: '#/components/schemas/PurchaseOrderTypeEnum'
-        status:
-          $ref: '#/components/schemas/PurchaseOrderStatusEnum'
-        receivingStatus:
-          $ref: '#/components/schemas/PurchaseOrderReceivingStatusEnum'
-        expectedReceiveDate:
-          type: string
-          description: PO Expected receipt date
-          format: date-time
-          nullable: true
-        customFieldData:
-          type: object
-          additionalProperties: {}
-          description: Custom Fields
-          nullable: true
-        externalReferences:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: External references associated with this entity.
-          nullable: true
-        currencyCode:
-          minLength: 1
-          type: string
-          description: 'Currency code/denomination associated to this vendor.
-
-            If not provided, default to the primary currency code for the organization.'
-          nullable: true
-        vendorOrderNumber:
-          type: string
-          description: The vendor's purchase order number
-          nullable: true
-        vendorNote:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: The vendor note is a string property that represents a note provided to the vendor.
-          nullable: true
-      additionalProperties: false
-      description: Represents a purchase order
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    PurchaseOrderUpdateDto:
-      type: object
-      properties:
-        externalReferences:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-          nullable: true
-        vendorNote:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: The vendor note is a string property that represents a note provided to the vendor.
-          nullable: true
-        vendorOrderNumber:
-          type: string
-          description: Vendor order number associated to a third party system.
-          nullable: true
-        expectedReceiveDate:
-          type: string
-          description: PO Expected receipt date (UTC)
-          format: date-time
-          nullable: true
-        promiseDate:
-          type: string
-          description: PO Promise date (UTC).
-          format: date-time
-          nullable: true
-      additionalProperties: false
-      description: Represents an update on a purchase order.
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
   securitySchemes:
     bearer:
       type: http

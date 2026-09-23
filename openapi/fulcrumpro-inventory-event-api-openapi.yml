@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Inventory Event API
+  title: Fulcrum Public Inventory Event API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -39,7 +39,7 @@ paths:
     post:
       tags:
       - Inventory Event
-      summary: Find inventory events based on search parameters.
+      summary: Find inventory events based on search parameters
       operationId: ListInventoryEvent
       parameters:
       - name: Sort.Field
@@ -96,54 +96,124 @@ paths:
       - ItemsAndInventory-Items-View Inventory
 components:
   schemas:
-    CommonExternalReferenceDto:
+    InventoryEventsInventoryEventDto:
       required:
-      - externalId
+      - id
+      - quantity
+      - type
       type: object
       properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id
+        actionDate:
+          type:
+          - string
+          - 'null'
+          description: The date of the action.
+          format: date-time
         type:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the type of this identifier.
-          nullable: true
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-          nullable: true
-        status:
-          type: string
-          description: A status for the external reference
-          nullable: true
-        url:
-          type: string
-          description: An external url for the reference
-          nullable: true
-        modifiedUtc:
-          type: string
-          description: Date the external reference was modified
-          format: date-time
-          nullable: true
-        lastSyncedUtc:
-          type: string
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-          nullable: true
+          $ref: '#/components/schemas/InventoryEventType'
+        secondaryType:
+          $ref: '#/components/schemas/InventoryEventSecondaryType'
+        sourceType:
+          $ref: '#/components/schemas/InventoryEnumEventSourceType'
+        sourceName:
+          type:
+          - string
+          - 'null'
+          description: Source name.
+        sourceEntityId:
+          type:
+          - string
+          - 'null'
+          description: Source entity id
+        sourceRelatedType:
+          $ref: '#/components/schemas/InventoryEnumEventSourceType'
+        sourceRelatedEntityId:
+          type:
+          - string
+          - 'null'
+          description: Related source entity id
+        sourceItemToMakeId:
+          type:
+          - string
+          - 'null'
+          description: Source item to make id. Please reference /api/jobs/{jobId}/items-to-make endpoint.
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item id key identifier. Please reference /api/items endpoint.
+        itemToMakeId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: Item to make id key identifier. Please reference /api/jobs/{jobId}/items-to-make endpoint.
+        quantity:
+          minimum: 0
+          type: number
+          description: Quantity.
+          format: double
+        laborValue:
+          $ref: '#/components/schemas/CommonCostDto'
+        machineValue:
+          $ref: '#/components/schemas/CommonCostDto'
+        outsideProcessingValue:
+          $ref: '#/components/schemas/CommonCostDto'
+        materialValue:
+          $ref: '#/components/schemas/CommonCostDto'
+        totalValue:
+          $ref: '#/components/schemas/CommonCostDto'
+        reservedForId:
+          maxLength: 36
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: This is the id for the underlying entity that this inventory is reserved for.
+        reservedForType:
+          $ref: '#/components/schemas/DomainCommonEntityType'
+        lotId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The lot this inventory is allocated to. Please reference /api/inventory-lots endpoint.
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The location this inventory is allocated to. Please reference /api/locations endpoint.
+        revertInventoryEventId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: If the event is intended to "revert" a previous transaction, this value contains the original event.
+        note:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: A note associated to this event.
+        resultEffects:
+          $ref: '#/components/schemas/DtoInventoryEventsInventoryEventChangeDetails'
+        details:
+          $ref: '#/components/schemas/InventoryEventDetailsDto'
       additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+      description: An inventory event
     DtoPagedResultDtoInventoryEventsInventoryEventDto:
       required:
       - data
@@ -189,34 +259,66 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    CommonCostDto:
+    CommonExternalReferenceDto:
       required:
-      - perUnit
-      - total
+      - externalId
       type: object
       properties:
-        total:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        perUnit:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
       additionalProperties: false
-      description: Cost information
-    InventoryEventType:
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    V2InventoryRestResourcesTransactionChangeType:
       enum:
-      - pick
-      - receive
-      - revert
-      - adjustment
-      - setItemValue
-      - eventOverride
+      - increase
+      - decrease
+      - static
       type: string
-      description: Primary inventory event type.
     DomainCommonEntityType:
       enum:
       - job
@@ -231,24 +333,6 @@ components:
       - receivingInspection
       - failedInspection
       type: string
-    InventoryEnumEventSourceType:
-      enum:
-      - purchaseOrder
-      - job
-      - shipment
-      - shipmentLineItem
-      - shipping
-      - receiving
-      - item
-      - workOrder
-      - salesOrder
-      - jobOperation
-      - workOrderOperation
-      - fulfillment
-      - itemToMakeMaterialRemnant
-      - poRcvValueAdj
-      type: string
-      description: Indicator for the initial source of the event.
     DtoInventoryEventsInventoryEventChangeDetails:
       required:
       - quantity
@@ -280,19 +364,111 @@ components:
           $ref: '#/components/schemas/CommonCostDto'
       additionalProperties: false
       description: Inventory event change information.
+    InventoryEnumEventSourceType:
+      enum:
+      - purchaseOrder
+      - job
+      - shipment
+      - shipmentLineItem
+      - shipping
+      - receiving
+      - item
+      - workOrder
+      - salesOrder
+      - jobOperation
+      - workOrderOperation
+      - fulfillment
+      - itemToMakeMaterialRemnant
+      - poRcvValueAdj
+      type: string
+      description: Indicator for the initial source of the event.
     InventoryEventDetailsDto:
       type: object
       properties:
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: External references associated with this entity.
-          nullable: true
       additionalProperties: false
       description: 'Inventory event details.
 
         Additional metadata for Inventory Events.'
+    InventoryEventRequestFindParameters:
+      type: object
+      properties:
+        createdBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters events created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        createdAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters events created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        types:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InventoryEventType'
+          description: Inventory event type(s).
+        secondaryTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InventoryEventSecondaryType'
+          description: Inventory event secondary type(s).
+        sourceTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InventoryEnumEventSourceType'
+          description: Inventory event source type(s).
+        itemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Item id. Please reference /api/items endpoint.
+        itemToMakeIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Item id. Please reference /api/items endpoint.
+        reservedForTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DomainCommonEntityType'
+          description: Inventory reservation types.
+        reservedForIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Inventory reservation ids.
+        inventoryEventIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Inventory event ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding inventory.
     InventoryEventSecondaryType:
       enum:
       - pick
@@ -328,187 +504,40 @@ components:
       - stockTake
       type: string
       description: Secondary, verbose description for an event.
-    InventoryEventsInventoryEventDto:
-      required:
-      - id
-      - quantity
-      - type
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Id
-        actionDate:
-          type: string
-          description: The date of the action.
-          format: date-time
-          nullable: true
-        type:
-          $ref: '#/components/schemas/InventoryEventType'
-        secondaryType:
-          $ref: '#/components/schemas/InventoryEventSecondaryType'
-        sourceType:
-          $ref: '#/components/schemas/InventoryEnumEventSourceType'
-        sourceName:
-          type: string
-          description: Source name.
-          nullable: true
-        sourceEntityId:
-          type: string
-          description: Source entity id
-          nullable: true
-        sourceRelatedType:
-          $ref: '#/components/schemas/InventoryEnumEventSourceType'
-        sourceRelatedEntityId:
-          type: string
-          description: Related source entity id
-          nullable: true
-        sourceItemToMakeId:
-          type: string
-          description: Source item to make id. Please reference /api/jobs/{jobId}/items-to-make endpoint.
-          nullable: true
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item id key identifier. Please reference /api/items endpoint.
-          nullable: true
-        itemToMakeId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Item to make id key identifier. Please reference /api/jobs/{jobId}/items-to-make endpoint.
-          nullable: true
-        quantity:
-          minimum: 0
-          type: number
-          description: Quantity.
-          format: double
-        laborValue:
-          $ref: '#/components/schemas/CommonCostDto'
-        machineValue:
-          $ref: '#/components/schemas/CommonCostDto'
-        outsideProcessingValue:
-          $ref: '#/components/schemas/CommonCostDto'
-        materialValue:
-          $ref: '#/components/schemas/CommonCostDto'
-        totalValue:
-          $ref: '#/components/schemas/CommonCostDto'
-        reservedForId:
-          maxLength: 36
-          minLength: 24
-          type: string
-          description: This is the id for the underlying entity that this inventory is reserved for.
-          nullable: true
-        reservedForType:
-          $ref: '#/components/schemas/DomainCommonEntityType'
-        lotId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The lot this inventory is allocated to. Please reference /api/inventory-lots endpoint.
-          nullable: true
-        locationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The location this inventory is allocated to. Please reference /api/locations endpoint.
-          nullable: true
-        revertInventoryEventId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: If the event is intended to "revert" a previous transaction, this value contains the original event.
-          nullable: true
-        note:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: A note associated to this event.
-          nullable: true
-        resultEffects:
-          $ref: '#/components/schemas/DtoInventoryEventsInventoryEventChangeDetails'
-        details:
-          $ref: '#/components/schemas/InventoryEventDetailsDto'
-      additionalProperties: false
-      description: An inventory event
     CommonEnumSortDirectionEnum:
       enum:
       - ascending
       - descending
       type: string
       description: Specify sorting direction.
-    V2InventoryRestResourcesTransactionChangeType:
+    InventoryEventType:
       enum:
-      - increase
-      - decrease
-      - static
+      - pick
+      - receive
+      - revert
+      - adjustment
+      - setItemValue
+      - eventOverride
       type: string
-    InventoryEventRequestFindParameters:
+      description: Primary inventory event type.
+    CommonCostDto:
+      required:
+      - perUnit
+      - total
       type: object
       properties:
-        createdBeforeUtc:
-          type: string
-          description: Filters events created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-          nullable: true
-        createdAfterUtc:
-          type: string
-          description: Filters events created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-          nullable: true
-        types:
-          type: array
-          items:
-            $ref: '#/components/schemas/InventoryEventType'
-          description: Inventory event type(s).
-          nullable: true
-        secondaryTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/InventoryEventSecondaryType'
-          description: Inventory event secondary type(s).
-          nullable: true
-        sourceTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/InventoryEnumEventSourceType'
-          description: Inventory event source type(s).
-          nullable: true
-        itemIds:
-          type: array
-          items:
-            type: string
-          description: Item id. Please reference /api/items endpoint.
-          nullable: true
-        itemToMakeIds:
-          type: array
-          items:
-            type: string
-          description: Item id. Please reference /api/items endpoint.
-          nullable: true
-        reservedForTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/DomainCommonEntityType'
-          description: Inventory reservation types.
-          nullable: true
-        reservedForIds:
-          type: array
-          items:
-            type: string
-          description: Inventory reservation ids.
-          nullable: true
-        inventoryEventIds:
-          type: array
-          items:
-            type: string
-          description: Inventory event ids.
-          nullable: true
+        total:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        perUnit:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
       additionalProperties: false
-      description: Parameters used for searching/finding inventory.
+      description: Cost information
   securitySchemes:
     bearer:
       type: http

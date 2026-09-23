@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Vendor Address API
+  title: Fulcrum Public Vendor Address API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -195,6 +195,192 @@ paths:
       - Vendor-Vendors-View Vendor
 components:
   schemas:
+    CommonAddressCreateDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Second address line.
+        address3:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Third address line.
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Address state/province.
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Country identifier.
+        shippingLeadTime:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead time for shipping contents.
+          format: int32
+        primaryBilling:
+          type: boolean
+          description: Signifies if this is a primary billing address.
+        primaryShipping:
+          type: boolean
+          description: Signifies if this is a primary billing address.
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Associated phone number
+        fax:
+          type:
+          - string
+          - 'null'
+          description: Associated fax number
+        notes:
+          type:
+          - string
+          - 'null'
+          description: General notes associated to this customer address
+      additionalProperties: false
+      description: Address with additional context
+    VendorAddressUpdateDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Second address line.
+        address3:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Third address line.
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Address state/province.
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Country identifier.
+        shippingLeadTime:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead time for shipping contents.
+          format: int32
+        primaryBilling:
+          type: boolean
+          description: Signifies if this is a primary billing address.
+        primaryShipping:
+          type: boolean
+          description: Signifies if this is a primary billing address.
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Associated phone number
+        fax:
+          type:
+          - string
+          - 'null'
+          description: Associated fax number
+        notes:
+          type:
+          - string
+          - 'null'
+          description: General notes associated to this customer address
+      additionalProperties: false
+      description: Address with additional context for updating for a vendor
     VendorAddressDto:
       required:
       - address1
@@ -206,9 +392,10 @@ components:
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-          nullable: true
         address1:
           maxLength: 200
           minLength: 1
@@ -217,15 +404,17 @@ components:
         address2:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Second address line.
-          nullable: true
         address3:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Third address line.
-          nullable: true
         city:
           maxLength: 200
           minLength: 1
@@ -234,9 +423,10 @@ components:
         stateProvince:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Address state/province.
-          nullable: true
         postalCode:
           maxLength: 200
           minLength: 1
@@ -245,15 +435,17 @@ components:
         country:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Country identifier.
-          nullable: true
         shippingLeadTime:
           minimum: 0
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Lead time for shipping contents.
           format: int32
-          nullable: true
         primaryBilling:
           type: boolean
           description: Signifies if this is a primary billing address.
@@ -266,107 +458,28 @@ components:
           type: string
           description: Unique id associated to this entity.
         email:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
           format: email
-          nullable: true
         phone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Associated phone number
-          nullable: true
         fax:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Associated fax number
-          nullable: true
         notes:
-          type: string
+          type:
+          - string
+          - 'null'
           description: General notes associated to this vendor address
-          nullable: true
       additionalProperties: false
       description: Address with additional context for a vendor
-    CommonAddressCreateDto:
-      required:
-      - address1
-      - city
-      - postalCode
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-          nullable: true
-        address1:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary address line.
-        address2:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Second address line.
-          nullable: true
-        address3:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Third address line.
-          nullable: true
-        city:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address city
-        stateProvince:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address state/province.
-          nullable: true
-        postalCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Postal/zip code.
-        country:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Country identifier.
-          nullable: true
-        shippingLeadTime:
-          minimum: 0
-          type: integer
-          description: Lead time for shipping contents.
-          format: int32
-          nullable: true
-        primaryBilling:
-          type: boolean
-          description: Signifies if this is a primary billing address.
-        primaryShipping:
-          type: boolean
-          description: Signifies if this is a primary billing address.
-        email:
-          type: string
-          description: Email address
-          format: email
-          nullable: true
-        phone:
-          type: string
-          description: Associated phone number
-          nullable: true
-        fax:
-          type: string
-          description: Associated fax number
-          nullable: true
-        notes:
-          type: string
-          description: General notes associated to this customer address
-          nullable: true
-      additionalProperties: false
-      description: Address with additional context
     CreatedResponseDto:
       required:
       - id
@@ -378,89 +491,6 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    VendorAddressUpdateDto:
-      required:
-      - address1
-      - city
-      - postalCode
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-          nullable: true
-        address1:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary address line.
-        address2:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Second address line.
-          nullable: true
-        address3:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Third address line.
-          nullable: true
-        city:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address city
-        stateProvince:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address state/province.
-          nullable: true
-        postalCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Postal/zip code.
-        country:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Country identifier.
-          nullable: true
-        shippingLeadTime:
-          minimum: 0
-          type: integer
-          description: Lead time for shipping contents.
-          format: int32
-          nullable: true
-        primaryBilling:
-          type: boolean
-          description: Signifies if this is a primary billing address.
-        primaryShipping:
-          type: boolean
-          description: Signifies if this is a primary billing address.
-        email:
-          type: string
-          description: Email address
-          format: email
-          nullable: true
-        phone:
-          type: string
-          description: Associated phone number
-          nullable: true
-        fax:
-          type: string
-          description: Associated fax number
-          nullable: true
-        notes:
-          type: string
-          description: General notes associated to this customer address
-          nullable: true
-      additionalProperties: false
-      description: Address with additional context for updating for a vendor
   securitySchemes:
     bearer:
       type: http

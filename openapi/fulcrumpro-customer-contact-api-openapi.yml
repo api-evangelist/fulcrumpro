@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Customer Contact API
+  title: Fulcrum Public Customer Contact API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -200,7 +200,7 @@ paths:
       - Customer-Customers-View Customer
 components:
   schemas:
-    CustomerContactUpdateDto:
+    CustomerContactCreateDto:
       required:
       - firstName
       type: object
@@ -213,28 +213,33 @@ components:
         lastName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Last name
-          nullable: true
         position:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Position / Job Title
-          nullable: true
         phone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Phone number
-          nullable: true
         cellPhone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Cellphone number
-          nullable: true
         email:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
           format: email
-          nullable: true
       additionalProperties: false
       description: A customer contact
     CustomerContactDto:
@@ -262,22 +267,68 @@ components:
         position:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Position / Job Title
-          nullable: true
         cellPhone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Cellphone number
-          nullable: true
         phone:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Phone number
-          nullable: true
         email:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
           format: email
-          nullable: true
+      additionalProperties: false
+      description: A customer contact
+    CustomerContactUpdateDto:
+      required:
+      - firstName
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Position / Job Title
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        cellPhone:
+          type:
+          - string
+          - 'null'
+          description: Cellphone number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
       additionalProperties: false
       description: A customer contact
     CreatedResponseDto:
@@ -291,43 +342,6 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CustomerContactCreateDto:
-      required:
-      - firstName
-      type: object
-      properties:
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Last name
-          nullable: true
-        position:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Position / Job Title
-          nullable: true
-        phone:
-          type: string
-          description: Phone number
-          nullable: true
-        cellPhone:
-          type: string
-          description: Cellphone number
-          nullable: true
-        email:
-          type: string
-          description: Email address
-          format: email
-          nullable: true
-      additionalProperties: false
-      description: A customer contact
   securitySchemes:
     bearer:
       type: http

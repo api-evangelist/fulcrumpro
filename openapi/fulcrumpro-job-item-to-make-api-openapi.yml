@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Job Item To Make API
+  title: Fulcrum Public Job Item To Make API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -122,6 +122,63 @@ paths:
       - Pricing-Margins-View Margins
 components:
   schemas:
+    JobItemToMakeStatusEnum:
+      enum:
+      - new
+      - working
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make status
+    CommonTimeDto:
+      required:
+      - labor
+      - machine
+      - setup
+      type: object
+      properties:
+        labor:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        machine:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+        setup:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Time information
+    CommonEnumOperationTypeEnum:
+      enum:
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      type: string
+      description: Operation type
+    CommonEnumCostBreakdownLineTypeEnum:
+      enum:
+      - material
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      - componentMaterial
+      - componentLabor
+      - componentMachine
+      - componentOutsideProcessing
+      - nestPartMaterialUsage
+      - nestPartMaterialScrap
+      - overhead
+      - unknown
+      type: string
+      description: Cost breakdown types
     CommonCostBreakdownDto:
       required:
       - calculatedOn
@@ -162,10 +219,11 @@ components:
           format: int32
         quantityScrapped:
           minimum: 0
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Number of units scrapped.
           format: int32
-          nullable: true
         calculatedOn:
           type: string
           description: When was this cost breakdown last calculated/aggregated.
@@ -211,24 +269,6 @@ components:
           description: Cost breakdown line details.
       additionalProperties: false
       description: Cost breakdown
-    CommonCostDto:
-      required:
-      - perUnit
-      - total
-      type: object
-      properties:
-        total:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        perUnit:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Cost information
     ItemsAndInventoryRoutingsCostBreakdownType:
       enum:
       - estimated
@@ -236,23 +276,6 @@ components:
       - completedJob
       - cancelledJob
       type: string
-    CommonEnumCostBreakdownLineTypeEnum:
-      enum:
-      - material
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      - componentMaterial
-      - componentLabor
-      - componentMachine
-      - componentOutsideProcessing
-      - nestPartMaterialUsage
-      - nestPartMaterialScrap
-      - overhead
-      - unknown
-      type: string
-      description: Cost breakdown types
     JobItemToMakeDto:
       required:
       - depth
@@ -285,10 +308,11 @@ components:
         status:
           $ref: '#/components/schemas/JobItemToMakeStatusEnum'
         quantityMade:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Quantity already produced, if the job is in progress.
           format: double
-          nullable: true
         depth:
           type: integer
           description: 'Structurally, identify where in the tree of building the parent item this item lies.
@@ -298,25 +322,65 @@ components:
             This cascades down so that a subcomponent to a subcomponent would be 2... and so on.'
           format: int32
         routingNotes:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'The routing notes (the "Routing Notes" field) captured on this job''s routing for the item.
 
             Null when the job''s routing has no note for the item.'
-          nullable: true
         costBreakdown:
           $ref: '#/components/schemas/CommonCostBreakdownDto'
         costBreakdownEstimated:
           $ref: '#/components/schemas/CommonCostBreakdownDto'
       additionalProperties: false
       description: Represents an ItemToMake on a Job
-    CommonEnumOperationTypeEnum:
-      enum:
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      type: string
-      description: Operation type
+    CommonCostBreakdownOperationDto:
+      required:
+      - operationId
+      type: object
+      properties:
+        operationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Operation id. Please reference /api/operations
+        name:
+          type:
+          - string
+          - 'null'
+          description: Operation name.
+        timeInSeconds:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in seconds.
+          format: double
+          readOnly: true
+        timeInHours:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in hours
+          format: double
+        ratePerSecond:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per second
+          format: double
+          readOnly: true
+        ratePerHour:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per hour
+          format: double
+      additionalProperties: false
+      description: Operation information
     CommonCostBreakdownLineDto:
       required:
       - cost
@@ -339,62 +403,34 @@ components:
           format: double
         quantity:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Quantity (if applicable)
           format: double
-          nullable: true
         itemId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Id of the item that was picked. Please reference /api/items endpoint.
-          nullable: true
         itemName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The name of the item that was picked.
-          nullable: true
         accountingCodeId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Accounting code affected. Please reference /api/accounting-codes endpoint.
-          nullable: true
         operationInformation:
           $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
       additionalProperties: false
       description: Cost breakdown line information.
-    CommonTimeDto:
-      required:
-      - labor
-      - machine
-      - setup
-      type: object
-      properties:
-        labor:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        machine:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-        setup:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Time information
-    JobItemToMakeStatusEnum:
-      enum:
-      - new
-      - working
-      - complete
-      - cancelled
-      type: string
-      description: Job Item to Make status
     JobItemToMakeCostBreakdownsDto:
       type: object
       properties:
@@ -404,48 +440,24 @@ components:
           $ref: '#/components/schemas/CommonCostBreakdownDto'
       additionalProperties: false
       description: Cost breakdowns for an item to make
-    CommonCostBreakdownOperationDto:
+    CommonCostDto:
       required:
-      - operationId
+      - perUnit
+      - total
       type: object
       properties:
-        operationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Operation id. Please reference /api/operations
-        name:
-          type: string
-          description: Operation name.
-          nullable: true
-        timeInSeconds:
+        total:
           minimum: 0
           type: number
-          description: Time in seconds.
+          description: Total
           format: double
-          nullable: true
-          readOnly: true
-        timeInHours:
+        perUnit:
           minimum: 0
           type: number
-          description: Time in hours
+          description: Cost per unit
           format: double
-          nullable: true
-        ratePerSecond:
-          minimum: 0
-          type: number
-          description: Rate per second
-          format: double
-          nullable: true
-          readOnly: true
-        ratePerHour:
-          minimum: 0
-          type: number
-          description: Rate per hour
-          format: double
-          nullable: true
       additionalProperties: false
-      description: Operation information
+      description: Cost information
   securitySchemes:
     bearer:
       type: http

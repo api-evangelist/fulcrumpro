@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Item Material Vendor API
+  title: Fulcrum Public Item Material Vendor API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -142,6 +142,32 @@ paths:
       - ItemsAndInventory-Items-Edit Item
 components:
   schemas:
+    ItemMaterialVendorUpdateDto:
+      type: object
+      properties:
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item number for this vendor.
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this vendor.
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes to the vendor.
+      additionalProperties: false
+      description: Vendor with additional context for a material-based item.
     ItemMaterialVendorCreateDto:
       required:
       - vendorId
@@ -155,57 +181,26 @@ components:
         vendorItemNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item number for this vendor.
-          nullable: true
         vendorItemName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item name for this vendor.
-          nullable: true
         notes:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes to the vendor.
-          nullable: true
       additionalProperties: false
       description: Vendor with additional context for a material-based item.
-    ItemMaterialVendorUpdateDto:
-      type: object
-      properties:
-        vendorItemNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The item number for this vendor.
-          nullable: true
-        vendorItemName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The item name for this vendor.
-          nullable: true
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Notes to the vendor.
-          nullable: true
-      additionalProperties: false
-      description: Vendor with additional context for a material-based item.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     ItemMaterialVendorDto:
       required:
       - id
@@ -225,23 +220,37 @@ components:
         vendorItemNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item number for this vendor.
-          nullable: true
         vendorItemName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The item name for this vendor.
-          nullable: true
         notes:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes to the vendor.
-          nullable: true
       additionalProperties: false
       description: Material vendor with additional context for an item.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

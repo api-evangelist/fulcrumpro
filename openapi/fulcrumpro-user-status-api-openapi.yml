@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code User Status API
+  title: Fulcrum Public User Status API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     get:
       tags:
       - User Status
-      summary: Gets a status object for a user that displays various timer metrics (jobs/ops clocked into, whether on break, etc)
+      summary: Gets a status object for a user that displays various timer metrics (jobs/ops…
       operationId: GetUserStatus
       parameters:
       - name: userId
@@ -47,16 +47,16 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/ControllerUsersListUserStatus+UserStatusListParams'
+              $ref: '#/components/schemas/ControllerUsersListUserStatus_UserStatusListParams'
           application/json:
             schema:
-              $ref: '#/components/schemas/ControllerUsersListUserStatus+UserStatusListParams'
+              $ref: '#/components/schemas/ControllerUsersListUserStatus_UserStatusListParams'
           text/json:
             schema:
-              $ref: '#/components/schemas/ControllerUsersListUserStatus+UserStatusListParams'
+              $ref: '#/components/schemas/ControllerUsersListUserStatus_UserStatusListParams'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/ControllerUsersListUserStatus+UserStatusListParams'
+              $ref: '#/components/schemas/ControllerUsersListUserStatus_UserStatusListParams'
       responses:
         '200':
           description: OK
@@ -75,36 +75,7 @@ paths:
       - System-Users-View Users
 components:
   schemas:
-    DtoUserJobOpTimer:
-      type: object
-      properties:
-        jobId:
-          type: string
-          description: The job id
-          nullable: true
-        jobName:
-          type: string
-          description: The job name
-          nullable: true
-        operationId:
-          type: string
-          description: The operation id
-          nullable: true
-        operationName:
-          type: string
-          description: The operation name
-          nullable: true
-        elapsedTimeInSeconds:
-          type: number
-          description: The time working on the operation in seconds
-          format: double
-        estimatedTimeToCompleteInSeconds:
-          type: number
-          description: The estimate time to complete this operation in seconds.
-          format: double
-      additionalProperties: false
-      description: A job timer
-    ControllerUsersListUserStatus+UserStatusListParams:
+    ControllerUsersListUserStatus_UserStatusListParams:
       type: object
       properties:
         userIds:
@@ -118,40 +89,46 @@ components:
       type: object
       properties:
         firstName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The user's first name
-          nullable: true
         lastName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The user's last name
-          nullable: true
         isOnBreak:
           type: boolean
           description: Whether user is on break.
         breakStartAtUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Time the break started.
           format: date-time
-          nullable: true
         elapsedBreakTimeInSeconds:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The elapsed break time in seconds.
           format: double
-          nullable: true
           readOnly: true
         isClockedIn:
           type: boolean
           description: Whether the user is clocked in.
         clockedInAtUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Date-time the user clocked in at.
           format: date-time
-          nullable: true
         elapsedClockedInTimeInSeconds:
-          type: number
+          type:
+          - number
+          - 'null'
           description: The elapsed clocked in time in seconds.
           format: double
-          nullable: true
           readOnly: true
         jobs:
           type: array
@@ -160,6 +137,39 @@ components:
           description: The jobs the user is working on.
       additionalProperties: false
       description: A user object that contains information about the jobs/operations the user is clocked into, as well as if the user is on break.
+    DtoUserJobOpTimer:
+      type: object
+      properties:
+        jobId:
+          type:
+          - string
+          - 'null'
+          description: The job id
+        jobName:
+          type:
+          - string
+          - 'null'
+          description: The job name
+        operationId:
+          type:
+          - string
+          - 'null'
+          description: The operation id
+        operationName:
+          type:
+          - string
+          - 'null'
+          description: The operation name
+        elapsedTimeInSeconds:
+          type: number
+          description: The time working on the operation in seconds
+          format: double
+        estimatedTimeToCompleteInSeconds:
+          type: number
+          description: The estimate time to complete this operation in seconds.
+          format: double
+      additionalProperties: false
+      description: A job timer
   securitySchemes:
     bearer:
       type: http

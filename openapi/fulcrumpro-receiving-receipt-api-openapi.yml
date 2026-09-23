@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Receiving Receipt API
+  title: Fulcrum Public Receiving Receipt API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -209,9 +209,17 @@ paths:
       - Receiving-Receiving-View Receiving
 components:
   schemas:
-    ReceivingReceiptDto:
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    ReceivingLineItemReceiptLineItemDto:
       required:
+      - fullyReceived
       - id
+      - lineItemId
+      - rolledBack
       type: object
       properties:
         id:
@@ -219,65 +227,69 @@ components:
           minLength: 36
           type: string
           description: Unique id associated to this entity.
-        receivedBy:
-          maxLength: 200
-          minLength: 1
+        lineItemId:
+          maxLength: 36
+          minLength: 36
           type: string
-          description: Id of the user who received the item(s)
-          nullable: true
-          readOnly: true
-        number:
-          type: number
-          description: Number
+          description: Id of the purchase order line item corresponding to this update
+        fullyReceived:
+          type: boolean
+          description: Indicates whether the entire quantity of this line item have been received
+        rolledBack:
+          type: boolean
+          description: Indicates whether this update is active.
+        quantityReceived:
+          type:
+          - number
+          - 'null'
+          description: Quantity of the associated item that has been received on this update in the specified unit of measure (non-cumulative)
           format: double
-          nullable: true
-        date:
-          type: string
-          description: Received date
-          format: date-time
-          nullable: true
-        dateOriginal:
-          type: string
-          description: Original received date
-          format: date-time
-          nullable: true
-        dateOverride:
-          type: string
-          description: Override received date
-          format: date-time
-          nullable: true
-        orderType:
-          $ref: '#/components/schemas/CommonEnumOrderType'
-        orderId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Id of parent order to which this receipt belongs
-          nullable: true
+        unitOfMeasureMultiplier:
+          type: number
+          description: 'If the receipt has a different unit of measure than the item is stored in fulcrum, you would use this multiplier with the QuantityReceived to get the amount you received into
+
+            Fulcrum.'
+          format: double
+        convertedQuantityReceived:
+          type: number
+          description: Quantity of the associated item that has been received in Fulcrum's unit of measure
+          format: double
+          readOnly: true
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt object.
-          nullable: true
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemDto'
-          description: Receipt Line item data.
-        customFields:
-          type: object
-          additionalProperties: {}
-          description: Custom fields that have been defined on this entity.
-          nullable: true
-        invoiceNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The vendor invoice invoice number associated to the receipt.
-          nullable: true
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
-      description: Represents a receiving object
+      description: Represents a line item on a receipt for a purchase or sales order
+    CommonExternalReferenceFindDto:
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Arbitrary sub-key that can be used to qualify the value
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external identifier
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -286,9 +298,10 @@ components:
         type:
           maxLength: 50
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: Specifies the type of this identifier.
-          nullable: true
         externalId:
           maxLength: 500
           minLength: 0
@@ -297,33 +310,38 @@ components:
         displayId:
           maxLength: 500
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
 
             will fall back to the ExternalId'
-          nullable: true
         status:
-          type: string
+          type:
+          - string
+          - 'null'
           description: A status for the external reference
-          nullable: true
         url:
-          type: string
+          type:
+          - string
+          - 'null'
           description: An external url for the reference
-          nullable: true
         modifiedUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Date the external reference was modified
           format: date-time
-          nullable: true
         lastSyncedUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Date the external system last successfully synced this reference. Set by integrations
 
             on successful sync only; null means never synced or that the sync timestamp isn''t
 
             maintained by the integration.'
           format: date-time
-          nullable: true
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
     JsonPatchOperation:
@@ -335,27 +353,63 @@ components:
           type: string
         path:
           type: string
+    CommonEnumOrderType:
+      enum:
+      - purchaseOrder
+      - salesOrder
+      type: string
+      description: Order type enum
+    ReceivingReceiptUpdateDto:
+      required:
+      - receivedBy
+      type: object
+      properties:
+        receivedBy:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of the user who received the item(s)
+        date:
+          type:
+          - string
+          - 'null'
+          description: 'Received date override.  If not provided,
+
+            receipt date will default to the date the object was initially created.'
+          format: date-time
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt object.
+      additionalProperties: false
+      description: Represents a receiving object on a purchase order
     ReceivingRequestListFindParameters:
       type: object
       properties:
         salesOrderIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Include receipts for specific sales order ids
-          nullable: true
         purchaseOrderIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Include receipts for specific purchase order ids
-          nullable: true
         receiptIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Include receipts with specific ids
-          nullable: true
         includeReceiptLines:
           type: boolean
           description: If set to true, receipt line items will be included in the results
@@ -363,12 +417,12 @@ components:
           $ref: '#/components/schemas/CommonExternalReferenceFindDto'
       additionalProperties: false
       description: Parameters used for searching/finding receipts.
-    CommonEnumOrderType:
+    CommonEnumSortDirectionEnum:
       enum:
-      - purchaseOrder
-      - salesOrder
+      - ascending
+      - descending
       type: string
-      description: Order type enum
+      description: Specify sorting direction.
     ReceivingReceiptCreateDto:
       required:
       - lines
@@ -406,59 +460,31 @@ components:
           description: Quantity of the associated item that has been received (non-cumulative).
           format: double
         lotNumber:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Lot number to receive the item into.
-          nullable: true
         locationId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Location to receive the item into. Please reference /api/locations endpoint.
-          nullable: true
         expirationDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Expiration date indicating when this receiving is good until.
           format: date-time
-          nullable: true
         fullyReceived:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Indicate if this is fully received.
-          nullable: true
       additionalProperties: false
       description: Represents creating a receiving object on a purchase order
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CommonExternalReferenceFindDto:
+    ReceivingReceiptDto:
       required:
-      - key
-      type: object
-      properties:
-        key:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
-        type:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Arbitrary sub-key that can be used to qualify the value
-          nullable: true
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-          nullable: true
-      additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
-    ReceivingLineItemReceiptLineItemDto:
-      required:
-      - fullyReceived
       - id
-      - lineItemId
-      - rolledBack
       type: object
       properties:
         id:
@@ -466,72 +492,74 @@ components:
           minLength: 36
           type: string
           description: Unique id associated to this entity.
-        lineItemId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Id of the purchase order line item corresponding to this update
-        fullyReceived:
-          type: boolean
-          description: Indicates whether the entire quantity of this line item have been received
-        rolledBack:
-          type: boolean
-          description: Indicates whether this update is active.
-        quantityReceived:
-          type: number
-          description: Quantity of the associated item that has been received on this update in the specified unit of measure (non-cumulative)
-          format: double
-          nullable: true
-        unitOfMeasureMultiplier:
-          type: number
-          description: 'If the receipt has a different unit of measure than the item is stored in fulcrum, you would use this multiplier with the QuantityReceived to get the amount you received into
-
-            Fulcrum.'
-          format: double
-        convertedQuantityReceived:
-          type: number
-          description: Quantity of the associated item that has been received in Fulcrum's unit of measure
-          format: double
-          readOnly: true
-        externalReferences:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-          nullable: true
-      additionalProperties: false
-      description: Represents a line item on a receipt for a purchase or sales order
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    ReceivingReceiptUpdateDto:
-      required:
-      - receivedBy
-      type: object
-      properties:
         receivedBy:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Id of the user who received the item(s)
+          readOnly: true
+        number:
+          type:
+          - number
+          - 'null'
+          description: Number
+          format: double
+        date:
+          type:
+          - string
+          - 'null'
+          description: Received date
+          format: date-time
+        dateOriginal:
+          type:
+          - string
+          - 'null'
+          description: Original received date
+          format: date-time
+        dateOverride:
+          type:
+          - string
+          - 'null'
+          description: Override received date
+          format: date-time
+        orderType:
+          $ref: '#/components/schemas/CommonEnumOrderType'
+        orderId:
           maxLength: 24
           minLength: 24
-          type: string
-          description: Id of the user who received the item(s)
-        date:
-          type: string
-          description: 'Received date override.  If not provided,
-
-            receipt date will default to the date the object was initially created.'
-          format: date-time
-          nullable: true
+          type:
+          - string
+          - 'null'
+          description: Id of parent order to which this receipt belongs
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for this receipt object.
-          nullable: true
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemDto'
+          description: Receipt Line item data.
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+        invoiceNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The vendor invoice invoice number associated to the receipt.
       additionalProperties: false
-      description: Represents a receiving object on a purchase order
+      description: Represents a receiving object
   securitySchemes:
     bearer:
       type: http

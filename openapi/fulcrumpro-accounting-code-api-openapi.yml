@@ -1,4 +1,4 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
   title: Fulcrum Public Accounting Code API
   version: v1
@@ -45,7 +45,7 @@ paths:
     get:
       tags:
       - Accounting Code
-      summary: Get an accounting code.
+      summary: Get an accounting code
       operationId: GetAccountingCode
       parameters:
       - name: id
@@ -71,7 +71,7 @@ paths:
     post:
       tags:
       - Accounting Code
-      summary: Find accounting codes based on search parameters.
+      summary: Find accounting codes based on search parameters
       operationId: ListAccountingCode
       parameters:
       - name: Sort.Field
@@ -130,23 +130,6 @@ paths:
                   $ref: '#/components/schemas/TagDto'
 components:
   schemas:
-    CommonEnumTagTypeEnum:
-      enum:
-      - item
-      - accountingCode
-      - itemCategory
-      - itemShape
-      - itemMaterial
-      - itemGrade
-      - itemGauge
-      - itemShippingContainer
-      - itemClass
-      - breakReasonCode
-      - refundReasonCode
-      - vendorOrderIssueCode
-      - chartOfAccounts
-      type: string
-      description: What the tag is used for (can be many).
     TagDto:
       required:
       - id
@@ -170,58 +153,58 @@ components:
         description:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Descriptive name associated to the object
-          nullable: true
         types:
           type: array
           items:
             $ref: '#/components/schemas/CommonEnumTagTypeEnum'
           description: Represents where/how this tag is used.
         deleted:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Indicate if this tag has been deleted.
-          nullable: true
       additionalProperties: false
       description: Represents a tag
+    CommonEnumTagTypeEnum:
+      enum:
+      - item
+      - accountingCode
+      - itemCategory
+      - itemShape
+      - itemMaterial
+      - itemGrade
+      - itemGauge
+      - itemShippingContainer
+      - itemClass
+      - breakReasonCode
+      - refundReasonCode
+      - vendorOrderIssueCode
+      - chartOfAccounts
+      type: string
+      description: What the tag is used for (can be many).
     TagRequestFindParametersBase:
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter tags based on their name.
-          nullable: true
         ids:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter tags based on matching ids.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding accounting codes.
-    TagCreateBaseDto:
-      required:
-      - name
-      - style
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-        style:
-          $ref: '#/components/schemas/CommonEnumStyleEnum'
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
-      additionalProperties: false
-      description: Represents a tag for creation
     CreatedResponseDto:
       required:
       - id
@@ -239,6 +222,28 @@ components:
       - descending
       type: string
       description: Specify sorting direction.
+    TagCreateBaseDto:
+      required:
+      - name
+      - style
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+        style:
+          $ref: '#/components/schemas/CommonEnumStyleEnum'
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a tag for creation
     CommonEnumStyleEnum:
       enum:
       - primary

@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Department API
+  title: Fulcrum Public Department API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     post:
       tags:
       - Department
-      summary: Create a department.
+      summary: Create a department
       operationId: CreateDepartment
       requestBody:
         content:
@@ -47,7 +47,7 @@ paths:
     get:
       tags:
       - Department
-      summary: Get a department.
+      summary: Get a department
       operationId: GetDepartment
       parameters:
       - name: id
@@ -74,7 +74,7 @@ paths:
     put:
       tags:
       - Department
-      summary: Update a department.
+      summary: Update a department
       operationId: UpdateDepartment
       parameters:
       - name: id
@@ -120,7 +120,7 @@ paths:
     post:
       tags:
       - Department
-      summary: Find departments based on search parameters.
+      summary: Find departments based on search parameters
       operationId: ListDepartment
       parameters:
       - name: Sort.Field
@@ -185,17 +185,19 @@ components:
       type: object
       properties:
         ids:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter departments based on matching ids.
-          nullable: true
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter departments based on their name.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding departments.
     EquipmentDto:
@@ -217,56 +219,120 @@ components:
         description:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Description.
-          nullable: true
         workCenterId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: WorkCenter identifier. Please reference /api/work-centers endpoint.
-          nullable: true
         manufacturer:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Manufacturer.
-          nullable: true
         modelNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Model number.
-          nullable: true
         serialNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Serial number.
-          nullable: true
         canRunUnattended:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
 
             that utilizes this equipment to be scheduled outside of a shift.'
-          nullable: true
         unlimitedCapacity:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Indicates if this equipment can support multiple operations simultaneously.
-          nullable: true
         status:
           $ref: '#/components/schemas/EquipmentStatus'
         notes:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes associated to the equipment.
-          nullable: true
         deleted:
           type: boolean
           description: Indicates whether this equipment has been deleted
       additionalProperties: false
       description: Equipment definition.
+    DepartmentUpdateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Description of the department. Replaces the existing value.
+        workCenterIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: 'Identifiers of the work centers associated with this department. Replaces the existing set.
+
+            Please reference /api/work-centers endpoint.'
+      additionalProperties: false
+      description: 'Details of a department to be updated. This is a full replacement: any field omitted
+
+        (description, work centers) is treated as cleared.'
+    DepartmentCreateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Description of the department.
+        workCenterIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Identifiers of the work centers associated with this department. Please reference /api/work-centers endpoint.
+      additionalProperties: false
+      description: Details of a department to be created.
     WorkCenterDto:
       required:
       - id
@@ -286,39 +352,45 @@ components:
         departmentId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Department identifier. Please reference /api/departments endpoint.
-          nullable: true
         setupRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for setup.
           format: double
-          nullable: true
         runRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for run.
           format: double
-          nullable: true
         laborRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for labor.
           format: double
-          nullable: true
         overheadRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for overhead.
           format: double
-          nullable: true
         machineRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for machine.
           format: double
-          nullable: true
         deleted:
           type: boolean
           description: Indicates whether this equipment has been deleted
@@ -329,6 +401,23 @@ components:
           description: Equipment associated with this workcenter.
       additionalProperties: false
       description: Workcenter definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     EquipmentStatus:
       enum:
       - good
@@ -363,75 +452,6 @@ components:
           description: Workcenters associated with this department.
       additionalProperties: false
       description: Department definition.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    DepartmentUpdateDto:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Description of the department. Replaces the existing value.
-          nullable: true
-        workCenterIds:
-          type: array
-          items:
-            type: string
-          description: 'Identifiers of the work centers associated with this department. Replaces the existing set.
-
-            Please reference /api/work-centers endpoint.'
-          nullable: true
-      additionalProperties: false
-      description: 'Details of a department to be updated. This is a full replacement: any field omitted
-
-        (description, work centers) is treated as cleared.'
-    DepartmentCreateDto:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Description of the department.
-          nullable: true
-        workCenterIds:
-          type: array
-          items:
-            type: string
-          description: Identifiers of the work centers associated with this department. Please reference /api/work-centers endpoint.
-          nullable: true
-      additionalProperties: false
-      description: Details of a department to be created.
   securitySchemes:
     bearer:
       type: http

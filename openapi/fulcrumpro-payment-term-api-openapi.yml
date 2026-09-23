@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Payment Term API
+  title: Fulcrum Public Payment Term API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -47,7 +47,7 @@ paths:
     get:
       tags:
       - Payment Term
-      summary: Get a payment term.
+      summary: Get a payment term
       operationId: GetPaymentTerm
       parameters:
       - name: id
@@ -73,7 +73,7 @@ paths:
     post:
       tags:
       - Payment Term
-      summary: Find payment terms based on search parameters.
+      summary: Find payment terms based on search parameters
       operationId: ListPaymentTerms
       parameters:
       - name: Sort.Field
@@ -132,28 +132,24 @@ paths:
                   $ref: '#/components/schemas/CommonPaymentTermDto'
 components:
   schemas:
-    CreatedResponseDto:
+    CommonPaymentTermCreateDto:
       required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    PaymentTermRequestFindParameters:
+      - dueDays
+      - name
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
           type: string
-          description: Filter payment terms based on their name.
-          nullable: true
+          description: Identifying name. Must be unique.
+        dueDays:
+          minimum: 0
+          type: integer
+          description: Due days.
+          format: int32
       additionalProperties: false
-      description: Parameters used for searching/finding payment terms.
+      description: Payment terms definition.
     CommonPaymentTermDto:
       required:
       - deleted
@@ -181,30 +177,35 @@ components:
           description: Indicate if this payment term has been deleted.
       additionalProperties: false
       description: Payment terms definition.
-    CommonPaymentTermCreateDto:
-      required:
-      - dueDays
-      - name
+    PaymentTermRequestFindParameters:
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        dueDays:
-          minimum: 0
-          type: integer
-          description: Due days.
-          format: int32
+          type:
+          - string
+          - 'null'
+          description: Filter payment terms based on their name.
       additionalProperties: false
-      description: Payment terms definition.
+      description: Parameters used for searching/finding payment terms.
     CommonEnumSortDirectionEnum:
       enum:
       - ascending
       - descending
       type: string
       description: Specify sorting direction.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

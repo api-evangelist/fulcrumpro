@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Attachment Certification API
+  title: Fulcrum Public Attachment Certification API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -40,8 +40,9 @@ paths:
                 Detail.Metadata:
                   type: object
                   additionalProperties:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   description: Metadata to associate to the attachment.
                 Detail.LotId:
                   maxLength: 24
@@ -73,13 +74,6 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
 components:
   schemas:
-    CommonEnumOwnerTypeCertificationEnum:
-      enum:
-      - item
-      - purchaseOrderReceivingLineItem
-      - salesOrderReceivingLineItem
-      type: string
-      description: Owner types that can be used for certification attachments
     CreatedResponseDto:
       required:
       - id
@@ -91,6 +85,13 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    CommonEnumOwnerTypeCertificationEnum:
+      enum:
+      - item
+      - purchaseOrderReceivingLineItem
+      - salesOrderReceivingLineItem
+      type: string
+      description: Owner types that can be used for certification attachments
   securitySchemes:
     bearer:
       type: http

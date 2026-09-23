@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code ScrapReport API
+  title: Fulcrum Public Scrap Report API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,11 +11,7 @@ paths:
     get:
       tags:
       - ScrapReport
-      summary: 'Returns scrap entries logged within the supplied date range. Both
-
-        dates are optional; the Domain layer defaults to the prior 90 days
-
-        when neither is supplied.'
+      summary: Returns scrap entries logged within the supplied date range.
       operationId: GetScrapReports
       parameters:
       - name: startDateUtc
@@ -48,6 +44,25 @@ paths:
       - Jobs-Jobs-View Job
 components:
   schemas:
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
     ScrapReportEntryDto:
       required:
       - dateUtc
@@ -68,9 +83,10 @@ components:
         operator:
           $ref: '#/components/schemas/CommonReferenceDto'
         operation:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Operation name on the job during which the scrap was logged.
-          nullable: true
         workCenter:
           $ref: '#/components/schemas/CommonReferenceDto'
         department:
@@ -89,23 +105,6 @@ components:
         was scrapped during a specific operation, on a specific job. Aggregated
 
         from job-tracking activity rather than stored as a top-level entity.'
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
   securitySchemes:
     bearer:
       type: http

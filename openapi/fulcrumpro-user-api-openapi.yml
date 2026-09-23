@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code User API
+  title: Fulcrum Public User API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -39,7 +39,7 @@ paths:
     post:
       tags:
       - User
-      summary: Find users based on search parameters.
+      summary: Find users based on search parameters
       operationId: ListUser
       parameters:
       - name: Sort.Field
@@ -113,30 +113,35 @@ components:
         firstName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: First name
-          nullable: true
         lastName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Last name
-          nullable: true
         emailAddress:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
           format: email
-          nullable: true
         phoneNumber:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
-          nullable: true
         roleIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/CommonReferenceDto'
           description: Roles associated to the user.
-          nullable: true
         deleted:
           type: boolean
           description: Indicates whether this user has been deleted
@@ -148,35 +153,60 @@ components:
         firstName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter users based on their first name.
-          nullable: true
         lastName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter users based on their last name.
-          nullable: true
         emailAddress:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
-          nullable: true
         phoneNumber:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Phone number
-          nullable: true
         roles:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter users to those with any of the provided roles.
-          nullable: true
         omniSearch:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Search for users based on a string that should match any of the user's first name, last name, email address, phone number or roles.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding users.
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
     CommonEnumSortDirectionEnum:
       enum:
       - ascending
@@ -196,58 +226,47 @@ components:
         employeeId:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: This property represents the unique identifier of an employee.
-          nullable: true
         firstName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: First name
-          nullable: true
         lastName:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Last name
-          nullable: true
         emailAddress:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
           format: email
-          nullable: true
         phoneNumber:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Email address
-          nullable: true
         roles:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Roles associated to the user.
-          nullable: true
         deleted:
           type: boolean
           description: Indicates whether this user has been deleted
       additionalProperties: false
       description: User.
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
   securitySchemes:
     bearer:
       type: http

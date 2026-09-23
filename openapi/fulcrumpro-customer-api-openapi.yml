@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Customer API
+  title: Fulcrum Public Customer API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -166,7 +166,7 @@ paths:
     post:
       tags:
       - Customer
-      summary: Find customers based on search parameters.
+      summary: Find customers based on search parameters
       operationId: ListCustomer
       parameters:
       - name: Sort.Field
@@ -227,34 +227,132 @@ paths:
       - Customer-Customers-View Customer
 components:
   schemas:
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     CustomerRequestFindParameters:
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter to customers who's name contains the given string
-          nullable: true
         customerCode:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Unique identifier for this customer.
-          nullable: true
         email:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: The email of the customer
-          nullable: true
         modifiedAfterUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter to customer records modified after the given datetime (in UTC)
           format: date-time
-          nullable: true
         externalReference:
           $ref: '#/components/schemas/CommonExternalReferenceFindDto'
       additionalProperties: false
       description: Parameters used for searching/finding customers.
+    CommonExternalReferenceFindDto:
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Arbitrary sub-key that can be used to qualify the value
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external identifier
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
     CustomerDto:
       required:
       - hasCustomerPortal
@@ -274,215 +372,113 @@ components:
           description: The name to give the customer. Must be unique to all active customers.
         customerCode:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Unique identifier for this customer
-          nullable: true
         currencyCode:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Currency code/denomination associated to this customer.
 
             If not provided, default to the primary currency code for the organization.'
-          nullable: true
         url:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The Customer's website
           format: uri
-          nullable: true
         creditLimit:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Credit limit
           format: double
-          nullable: true
         paymentTermsId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Payment terms identifier. Please reference /api/payment-terms endpoint.
-          nullable: true
         paymentTerms:
           $ref: '#/components/schemas/CommonReferenceDto'
         salesPersonId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Sales person identifier. Please reference /api/users endpoint.
-          nullable: true
         isTaxable:
           type: boolean
           description: Whether or not this customer is taxable on Sales Orders and Quotes
         taxRateIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: A list of tax codes to be automatically added to new SalesOrders for the customer when AutoAddTaxLineItems process setting is enabled.
-          nullable: true
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: External references associated with this entity.
-          nullable: true
         customFields:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties: {}
           description: Custom fields that have been defined on this entity.
-          nullable: true
         notes:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes associated to the customer.
-          nullable: true
         hasCustomerPortal:
           type: boolean
           description: Indicates if this customer is set up to use the customer portal.
         customerTierId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Customer tier identifier. Please reference /api/customer-tiers endpoint.
-          nullable: true
         customerTierName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Customer tier name.
-          nullable: true
       additionalProperties: false
       description: A customer
-    JsonPatchOperation:
+    CommonReferenceDto:
       type: object
       properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the type of this identifier.
-          nullable: true
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-          nullable: true
-        status:
-          type: string
-          description: A status for the external reference
-          nullable: true
-        url:
-          type: string
-          description: An external url for the reference
-          nullable: true
-        modifiedUtc:
-          type: string
-          description: Date the external reference was modified
-          format: date-time
-          nullable: true
-        lastSyncedUtc:
-          type: string
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-          nullable: true
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    CustomerCreateDto:
-      required:
-      - name
-      type: object
-      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
         name:
           maxLength: 200
           minLength: 1
-          type: string
-          description: The name to give the customer. Must be unique to all active customers.
-        customerCode:
-          minLength: 1
-          type: string
-          description: Unique identifier for this customer
-          nullable: true
-        currencyCode:
-          minLength: 1
-          type: string
-          description: 'Currency code/denomination associated to this customer.
-
-            If not provided, default to the primary currency code for the organization.'
-          nullable: true
-        creditLimit:
-          minimum: 0
-          type: number
-          description: Credit limit
-          format: double
-          nullable: true
-        paymentTermsId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Payment terms.
-          nullable: true
-        salesPersonId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Payment terms.
-          nullable: true
-        url:
-          type: string
-          description: The Customer's website
-          format: uri
-          nullable: true
-        isTaxable:
-          type: boolean
-          description: Whether or not this customer is taxable on Sales Orders and Quotes
-          nullable: true
-        taxRateIds:
-          type: array
-          items:
-            type: string
-          description: A list of tax codes to be automatically added to new SalesOrders for the customer when AutoAddTaxLineItems process setting is enabled.
-          nullable: true
-        externalReferences:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for the customer
-          nullable: true
-        customFields:
-          type: object
-          additionalProperties: {}
-          description: Custom fields that have been defined on this entity.
-          nullable: true
-        notes:
-          type: string
-          description: Notes associated to the customer.
-          nullable: true
-        hasCustomerPortal:
-          type: boolean
-          description: Indicates if this customer is set up to use the customer portal.
-          nullable: true
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: Details of customer to be created
+      description: Represents a reference to a document in a DB collection
     CustomerUpdateDto:
       required:
       - name
@@ -495,99 +491,88 @@ components:
           description: The name to give the customer. Must be unique to all active customers.
         customerCode:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Unique identifier for this customer
-          nullable: true
         currencyCode:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Currency code/denomination associated to this customer.
 
             If not provided, default to the primary currency code for the organization.'
-          nullable: true
         url:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The Customer's website
           format: uri
-          nullable: true
         creditLimit:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Credit limit
           format: double
-          nullable: true
         paymentTermsId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Payment terms identifier. Please reference /api/payment-terms endpoint.
-          nullable: true
         salesPersonId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Sales person identifier. Please reference /api/users endpoint.
-          nullable: true
         isTaxable:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Whether or not this customer is taxable on Sales Orders and Quotes
-          nullable: true
         taxRateIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: A list of tax codes to be automatically added to new SalesOrders for the customer when AutoAddTaxLineItems process setting is enabled.
-          nullable: true
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-          nullable: true
         customFields:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties: {}
           description: Custom fields that have been defined on this entity.
-          nullable: true
         notes:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes associated to the customer.
-          nullable: true
         hasCustomerPortal:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Indicates if this customer is set up to use the customer portal.
-          nullable: true
       additionalProperties: false
       description: Details of customer to be updated
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CommonExternalReferenceFindDto:
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
-        type:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Arbitrary sub-key that can be used to qualify the value
-          nullable: true
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-          nullable: true
-      additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     CreatedResponseDto:
       required:
       - id
@@ -599,29 +584,94 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonReferenceDto:
+    CustomerCreateDto:
+      required:
+      - name
       type: object
       properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-          nullable: true
         name:
           maxLength: 200
           minLength: 1
           type: string
-          description: Descriptive name associated to the object
-          nullable: true
+          description: The name to give the customer. Must be unique to all active customers.
+        customerCode:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for this customer
+        currencyCode:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: 'Currency code/denomination associated to this customer.
+
+            If not provided, default to the primary currency code for the organization.'
+        creditLimit:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Credit limit
+          format: double
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Payment terms.
+        salesPersonId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Payment terms.
+        url:
+          type:
+          - string
+          - 'null'
+          description: The Customer's website
+          format: uri
+        isTaxable:
+          type:
+          - boolean
+          - 'null'
+          description: Whether or not this customer is taxable on Sales Orders and Quotes
+        taxRateIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of tax codes to be automatically added to new SalesOrders for the customer when AutoAddTaxLineItems process setting is enabled.
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for the customer
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Notes associated to the customer.
+        hasCustomerPortal:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if this customer is set up to use the customer portal.
       additionalProperties: false
-      description: Represents a reference to a document in a DB collection
+      description: Details of customer to be created
   securitySchemes:
     bearer:
       type: http

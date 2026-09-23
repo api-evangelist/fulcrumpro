@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Custom Field API
+  title: Fulcrum Public Custom Field API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     get:
       tags:
       - Custom Field
-      summary: Get a custom field.
+      summary: Get a custom field
       operationId: GetCustomField
       parameters:
       - name: id
@@ -37,7 +37,7 @@ paths:
     post:
       tags:
       - Custom Field
-      summary: Find custom fields based on search parameters.
+      summary: Find custom fields based on search parameters
       operationId: ListCustomField
       parameters:
       - name: Sort.Field
@@ -96,35 +96,23 @@ paths:
                   $ref: '#/components/schemas/CustomFieldDto'
 components:
   schemas:
-    DomainSystemDataCustomFieldDefinitionType:
-      enum:
-      - text
-      - multilineText
-      - dropdown
-      - multipleChoiceDropdown
-      - integerNumber
-      - decimalNumber
-      - floatingPointNumber
-      - boolean
-      - list
-      - date
-      - multipleChoiceUser
-      type: string
     CustomFieldRequestFindParameters:
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter custom fields based on their name.
-          nullable: true
         ids:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter custom fields based on matching ids.
-          nullable: true
         module:
           $ref: '#/components/schemas/DomainSystemDataCustomFieldDefinitionModule'
         type:
@@ -164,23 +152,27 @@ components:
           type: boolean
           description: Required.
         options:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: The options available (only applicable to dropdown and multiplechoicedropdown types).
-          nullable: true
         prepend:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Prepended text.
-          nullable: true
         append:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Appended text.
-          nullable: true
         helpText:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Help information that will be visble to the user.
-          nullable: true
       additionalProperties: false
       description: Custom field definition.
     DomainSystemDataCustomFieldDefinitionModule:
@@ -213,6 +205,20 @@ components:
       - descending
       type: string
       description: Specify sorting direction.
+    DomainSystemDataCustomFieldDefinitionType:
+      enum:
+      - text
+      - multilineText
+      - dropdown
+      - multipleChoiceDropdown
+      - integerNumber
+      - decimalNumber
+      - floatingPointNumber
+      - boolean
+      - list
+      - date
+      - multipleChoiceUser
+      type: string
   securitySchemes:
     bearer:
       type: http

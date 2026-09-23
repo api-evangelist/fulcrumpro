@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Customer Tier API
+  title: Fulcrum Public Customer Tier API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     get:
       tags:
       - Customer Tier
-      summary: Get a customer tier.
+      summary: Get a customer tier
       operationId: GetCustomerTier
       parameters:
       - name: id
@@ -39,7 +39,7 @@ paths:
     post:
       tags:
       - Customer Tier
-      summary: Find customer tiers based on search parameters.
+      summary: Find customer tiers based on search parameters
       operationId: ListCustomerTier
       parameters:
       - name: Sort.Field
@@ -100,23 +100,6 @@ paths:
       - Customer-Customer Tiers-View Customer Tier
 components:
   schemas:
-    CustomerTierRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Filter customer tierds based on their name.
-          nullable: true
-        ids:
-          type: array
-          items:
-            type: string
-          description: Filter customer tiers based on matching ids.
-          nullable: true
-      additionalProperties: false
-      description: Parameters used for searching/finding customer tiers.
     CustomerTierDto:
       required:
       - id
@@ -136,11 +119,31 @@ components:
         description:
           maxLength: 2000
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: Description
-          nullable: true
       additionalProperties: false
       description: Customer tier definition.
+    CustomerTierRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter customer tierds based on their name.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter customer tiers based on matching ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding customer tiers.
     CommonEnumSortDirectionEnum:
       enum:
       - ascending

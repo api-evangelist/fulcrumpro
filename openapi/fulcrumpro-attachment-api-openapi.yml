@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Attachment API
+  title: Fulcrum Public Attachment API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -51,8 +51,9 @@ paths:
                 Detail.Metadata:
                   type: object
                   additionalProperties:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   description: Metadata to associate to the attachment.
             encoding:
               File:
@@ -85,7 +86,7 @@ paths:
     post:
       tags:
       - Attachment
-      summary: Create an attachment based on a remote data endpoint.
+      summary: Create an attachment based on a remote data endpoint
       operationId: CreateRemoteAttachment
       requestBody:
         content:
@@ -218,7 +219,7 @@ paths:
     post:
       tags:
       - Attachment
-      summary: Find attachments based on search parameters.
+      summary: Find attachments based on search parameters
       operationId: ListAttachment
       parameters:
       - name: Sort.Field
@@ -278,6 +279,43 @@ paths:
                   $ref: '#/components/schemas/AttachmentDto'
 components:
   schemas:
+    AttachmentRequestFindParameters:
+      type: object
+      properties:
+        owner:
+          $ref: '#/components/schemas/AttachmentOwnerDto'
+        owners:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AttachmentOwnerDto'
+          description: The primary owners of the attachment.
+        attachmentIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter to attachments whose ids are in the list.
+        formats:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonEnumAttachmentMediaFormatEnum'
+          description: Allows for filtering based on specific attachment format types.
+      additionalProperties: false
+      description: 'Parameters used for searching/finding attachmewnts.
+
+
+        Note: These filters are applied using the AND operator. If both attachmentIds and owner are provided, attachments that do match the owner will not be returned.'
     AttachmentDto:
       required:
       - fileId
@@ -293,22 +331,25 @@ components:
         owner:
           $ref: '#/components/schemas/AttachmentOwnerDto'
         name:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The file name.
-          nullable: true
         description:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Description
-          nullable: true
         type:
           $ref: '#/components/schemas/CommonEnumAttachmentTypeEnum'
         format:
           $ref: '#/components/schemas/CommonEnumAttachmentMediaFormatEnum'
         size:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: File size in bytes
           format: int64
-          nullable: true
         fileId:
           minLength: 1
           type: string
@@ -341,91 +382,6 @@ components:
       - job
       type: string
       description: Owner types
-    CommonEnumAttachmentMediaFormatEnum:
-      enum:
-      - undefined
-      - cad
-      - document
-      - image
-      - video
-      type: string
-      description: Attachment format
-    AttachmentOwnerCreateDto:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CommonEnumOwnerTypeCreateEnum'
-        id:
-          maxLength: 36
-          minLength: 24
-          type: string
-          description: The primary owner id of this attachment.
-      additionalProperties: false
-      description: Attachment owner
-    AttachmentRequestFindParameters:
-      type: object
-      properties:
-        owner:
-          $ref: '#/components/schemas/AttachmentOwnerDto'
-        owners:
-          maxItems: 500
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/AttachmentOwnerDto'
-          description: The primary owners of the attachment.
-          nullable: true
-        attachmentIds:
-          maxItems: 500
-          minItems: 1
-          type: array
-          items:
-            type: string
-          description: Filter to attachments whose ids are in the list.
-          nullable: true
-        formats:
-          maxItems: 500
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonEnumAttachmentMediaFormatEnum'
-          description: Allows for filtering based on specific attachment format types.
-          nullable: true
-      additionalProperties: false
-      description: 'Parameters used for searching/finding attachmewnts.
-
-
-        Note: These filters are applied using the AND operator. If both attachmentIds and owner are provided, attachments that do match the owner will not be returned.'
-    AttachmentOwnerDto:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CommonEnumOwnerTypeEnum'
-        id:
-          maxLength: 36
-          minLength: 24
-          type: string
-          description: The primary owner id of this attachment.
-      additionalProperties: false
-      description: Attachment owner
-    CommonEnumAttachmentTypeEnum:
-      enum:
-      - standard
-      - externalAccessDocument
-      - certification
-      type: string
-      description: Attachment types
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     CommonEnumOwnerTypeCreateEnum:
       enum:
       - salesOrder
@@ -443,12 +399,27 @@ components:
       - job
       type: string
       description: Owner types
-    CommonEnumSortDirectionEnum:
+    AttachmentOwnerDto:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CommonEnumOwnerTypeEnum'
+        id:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: The primary owner id of this attachment.
+      additionalProperties: false
+      description: Attachment owner
+    CommonEnumAttachmentMediaFormatEnum:
       enum:
-      - ascending
-      - descending
+      - undefined
+      - cad
+      - document
+      - image
+      - video
       type: string
-      description: Specify sorting direction.
+      description: Attachment format
     AttachmentRemoteCreateDto:
       required:
       - accessUrl
@@ -471,11 +442,48 @@ components:
           description: File access url
           format: uri
         token:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Optional token that may be required for access the AccessUrl
-          nullable: true
       additionalProperties: false
       description: Create an attachment.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CommonEnumAttachmentTypeEnum:
+      enum:
+      - standard
+      - externalAccessDocument
+      - certification
+      type: string
+      description: Attachment types
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    AttachmentOwnerCreateDto:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CommonEnumOwnerTypeCreateEnum'
+        id:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: The primary owner id of this attachment.
+      additionalProperties: false
+      description: Attachment owner
   securitySchemes:
     bearer:
       type: http

@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Note API
+  title: Fulcrum Public Note API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -70,7 +70,7 @@ paths:
     post:
       tags:
       - Note
-      summary: Find notes based on search parameters.
+      summary: Find notes based on search parameters
       operationId: ListNote
       requestBody:
         content:
@@ -103,31 +103,6 @@ paths:
                   $ref: '#/components/schemas/NoteDto'
 components:
   schemas:
-    NoteRequestFindParameters:
-      required:
-      - parentId
-      - parentType
-      type: object
-      properties:
-        parentType:
-          $ref: '#/components/schemas/NoteTypeEnum'
-        parentId:
-          maxLength: 36
-          minLength: 24
-          type: string
-          description: 'Filter notes by parent Id.
-
-            Either 24 or 36 characters, depending on parent type'
-      additionalProperties: false
-      description: Parameters used for searching notes
-    NoteTypeEnum:
-      enum:
-      - salesOrder
-      - purchaseOrder
-      - quote
-      - invoice
-      type: string
-      description: Note parent document type
     NoteCreateDto:
       required:
       - body
@@ -150,24 +125,14 @@ components:
           type: string
           description: Note text
         mentions:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: User Ids to tag in the note. Please reference /api/users endpoints.
-          nullable: true
       additionalProperties: false
       description: Represents a note on a document
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     NoteDto:
       required:
       - id
@@ -181,27 +146,66 @@ components:
         parentId:
           maxLength: 36
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Unique identifier of the object to which the note is attached
 
             Can be 24 or 36 characters, depending on parent type'
-          nullable: true
         parentType:
           $ref: '#/components/schemas/NoteTypeEnum'
         body:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Note text
-          nullable: true
         mentions:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: User Ids to tag in the note. Please reference /api/users endpoints.
-          nullable: true
       additionalProperties: false
       description: Represents a note on a document
+    NoteTypeEnum:
+      enum:
+      - salesOrder
+      - purchaseOrder
+      - quote
+      - invoice
+      type: string
+      description: Note parent document type
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    NoteRequestFindParameters:
+      required:
+      - parentId
+      - parentType
+      type: object
+      properties:
+        parentType:
+          $ref: '#/components/schemas/NoteTypeEnum'
+        parentId:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: 'Filter notes by parent Id.
+
+            Either 24 or 36 characters, depending on parent type'
+      additionalProperties: false
+      description: Parameters used for searching notes
   securitySchemes:
     bearer:
       type: http

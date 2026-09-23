@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Vendor API
+  title: Fulcrum Public Vendor API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -121,7 +121,7 @@ paths:
     get:
       tags:
       - Vendor
-      summary: Get a vendor.
+      summary: Get a vendor
       operationId: GetVendor
       parameters:
       - name: id
@@ -149,7 +149,7 @@ paths:
     post:
       tags:
       - Vendor
-      summary: Find vendors based on search parameters.
+      summary: Find vendors based on search parameters
       operationId: ListVendor
       parameters:
       - name: Sort.Field
@@ -210,102 +210,125 @@ paths:
       - Vendor-Vendors-View Vendor
 components:
   schemas:
-    CommonExternalReferenceDto:
+    VendorAddressDto:
       required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the type of this identifier.
-          nullable: true
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-          nullable: true
-        status:
-          type: string
-          description: A status for the external reference
-          nullable: true
-        url:
-          type: string
-          description: An external url for the reference
-          nullable: true
-        modifiedUtc:
-          type: string
-          description: Date the external reference was modified
-          format: date-time
-          nullable: true
-        lastSyncedUtc:
-          type: string
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-          nullable: true
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    VendorCreateDto:
-      required:
-      - name
+      - address1
+      - city
+      - id
+      - postalCode
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+        address1:
+          maxLength: 200
+          minLength: 1
           type: string
-          description: The name to give the entity. Must be unique to all active vendors.
-        paymentTermsId:
-          maxLength: 24
-          minLength: 24
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Second address line.
+        address3:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Third address line.
+        city:
+          maxLength: 200
+          minLength: 1
           type: string
-          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
-          nullable: true
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Address state/province.
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Country identifier.
+        shippingLeadTime:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead time for shipping contents.
+          format: int32
+        primaryBilling:
+          type: boolean
+          description: Signifies if this is a primary billing address.
+        primaryShipping:
+          type: boolean
+          description: Signifies if this is a primary billing address.
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Associated phone number
+        fax:
+          type:
+          - string
+          - 'null'
+          description: Associated fax number
+        notes:
+          type:
+          - string
+          - 'null'
+          description: General notes associated to this vendor address
+      additionalProperties: false
+      description: Address with additional context for a vendor
+    VendorRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter to vendors who's name contains the given string
         vendorCode:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Unique identifier for this vendor.
-          nullable: true
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: General notes associated to this vendor
-          nullable: true
-        currencyCode:
-          type: string
-          description: The currency of the vendor
-          nullable: true
-        externalReferences:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for the vendor
-          nullable: true
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
       additionalProperties: false
-      description: Definition for creating a vendor.
+      description: Parameters used for searching/finding vendors.
     VendorDto:
       required:
       - id
@@ -324,169 +347,72 @@ components:
           description: The name to give the vendor. Must be unique to all active vendors.
         vendorCode:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Unique identifier for this vendor.
-          nullable: true
         paymentTermsId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Payment terms identifier. Please reference /api/payment-terms endpoint.
-          nullable: true
         paymentTerms:
           $ref: '#/components/schemas/CommonReferenceDto'
         notes:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: General notes associated to this vendor
-          nullable: true
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: External references associated with this entity.
-          nullable: true
         customFields:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties: {}
           description: Custom fields that have been defined on this entity.
-          nullable: true
         currencyCode:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The currency of the vendor.
-          nullable: true
         status:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Approval/quality status of the vendor. One of: Approved, Probation, Monitor, Disqualified, Other.'
-          nullable: true
         active:
           type: boolean
           description: Whether the vendor is active.
         leadTime:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Default lead time in days.
           format: int32
-          nullable: true
         url:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Vendor website URL.
           format: uri
-          nullable: true
         vendorSince:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Date the vendor relationship began.
           format: date-time
-          nullable: true
       additionalProperties: false
       description: A vendor
-    VendorRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Filter to vendors who's name contains the given string
-          nullable: true
-        vendorCode:
-          minLength: 1
-          type: string
-          description: Unique identifier for this vendor.
-          nullable: true
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-      additionalProperties: false
-      description: Parameters used for searching/finding vendors.
-    VendorAddressDto:
-      required:
-      - address1
-      - city
-      - id
-      - postalCode
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-          nullable: true
-        address1:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary address line.
-        address2:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Second address line.
-          nullable: true
-        address3:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Third address line.
-          nullable: true
-        city:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address city
-        stateProvince:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address state/province.
-          nullable: true
-        postalCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Postal/zip code.
-        country:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Country identifier.
-          nullable: true
-        shippingLeadTime:
-          minimum: 0
-          type: integer
-          description: Lead time for shipping contents.
-          format: int32
-          nullable: true
-        primaryBilling:
-          type: boolean
-          description: Signifies if this is a primary billing address.
-        primaryShipping:
-          type: boolean
-          description: Signifies if this is a primary billing address.
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
-        email:
-          type: string
-          description: Email address
-          format: email
-          nullable: true
-        phone:
-          type: string
-          description: Associated phone number
-          nullable: true
-        fax:
-          type: string
-          description: Associated fax number
-          nullable: true
-        notes:
-          type: string
-          description: General notes associated to this vendor address
-          nullable: true
-      additionalProperties: false
-      description: Address with additional context for a vendor
     JsonPatchDocument:
       type: array
       items:
@@ -505,17 +431,220 @@ components:
         type:
           maxLength: 50
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: Arbitrary sub-key that can be used to qualify the value
-          nullable: true
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external identifier
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
         externalId:
           maxLength: 500
           minLength: 0
           type: string
           description: The external identifier
-          nullable: true
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
       additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    VendorUpdateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name to give the entity. Must be unique to all active vendors.
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
+        vendorCode:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for this vendor.
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: General notes associated to this vendor.
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: The currency of the vendor. When omitted, the existing value is preserved.
+        status:
+          type:
+          - string
+          - 'null'
+          description: 'Approval/quality status of the vendor. One of: Approved, Probation, Monitor, Disqualified, Other.
+
+            When omitted, the existing value is preserved.'
+        active:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the vendor is active. When omitted, the existing value is preserved.
+        leadTime:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Default lead time in days.
+          format: int32
+        url:
+          type:
+          - string
+          - 'null'
+          description: Vendor website URL.
+          format: uri
+        vendorSince:
+          type:
+          - string
+          - 'null'
+          description: Date the vendor relationship began.
+          format: date-time
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Definition for updating a vendor.
+    VendorCreateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name to give the entity. Must be unique to all active vendors.
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
+        vendorCode:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for this vendor.
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: General notes associated to this vendor
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: The currency of the vendor
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for the vendor
+      additionalProperties: false
+      description: Definition for creating a vendor.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
     DtoVendorDtoWithDetails:
       required:
       - id
@@ -534,60 +663,70 @@ components:
           description: The name to give the vendor. Must be unique to all active vendors.
         vendorCode:
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Unique identifier for this vendor.
-          nullable: true
         paymentTermsId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Payment terms identifier. Please reference /api/payment-terms endpoint.
-          nullable: true
         paymentTerms:
           $ref: '#/components/schemas/CommonReferenceDto'
         notes:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: General notes associated to this vendor
-          nullable: true
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: External references associated with this entity.
-          nullable: true
         customFields:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties: {}
           description: Custom fields that have been defined on this entity.
-          nullable: true
         currencyCode:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The currency of the vendor.
-          nullable: true
         status:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'Approval/quality status of the vendor. One of: Approved, Probation, Monitor, Disqualified, Other.'
-          nullable: true
         active:
           type: boolean
           description: Whether the vendor is active.
         leadTime:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Default lead time in days.
           format: int32
-          nullable: true
         url:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Vendor website URL.
           format: uri
-          nullable: true
         vendorSince:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Date the vendor relationship began.
           format: date-time
-          nullable: true
         addresses:
           type: array
           items:
@@ -595,6 +734,12 @@ components:
           description: The addresses associated with the vendor
       additionalProperties: false
       description: A vendor
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     CreatedResponseDto:
       required:
       - id
@@ -606,94 +751,6 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    VendorUpdateDto:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The name to give the entity. Must be unique to all active vendors.
-        paymentTermsId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
-          nullable: true
-        vendorCode:
-          minLength: 1
-          type: string
-          description: Unique identifier for this vendor.
-          nullable: true
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: General notes associated to this vendor.
-          nullable: true
-        currencyCode:
-          type: string
-          description: The currency of the vendor. When omitted, the existing value is preserved.
-          nullable: true
-        status:
-          type: string
-          description: 'Approval/quality status of the vendor. One of: Approved, Probation, Monitor, Disqualified, Other.
-
-            When omitted, the existing value is preserved.'
-          nullable: true
-        active:
-          type: boolean
-          description: Whether the vendor is active. When omitted, the existing value is preserved.
-          nullable: true
-        leadTime:
-          minimum: 0
-          type: integer
-          description: Default lead time in days.
-          format: int32
-          nullable: true
-        url:
-          type: string
-          description: Vendor website URL.
-          format: uri
-          nullable: true
-        vendorSince:
-          type: string
-          description: Date the vendor relationship began.
-          format: date-time
-          nullable: true
-        externalReferences:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-          nullable: true
-      additionalProperties: false
-      description: Definition for updating a vendor.
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
   securitySchemes:
     bearer:
       type: http

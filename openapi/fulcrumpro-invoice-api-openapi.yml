@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Invoice API
+  title: Fulcrum Public Invoice API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -112,7 +112,7 @@ paths:
     post:
       tags:
       - Invoice
-      summary: Find invoices based on search parameters.
+      summary: Find invoices based on search parameters
       operationId: ListInvoice
       parameters:
       - name: Sort.Field
@@ -212,170 +212,23 @@ paths:
       - Invoicing-Invoicing-Edit Invoices
 components:
   schemas:
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the type of this identifier.
-          nullable: true
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-          nullable: true
-        status:
-          type: string
-          description: A status for the external reference
-          nullable: true
-        url:
-          type: string
-          description: An external url for the reference
-          nullable: true
-        modifiedUtc:
-          type: string
-          description: Date the external reference was modified
-          format: date-time
-          nullable: true
-        lastSyncedUtc:
-          type: string
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-          nullable: true
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    CommonAddressDto:
-      required:
-      - address1
-      - city
-      - postalCode
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-          nullable: true
-        address1:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary address line.
-        address2:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Second address line.
-          nullable: true
-        address3:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Third address line.
-          nullable: true
-        city:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address city
-        stateProvince:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address state/province.
-          nullable: true
-        postalCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Postal/zip code.
-        country:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Country identifier.
-          nullable: true
-        phone:
-          type: string
-          description: Phone number.
-          format: tel
-          nullable: true
-        email:
-          type: string
-          description: Email address
-          format: email
-          nullable: true
-      additionalProperties: false
-      description: Address definition
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     InvoiceUpdateDto:
       type: object
       properties:
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-          nullable: true
       additionalProperties: false
       description: Represents an update on an invoice.
-    InvoiceRequestFindParameters:
-      type: object
-      properties:
-        numbers:
-          maxItems: 500
-          minItems: 1
-          type: array
-          items:
-            type: integer
-            format: int32
-          description: Filter invoices to only given numbers
-          nullable: true
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-        status:
-          $ref: '#/components/schemas/InvoiceStatusEnum'
-      additionalProperties: false
-      description: Parameters used for searching/finding invoices.
-    InvoiceRequestUpdateStatus:
-      required:
-      - status
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/InvoiceStatusEnum'
-        paidDate:
-          type: string
-          description: The date that the invoice was paid.
-          format: date-time
-          nullable: true
-      additionalProperties: false
-      description: Update an invoice status.
     InvoiceDto:
       required:
       - customerId
@@ -406,47 +259,54 @@ components:
         currencyInfo:
           $ref: '#/components/schemas/CurrencyInfoDto'
         issueDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Invoice issued date indicates when the invoice was sent to the customer.
           format: date-time
-          nullable: true
         externalReferences:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: External references associated with this entity.
-          nullable: true
         paymentTermsId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
-          nullable: true
         paymentTerms:
           $ref: '#/components/schemas/CommonReferenceDto'
         companyInfoId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Company Information Id;
-          nullable: true
         salesOrderId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Sales order identifier. Please reference /api/sales-orders endpoint.
-          nullable: true
         customerPONumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Customer PO number.
-          nullable: true
         dueDate:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Invoice due date.
           format: date-time
-          nullable: true
         total:
           minimum: 0
           type: number
@@ -464,16 +324,18 @@ components:
         notesToCustomer:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: A field for the seller to provide additional details or instructions for the customer relating to the order.
-          nullable: true
         billingAddress:
           $ref: '#/components/schemas/CommonAddressDto'
         customFields:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties: {}
           description: Custom fields that have been defined on this entity.
-          nullable: true
         isDeposit:
           type: boolean
           description: Is deposit invoice
@@ -482,11 +344,6 @@ components:
           description: Indicates whether this invoice has been deleted
       additionalProperties: false
       description: Represents an invoice
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
     CommonExternalReferenceFindDto:
       required:
       - key
@@ -500,49 +357,34 @@ components:
         type:
           maxLength: 50
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: Arbitrary sub-key that can be used to qualify the value
-          nullable: true
         externalId:
           maxLength: 500
           minLength: 0
-          type: string
+          type:
+          - string
+          - 'null'
           description: The external identifier
-          nullable: true
       additionalProperties: false
       description: Search parameter for identifier record(s) via their external identifiers.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    InvoiceStatusEnum:
-      enum:
-      - new
-      - needsApproval
-      - approved
-      - issued
-      - paid
-      type: string
-      description: Invoice status
-    CommonReferenceDto:
+    InvoiceRequestUpdateStatus:
+      required:
+      - status
       type: object
       properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+        paidDate:
+          type:
+          - string
+          - 'null'
+          description: The date that the invoice was paid.
+          format: date-time
       additionalProperties: false
-      description: Represents a reference to a document in a DB collection
+      description: Update an invoice status.
     CurrencyInfoDto:
       required:
       - documentCurrencyCode
@@ -561,6 +403,193 @@ components:
           description: Primary Currency Code
       additionalProperties: false
       description: Currency Info Dto
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonAddressDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Second address line.
+        address3:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Third address line.
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Address state/province.
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Country identifier.
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          format: tel
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: Address definition
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    InvoiceRequestFindParameters:
+      type: object
+      properties:
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Filter invoices to only given numbers
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+      additionalProperties: false
+      description: Parameters used for searching/finding invoices.
+    InvoiceStatusEnum:
+      enum:
+      - new
+      - needsApproval
+      - approved
+      - issued
+      - paid
+      type: string
+      description: Invoice status
   securitySchemes:
     bearer:
       type: http

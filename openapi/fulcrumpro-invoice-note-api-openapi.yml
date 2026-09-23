@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Invoice Note API
+  title: Fulcrum Public Invoice Note API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -47,9 +47,10 @@ components:
         body:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Content of the note.
-          nullable: true
       additionalProperties: false
       description: Represents a note.
   securitySchemes:

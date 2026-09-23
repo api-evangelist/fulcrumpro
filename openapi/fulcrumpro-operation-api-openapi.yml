@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Operation API
+  title: Fulcrum Public Operation API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -47,7 +47,7 @@ paths:
     get:
       tags:
       - Operation
-      summary: Get an operation.
+      summary: Get an operation
       operationId: GetOperation
       parameters:
       - name: id
@@ -75,7 +75,7 @@ paths:
     post:
       tags:
       - Operation
-      summary: Find operations based on search parameters.
+      summary: Find operations based on search parameters
       operationId: ListOperation
       parameters:
       - name: Sort.Field
@@ -138,7 +138,7 @@ paths:
     put:
       tags:
       - Operation
-      summary: Update an operation.
+      summary: Update an operation
       operationId: UpdateOperation
       parameters:
       - name: id
@@ -182,64 +182,6 @@ paths:
       - System-System Data-Manage System Data
 components:
   schemas:
-    ItemRoutingOperationTimeOption:
-      enum:
-      - fixedSeconds
-      - fixedMinutes
-      - fixedHours
-      - fixedDays
-      - secondsPerUnit
-      - minutesPerUnit
-      - hoursPerUnit
-      - daysPerUnit
-      - unitsPerHour
-      type: string
-      description: The time unit or option used in operation times
-    ItemRoutingOutsideProcessingCostOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-      description: The cost option for the outside processing operation
-    ItemRoutingOutsideProcessingOperationCost:
-      type: object
-      properties:
-        costOption:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
-        fixedCost:
-          type: number
-          description: The fixed total cost for the operation
-          format: double
-          nullable: true
-        perUnitCost:
-          type: number
-          description: The cost per unit for the operation
-          format: double
-          nullable: true
-      additionalProperties: false
-      description: Outside processing operation cost
-    ItemRoutingOperationTime:
-      type: object
-      properties:
-        time:
-          type: number
-          description: Time or units of this operation
-          format: double
-        option:
-          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
-      additionalProperties: false
-      description: Operation time and type
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     OperationCreateDto:
       required:
       - description
@@ -273,153 +215,64 @@ components:
         defaultVendorId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
-          nullable: true
         vendors:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Available vendors.
-          nullable: true
         leadDays:
           minimum: 0
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Lead days.
           format: int32
-          nullable: true
         instructions:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Instructions.
-          nullable: true
         accountingCodeId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-          nullable: true
       additionalProperties: false
       description: Details of operation to be created
-    OperationRequestFindParameters:
+    ItemRoutingOperationTime:
       type: object
       properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Filter operations based on their name.
-          nullable: true
-        modifiedBeforeUtc:
-          type: string
-          description: Filters operations modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-          nullable: true
-        modifiedAfterUtc:
-          type: string
-          description: 'Filters operations modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-
-            Useful for polling incrementally instead of re-syncing every operation.'
-          format: date-time
-          nullable: true
+        time:
+          type: number
+          description: Time or units of this operation
+          format: double
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
       additionalProperties: false
-      description: Parameters used for searching/finding operations.
-    OperationDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: A verbose description of the location.
-          nullable: true
-        setupTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        laborTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        machineTimeTrackingEnabled:
-          type: boolean
-          description: Is machine time tracking enabled.
-          nullable: true
-        machineTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        isOutsideProcessing:
-          type: boolean
-          description: Specifies whether this is an outside processing operation
-        outsideProcessingCost:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
-        unattended:
-          type: boolean
-          description: Specifies whether this is operation will be unattended.
-        defaultVendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
-          nullable: true
-        leadDays:
-          type: integer
-          description: Lead days.
-          format: int32
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-          nullable: true
-        workCenters:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonReferenceDto'
-          description: The work centers associated with the operation
-        isNestable:
-          type: boolean
-          description: Indicates if this operation is nestable.
-        instructions:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Instructions.
-          nullable: true
-      additionalProperties: false
-      description: Operation definition.
-    CommonEnumSortDirectionEnum:
+      description: Operation time and type
+    ItemRoutingOperationTimeOption:
       enum:
-      - ascending
-      - descending
+      - fixedSeconds
+      - fixedMinutes
+      - fixedHours
+      - fixedDays
+      - secondsPerUnit
+      - minutesPerUnit
+      - hoursPerUnit
+      - daysPerUnit
+      - unitsPerHour
       type: string
-      description: Specify sorting direction.
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
+      description: The time unit or option used in operation times
     OperationUpdateDto:
       required:
       - description
@@ -453,37 +306,206 @@ components:
         defaultVendorId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
-          nullable: true
         vendors:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Available vendors.
-          nullable: true
         leadDays:
           minimum: 0
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Lead days.
           format: int32
-          nullable: true
         instructions:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Instructions.
-          nullable: true
         accountingCodeId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-          nullable: true
       additionalProperties: false
       description: 'Details of an operation to be updated. This is a full replacement of the publicly-exposed fields.
 
         Internal-only fields not exposed here (in-process tracking, tolerances, shop rates) are preserved.'
+    ItemRoutingOutsideProcessingCostOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+      description: The cost option for the outside processing operation
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    OperationRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter operations based on their name.
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters operations modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filters operations modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Useful for polling incrementally instead of re-syncing every operation.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding operations.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    OperationDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: A verbose description of the location.
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTimeTrackingEnabled:
+          type:
+          - boolean
+          - 'null'
+          description: Is machine time tracking enabled.
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        unattended:
+          type: boolean
+          description: Specifies whether this is operation will be unattended.
+        defaultVendorId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
+        leadDays:
+          type: integer
+          description: Lead days.
+          format: int32
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        workCenters:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonReferenceDto'
+          description: The work centers associated with the operation
+        isNestable:
+          type: boolean
+          description: Indicates if this operation is nestable.
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Instructions.
+      additionalProperties: false
+      description: Operation definition.
+    ItemRoutingOutsideProcessingOperationCost:
+      type: object
+      properties:
+        costOption:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
+        fixedCost:
+          type:
+          - number
+          - 'null'
+          description: The fixed total cost for the operation
+          format: double
+        perUnitCost:
+          type:
+          - number
+          - 'null'
+          description: The cost per unit for the operation
+          format: double
+      additionalProperties: false
+      description: Outside processing operation cost
   securitySchemes:
     bearer:
       type: http

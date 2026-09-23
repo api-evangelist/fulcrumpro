@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Tax Rate API
+  title: Fulcrum Public Tax Rate API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -47,7 +47,7 @@ paths:
     get:
       tags:
       - Tax Rate
-      summary: Get a tax rate.
+      summary: Get a tax rate
       operationId: GetTaxRate
       parameters:
       - name: id
@@ -116,7 +116,7 @@ paths:
     post:
       tags:
       - Tax Rate
-      summary: Find tax rates based on search parameters.
+      summary: Find tax rates based on search parameters
       operationId: ListTaxRate
       parameters:
       - name: Sort.Field
@@ -175,11 +175,25 @@ paths:
                   $ref: '#/components/schemas/TaxRateDto'
 components:
   schemas:
-    DomainSystemDataTaxCodeProvider:
-      enum:
-      - avalaraOrder
-      - avalaraInvoice
-      type: string
+    TaxRateRequestFindParameters:
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter tax rates based on their code.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter tax rates based on matching ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding tax rates.
     TaxRateDto:
       required:
       - code
@@ -211,6 +225,23 @@ components:
           description: Indicate if this record is deleted.
       additionalProperties: false
       description: Tax rate definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     TaxRateCreateDto:
       required:
       - code
@@ -232,23 +263,11 @@ components:
           description: Indicate if this tax rate applies to landed costs.
       additionalProperties: false
       description: Details of tax rate to be created
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    CommonEnumSortDirectionEnum:
+    DomainSystemDataTaxCodeProvider:
       enum:
-      - ascending
-      - descending
+      - avalaraOrder
+      - avalaraInvoice
       type: string
-      description: Specify sorting direction.
     TaxRateUpdateDto:
       required:
       - code
@@ -270,23 +289,6 @@ components:
           description: Indicate if this tax rate applies to landed costs.
       additionalProperties: false
       description: Details of tax rate to be update
-    TaxRateRequestFindParameters:
-      type: object
-      properties:
-        code:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Filter tax rates based on their code.
-          nullable: true
-        ids:
-          type: array
-          items:
-            type: string
-          description: Filter tax rates based on matching ids.
-          nullable: true
-      additionalProperties: false
-      description: Parameters used for searching/finding tax rates.
   securitySchemes:
     bearer:
       type: http

@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Equipment API
+  title: Fulcrum Public Equipment API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     post:
       tags:
       - Equipment
-      summary: Create a piece of equipment.
+      summary: Create a piece of equipment
       operationId: CreateEquipment
       requestBody:
         content:
@@ -47,7 +47,7 @@ paths:
     get:
       tags:
       - Equipment
-      summary: Get a piece of equipment.
+      summary: Get a piece of equipment
       operationId: GetEquipment
       parameters:
       - name: id
@@ -74,7 +74,7 @@ paths:
     put:
       tags:
       - Equipment
-      summary: Update a piece of equipment.
+      summary: Update a piece of equipment
       operationId: UpdateEquipment
       parameters:
       - name: id
@@ -120,7 +120,7 @@ paths:
     post:
       tags:
       - Equipment
-      summary: Find equipment based on search parameters.
+      summary: Find equipment based on search parameters
       operationId: ListEquipment
       parameters:
       - name: Sort.Field
@@ -181,6 +181,83 @@ paths:
       - Scheduling-Schedule-View Schedule
 components:
   schemas:
+    EquipmentDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Description.
+        workCenterId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
+        manufacturer:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Manufacturer.
+        modelNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Model number.
+        serialNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Serial number.
+        canRunUnattended:
+          type:
+          - boolean
+          - 'null'
+          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
+
+            that utilizes this equipment to be scheduled outside of a shift.'
+        unlimitedCapacity:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if this equipment can support multiple operations simultaneously.
+        status:
+          $ref: '#/components/schemas/EquipmentStatus'
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes associated to the equipment.
+        deleted:
+          type: boolean
+          description: Indicates whether this equipment has been deleted
+      additionalProperties: false
+      description: Equipment definition.
     EquipmentCreateDto:
       required:
       - description
@@ -200,27 +277,31 @@ components:
         workCenterId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: WorkCenter identifier. Please reference /api/work-centers endpoint.
-          nullable: true
         manufacturer:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Manufacturer.
-          nullable: true
         modelNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Model number.
-          nullable: true
         serialNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Serial number.
-          nullable: true
         canRunUnattended:
           type: boolean
           description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
@@ -234,9 +315,10 @@ components:
         notes:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes associated to the equipment.
-          nullable: true
       additionalProperties: false
       description: Details of a piece of equipment to be created.
     EquipmentUpdateDto:
@@ -258,27 +340,31 @@ components:
         workCenterId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: WorkCenter identifier. Please reference /api/work-centers endpoint.
-          nullable: true
         manufacturer:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Manufacturer.
-          nullable: true
         modelNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Model number.
-          nullable: true
         serialNumber:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Serial number.
-          nullable: true
         canRunUnattended:
           type: boolean
           description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
@@ -292,82 +378,31 @@ components:
         notes:
           maxLength: 2000
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Notes associated to the equipment.
-          nullable: true
       additionalProperties: false
       description: 'Details of a piece of equipment to be updated. This is a full replacement: any field omitted
 
         is treated as cleared.'
-    EquipmentDto:
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CreatedResponseDto:
       required:
       - id
-      - name
       type: object
       properties:
         id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
           minLength: 1
           type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Description.
-          nullable: true
-        workCenterId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
-          nullable: true
-        manufacturer:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Manufacturer.
-          nullable: true
-        modelNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Model number.
-          nullable: true
-        serialNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Serial number.
-          nullable: true
-        canRunUnattended:
-          type: boolean
-          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
-
-            that utilizes this equipment to be scheduled outside of a shift.'
-          nullable: true
-        unlimitedCapacity:
-          type: boolean
-          description: Indicates if this equipment can support multiple operations simultaneously.
-          nullable: true
-        status:
-          $ref: '#/components/schemas/EquipmentStatus'
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Notes associated to the equipment.
-          nullable: true
-        deleted:
-          type: boolean
-          description: Indicates whether this equipment has been deleted
+          description: The id of the created record
       additionalProperties: false
-      description: Equipment definition.
+      description: Response for a created record
     EquipmentStatus:
       enum:
       - good
@@ -380,36 +415,21 @@ components:
       type: object
       properties:
         ids:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter equipment based on matching ids.
-          nullable: true
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter equipment based on their name.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding equipment.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

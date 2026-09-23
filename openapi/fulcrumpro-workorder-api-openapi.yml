@@ -1,16 +1,16 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Work Order API
+  title: Fulcrum Public Work Order API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
 tags:
-- name: Work Order
+- name: workorder
 paths:
   /api/work-orders/{workOrderId}:
     get:
       tags:
-      - Work Order
+      - workorder
       summary: Get a specific work order
       operationId: GetWorkOrder
       parameters:
@@ -38,8 +38,8 @@ paths:
   /api/work-orders/list:
     post:
       tags:
-      - Work Order
-      summary: Find work orders based on search parameters.
+      - workorder
+      summary: Find work orders based on search parameters
       operationId: ListWorkOrder
       parameters:
       - name: Sort.Field
@@ -100,77 +100,6 @@ paths:
       - Jobs-Jobs-View Job
 components:
   schemas:
-    WorkOrderRequestFindParameters:
-      type: object
-      properties:
-        workOrderIds:
-          maxItems: 500
-          minItems: 1
-          type: array
-          items:
-            type: string
-          description: Filter to work orders whose ids are in the list
-          nullable: true
-        numbers:
-          maxItems: 500
-          minItems: 1
-          type: array
-          items:
-            type: integer
-            format: int32
-          description: Filter to only given numbers
-          nullable: true
-        names:
-          maxItems: 500
-          minItems: 1
-          type: array
-          items:
-            type: string
-          description: Filter to only given names
-          nullable: true
-        statuses:
-          maxItems: 500
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkOrderStatusEnum'
-          description: Filter to match the given statuses
-          nullable: true
-        createdBeforeUtc:
-          type: string
-          description: Filters jobs created before (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
-          format: date-time
-          nullable: true
-        createdAfterUtc:
-          type: string
-          description: Filters jobs created after (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
-          format: date-time
-          nullable: true
-      additionalProperties: false
-      description: Parameters used for searching/finding work orders.
-    JobPriorityEnum:
-      enum:
-      - low
-      - moderate
-      - high
-      type: string
-      description: Job priority
-    WorkOrderStatusEnum:
-      enum:
-      - needsReview
-      - approved
-      - scheduled
-      - inProgress
-      - complete
-      - cancelled
-      type: string
-      description: Work order status
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     WorkOrderDto:
       required:
       - id
@@ -198,31 +127,112 @@ components:
           description: The date the job was created
           format: date-time
         completedOnUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The job completion datetime.
           format: date-time
-          nullable: true
         cancelledOnUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The job cancelled datetime.
           format: date-time
-          nullable: true
         scheduledStartUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The current scheduled start time.
           format: date-time
-          nullable: true
         scheduledEndUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The current scheduled end time.
           format: date-time
-          nullable: true
         status:
           $ref: '#/components/schemas/WorkOrderStatusEnum'
         priority:
           $ref: '#/components/schemas/JobPriorityEnum'
       additionalProperties: false
       description: Represents a work order
+    WorkOrderRequestFindParameters:
+      type: object
+      properties:
+        workOrderIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter to work orders whose ids are in the list
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Filter to only given numbers
+        names:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter to only given names
+        statuses:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WorkOrderStatusEnum'
+          description: Filter to match the given statuses
+        createdBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs created before (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
+          format: date-time
+        createdAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs created after (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding work orders.
+    JobPriorityEnum:
+      enum:
+      - low
+      - moderate
+      - high
+      type: string
+      description: Job priority
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    WorkOrderStatusEnum:
+      enum:
+      - needsReview
+      - approved
+      - scheduled
+      - inProgress
+      - complete
+      - cancelled
+      type: string
+      description: Work order status
   securitySchemes:
     bearer:
       type: http

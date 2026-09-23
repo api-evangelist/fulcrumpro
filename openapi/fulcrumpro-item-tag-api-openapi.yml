@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Item Tag API
+  title: Fulcrum Public Item Tag API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -95,7 +95,7 @@ paths:
     post:
       tags:
       - Item Tag
-      summary: Attach a tag to an item. This operation is idempotent - attaching a tag that is already present is a no-op.
+      summary: Attach a tag to an item.
       operationId: AttachItemTag
       parameters:
       - name: itemId
@@ -138,7 +138,7 @@ paths:
     delete:
       tags:
       - Item Tag
-      summary: Detach a tag from an item. This operation is idempotent - detaching a tag that is not present is a no-op.
+      summary: Detach a tag from an item.
       operationId: DetachItemTag
       parameters:
       - name: itemId
@@ -180,7 +180,7 @@ paths:
     put:
       tags:
       - Item Tag
-      summary: Replace the complete set of tags on an item. Tags currently on the item that are not in the request are removed.
+      summary: Replace the complete set of tags on an item.
       operationId: ReplaceItemTags
       parameters:
       - name: itemId
@@ -270,18 +270,20 @@ components:
         description:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Descriptive name associated to the object
-          nullable: true
         types:
           type: array
           items:
             $ref: '#/components/schemas/CommonEnumTagTypeEnum'
           description: Represents where/how this tag is used.
         deleted:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           description: Indicate if this tag has been deleted.
-          nullable: true
       additionalProperties: false
       description: Represents a tag
     ItemTagReplaceItemTagsDto:
@@ -310,17 +312,38 @@ components:
         name:
           maxLength: 200
           minLength: 1
-          type: string
+          type:
+          - string
+          - 'null'
           description: Filter tags based on their name.
-          nullable: true
         ids:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Filter tags based on matching ids.
-          nullable: true
       additionalProperties: false
       description: Parameters used for searching/finding accounting codes.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CommonEnumStyleEnum:
+      enum:
+      - primary
+      - secondary
+      - success
+      - danger
+      - warning
+      - info
+      - light
+      - dark
+      - connected
+      type: string
+      description: Style enum (for tags).
     DtoPagedResultDtoTagDto:
       required:
       - data
@@ -366,25 +389,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonEnumStyleEnum:
-      enum:
-      - primary
-      - secondary
-      - success
-      - danger
-      - warning
-      - info
-      - light
-      - dark
-      - connected
-      type: string
-      description: Style enum (for tags).
   securitySchemes:
     bearer:
       type: http

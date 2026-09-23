@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code Job Operation API
+  title: Fulcrum Public Job Operation API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -41,6 +41,306 @@ paths:
       - Jobs-Jobs-View Job
 components:
   schemas:
+    JobItemToMakeStatusEnum:
+      enum:
+      - new
+      - working
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make status
+    DomainOperationsRouting_Step_SetupTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+    DomainOperationsRouting_Step_RunTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      - unitsPerHour
+      type: string
+    CommonTimeDto:
+      required:
+      - labor
+      - machine
+      - setup
+      type: object
+      properties:
+        labor:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        machine:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+        setup:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Time information
+    CommonCostDto:
+      required:
+      - perUnit
+      - total
+      type: object
+      properties:
+        total:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        perUnit:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Cost information
+    CommonCostBreakdownLineDto:
+      required:
+      - cost
+      - costType
+      - name
+      type: object
+      properties:
+        costType:
+          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
+        operationType:
+          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        name:
+          minLength: 1
+          type: string
+          description: Decription of this line.
+        cost:
+          minimum: 0
+          type: number
+          description: Cost.
+          format: double
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Quantity (if applicable)
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Id of the item that was picked. Please reference /api/items endpoint.
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: The name of the item that was picked.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
+        operationInformation:
+          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+      additionalProperties: false
+      description: Cost breakdown line information.
+    CommonEnumOperationTypeEnum:
+      enum:
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      type: string
+      description: Operation type
+    JobTrackingOperationDto:
+      required:
+      - id
+      - isOutsideProcessing
+      - order
+      - status
+      - systemOperationId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique Id associated to this entity
+        status:
+          $ref: '#/components/schemas/JobItemToMakeOpStatusEnum'
+        order:
+          minimum: 0
+          type: integer
+          description: Routing order of the operation
+          format: int32
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the system operation associated to this entity
+
+            Please reference api/operations.'
+        isOutsideProcessing:
+          type: boolean
+          description: Denotes whether this is an outside processing operation
+        originalScheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: The first scheduled start time.
+          format: date-time
+        originalScheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: The first scheduled end time.
+          format: date-time
+        scheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: Scheduled start datetime of the operation
+          format: date-time
+        scheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: Scheduled end datetime of the operation
+          format: date-time
+        completedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: The operation completion datetime.
+          format: date-time
+        completedById:
+          type:
+          - string
+          - 'null'
+          description: Operation completed user identifier. Please reference /api/users endpoint.
+        scheduledEquipmentId:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the equipment that this operation is scheduled to run on
+        scheduledEquipmentName:
+          type:
+          - string
+          - 'null'
+          description: The name of the equipment that this operation is scheduled to run on.
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: The custom field data on the object
+        instructions:
+          type:
+          - string
+          - 'null'
+          description: Instructions specific to the item to make operation.
+        name:
+          type:
+          - string
+          - 'null'
+          description: System operation name.
+        leadTimeInDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Number of days required between order and receipt. Only applicable for outside processing operations.
+          format: int32
+        associatedPurchaseOrderIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Associated purchase order IDs.
+        estimatedSetupTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: The estimated setup time in seconds for the operation.
+          format: double
+        estimatedSetupTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_SetupTimeOption'
+        estimatedRunTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: 'The estimated run time in seconds for the operation.
+
+            Note: This is an obsolete field from when operation could not separate between machine (unattended) and labor (attended) time.'
+          format: double
+        estimatedRunTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
+        estimatedMachineTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: The estimated machine time in seconds for the operation.
+          format: double
+        estimatedMachineTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
+        estimatedLaborTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: The estimated labor time in seconds for the operation.
+          format: double
+        estimatedLaborTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
+        isMachineTimeOnly:
+          type: boolean
+          description: 'Whether this operation can be run without an employee present.  If true, use the machineTime properties.  If false,
+
+            use the laborTime properties.'
+        workOrderId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of work order that this operation is associated to, if applicable.
+
+            Please reference api/work-orders endpoint.'
+        isRework:
+          type: boolean
+          description: Whether this operation is a rework operation (a redo created from a prior operation).
+        hasAssociatedRework:
+          type: boolean
+          description: Whether this operation was sent for rework (one or more rework operations were created from it).
+        rework:
+          $ref: '#/components/schemas/JobTrackingOperationReworkDto'
+      additionalProperties: false
+      description: Represents a job operation (for tracking purposes).
+    CommonEnumCostBreakdownLineTypeEnum:
+      enum:
+      - material
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      - componentMaterial
+      - componentLabor
+      - componentMachine
+      - componentOutsideProcessing
+      - nestPartMaterialUsage
+      - nestPartMaterialScrap
+      - overhead
+      - unknown
+      type: string
+      description: Cost breakdown types
     JobItemToMakeOpStatusEnum:
       enum:
       - pending
@@ -51,6 +351,18 @@ components:
       - cancelled
       type: string
       description: Job Item to Make Operation status
+    JobTrackingOperationDetailsDto:
+      required:
+      - itemToMake
+      - operation
+      type: object
+      properties:
+        itemToMake:
+          $ref: '#/components/schemas/JobTrackingItemToMakeDto'
+        operation:
+          $ref: '#/components/schemas/JobTrackingOperationDto'
+      additionalProperties: false
+      description: Represents a job operation and the item affected (for tracking purposes).
     CommonCostBreakdownDto:
       required:
       - calculatedOn
@@ -91,10 +403,11 @@ components:
           format: int32
         quantityScrapped:
           minimum: 0
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Number of units scrapped.
           format: int32
-          nullable: true
         calculatedOn:
           type: string
           description: When was this cost breakdown last calculated/aggregated.
@@ -140,24 +453,6 @@ components:
           description: Cost breakdown line details.
       additionalProperties: false
       description: Cost breakdown
-    CommonCostDto:
-      required:
-      - perUnit
-      - total
-      type: object
-      properties:
-        total:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        perUnit:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Cost information
     ItemsAndInventoryRoutingsCostBreakdownType:
       enum:
       - estimated
@@ -165,151 +460,91 @@ components:
       - completedJob
       - cancelledJob
       type: string
-    CommonEnumCostBreakdownLineTypeEnum:
-      enum:
-      - material
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      - componentMaterial
-      - componentLabor
-      - componentMachine
-      - componentOutsideProcessing
-      - nestPartMaterialUsage
-      - nestPartMaterialScrap
-      - overhead
-      - unknown
-      type: string
-      description: Cost breakdown types
-    CommonEnumOperationTypeEnum:
-      enum:
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      type: string
-      description: Operation type
-    CommonCostBreakdownLineDto:
+    CommonCostBreakdownOperationDto:
       required:
-      - cost
-      - costType
-      - name
+      - operationId
       type: object
       properties:
-        costType:
-          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
-        operationType:
-          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        operationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Operation id. Please reference /api/operations
         name:
+          type:
+          - string
+          - 'null'
+          description: Operation name.
+        timeInSeconds:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in seconds.
+          format: double
+          readOnly: true
+        timeInHours:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in hours
+          format: double
+        ratePerSecond:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per second
+          format: double
+          readOnly: true
+        ratePerHour:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per hour
+          format: double
+      additionalProperties: false
+      description: Operation information
+    ItemReferenceDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to this entity
+        number:
+          maxLength: 200
           minLength: 1
           type: string
-          description: Decription of this line.
-        cost:
-          minimum: 0
-          type: number
-          description: Cost.
-          format: double
-        quantity:
-          minimum: 0
-          type: number
-          description: Quantity (if applicable)
-          format: double
-          nullable: true
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Id of the item that was picked. Please reference /api/items endpoint.
-          nullable: true
-        itemName:
-          type: string
-          description: The name of the item that was picked.
-          nullable: true
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
-          nullable: true
-        operationInformation:
-          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+          description: Item number.
+        revision:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Revision name.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Item name.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Item description.
       additionalProperties: false
-      description: Cost breakdown line information.
-    CommonTimeDto:
-      required:
-      - labor
-      - machine
-      - setup
-      type: object
-      properties:
-        labor:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        machine:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-        setup:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Time information
-    JobItemToMakeStatusEnum:
-      enum:
-      - new
-      - working
-      - complete
-      - cancelled
-      type: string
-      description: Job Item to Make status
-    JobTrackingOperationReworkDto:
-      type: object
-      properties:
-        reasonId:
-          type: string
-          description: Identifier of the rework reason.
-          nullable: true
-        reason:
-          type: string
-          description: The rework reason.
-          nullable: true
-        notes:
-          type: string
-          description: Free-text notes captured when the rework was recorded.
-          nullable: true
-        quantityToRework:
-          type: integer
-          description: The quantity sent for rework.
-          format: int32
-        quantityScrapped:
-          type: integer
-          description: The quantity scrapped as part of the rework.
-          format: int32
-        hasScrapMaterials:
-          type: boolean
-          description: Whether scrap materials were tracked as part of the rework.
-        createdByUserId:
-          type: string
-          description: Identifier of the user who recorded the rework. Please reference /api/users endpoint.
-          nullable: true
-        createdUtc:
-          type: string
-          description: The datetime the rework was recorded.
-          format: date-time
-      additionalProperties: false
-      description: Rework details associated with a job operation.
-    DomainOperationsRouting_Step_RunTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      - unitsPerHour
-      type: string
+      description: Item reference
     JobTrackingItemToMakeDto:
       required:
       - depth
@@ -342,10 +577,11 @@ components:
         status:
           $ref: '#/components/schemas/JobItemToMakeStatusEnum'
         quantityMade:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Quantity already produced, if the job is in progress.
           format: double
-          nullable: true
         depth:
           type: integer
           description: 'Structurally, identify where in the tree of building the parent item this item lies.
@@ -355,11 +591,12 @@ components:
             This cascades down so that a subcomponent to a subcomponent would be 2... and so on.'
           format: int32
         routingNotes:
-          type: string
+          type:
+          - string
+          - 'null'
           description: 'The routing notes (the "Routing Notes" field) captured on this job''s routing for the item.
 
             Null when the job''s routing has no note for the item.'
-          nullable: true
         costBreakdown:
           $ref: '#/components/schemas/CommonCostBreakdownDto'
         costBreakdownEstimated:
@@ -368,246 +605,46 @@ components:
           $ref: '#/components/schemas/ItemReferenceDto'
       additionalProperties: false
       description: Represents an item to make on a job (for tracking purposes)
-    ItemReferenceDto:
-      required:
-      - id
+    JobTrackingOperationReworkDto:
       type: object
       properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to this entity
-        number:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Item number.
-        revision:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Revision name.
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Item name.
-          nullable: true
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-          description: Item description.
-          nullable: true
-      additionalProperties: false
-      description: Item reference
-    JobTrackingOperationDto:
-      required:
-      - id
-      - isOutsideProcessing
-      - order
-      - status
-      - systemOperationId
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique Id associated to this entity
-        status:
-          $ref: '#/components/schemas/JobItemToMakeOpStatusEnum'
-        order:
-          minimum: 0
+        reasonId:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the rework reason.
+        reason:
+          type:
+          - string
+          - 'null'
+          description: The rework reason.
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes captured when the rework was recorded.
+        quantityToRework:
           type: integer
-          description: Routing order of the operation
+          description: The quantity sent for rework.
           format: int32
-        systemOperationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Identifier of the system operation associated to this entity
-
-            Please reference api/operations.'
-        isOutsideProcessing:
-          type: boolean
-          description: Denotes whether this is an outside processing operation
-        originalScheduledStartUtc:
-          type: string
-          description: The first scheduled start time.
-          format: date-time
-          nullable: true
-        originalScheduledEndUtc:
-          type: string
-          description: The first scheduled end time.
-          format: date-time
-          nullable: true
-        scheduledStartUtc:
-          type: string
-          description: Scheduled start datetime of the operation
-          format: date-time
-          nullable: true
-        scheduledEndUtc:
-          type: string
-          description: Scheduled end datetime of the operation
-          format: date-time
-          nullable: true
-        completedOnUtc:
-          type: string
-          description: The operation completion datetime.
-          format: date-time
-          nullable: true
-        completedById:
-          type: string
-          description: Operation completed user identifier. Please reference /api/users endpoint.
-          nullable: true
-        scheduledEquipmentId:
-          type: string
-          description: Identifier of the equipment that this operation is scheduled to run on
-          nullable: true
-        scheduledEquipmentName:
-          type: string
-          description: The name of the equipment that this operation is scheduled to run on.
-          nullable: true
-        customFields:
-          type: object
-          additionalProperties: {}
-          description: The custom field data on the object
-          nullable: true
-        instructions:
-          type: string
-          description: Instructions specific to the item to make operation.
-          nullable: true
-        name:
-          type: string
-          description: System operation name.
-          nullable: true
-        leadTimeInDays:
-          minimum: 0
+        quantityScrapped:
           type: integer
-          description: Number of days required between order and receipt. Only applicable for outside processing operations.
+          description: The quantity scrapped as part of the rework.
           format: int32
-          nullable: true
-        associatedPurchaseOrderIds:
-          type: array
-          items:
-            type: string
-          description: Associated purchase order IDs.
-          nullable: true
-        estimatedSetupTimeInSeconds:
-          type: number
-          description: The estimated setup time in seconds for the operation.
-          format: double
-          nullable: true
-        estimatedSetupTimeBasis:
-          $ref: '#/components/schemas/DomainOperationsRouting_Step_SetupTimeOption'
-        estimatedRunTimeInSeconds:
-          type: number
-          description: 'The estimated run time in seconds for the operation.
-
-            Note: This is an obsolete field from when operation could not separate between machine (unattended) and labor (attended) time.'
-          format: double
-          nullable: true
-        estimatedRunTimeBasis:
-          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
-        estimatedMachineTimeInSeconds:
-          type: number
-          description: The estimated machine time in seconds for the operation.
-          format: double
-          nullable: true
-        estimatedMachineTimeBasis:
-          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
-        estimatedLaborTimeInSeconds:
-          type: number
-          description: The estimated labor time in seconds for the operation.
-          format: double
-          nullable: true
-        estimatedLaborTimeBasis:
-          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
-        isMachineTimeOnly:
+        hasScrapMaterials:
           type: boolean
-          description: 'Whether this operation can be run without an employee present.  If true, use the machineTime properties.  If false,
-
-            use the laborTime properties.'
-        workOrderId:
-          maxLength: 24
-          minLength: 24
+          description: Whether scrap materials were tracked as part of the rework.
+        createdByUserId:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the user who recorded the rework. Please reference /api/users endpoint.
+        createdUtc:
           type: string
-          description: 'Identifier of work order that this operation is associated to, if applicable.
-
-            Please reference api/work-orders endpoint.'
-          nullable: true
-        isRework:
-          type: boolean
-          description: Whether this operation is a rework operation (a redo created from a prior operation).
-        hasAssociatedRework:
-          type: boolean
-          description: Whether this operation was sent for rework (one or more rework operations were created from it).
-        rework:
-          $ref: '#/components/schemas/JobTrackingOperationReworkDto'
+          description: The datetime the rework was recorded.
+          format: date-time
       additionalProperties: false
-      description: Represents a job operation (for tracking purposes).
-    JobTrackingOperationDetailsDto:
-      required:
-      - itemToMake
-      - operation
-      type: object
-      properties:
-        itemToMake:
-          $ref: '#/components/schemas/JobTrackingItemToMakeDto'
-        operation:
-          $ref: '#/components/schemas/JobTrackingOperationDto'
-      additionalProperties: false
-      description: Represents a job operation and the item affected (for tracking purposes).
-    CommonCostBreakdownOperationDto:
-      required:
-      - operationId
-      type: object
-      properties:
-        operationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Operation id. Please reference /api/operations
-        name:
-          type: string
-          description: Operation name.
-          nullable: true
-        timeInSeconds:
-          minimum: 0
-          type: number
-          description: Time in seconds.
-          format: double
-          nullable: true
-          readOnly: true
-        timeInHours:
-          minimum: 0
-          type: number
-          description: Time in hours
-          format: double
-          nullable: true
-        ratePerSecond:
-          minimum: 0
-          type: number
-          description: Rate per second
-          format: double
-          nullable: true
-          readOnly: true
-        ratePerHour:
-          minimum: 0
-          type: number
-          description: Rate per hour
-          format: double
-          nullable: true
-      additionalProperties: false
-      description: Operation information
-    DomainOperationsRouting_Step_SetupTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
+      description: Rework details associated with a job operation.
   securitySchemes:
     bearer:
       type: http

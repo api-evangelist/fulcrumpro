@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code WorkCenter API
+  title: Fulcrum Public Work Center API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     post:
       tags:
       - WorkCenter
-      summary: Create a work center.
+      summary: Create a work center
       operationId: CreateWorkCenter
       requestBody:
         content:
@@ -47,7 +47,7 @@ paths:
     get:
       tags:
       - WorkCenter
-      summary: Get a workcenter.
+      summary: Get a workcenter
       operationId: GetWorkCenter
       parameters:
       - name: id
@@ -74,7 +74,7 @@ paths:
     put:
       tags:
       - WorkCenter
-      summary: Update a work center.
+      summary: Update a work center
       operationId: UpdateWorkCenter
       parameters:
       - name: id
@@ -120,7 +120,7 @@ paths:
     post:
       tags:
       - WorkCenter
-      summary: Find workcenters based on search parameters.
+      summary: Find workcenters based on search parameters
       operationId: ListWorkCenter
       parameters:
       - name: Sort.Field
@@ -181,58 +181,6 @@ paths:
       - Scheduling-Schedule-View Schedule
 components:
   schemas:
-    WorkCenterUpdateDto:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        departmentId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Department identifier. Please reference /api/departments endpoint.
-          nullable: true
-        setupRate:
-          minimum: 0
-          type: number
-          description: Hourly cost rate for setup.
-          format: double
-          nullable: true
-        laborRate:
-          minimum: 0
-          type: number
-          description: Hourly cost rate for labor.
-          format: double
-          nullable: true
-        overheadRate:
-          minimum: 0
-          type: number
-          description: Hourly cost rate for overhead.
-          format: double
-          nullable: true
-        machineRate:
-          minimum: 0
-          type: number
-          description: Hourly cost rate for machine. Providing a value turns on machine time for this work center.
-          format: double
-          nullable: true
-        equipmentIds:
-          type: array
-          items:
-            type: string
-          description: 'Identifiers of the equipment associated with this work center. Replaces the existing set.
-
-            Please reference /api/equipment endpoint.'
-          nullable: true
-      additionalProperties: false
-      description: 'Details of a work center to be updated. This is a full replacement: any field omitted
-
-        (department, rates, equipment) is treated as cleared.'
     WorkCenterCreateDto:
       required:
       - name
@@ -246,127 +194,105 @@ components:
         departmentId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Department identifier. Please reference /api/departments endpoint.
-          nullable: true
         setupRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for setup.
           format: double
-          nullable: true
         laborRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for labor.
           format: double
-          nullable: true
         overheadRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for overhead.
           format: double
-          nullable: true
         machineRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for machine. Providing a value turns on machine time for this work center.
           format: double
-          nullable: true
         equipmentIds:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
           description: Identifiers of the equipment associated with this work center. Please reference /api/equipment endpoint.
-          nullable: true
       additionalProperties: false
       description: Details of a work center to be created.
-    WorkCenterRequestFindParameters:
-      type: object
-      properties:
-        ids:
-          type: array
-          items:
-            type: string
-          description: Filter workcenters based on matching ids.
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Filter workcenters based on their name.
-          nullable: true
-      additionalProperties: false
-      description: Parameters used for searching/finding workcenters.
-    EquipmentDto:
+    WorkCenterUpdateDto:
       required:
-      - id
       - name
       type: object
       properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
         name:
           maxLength: 200
           minLength: 1
           type: string
           description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Description.
-          nullable: true
-        workCenterId:
+        departmentId:
           maxLength: 24
           minLength: 24
-          type: string
-          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
-          nullable: true
-        manufacturer:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Manufacturer.
-          nullable: true
-        modelNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Model number.
-          nullable: true
-        serialNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Serial number.
-          nullable: true
-        canRunUnattended:
-          type: boolean
-          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
+          type:
+          - string
+          - 'null'
+          description: Department identifier. Please reference /api/departments endpoint.
+        setupRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for setup.
+          format: double
+        laborRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for labor.
+          format: double
+        overheadRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for overhead.
+          format: double
+        machineRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for machine. Providing a value turns on machine time for this work center.
+          format: double
+        equipmentIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: 'Identifiers of the equipment associated with this work center. Replaces the existing set.
 
-            that utilizes this equipment to be scheduled outside of a shift.'
-          nullable: true
-        unlimitedCapacity:
-          type: boolean
-          description: Indicates if this equipment can support multiple operations simultaneously.
-          nullable: true
-        status:
-          $ref: '#/components/schemas/EquipmentStatus'
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Notes associated to the equipment.
-          nullable: true
-        deleted:
-          type: boolean
-          description: Indicates whether this equipment has been deleted
+            Please reference /api/equipment endpoint.'
       additionalProperties: false
-      description: Equipment definition.
+      description: 'Details of a work center to be updated. This is a full replacement: any field omitted
+
+        (department, rates, equipment) is treated as cleared.'
     WorkCenterDto:
       required:
       - id
@@ -386,39 +312,45 @@ components:
         departmentId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Department identifier. Please reference /api/departments endpoint.
-          nullable: true
         setupRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for setup.
           format: double
-          nullable: true
         runRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for run.
           format: double
-          nullable: true
         laborRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for labor.
           format: double
-          nullable: true
         overheadRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for overhead.
           format: double
-          nullable: true
         machineRate:
           minimum: 0
-          type: number
+          type:
+          - number
+          - 'null'
           description: Hourly cost rate for machine.
           format: double
-          nullable: true
         deleted:
           type: boolean
           description: Indicates whether this equipment has been deleted
@@ -429,14 +361,31 @@ components:
           description: Equipment associated with this workcenter.
       additionalProperties: false
       description: Workcenter definition.
-    EquipmentStatus:
+    WorkCenterRequestFindParameters:
+      type: object
+      properties:
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter workcenters based on matching ids.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter workcenters based on their name.
+      additionalProperties: false
+      description: Parameters used for searching/finding workcenters.
+    CommonEnumSortDirectionEnum:
       enum:
-      - good
-      - poor
-      - bad
-      - outOfService
+      - ascending
+      - descending
       type: string
-      description: Equipment status
+      description: Specify sorting direction.
     CreatedResponseDto:
       required:
       - id
@@ -448,12 +397,91 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CommonEnumSortDirectionEnum:
+    EquipmentStatus:
       enum:
-      - ascending
-      - descending
+      - good
+      - poor
+      - bad
+      - outOfService
       type: string
-      description: Specify sorting direction.
+      description: Equipment status
+    EquipmentDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Description.
+        workCenterId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
+        manufacturer:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Manufacturer.
+        modelNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Model number.
+        serialNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Serial number.
+        canRunUnattended:
+          type:
+          - boolean
+          - 'null'
+          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
+
+            that utilizes this equipment to be scheduled outside of a shift.'
+        unlimitedCapacity:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if this equipment can support multiple operations simultaneously.
+        status:
+          $ref: '#/components/schemas/EquipmentStatus'
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes associated to the equipment.
+        deleted:
+          type: boolean
+          description: Indicates whether this equipment has been deleted
+      additionalProperties: false
+      description: Equipment definition.
   securitySchemes:
     bearer:
       type: http

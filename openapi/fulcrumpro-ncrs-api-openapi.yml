@@ -1,6 +1,6 @@
-openapi: 3.0.4
+openapi: 3.2.0
 info:
-  title: Fulcrum Public Accounting Code NCRs API
+  title: Fulcrum Public NC Rs API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -11,7 +11,7 @@ paths:
     get:
       tags:
       - NCRs
-      summary: Get a specific NCR by id.
+      summary: Get a specific NCR by id
       operationId: GetNcr
       parameters:
       - name: ncrId
@@ -96,6 +96,99 @@ paths:
       - Quality-NCR-View NCR
 components:
   schemas:
+    CommonImpactDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID for this object.
+          format: uuid
+        operation:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        workCenter:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        scheduledEquipment:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        job:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        salesOrder:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        quantityImpacted:
+          type:
+          - number
+          - 'null'
+          description: Quantity Impacted
+          format: double
+        incrementalCost:
+          type:
+          - number
+          - 'null'
+          description: Incremental Cost
+          format: double
+      additionalProperties: false
+      description: Impact Dto.
+    NCRRequestNcrListParameters:
+      type: object
+      properties:
+        status:
+          type:
+          - string
+          - 'null'
+          description: 'Filter NCRs by a specific status
+
+            Accepted Values:
+
+            Closed, Hold, New, Quality Review, Engineering Review'
+        type:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs by a specific type. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        cause:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs by a specific cause. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs by a specific reason. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        createdUtc:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs created after a certain date
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching NCRs
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     NCRNcrDto:
       required:
       - cause
@@ -131,61 +224,71 @@ components:
         departmentId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Department key identifier. Please reference /api/departments endpoint.
-          nullable: true
         department:
           $ref: '#/components/schemas/CommonReferenceDto'
         vendorId:
           maxLength: 24
           minLength: 24
-          type: string
+          type:
+          - string
+          - 'null'
           description: Vendor key identifier. Please reference /api/vendors endpoint.
-          nullable: true
         vendor:
           $ref: '#/components/schemas/CommonReferenceDto'
         workCenters:
-          type: string
+          type:
+          - string
+          - 'null'
           description: The work centers assigned to this NCR.
-          nullable: true
           readOnly: true
         scheduledEquipment:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Affected Equipment
-          nullable: true
           readOnly: true
         reason:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Reason
-          nullable: true
         operator:
           $ref: '#/components/schemas/CommonReferenceDto'
         status:
-          type: string
+          type:
+          - string
+          - 'null'
           description: NCR Status
-          nullable: true
         quantityImpacted:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Quantity Impacted
           format: double
-          nullable: true
           readOnly: true
         incrementalCost:
-          type: number
+          type:
+          - number
+          - 'null'
           description: Incremental Cost
           format: double
-          nullable: true
           readOnly: true
         createdUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Created Date
           format: date-time
-          nullable: true
         completedUtc:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Completed Date
           format: date-time
-          nullable: true
         jobIds:
           type: array
           items:
@@ -193,83 +296,24 @@ components:
           description: Impacted Job IDs
           readOnly: true
         customFields:
-          type: object
+          type:
+          - object
+          - 'null'
           additionalProperties: {}
           description: Custom fields that have been defined on this entity.
-          nullable: true
         completedBy:
           $ref: '#/components/schemas/CommonReferenceDto'
         analyzedBy:
           $ref: '#/components/schemas/CommonReferenceDto'
         impacts:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/CommonImpactDto'
           description: Impact information.
-          nullable: true
       additionalProperties: false
       description: Represents an NCR
-    CommonImpactDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID for this object.
-          format: uuid
-        operation:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        workCenter:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        scheduledEquipment:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        job:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        salesOrder:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        quantityImpacted:
-          type: number
-          description: Quantity Impacted
-          format: double
-          nullable: true
-        incrementalCost:
-          type: number
-          description: Incremental Cost
-          format: double
-          nullable: true
-      additionalProperties: false
-      description: Impact Dto.
-    NCRRequestNcrListParameters:
-      type: object
-      properties:
-        status:
-          type: string
-          description: 'Filter NCRs by a specific status
-
-            Accepted Values:
-
-            Closed, Hold, New, Quality Review, Engineering Review'
-          nullable: true
-        type:
-          type: string
-          description: Filter NCRs by a specific type. Available values are configured per tenant in Quality settings (NCR dropdowns).
-          nullable: true
-        cause:
-          type: string
-          description: Filter NCRs by a specific cause. Available values are configured per tenant in Quality settings (NCR dropdowns).
-          nullable: true
-        reason:
-          type: string
-          description: Filter NCRs by a specific reason. Available values are configured per tenant in Quality settings (NCR dropdowns).
-          nullable: true
-        createdUtc:
-          type: string
-          description: Filter NCRs created after a certain date
-          format: date-time
-          nullable: true
-      additionalProperties: false
-      description: Parameters used for searching NCRs
     DtoPagedResultDtoNCRNcrDto:
       required:
       - data
@@ -315,29 +359,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-          nullable: true
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-          nullable: true
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
   securitySchemes:
     bearer:
       type: http
