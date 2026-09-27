@@ -100,6 +100,25 @@ paths:
       - System-Users-View Users
 components:
   schemas:
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
     UserListDto:
       required:
       - id
@@ -147,72 +166,6 @@ components:
           description: Indicates whether this user has been deleted
       additionalProperties: false
       description: User.
-    UserRequestFindParameters:
-      type: object
-      properties:
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter users based on their first name.
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter users based on their last name.
-        emailAddress:
-          type:
-          - string
-          - 'null'
-          description: Email address
-        phoneNumber:
-          type:
-          - string
-          - 'null'
-          description: Phone number
-        roles:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter users to those with any of the provided roles.
-        omniSearch:
-          type:
-          - string
-          - 'null'
-          description: Search for users based on a string that should match any of the user's first name, last name, email address, phone number or roles.
-      additionalProperties: false
-      description: Parameters used for searching/finding users.
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     UserDto:
       required:
       - id
@@ -267,6 +220,53 @@ components:
           description: Indicates whether this user has been deleted
       additionalProperties: false
       description: User.
+    UserRequestFindParameters:
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter users based on their first name.
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter users based on their last name.
+        emailAddress:
+          type:
+          - string
+          - 'null'
+          description: Email address
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter users to those with any of the provided roles.
+        omniSearch:
+          type:
+          - string
+          - 'null'
+          description: Search for users based on a string that should match any of the user's first name, last name, email address, phone number or roles.
+      additionalProperties: false
+      description: Parameters used for searching/finding users.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

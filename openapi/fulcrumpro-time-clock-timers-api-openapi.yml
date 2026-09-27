@@ -123,15 +123,6 @@ paths:
       - Time-Time-View Time Management
 components:
   schemas:
-    DomainTimeTrackingTimer_Type:
-      enum:
-      - setup
-      - run
-      - clockIn
-      - break
-      - labor
-      - machine
-      type: string
     DtoPagedResultDtoTimeClockDto:
       required:
       - data
@@ -177,18 +168,15 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    TimeClockClockInDto:
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the clock in to.  If not supplied, will use the user assigned to the api key used for authorization
-      additionalProperties: false
-      description: Model for clocking in via the public api
+    DomainTimeTrackingTimer_Type:
+      enum:
+      - setup
+      - run
+      - clockIn
+      - break
+      - labor
+      - machine
+      type: string
     DtoCommonDateRangeFilter:
       type: object
       properties:
@@ -206,31 +194,6 @@ components:
           format: date-time
       additionalProperties: false
       description: Date range used for filters
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    TimeClockRequestListTimeClocksParameters:
-      type: object
-      properties:
-        userId:
-          type:
-          - string
-          - 'null'
-          description: Filter timers based on who started it
-        startedDateRange:
-          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
-        stoppedDateRange:
-          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
-        runningTimersOnly:
-          type:
-          - boolean
-          - 'null'
-          description: Filter to only open timers
-      additionalProperties: false
-      description: Parameters used for searching time clocks
     TimeClockClockOutDto:
       type: object
       properties:
@@ -243,6 +206,24 @@ components:
           description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
       additionalProperties: false
       description: Model for clocking a user out
+    TimeClockClockInDto:
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the clock in to.  If not supplied, will use the user assigned to the api key used for authorization
+      additionalProperties: false
+      description: Model for clocking in via the public api
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     TimeClockDto:
       type: object
       properties:
@@ -286,6 +267,25 @@ components:
           description: The tag identifier for the clock in code
       additionalProperties: false
       description: Data transfer object for Timer entity
+    TimeClockRequestListTimeClocksParameters:
+      type: object
+      properties:
+        userId:
+          type:
+          - string
+          - 'null'
+          description: Filter timers based on who started it
+        startedDateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        stoppedDateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        runningTimersOnly:
+          type:
+          - boolean
+          - 'null'
+          description: Filter to only open timers
+      additionalProperties: false
+      description: Parameters used for searching time clocks
   securitySchemes:
     bearer:
       type: http

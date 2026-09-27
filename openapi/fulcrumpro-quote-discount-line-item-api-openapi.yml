@@ -103,20 +103,13 @@ paths:
       - Orders-Quotes-Edit Quote
 components:
   schemas:
-    QuoteDiscountLineItemDto:
+    QuoteDiscountLineItemUpdateDto:
       required:
-      - accountingDetails
       - amount
-      - id
       - isPercentage
       - name
       type: object
       properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
         name:
           maxLength: 200
           minLength: 1
@@ -128,21 +121,15 @@ components:
           type:
           - string
           - 'null'
-          description: The name of the discount line.
+          description: The description of the discount line.
         isPercentage:
           type: boolean
-          description: Indicates whether FulcrumProduct.PublicApi.Dto.Quote.DiscountLineItem.DiscountLineItemDto.Amount discount is percentage based (else, it's an absolute amount).
+          description: Indicates whether "Amount" value is percentage based or an absolute amount.
         amount:
           minimum: 0
           type: number
           description: The amount of the discount.
           format: double
-        number:
-          type: integer
-          description: Line number
-          format: int32
-        accountingDetails:
-          $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Represents a discount line item on a quote.
     CommonAccountingDetailsDto:
@@ -185,13 +172,20 @@ components:
           description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
       description: An object that contains all accounting details.
-    QuoteDiscountLineItemUpdateDto:
+    QuoteDiscountLineItemDto:
       required:
+      - accountingDetails
       - amount
+      - id
       - isPercentage
       - name
       type: object
       properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
         name:
           maxLength: 200
           minLength: 1
@@ -203,15 +197,21 @@ components:
           type:
           - string
           - 'null'
-          description: The description of the discount line.
+          description: The name of the discount line.
         isPercentage:
           type: boolean
-          description: Indicates whether "Amount" value is percentage based or an absolute amount.
+          description: Indicates whether FulcrumProduct.PublicApi.Dto.Quote.DiscountLineItem.DiscountLineItemDto.Amount discount is percentage based (else, it's an absolute amount).
         amount:
           minimum: 0
           type: number
           description: The amount of the discount.
           format: double
+        number:
+          type: integer
+          description: Line number
+          format: int32
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Represents a discount line item on a quote.
   securitySchemes:

@@ -39,82 +39,6 @@ paths:
       - Invoicing-Invoicing-View Invoices
 components:
   schemas:
-    InvoiceShippingChargeLineItemDto:
-      required:
-      - accountingDetails
-      - amount
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The name of the shipping charge line.
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The description of the shipping charge line.
-        amount:
-          minimum: 0
-          type: number
-          description: The amount of the charge.
-          format: double
-        isTaxable:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if this line item is taxable.
-        overrideTaxRate:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if the tax rate is overridden.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Invoice.ShippingChargeLineItem.ShippingChargeLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Invoice.ShippingChargeLineItem.ShippingChargeLineItemDto.TaxRate will supercede the defined tax rate.
-          format: double
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-        salesOrderLineItemId:
-          maxLength: 36
-          minLength: 36
-          type:
-          - string
-          - 'null'
-          description: Related sales order line item id.
-        number:
-          type: integer
-          description: Line number
-          format: int32
-        accountingDetails:
-          $ref: '#/components/schemas/CommonAccountingDetailsDto'
-      additionalProperties: false
-      description: Represents a shipping charge line item on an invoice.
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -209,6 +133,82 @@ components:
           description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
       description: An object that contains all accounting details.
+    InvoiceShippingChargeLineItemDto:
+      required:
+      - accountingDetails
+      - amount
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of the shipping charge line.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The description of the shipping charge line.
+        amount:
+          minimum: 0
+          type: number
+          description: The amount of the charge.
+          format: double
+        isTaxable:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if this line item is taxable.
+        overrideTaxRate:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if the tax rate is overridden.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Invoice.ShippingChargeLineItem.ShippingChargeLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Invoice.ShippingChargeLineItem.ShippingChargeLineItemDto.TaxRate will supercede the defined tax rate.
+          format: double
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        salesOrderLineItemId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: Related sales order line item id.
+        number:
+          type: integer
+          description: Line number
+          format: int32
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+      additionalProperties: false
+      description: Represents a shipping charge line item on an invoice.
   securitySchemes:
     bearer:
       type: http

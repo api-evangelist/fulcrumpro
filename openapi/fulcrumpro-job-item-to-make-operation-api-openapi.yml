@@ -342,121 +342,6 @@ paths:
       - Jobs-Jobs-Edit In Progress Job
 components:
   schemas:
-    JobItemToMakeOperationPickInventoryDto:
-      required:
-      - itemId
-      - quantity
-      type: object
-      properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The identifier of the item to be picked. Please reference api/items endpoint
-        quantity:
-          type: number
-          description: Quantity of the item to pick.
-          format: double
-        locationId:
-          type:
-          - string
-          - 'null'
-          description: 'ID of the location to pick from. If not set or set to an empty string, will
-
-            pick from inventory not assigned to a location. Cannot be set if FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.UseDefaultLocation
-
-            is set to ```true```.'
-        useDefaultLocation:
-          type: boolean
-          description: 'If set to true, inventory will be picked from the default location for the item. If set to true,
-
-            FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.LocationId cannot be set.  If the item does not have a default location set and this
-
-            is set to true, will pick from inventory not assigned to a location.'
-        lotId:
-          type:
-          - string
-          - 'null'
-          description: The ID of the lot to pick from.
-      additionalProperties: false
-      description: Pick event for an input item
-    DomainOperationsRouting_Step_SetupTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-    DomainOperationsRouting_Step_RunTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      - unitsPerHour
-      type: string
-    ItemToMakeOperationMaterialRequiredDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: 'Identifier of the material shape.
-
-            Please reference /api/material-shapes endpoint.'
-        name:
-          minLength: 1
-          type: string
-          description: Name of the material shape required
-      additionalProperties: false
-      description: Represents a required input material for a job operation
-    JobItemToMakeOpStatusEnum:
-      enum:
-      - pending
-      - ready
-      - running
-      - paused
-      - complete
-      - cancelled
-      type: string
-      description: Job Item to Make Operation status
-    ItemsToMakeOperationsAddQuantityCompletedRequest:
-      required:
-      - additionalQuantity
-      type: object
-      properties:
-        additionalQuantity:
-          type: number
-          description: 'The additional quantity to add to the operation''s completed quantity.
-
-            Must be greater than zero.'
-          format: double
-      additionalProperties: false
-      description: Request to add additional quantity completed to a job operation
-    ItemToMakeOperationItemRequiredDto:
-      required:
-      - itemId
-      - itemNumber
-      type: object
-      properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Identifier of the required item.
-
-            Please reference /api/items endpoint.'
-        itemNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Item number of the required item
-        revision:
-          type:
-          - string
-          - 'null'
-          description: Revision of the required item
-      additionalProperties: false
-      description: Represents a required input item for a job operation
     ItemsToMakeOperationsAddQuantityCompletedResponse:
       required:
       - additionalQuantityAdded
@@ -503,6 +388,132 @@ components:
           description: The current status of the operation
       additionalProperties: false
       description: Response after adding additional quantity completed to a job operation
+    ItemToMakeOperationUpdateDto:
+      type: object
+      properties:
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: The custom fields to update on the operation object
+      additionalProperties: false
+      description: Represents an routing operation on a job item to make
+    DomainOperationsRouting_Step_SetupTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+    JobItemToMakeOpStatusEnum:
+      enum:
+      - pending
+      - ready
+      - running
+      - paused
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make Operation status
+    DomainOperationsRouting_Step_RunTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      - unitsPerHour
+      type: string
+    ItemsToMakeOperationsAddQuantityCompletedRequest:
+      required:
+      - additionalQuantity
+      type: object
+      properties:
+        additionalQuantity:
+          type: number
+          description: 'The additional quantity to add to the operation''s completed quantity.
+
+            Must be greater than zero.'
+          format: double
+      additionalProperties: false
+      description: Request to add additional quantity completed to a job operation
+    JobItemToMakeOperationPickInventoryDto:
+      required:
+      - itemId
+      - quantity
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The identifier of the item to be picked. Please reference api/items endpoint
+        quantity:
+          type: number
+          description: Quantity of the item to pick.
+          format: double
+        locationId:
+          type:
+          - string
+          - 'null'
+          description: 'ID of the location to pick from. If not set or set to an empty string, will
+
+            pick from inventory not assigned to a location. Cannot be set if FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.UseDefaultLocation
+
+            is set to ```true```.'
+        useDefaultLocation:
+          type: boolean
+          description: 'If set to true, inventory will be picked from the default location for the item. If set to true,
+
+            FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.LocationId cannot be set.  If the item does not have a default location set and this
+
+            is set to true, will pick from inventory not assigned to a location.'
+        lotId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the lot to pick from.
+      additionalProperties: false
+      description: Pick event for an input item
+    ItemToMakeOperationItemRequiredDto:
+      required:
+      - itemId
+      - itemNumber
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the required item.
+
+            Please reference /api/items endpoint.'
+        itemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Item number of the required item
+        revision:
+          type:
+          - string
+          - 'null'
+          description: Revision of the required item
+      additionalProperties: false
+      description: Represents a required input item for a job operation
+    ItemToMakeOperationMaterialRequiredDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: 'Identifier of the material shape.
+
+            Please reference /api/material-shapes endpoint.'
+        name:
+          minLength: 1
+          type: string
+          description: Name of the material shape required
+      additionalProperties: false
+      description: Represents a required input material for a job operation
     ItemToMakeOperationDto:
       required:
       - id
@@ -657,17 +668,6 @@ components:
           description: 'Identifier of work order that this operation is associated to, if applicable.
 
             Please reference api/work-orders endpoint.'
-      additionalProperties: false
-      description: Represents an routing operation on a job item to make
-    ItemToMakeOperationUpdateDto:
-      type: object
-      properties:
-        customFields:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: The custom fields to update on the operation object
       additionalProperties: false
       description: Represents an routing operation on a job item to make
   securitySchemes:

@@ -212,11 +212,207 @@ paths:
       - Invoicing-Invoicing-Edit Invoices
 components:
   schemas:
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    CommonAddressDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Second address line.
+        address3:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Third address line.
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Address state/province.
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Country identifier.
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          format: tel
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: Address definition
+    InvoiceRequestFindParameters:
+      type: object
+      properties:
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Filter invoices to only given numbers
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+      additionalProperties: false
+      description: Parameters used for searching/finding invoices.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    InvoiceRequestUpdateStatus:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+        paidDate:
+          type:
+          - string
+          - 'null'
+          description: The date that the invoice was paid.
+          format: date-time
+      additionalProperties: false
+      description: Update an invoice status.
     JsonPatchDocument:
       type: array
       items:
         $ref: '#/components/schemas/JsonPatchOperation'
       description: Array of operations to perform
+    InvoiceStatusEnum:
+      enum:
+      - new
+      - needsApproval
+      - approved
+      - issued
+      - paid
+      type: string
+      description: Invoice status
     InvoiceUpdateDto:
       type: object
       properties:
@@ -344,6 +540,30 @@ components:
           description: Indicates whether this invoice has been deleted
       additionalProperties: false
       description: Represents an invoice
+    CurrencyInfoDto:
+      required:
+      - documentCurrencyCode
+      - primaryCurrencyCode
+      type: object
+      properties:
+        documentCurrencyCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Document Currency Code
+        primaryCurrencyCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary Currency Code
+      additionalProperties: false
+      description: Currency Info Dto
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     CommonExternalReferenceFindDto:
       required:
       - key
@@ -370,226 +590,6 @@ components:
           description: The external identifier
       additionalProperties: false
       description: Search parameter for identifier record(s) via their external identifiers.
-    InvoiceRequestUpdateStatus:
-      required:
-      - status
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/InvoiceStatusEnum'
-        paidDate:
-          type:
-          - string
-          - 'null'
-          description: The date that the invoice was paid.
-          format: date-time
-      additionalProperties: false
-      description: Update an invoice status.
-    CurrencyInfoDto:
-      required:
-      - documentCurrencyCode
-      - primaryCurrencyCode
-      type: object
-      properties:
-        documentCurrencyCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Document Currency Code
-        primaryCurrencyCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary Currency Code
-      additionalProperties: false
-      description: Currency Info Dto
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    CommonAddressDto:
-      required:
-      - address1
-      - city
-      - postalCode
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-        address1:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary address line.
-        address2:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Second address line.
-        address3:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Third address line.
-        city:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address city
-        stateProvince:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Address state/province.
-        postalCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Postal/zip code.
-        country:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Country identifier.
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number.
-          format: tel
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-      additionalProperties: false
-      description: Address definition
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    InvoiceRequestFindParameters:
-      type: object
-      properties:
-        numbers:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-          description: Filter invoices to only given numbers
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-        status:
-          $ref: '#/components/schemas/InvoiceStatusEnum'
-      additionalProperties: false
-      description: Parameters used for searching/finding invoices.
-    InvoiceStatusEnum:
-      enum:
-      - new
-      - needsApproval
-      - approved
-      - issued
-      - paid
-      type: string
-      description: Invoice status
   securitySchemes:
     bearer:
       type: http

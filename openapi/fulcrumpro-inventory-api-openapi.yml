@@ -284,15 +284,6 @@ components:
           description: Notes associated to this transaction.
       additionalProperties: false
       description: Pick event for item inventory.
-    InventoryPickEventSecondaryType:
-      enum:
-      - pick
-      - consume
-      - scrap
-      - stockAdjustmentDecrease
-      - otherDecrease
-      type: string
-      description: Secondary event type specifically for picking.
     InventoryReceiveDto:
       required:
       - itemId
@@ -401,6 +392,29 @@ components:
           description: The note to add to the override transaction.
       additionalProperties: false
       description: Override event for item inventory
+    InventoryPickEventSecondaryType:
+      enum:
+      - pick
+      - consume
+      - scrap
+      - stockAdjustmentDecrease
+      - otherDecrease
+      type: string
+      description: Secondary event type specifically for picking.
+    InventoryReceiveEventSecondaryType:
+      enum:
+      - receive
+      - found
+      - stockAdjustmentIncrease
+      - otherIncrease
+      type: string
+      description: Secondary event type specifically for receiving.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     InventoryDto:
       required:
       - id
@@ -458,20 +472,6 @@ components:
           description: The description of the item
       additionalProperties: false
       description: An item inventory record.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    InventoryReceiveEventSecondaryType:
-      enum:
-      - receive
-      - found
-      - stockAdjustmentIncrease
-      - otherIncrease
-      type: string
-      description: Secondary event type specifically for receiving.
   securitySchemes:
     bearer:
       type: http

@@ -200,6 +200,59 @@ paths:
       - Customer-Customers-View Customer
 components:
   schemas:
+    CustomerContactUpdateDto:
+      required:
+      - firstName
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Position / Job Title
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        cellPhone:
+          type:
+          - string
+          - 'null'
+          description: Cellphone number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: A customer contact
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     CustomerContactCreateDto:
       required:
       - firstName
@@ -289,59 +342,6 @@ components:
           format: email
       additionalProperties: false
       description: A customer contact
-    CustomerContactUpdateDto:
-      required:
-      - firstName
-      type: object
-      properties:
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Last name
-        position:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Position / Job Title
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number
-        cellPhone:
-          type:
-          - string
-          - 'null'
-          description: Cellphone number
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-      additionalProperties: false
-      description: A customer contact
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

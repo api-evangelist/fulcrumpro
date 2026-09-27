@@ -274,11 +274,28 @@ paths:
       - Orders-PurchaseOrders-View Purchase Order
 components:
   schemas:
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
+    PurchaseOrderLineItemTaxAllocationResponseDto:
+      type: object
+      properties:
+        appliedTaxes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
+          description: 'Tax amounts allocated to this line item from PO-level tax lines.
+
+            Null if the line item is not taxable or has no tax allocations.'
+        totalTax:
+          type:
+          - number
+          - 'null'
+          description: 'Total tax amount allocated to this line item across all applicable tax lines.
+
+            Null if the line item is not taxable.'
+          format: double
+      additionalProperties: false
+      description: Tax allocation data for a purchase order line item.
     PurchaseOrderFeeLineItemCreateDto:
       required:
       - price
@@ -357,46 +374,6 @@ components:
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
       description: Represents a fee line item on a purchase order.
-    CommonAccountingDetailsDto:
-      type: object
-      properties:
-        classId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-      additionalProperties: false
-      description: An object that contains all accounting details.
     PurchaseOrderAppliedTaxDto:
       required:
       - taxAmount
@@ -435,6 +412,15 @@ components:
           format: double
       additionalProperties: false
       description: Represents a tax allocation from a PO-level tax line item to an individual line item.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -489,135 +475,11 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    CommonEnumLineItemUomEnum:
-      enum:
-      - notApplicable
-      - piece
-      - linearFeet
-      - hour
-      - yard
-      type: string
-      description: Line item unit of measure.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    PurchaseOrderLineItemTaxAllocationResponseDto:
-      type: object
-      properties:
-        appliedTaxes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
-          description: 'Tax amounts allocated to this line item from PO-level tax lines.
-
-            Null if the line item is not taxable or has no tax allocations.'
-        totalTax:
-          type:
-          - number
-          - 'null'
-          description: 'Total tax amount allocated to this line item across all applicable tax lines.
-
-            Null if the line item is not taxable.'
-          format: double
-      additionalProperties: false
-      description: Tax allocation data for a purchase order line item.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    PurchaseOrderFeeLineItemUpdateDto:
-      required:
-      - price
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Verbose name for this entity.
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        quantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The line item quantity. Required for receivable line items.
-          format: double
-        price:
-          minimum: 0
-          type: number
-          description: The line item price.
-          format: double
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-        unitOfMeasure:
-          $ref: '#/components/schemas/CommonEnumLineItemUomEnum'
-        isReceivable:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if this fee is receivable. If not provided, defaults to false.
-        isTaxable:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if this fee is taxable. If not provided, defaults to false.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.PurchaseOrder.FeeLineItem.FeeLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.PurchaseOrder.FeeLineItem.FeeLineItemUpdateDto.TaxRate will supercede the defined tax rate.
-          format: double
-        overrideTaxRate:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate if the tax supplied is intended to be an override.
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents a fee line item on a purchase order.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     PurchaseOrderFeeLineItemDto:
       required:
       - accountingDetails
@@ -706,6 +568,144 @@ components:
           format: int32
         accountingDetails:
           $ref: '#/components/schemas/CommonAccountingDetailsDto'
+      additionalProperties: false
+      description: Represents a fee line item on a purchase order.
+    CommonEnumLineItemUomEnum:
+      enum:
+      - notApplicable
+      - piece
+      - linearFeet
+      - hour
+      - yard
+      type: string
+      description: Line item unit of measure.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
+    PurchaseOrderFeeLineItemUpdateDto:
+      required:
+      - price
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Verbose name for this entity.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The line item quantity. Required for receivable line items.
+          format: double
+        price:
+          minimum: 0
+          type: number
+          description: The line item price.
+          format: double
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        unitOfMeasure:
+          $ref: '#/components/schemas/CommonEnumLineItemUomEnum'
+        isReceivable:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if this fee is receivable. If not provided, defaults to false.
+        isTaxable:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if this fee is taxable. If not provided, defaults to false.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.PurchaseOrder.FeeLineItem.FeeLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.PurchaseOrder.FeeLineItem.FeeLineItemUpdateDto.TaxRate will supercede the defined tax rate.
+          format: double
+        overrideTaxRate:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if the tax supplied is intended to be an override.
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
       description: Represents a fee line item on a purchase order.
   securitySchemes:

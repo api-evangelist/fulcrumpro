@@ -111,46 +111,38 @@ paths:
       - Orders-PurchaseOrders-View Purchase Order
 components:
   schemas:
-    CommonAccountingDetailsDto:
+    PurchaseOrderLineItemTaxAllocationResponseDto:
       type: object
       properties:
-        classId:
-          maxLength: 24
-          minLength: 24
+        appliedTaxes:
           type:
-          - string
+          - array
           - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
+          items:
+            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
+          description: 'Tax amounts allocated to this line item from PO-level tax lines.
+
+            Null if the line item is not taxable or has no tax allocations.'
+        totalTax:
           type:
-          - string
+          - number
           - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          description: 'Total tax amount allocated to this line item across all applicable tax lines.
+
+            Null if the line item is not taxable.'
+          format: double
       additionalProperties: false
-      description: An object that contains all accounting details.
+      description: Tax allocation data for a purchase order line item.
+    PurchaseOrderLineItemTypeEnum:
+      enum:
+      - part
+      - outsideProcessing
+      - tax
+      - discount
+      - fee
+      - vendorCredit
+      type: string
+      description: Purchase order line item type
     PurchaseOrderAppliedTaxDto:
       required:
       - taxAmount
@@ -243,38 +235,6 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    PurchaseOrderLineItemTypeEnum:
-      enum:
-      - part
-      - outsideProcessing
-      - tax
-      - discount
-      - fee
-      - vendorCredit
-      type: string
-      description: Purchase order line item type
-    PurchaseOrderLineItemTaxAllocationResponseDto:
-      type: object
-      properties:
-        appliedTaxes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
-          description: 'Tax amounts allocated to this line item from PO-level tax lines.
-
-            Null if the line item is not taxable or has no tax allocations.'
-        totalTax:
-          type:
-          - number
-          - 'null'
-          description: 'Total tax amount allocated to this line item across all applicable tax lines.
-
-            Null if the line item is not taxable.'
-          format: double
-      additionalProperties: false
-      description: Tax allocation data for a purchase order line item.
     PurchaseOrderLineItemDto:
       required:
       - accountingDetails
@@ -389,6 +349,46 @@ components:
           $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Represents a generic line item on a purchase order.
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
   securitySchemes:
     bearer:
       type: http

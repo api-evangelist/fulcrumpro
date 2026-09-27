@@ -103,6 +103,31 @@ paths:
                   $ref: '#/components/schemas/NoteDto'
 components:
   schemas:
+    NoteTypeEnum:
+      enum:
+      - salesOrder
+      - purchaseOrder
+      - quote
+      - invoice
+      type: string
+      description: Note parent document type
+    NoteRequestFindParameters:
+      required:
+      - parentId
+      - parentType
+      type: object
+      properties:
+        parentType:
+          $ref: '#/components/schemas/NoteTypeEnum'
+        parentId:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: 'Filter notes by parent Id.
+
+            Either 24 or 36 characters, depending on parent type'
+      additionalProperties: false
+      description: Parameters used for searching notes
     NoteCreateDto:
       required:
       - body
@@ -133,6 +158,17 @@ components:
           description: User Ids to tag in the note. Please reference /api/users endpoints.
       additionalProperties: false
       description: Represents a note on a document
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     NoteDto:
       required:
       - id
@@ -170,42 +206,6 @@ components:
           description: User Ids to tag in the note. Please reference /api/users endpoints.
       additionalProperties: false
       description: Represents a note on a document
-    NoteTypeEnum:
-      enum:
-      - salesOrder
-      - purchaseOrder
-      - quote
-      - invoice
-      type: string
-      description: Note parent document type
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    NoteRequestFindParameters:
-      required:
-      - parentId
-      - parentType
-      type: object
-      properties:
-        parentType:
-          $ref: '#/components/schemas/NoteTypeEnum'
-        parentId:
-          maxLength: 36
-          minLength: 24
-          type: string
-          description: 'Filter notes by parent Id.
-
-            Either 24 or 36 characters, depending on parent type'
-      additionalProperties: false
-      description: Parameters used for searching notes
   securitySchemes:
     bearer:
       type: http

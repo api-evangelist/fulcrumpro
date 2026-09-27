@@ -286,6 +286,17 @@ components:
           description: General notes associated to this customer address
       additionalProperties: false
       description: Address with additional context for updating for a customer
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     CustomerAddressDto:
       required:
       - address1
@@ -478,17 +489,6 @@ components:
           description: General notes associated to this customer address
       additionalProperties: false
       description: Address with additional context
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

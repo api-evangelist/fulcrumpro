@@ -254,6 +254,68 @@ paths:
       - ItemsAndInventory-Items-Edit Item
 components:
   schemas:
+    MaterialShapeVendorCreateDto:
+      required:
+      - priceBreaks
+      - priceUnit
+      - vendorId
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        leadTimeInDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead time for this vendor.
+          format: int32
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Vendor with additional context for a material.
+    MaterialVendorUpdateMaterialVendorRequestDto:
+      required:
+      - materialId
+      - priceBreaks
+      type: object
+      properties:
+        materialId:
+          minLength: 1
+          type: string
+          description: Unique id of the material whose vendor will be updated.
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        leadTimeInDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead time for this vendor.
+          format: int32
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: 'Request parameters for updating a vendor on a material.
+
+        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
+
+        which cannot be round-tripped through URL path segments.'
     MaterialVendorCreateMaterialVendorRequestDto:
       required:
       - materialId
@@ -309,28 +371,6 @@ components:
         Introduced for the v2 endpoint because material ids may contain ''/'' characters,
 
         which cannot be round-tripped through URL path segments.'
-    MaterialShapeVendorUpdateDto:
-      required:
-      - priceBreaks
-      type: object
-      properties:
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this material.
-        leadTimeInDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead time for this vendor.
-          format: int32
-        priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
-          description: Vendor price breaks
-      additionalProperties: false
-      description: Vendor with additional context for a material.
     MaterialShapeVendorPriceBreakDto:
       required:
       - id
@@ -353,103 +393,6 @@ components:
           format: double
       additionalProperties: false
       description: Vendor prices breaks for a material shape.
-    MaterialVendorUpdateMaterialVendorRequestDto:
-      required:
-      - materialId
-      - priceBreaks
-      type: object
-      properties:
-        materialId:
-          minLength: 1
-          type: string
-          description: Unique id of the material whose vendor will be updated.
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this material.
-        leadTimeInDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead time for this vendor.
-          format: int32
-        priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
-          description: Vendor price breaks
-      additionalProperties: false
-      description: 'Request parameters for updating a vendor on a material.
-
-        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
-
-        which cannot be round-tripped through URL path segments.'
-    MaterialShapeVendorCreateDto:
-      required:
-      - priceBreaks
-      - priceUnit
-      - vendorId
-      type: object
-      properties:
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
-        priceUnit:
-          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this material.
-        leadTimeInDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead time for this vendor.
-          format: int32
-        priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
-          description: Vendor price breaks
-      additionalProperties: false
-      description: Vendor with additional context for a material.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    CommonEnumMaterialVendorPriceUnitEnum:
-      enum:
-      - kilogram
-      - pound
-      type: string
-      description: Specifies how a routing input item quantity is measured.
-    MaterialShapeVendorPriceBreakCreateDto:
-      required:
-      - price
-      - quantity
-      type: object
-      properties:
-        quantity:
-          minimum: 0
-          type: integer
-          description: The minimum quantity to associate this price break to.
-          format: int32
-        price:
-          minimum: 0
-          type: number
-          description: The price per unit.
-          format: double
-      additionalProperties: false
-      description: Vendor prices break create/update for a material shape.
     MaterialShapeVendorDto:
       required:
       - id
@@ -492,6 +435,63 @@ components:
           description: Vendor price breaks
       additionalProperties: false
       description: Material vendor definition
+    MaterialShapeVendorPriceBreakCreateDto:
+      required:
+      - price
+      - quantity
+      type: object
+      properties:
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          minimum: 0
+          type: number
+          description: The price per unit.
+          format: double
+      additionalProperties: false
+      description: Vendor prices break create/update for a material shape.
+    CommonEnumMaterialVendorPriceUnitEnum:
+      enum:
+      - kilogram
+      - pound
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    MaterialShapeVendorUpdateDto:
+      required:
+      - priceBreaks
+      type: object
+      properties:
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        leadTimeInDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead time for this vendor.
+          format: int32
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Vendor with additional context for a material.
   securitySchemes:
     bearer:
       type: http

@@ -160,6 +160,48 @@ components:
           description: Filter by whether the lot is considered a system-generated lot.
       additionalProperties: false
       description: Parameters used for searching/finding inventory lots.
+    InventoryLotCreateDto:
+      required:
+      - itemId
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The name of the lot. It is not guaranteed to be unique inventory-wide, but only within an item.
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The item id that is associated to this lot. Please reference /api/items endpoint.
+        expirationDate:
+          type:
+          - string
+          - 'null'
+          description: The date that this lot is supposed to expire.
+          format: date-time
+      additionalProperties: false
+      description: Details of the inventory lot to be created.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     InventoryLotDto:
       required:
       - custom
@@ -202,48 +244,6 @@ components:
           format: date-time
       additionalProperties: false
       description: Inventory lot definition.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    InventoryLotCreateDto:
-      required:
-      - itemId
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The name of the lot. It is not guaranteed to be unique inventory-wide, but only within an item.
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The item id that is associated to this lot. Please reference /api/items endpoint.
-        expirationDate:
-          type:
-          - string
-          - 'null'
-          description: The date that this lot is supposed to expire.
-          format: date-time
-      additionalProperties: false
-      description: Details of the inventory lot to be created.
   securitySchemes:
     bearer:
       type: http

@@ -68,40 +68,6 @@ paths:
       - ItemsAndInventory-Items-View Inventory
 components:
   schemas:
-    V2InventoryDataEventSourceType:
-      enum:
-      - purchaseOrder
-      - job
-      - shipment
-      - shipmentLineItem
-      - shipping
-      - receiving
-      - item
-      - workOrder
-      - salesOrder
-      - jobOperation
-      - workOrderOperation
-      - fulfillment
-      - itemToMakeMaterialRemnant
-      - poRcvValueAdj
-      type: string
-    DtoCommonDateRangeFilter:
-      type: object
-      properties:
-        start:
-          type:
-          - string
-          - 'null'
-          description: Inclusive start date to filter by
-          format: date-time
-        end:
-          type:
-          - string
-          - 'null'
-          description: Inclusive end date to filter by
-          format: date-time
-      additionalProperties: false
-      description: Date range used for filters
     CommonReferenceDto:
       type: object
       properties:
@@ -121,47 +87,29 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a reference to a document in a DB collection
-    InventoryEventSecondaryType:
-      enum:
-      - pick
-      - receive
-      - override
-      - revert
-      - deposit
-      - create
-      - consume
-      - ship
-      - sold
-      - transferOut
-      - transferIn
-      - found
-      - expired
-      - damaged
-      - lost
-      - returnVendor
-      - returnStock
-      - receivedNoPo
-      - returnIncrease
-      - returnDecrease
-      - otherIncrease
-      - otherDecrease
-      - scrap
-      - waste
-      - transferredFromSalesOrder
-      - overrideItemValue
-      - transferFromLot
-      - transferToLot
-      - stockAdjustmentIncrease
-      - stockAdjustmentDecrease
-      - stockTake
-      type: string
-      description: Secondary, verbose description for an event.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
+    InventoryTransactionsListParameters:
+      type: object
+      properties:
+        itemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter inventory transactions based on item identifiers.
+        dateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        sourceType:
+          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
+        relatedEntityType:
+          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
+        relatedEntityId:
+          type:
+          - string
+          - 'null'
+          description: The transaction's related entity identifier
+      additionalProperties: false
+      description: Parameters used for searching inventory transactions
     InventoryEventType:
       enum:
       - pick
@@ -172,6 +120,29 @@ components:
       - eventOverride
       type: string
       description: Primary inventory event type.
+    DtoCommonDateRangeFilter:
+      type: object
+      properties:
+        start:
+          type:
+          - string
+          - 'null'
+          description: Inclusive start date to filter by
+          format: date-time
+        end:
+          type:
+          - string
+          - 'null'
+          description: Inclusive end date to filter by
+          format: date-time
+      additionalProperties: false
+      description: Date range used for filters
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     InventoryTransactionDto:
       type: object
       properties:
@@ -226,6 +197,58 @@ components:
           readOnly: true
       additionalProperties: false
       description: An inventory transaction
+    InventoryEventSecondaryType:
+      enum:
+      - pick
+      - receive
+      - override
+      - revert
+      - deposit
+      - create
+      - consume
+      - ship
+      - sold
+      - transferOut
+      - transferIn
+      - found
+      - expired
+      - damaged
+      - lost
+      - returnVendor
+      - returnStock
+      - receivedNoPo
+      - returnIncrease
+      - returnDecrease
+      - otherIncrease
+      - otherDecrease
+      - scrap
+      - waste
+      - transferredFromSalesOrder
+      - overrideItemValue
+      - transferFromLot
+      - transferToLot
+      - stockAdjustmentIncrease
+      - stockAdjustmentDecrease
+      - stockTake
+      type: string
+      description: Secondary, verbose description for an event.
+    V2InventoryDataEventSourceType:
+      enum:
+      - purchaseOrder
+      - job
+      - shipment
+      - shipmentLineItem
+      - shipping
+      - receiving
+      - item
+      - workOrder
+      - salesOrder
+      - jobOperation
+      - workOrderOperation
+      - fulfillment
+      - itemToMakeMaterialRemnant
+      - poRcvValueAdj
+      type: string
     DtoPagedResultDtoInventoryTransactionDto:
       required:
       - data
@@ -271,29 +294,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    InventoryTransactionsListParameters:
-      type: object
-      properties:
-        itemIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter inventory transactions based on item identifiers.
-        dateRange:
-          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
-        sourceType:
-          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
-        relatedEntityType:
-          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
-        relatedEntityId:
-          type:
-          - string
-          - 'null'
-          description: The transaction's related entity identifier
-      additionalProperties: false
-      description: Parameters used for searching inventory transactions
   securitySchemes:
     bearer:
       type: http

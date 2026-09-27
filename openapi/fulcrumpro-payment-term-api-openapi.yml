@@ -132,24 +132,6 @@ paths:
                   $ref: '#/components/schemas/CommonPaymentTermDto'
 components:
   schemas:
-    CommonPaymentTermCreateDto:
-      required:
-      - dueDays
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        dueDays:
-          minimum: 0
-          type: integer
-          description: Due days.
-          format: int32
-      additionalProperties: false
-      description: Payment terms definition.
     CommonPaymentTermDto:
       required:
       - deleted
@@ -189,12 +171,6 @@ components:
           description: Filter payment terms based on their name.
       additionalProperties: false
       description: Parameters used for searching/finding payment terms.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     CreatedResponseDto:
       required:
       - id
@@ -206,6 +182,30 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    CommonPaymentTermCreateDto:
+      required:
+      - dueDays
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        dueDays:
+          minimum: 0
+          type: integer
+          description: Due days.
+          format: int32
+      additionalProperties: false
+      description: Payment terms definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

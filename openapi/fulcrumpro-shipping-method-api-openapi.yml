@@ -96,6 +96,25 @@ paths:
                   $ref: '#/components/schemas/ShippingMethodDto'
 components:
   schemas:
+    ShippingMethodRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter shipping methods based on their name.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter shipping methods based on matching ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding shipping methods.
     ShippingMethodDto:
       required:
       - id
@@ -120,25 +139,6 @@ components:
       - descending
       type: string
       description: Specify sorting direction.
-    ShippingMethodRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter shipping methods based on their name.
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter shipping methods based on matching ids.
-      additionalProperties: false
-      description: Parameters used for searching/finding shipping methods.
   securitySchemes:
     bearer:
       type: http

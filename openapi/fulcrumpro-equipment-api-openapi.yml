@@ -181,83 +181,6 @@ paths:
       - Scheduling-Schedule-View Schedule
 components:
   schemas:
-    EquipmentDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Description.
-        workCenterId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
-        manufacturer:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Manufacturer.
-        modelNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Model number.
-        serialNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Serial number.
-        canRunUnattended:
-          type:
-          - boolean
-          - 'null'
-          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
-
-            that utilizes this equipment to be scheduled outside of a shift.'
-        unlimitedCapacity:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates if this equipment can support multiple operations simultaneously.
-        status:
-          $ref: '#/components/schemas/EquipmentStatus'
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Notes associated to the equipment.
-        deleted:
-          type: boolean
-          description: Indicates whether this equipment has been deleted
-      additionalProperties: false
-      description: Equipment definition.
     EquipmentCreateDto:
       required:
       - description
@@ -386,12 +309,14 @@ components:
       description: 'Details of a piece of equipment to be updated. This is a full replacement: any field omitted
 
         is treated as cleared.'
-    CommonEnumSortDirectionEnum:
+    EquipmentStatus:
       enum:
-      - ascending
-      - descending
+      - good
+      - poor
+      - bad
+      - outOfService
       type: string
-      description: Specify sorting direction.
+      description: Equipment status
     CreatedResponseDto:
       required:
       - id
@@ -403,14 +328,6 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    EquipmentStatus:
-      enum:
-      - good
-      - poor
-      - bad
-      - outOfService
-      type: string
-      description: Equipment status
     EquipmentRequestFindParameters:
       type: object
       properties:
@@ -430,6 +347,89 @@ components:
           description: Filter equipment based on their name.
       additionalProperties: false
       description: Parameters used for searching/finding equipment.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    EquipmentDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Description.
+        workCenterId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
+        manufacturer:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Manufacturer.
+        modelNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Model number.
+        serialNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Serial number.
+        canRunUnattended:
+          type:
+          - boolean
+          - 'null'
+          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
+
+            that utilizes this equipment to be scheduled outside of a shift.'
+        unlimitedCapacity:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if this equipment can support multiple operations simultaneously.
+        status:
+          $ref: '#/components/schemas/EquipmentStatus'
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes associated to the equipment.
+        deleted:
+          type: boolean
+          description: Indicates whether this equipment has been deleted
+      additionalProperties: false
+      description: Equipment definition.
   securitySchemes:
     bearer:
       type: http

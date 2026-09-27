@@ -169,242 +169,25 @@ paths:
       - Shipping-Shipping-View Shipments
 components:
   schemas:
-    ShippingDataShipmentStatus:
-      enum:
-      - pending
-      - open
-      - shipped
-      - cancelled
-      type: string
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    ShippingDataShipmentType:
-      enum:
-      - unknown
-      - standard
-      - outsideProcessing
-      type: string
-    DtoPagedResultDtoShipmentsShipmentDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
+    CommonReferenceDto:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShipmentsShipmentDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    ShipmentsShipmentUpdateDto:
-      type: object
-      properties:
-        shipByDate:
+        id:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: Ship by date.
-          format: date-time
-        notes:
-          maxLength: 2000
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
           minLength: 1
           type:
           - string
           - 'null'
-          description: Shipment notes.
-        displayNotesToCustomer:
-          type: boolean
-          description: Whether or not to display the shipment notes on the pack list.
-        trackingNumber:
-          type:
-          - string
-          - 'null'
-          description: The tracking number for the shipment.
-        shippingMethodId:
-          type:
-          - string
-          - 'null'
-          description: The shipping method identifier
-        shippedDate:
-          type:
-          - string
-          - 'null'
-          description: The shipped date
-          format: date-time
-        shippedDateOverride:
-          type:
-          - string
-          - 'null'
-          description: The override of the shipped date (used for changing the date of a shipment after it's been created)
-          format: date-time
-        shippingCost:
-          type:
-          - number
-          - 'null'
-          description: The shipment's cost
-          format: double
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: Represents an update to a Shipment.
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    ShipmentsListParameters:
-      type: object
-      properties:
-        shipmentStatus:
-          $ref: '#/components/schemas/ShippingDataShipmentStatus'
-        packingStatus:
-          $ref: '#/components/schemas/ShippingDataPackingStatus'
-        salesOrderId:
-          type:
-          - string
-          - 'null'
-          description: Filter shipments by sales order identifier
-        purchaseOrderId:
-          type:
-          - string
-          - 'null'
-          description: Filter shipments by purchase order identifier
-        shipmentType:
-          $ref: '#/components/schemas/ShippingDataShipmentType'
-        shipmentIds:
-          type: array
-          items:
-            type: string
-          description: Filter shipments by shipment identifiers.
-        shipByDateBefore:
-          type:
-          - string
-          - 'null'
-          description: Filter to shipments scheduled to ship before this date (exclusive).
-          format: date-time
-        shipByDateAfter:
-          type:
-          - string
-          - 'null'
-          description: Filter to shipments scheduled to ship after this date (exclusive).
-          format: date-time
-        shippedDateBefore:
-          type:
-          - string
-          - 'null'
-          description: 'Filter to shipments actually shipped before this date (exclusive).
-
-            Compares against the shipped date override (a shop-local date) when one is set, otherwise the shipped date (UTC).'
-          format: date-time
-        shippedDateAfter:
-          type:
-          - string
-          - 'null'
-          description: 'Filter to shipments actually shipped after this date (exclusive).
-
-            Compares against the shipped date override (a shop-local date) when one is set, otherwise the shipped date (UTC).'
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching V3 shipments
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    ShippingDataPackingStatus:
-      enum:
-      - notPacked
-      - partiallyPacked
-      - fullyPacked
-      - overPacked
-      type: string
+      description: Represents a reference to a document in a DB collection
     CommonAddressDto:
       required:
       - address1
@@ -476,31 +259,184 @@ components:
           format: email
       additionalProperties: false
       description: Address definition
-    CommonReferenceDto:
+    ShipmentsShipmentUpdateDto:
       type: object
       properties:
-        id:
-          maxLength: 24
-          minLength: 24
+        shipByDate:
           type:
           - string
           - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
+          description: Ship by date.
+          format: date-time
+        notes:
+          maxLength: 2000
           minLength: 1
           type:
           - string
           - 'null'
-          description: Descriptive name associated to the object
+          description: Shipment notes.
+        displayNotesToCustomer:
+          type: boolean
+          description: Whether or not to display the shipment notes on the pack list.
+        trackingNumber:
+          type:
+          - string
+          - 'null'
+          description: The tracking number for the shipment.
+        shippingMethodId:
+          type:
+          - string
+          - 'null'
+          description: The shipping method identifier
+        shippedDate:
+          type:
+          - string
+          - 'null'
+          description: The shipped date
+          format: date-time
+        shippedDateOverride:
+          type:
+          - string
+          - 'null'
+          description: The override of the shipped date (used for changing the date of a shipment after it's been created)
+          format: date-time
+        shippingCost:
+          type:
+          - number
+          - 'null'
+          description: The shipment's cost
+          format: double
       additionalProperties: false
-      description: Represents a reference to a document in a DB collection
-    CommonEnumSortDirectionEnum:
+      description: Represents an update to a Shipment.
+    ShippingDataPackingStatus:
       enum:
-      - ascending
-      - descending
+      - notPacked
+      - partiallyPacked
+      - fullyPacked
+      - overPacked
       type: string
-      description: Specify sorting direction.
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    ShipmentsListParameters:
+      type: object
+      properties:
+        shipmentStatus:
+          $ref: '#/components/schemas/ShippingDataShipmentStatus'
+        packingStatus:
+          $ref: '#/components/schemas/ShippingDataPackingStatus'
+        salesOrderId:
+          type:
+          - string
+          - 'null'
+          description: Filter shipments by sales order identifier
+        purchaseOrderId:
+          type:
+          - string
+          - 'null'
+          description: Filter shipments by purchase order identifier
+        shipmentType:
+          $ref: '#/components/schemas/ShippingDataShipmentType'
+        shipmentIds:
+          type: array
+          items:
+            type: string
+          description: Filter shipments by shipment identifiers.
+        shipByDateBefore:
+          type:
+          - string
+          - 'null'
+          description: Filter to shipments scheduled to ship before this date (exclusive).
+          format: date-time
+        shipByDateAfter:
+          type:
+          - string
+          - 'null'
+          description: Filter to shipments scheduled to ship after this date (exclusive).
+          format: date-time
+        shippedDateBefore:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to shipments actually shipped before this date (exclusive).
+
+            Compares against the shipped date override (a shop-local date) when one is set, otherwise the shipped date (UTC).'
+          format: date-time
+        shippedDateAfter:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to shipments actually shipped after this date (exclusive).
+
+            Compares against the shipped date override (a shop-local date) when one is set, otherwise the shipped date (UTC).'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching V3 shipments
     ShipmentsShipmentDto:
       required:
       - id
@@ -594,6 +530,70 @@ components:
           description: The external references associated with this shipment
       additionalProperties: false
       description: Represents a shipment
+    DtoPagedResultDtoShipmentsShipmentDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentsShipmentDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    ShippingDataShipmentType:
+      enum:
+      - unknown
+      - standard
+      - outsideProcessing
+      type: string
+    ShippingDataShipmentStatus:
+      enum:
+      - pending
+      - open
+      - shipped
+      - cancelled
+      type: string
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

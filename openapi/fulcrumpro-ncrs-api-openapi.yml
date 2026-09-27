@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Fulcrum Public NC Rs API
+  title: Fulcrum Public NCRs API
   version: v1
 servers:
 - url: https://api.fulcrumpro.com
@@ -96,39 +96,25 @@ paths:
       - Quality-NCR-View NCR
 components:
   schemas:
-    CommonImpactDto:
-      required:
-      - id
+    CommonReferenceDto:
       type: object
       properties:
         id:
-          type: string
-          description: The ID for this object.
-          format: uuid
-        operation:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        workCenter:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        scheduledEquipment:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        job:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        salesOrder:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        quantityImpacted:
+          maxLength: 24
+          minLength: 24
           type:
-          - number
+          - string
           - 'null'
-          description: Quantity Impacted
-          format: double
-        incrementalCost:
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
           type:
-          - number
+          - string
           - 'null'
-          description: Incremental Cost
-          format: double
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: Impact Dto.
+      description: Represents a reference to a document in a DB collection
     NCRRequestNcrListParameters:
       type: object
       properties:
@@ -164,31 +150,6 @@ components:
           format: date-time
       additionalProperties: false
       description: Parameters used for searching NCRs
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     NCRNcrDto:
       required:
       - cause
@@ -359,6 +320,45 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
+    CommonImpactDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID for this object.
+          format: uuid
+        operation:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        workCenter:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        scheduledEquipment:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        job:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        salesOrder:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        quantityImpacted:
+          type:
+          - number
+          - 'null'
+          description: Quantity Impacted
+          format: double
+        incrementalCost:
+          type:
+          - number
+          - 'null'
+          description: Incremental Cost
+          format: double
+      additionalProperties: false
+      description: Impact Dto.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

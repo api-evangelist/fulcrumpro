@@ -235,64 +235,6 @@ components:
           description: Identifiers of the equipment associated with this work center. Please reference /api/equipment endpoint.
       additionalProperties: false
       description: Details of a work center to be created.
-    WorkCenterUpdateDto:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        departmentId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Department identifier. Please reference /api/departments endpoint.
-        setupRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Hourly cost rate for setup.
-          format: double
-        laborRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Hourly cost rate for labor.
-          format: double
-        overheadRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Hourly cost rate for overhead.
-          format: double
-        machineRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Hourly cost rate for machine. Providing a value turns on machine time for this work center.
-          format: double
-        equipmentIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: 'Identifiers of the equipment associated with this work center. Replaces the existing set.
-
-            Please reference /api/equipment endpoint.'
-      additionalProperties: false
-      description: 'Details of a work center to be updated. This is a full replacement: any field omitted
-
-        (department, rates, equipment) is treated as cleared.'
     WorkCenterDto:
       required:
       - id
@@ -361,6 +303,72 @@ components:
           description: Equipment associated with this workcenter.
       additionalProperties: false
       description: Workcenter definition.
+    EquipmentStatus:
+      enum:
+      - good
+      - poor
+      - bad
+      - outOfService
+      type: string
+      description: Equipment status
+    WorkCenterUpdateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        departmentId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Department identifier. Please reference /api/departments endpoint.
+        setupRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for setup.
+          format: double
+        laborRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for labor.
+          format: double
+        overheadRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for overhead.
+          format: double
+        machineRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for machine. Providing a value turns on machine time for this work center.
+          format: double
+        equipmentIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: 'Identifiers of the equipment associated with this work center. Replaces the existing set.
+
+            Please reference /api/equipment endpoint.'
+      additionalProperties: false
+      description: 'Details of a work center to be updated. This is a full replacement: any field omitted
+
+        (department, rates, equipment) is treated as cleared.'
     WorkCenterRequestFindParameters:
       type: object
       properties:
@@ -380,12 +388,6 @@ components:
           description: Filter workcenters based on their name.
       additionalProperties: false
       description: Parameters used for searching/finding workcenters.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     CreatedResponseDto:
       required:
       - id
@@ -397,14 +399,12 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    EquipmentStatus:
+    CommonEnumSortDirectionEnum:
       enum:
-      - good
-      - poor
-      - bad
-      - outOfService
+      - ascending
+      - descending
       type: string
-      description: Equipment status
+      description: Specify sorting direction.
     EquipmentDto:
       required:
       - id

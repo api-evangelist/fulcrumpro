@@ -182,172 +182,6 @@ paths:
       - System-System Data-Manage System Data
 components:
   schemas:
-    OperationCreateDto:
-      required:
-      - description
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The name of operation.
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The description of the operation.
-        isOutsideProcessing:
-          type: boolean
-          description: Specifies whether this is an outside processing operation.
-        setupTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        laborTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        machineTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        machineTimeTrackingEnabled:
-          type: boolean
-          description: Specifies whether machine tracking is enabled.
-        outsideProcessingCost:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
-        defaultVendorId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
-        vendors:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Available vendors.
-        leadDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead days.
-          format: int32
-        instructions:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Instructions.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-      additionalProperties: false
-      description: Details of operation to be created
-    ItemRoutingOperationTime:
-      type: object
-      properties:
-        time:
-          type: number
-          description: Time or units of this operation
-          format: double
-        option:
-          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
-      additionalProperties: false
-      description: Operation time and type
-    ItemRoutingOperationTimeOption:
-      enum:
-      - fixedSeconds
-      - fixedMinutes
-      - fixedHours
-      - fixedDays
-      - secondsPerUnit
-      - minutesPerUnit
-      - hoursPerUnit
-      - daysPerUnit
-      - unitsPerHour
-      type: string
-      description: The time unit or option used in operation times
-    OperationUpdateDto:
-      required:
-      - description
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The name of operation.
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The description of the operation.
-        isOutsideProcessing:
-          type: boolean
-          description: Specifies whether this is an outside processing operation.
-        setupTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        laborTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        machineTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        machineTimeTrackingEnabled:
-          type: boolean
-          description: Specifies whether machine tracking is enabled.
-        outsideProcessingCost:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
-        defaultVendorId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
-        vendors:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Available vendors.
-        leadDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead days.
-          format: int32
-        instructions:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Instructions.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-      additionalProperties: false
-      description: 'Details of an operation to be updated. This is a full replacement of the publicly-exposed fields.
-
-        Internal-only fields not exposed here (in-process tracking, tolerances, shop rates) are preserved.'
-    ItemRoutingOutsideProcessingCostOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-      description: The cost option for the outside processing operation
     CommonReferenceDto:
       type: object
       properties:
@@ -367,49 +201,6 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a reference to a document in a DB collection
-    OperationRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter operations based on their name.
-        modifiedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters operations modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Filters operations modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-
-            Useful for polling incrementally instead of re-syncing every operation.'
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching/finding operations.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     OperationDto:
       required:
       - id
@@ -506,6 +297,215 @@ components:
           format: double
       additionalProperties: false
       description: Outside processing operation cost
+    OperationCreateDto:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of operation.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The description of the operation.
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation.
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTimeTrackingEnabled:
+          type: boolean
+          description: Specifies whether machine tracking is enabled.
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        defaultVendorId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
+        vendors:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Available vendors.
+        leadDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead days.
+          format: int32
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Instructions.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+      additionalProperties: false
+      description: Details of operation to be created
+    ItemRoutingOutsideProcessingCostOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+      description: The cost option for the outside processing operation
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    OperationRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter operations based on their name.
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters operations modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filters operations modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Useful for polling incrementally instead of re-syncing every operation.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding operations.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    ItemRoutingOperationTime:
+      type: object
+      properties:
+        time:
+          type: number
+          description: Time or units of this operation
+          format: double
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
+      additionalProperties: false
+      description: Operation time and type
+    ItemRoutingOperationTimeOption:
+      enum:
+      - fixedSeconds
+      - fixedMinutes
+      - fixedHours
+      - fixedDays
+      - secondsPerUnit
+      - minutesPerUnit
+      - hoursPerUnit
+      - daysPerUnit
+      - unitsPerHour
+      type: string
+      description: The time unit or option used in operation times
+    OperationUpdateDto:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of operation.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The description of the operation.
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation.
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTimeTrackingEnabled:
+          type: boolean
+          description: Specifies whether machine tracking is enabled.
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        defaultVendorId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
+        vendors:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Available vendors.
+        leadDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead days.
+          format: int32
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Instructions.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+      additionalProperties: false
+      description: 'Details of an operation to be updated. This is a full replacement of the publicly-exposed fields.
+
+        Internal-only fields not exposed here (in-process tracking, tolerances, shop rates) are preserved.'
   securitySchemes:
     bearer:
       type: http

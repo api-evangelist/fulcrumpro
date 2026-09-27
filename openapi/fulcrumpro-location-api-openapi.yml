@@ -119,6 +119,24 @@ paths:
       - ItemsAndInventory-Items-View Inventory
 components:
   schemas:
+    LocationRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter locations based on their name.
+      additionalProperties: false
+      description: Parameters used for searching/finding locations.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     LocationDto:
       required:
       - id
@@ -151,24 +169,6 @@ components:
           description: Barcode identifier for this entity.
       additionalProperties: false
       description: Location definition.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    LocationRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter locations based on their name.
-      additionalProperties: false
-      description: Parameters used for searching/finding locations.
   securitySchemes:
     bearer:
       type: http

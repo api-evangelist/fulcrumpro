@@ -100,6 +100,73 @@ paths:
       - Jobs-Jobs-View Job
 components:
   schemas:
+    WorkOrderRequestFindParameters:
+      type: object
+      properties:
+        workOrderIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter to work orders whose ids are in the list
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Filter to only given numbers
+        names:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter to only given names
+        statuses:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WorkOrderStatusEnum'
+          description: Filter to match the given statuses
+        createdBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs created before (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
+          format: date-time
+        createdAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs created after (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding work orders.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    JobPriorityEnum:
+      enum:
+      - low
+      - moderate
+      - high
+      type: string
+      description: Job priority
     WorkOrderDto:
       required:
       - id
@@ -156,73 +223,6 @@ components:
           $ref: '#/components/schemas/JobPriorityEnum'
       additionalProperties: false
       description: Represents a work order
-    WorkOrderRequestFindParameters:
-      type: object
-      properties:
-        workOrderIds:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter to work orders whose ids are in the list
-        numbers:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-          description: Filter to only given numbers
-        names:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter to only given names
-        statuses:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/WorkOrderStatusEnum'
-          description: Filter to match the given statuses
-        createdBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters jobs created before (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
-          format: date-time
-        createdAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters jobs created after (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching/finding work orders.
-    JobPriorityEnum:
-      enum:
-      - low
-      - moderate
-      - high
-      type: string
-      description: Job priority
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     WorkOrderStatusEnum:
       enum:
       - needsReview

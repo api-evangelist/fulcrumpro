@@ -152,6 +152,149 @@ components:
           format: double
       additionalProperties: false
       description: Cost and time attribution for a timer.
+    JobTrackingTimerStopTimerDto:
+      required:
+      - timerId
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
+        timerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The timer identifier
+      additionalProperties: false
+      description: Model for stopping a timer
+    TimerSegmentDto:
+      required:
+      - id
+      - startedOnUtc
+      type: object
+      properties:
+        id:
+          type: string
+          description: The timer segment identifier.
+          format: uuid
+        startedOnUtc:
+          type: string
+          description: When this segment begins.
+          format: date-time
+        stoppedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: When this segment ends. If the timer is not stopped (still running), this value will be blank.
+          format: date-time
+        isRunning:
+          type: boolean
+          description: Whether the timer segment is running or not.
+          readOnly: true
+        details:
+          $ref: '#/components/schemas/DtoTimerSegmentAttributionDetails'
+      additionalProperties: false
+      description: Data transfer object for TimerSegments entity
+    JobTrackingTimerRequestListTimersParameters:
+      type: object
+      properties:
+        userId:
+          type:
+          - string
+          - 'null'
+          description: Filter timers based on who started it
+        jobId:
+          type:
+          - string
+          - 'null'
+          description: Filter timers based on job
+        runningTimersOnly:
+          type:
+          - boolean
+          - 'null'
+          description: Filter to only running timers
+        types:
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+          description: Filter to specific timer types
+        createdBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        createdAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        startedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers started before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        startedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers started after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        stoppedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers stopped before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        stoppedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers stopped after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        stoppedBeforeUtcOriginal:
+          type:
+          - string
+          - 'null'
+          description: 'Filters timers stopped before (exclusive) this parameter in UTC time.
+
+            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
+
+            If no time component is passed, midnight UTC will be used.'
+          format: date-time
+        stoppedAfterUtcOriginal:
+          type:
+          - string
+          - 'null'
+          description: 'Filters timers stopped after (exclusive) this parameter in UTC time.
+
+            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
+
+            If no time component is passed, midnight UTC will be used.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching job tracking timers
     DomainTimeTrackingTimer_Type:
       enum:
       - setup
@@ -161,6 +304,138 @@ components:
       - labor
       - machine
       type: string
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    DtoPagedResultDtoTimerDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimerDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    JobTrackingTimerStartTimerDto:
+      required:
+      - itemToMakeId
+      - jobId
+      - operationId
+      - type
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
+        jobId:
+          minLength: 1
+          type: string
+          description: The job identifier
+        itemToMakeId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The item to make identifier
+        operationId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The operation identifier
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+      additionalProperties: false
+      description: Model for starting a job tracking timer via the public api
     TimerDto:
       required:
       - createdUtc
@@ -330,287 +605,12 @@ components:
           format: double
       additionalProperties: false
       description: Time attribution for a timer segment.
-    JobTrackingTimerStopTimerDto:
-      required:
-      - timerId
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
-        timerId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The timer identifier
-      additionalProperties: false
-      description: Model for stopping a timer
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    DtoPagedResultDtoTimerDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimerDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    JobTrackingTimerStartTimerDto:
-      required:
-      - itemToMakeId
-      - jobId
-      - operationId
-      - type
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
-        jobId:
-          minLength: 1
-          type: string
-          description: The job identifier
-        itemToMakeId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The item to make identifier
-        operationId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The operation identifier
-        type:
-          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
-      additionalProperties: false
-      description: Model for starting a job tracking timer via the public api
     CommonEnumSortDirectionEnum:
       enum:
       - ascending
       - descending
       type: string
       description: Specify sorting direction.
-    JobTrackingTimerRequestListTimersParameters:
-      type: object
-      properties:
-        userId:
-          type:
-          - string
-          - 'null'
-          description: Filter timers based on who started it
-        jobId:
-          type:
-          - string
-          - 'null'
-          description: Filter timers based on job
-        runningTimersOnly:
-          type:
-          - boolean
-          - 'null'
-          description: Filter to only running timers
-        types:
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
-          description: Filter to specific timer types
-        createdBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        createdAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        startedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers started before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        startedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers started after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        stoppedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers stopped before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        stoppedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers stopped after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        stoppedBeforeUtcOriginal:
-          type:
-          - string
-          - 'null'
-          description: 'Filters timers stopped before (exclusive) this parameter in UTC time.
-
-            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
-
-            If no time component is passed, midnight UTC will be used.'
-          format: date-time
-        stoppedAfterUtcOriginal:
-          type:
-          - string
-          - 'null'
-          description: 'Filters timers stopped after (exclusive) this parameter in UTC time.
-
-            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
-
-            If no time component is passed, midnight UTC will be used.'
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching job tracking timers
-    TimerSegmentDto:
-      required:
-      - id
-      - startedOnUtc
-      type: object
-      properties:
-        id:
-          type: string
-          description: The timer segment identifier.
-          format: uuid
-        startedOnUtc:
-          type: string
-          description: When this segment begins.
-          format: date-time
-        stoppedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: When this segment ends. If the timer is not stopped (still running), this value will be blank.
-          format: date-time
-        isRunning:
-          type: boolean
-          description: Whether the timer segment is running or not.
-          readOnly: true
-        details:
-          $ref: '#/components/schemas/DtoTimerSegmentAttributionDetails'
-      additionalProperties: false
-      description: Data transfer object for TimerSegments entity
   securitySchemes:
     bearer:
       type: http

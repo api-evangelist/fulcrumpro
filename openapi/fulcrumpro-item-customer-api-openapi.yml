@@ -162,83 +162,6 @@ paths:
       - ItemsAndInventory-Items-View Item
 components:
   schemas:
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    DomainPriceBreaksPriceBreakTypeEnum:
-      enum:
-      - price
-      - margin
-      - cost
-      - operation
-      - shopRate
-      type: string
-    CommonPriceBreakDto:
-      required:
-      - type
-      type: object
-      properties:
-        quantity:
-          type:
-          - integer
-          - 'null'
-          description: Indicates at what quantity this price break becomes active.
-          format: int32
-        price:
-          type:
-          - number
-          - 'null'
-          description: The price "per unit" at this price break.
-          format: double
-        margin:
-          type:
-          - number
-          - 'null'
-          description: Margin
-          format: double
-        currencyCode:
-          type:
-          - string
-          - 'null'
-          description: Currency code associated to this price break.
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Vendor identifier. Please reference /api/vendors endpoint.
-        customerId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Customer identifier. Please reference /api/customers endpoint.
-        customerTierId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Customer tier identifier. Please reference /api/customer-tiers endpoint.
-        unitOfMeasureName:
-          type:
-          - string
-          - 'null'
-          description: The unit of measurement.
-        type:
-          $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
-      additionalProperties: false
-      description: Price break definition
     ItemCustomerUpdateDto:
       type: object
       properties:
@@ -302,6 +225,72 @@ components:
           description: Price breaks.
       additionalProperties: false
       description: Customer with additional context for an item.
+    CommonPriceBreakDto:
+      required:
+      - type
+      type: object
+      properties:
+        quantity:
+          type:
+          - integer
+          - 'null'
+          description: Indicates at what quantity this price break becomes active.
+          format: int32
+        price:
+          type:
+          - number
+          - 'null'
+          description: The price "per unit" at this price break.
+          format: double
+        margin:
+          type:
+          - number
+          - 'null'
+          description: Margin
+          format: double
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: Currency code associated to this price break.
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Vendor identifier. Please reference /api/vendors endpoint.
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Customer identifier. Please reference /api/customers endpoint.
+        customerTierId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Customer tier identifier. Please reference /api/customer-tiers endpoint.
+        unitOfMeasureName:
+          type:
+          - string
+          - 'null'
+          description: The unit of measurement.
+        type:
+          $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
+      additionalProperties: false
+      description: Price break definition
+    DomainPriceBreaksPriceBreakTypeEnum:
+      enum:
+      - price
+      - margin
+      - cost
+      - operation
+      - shopRate
+      type: string
     ItemCustomerCreateDto:
       required:
       - customerId
@@ -328,6 +317,17 @@ components:
           description: The item name for this customer.
       additionalProperties: false
       description: Create a new item customer association.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

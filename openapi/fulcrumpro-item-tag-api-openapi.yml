@@ -230,6 +230,109 @@ paths:
       - ItemsAndInventory-Items-Edit Item
 components:
   schemas:
+    TagRequestFindParametersBase:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter tags based on their name.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter tags based on matching ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding accounting codes.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    DtoPagedResultDtoTagDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    ItemTagReplaceItemTagsDto:
+      required:
+      - tagIds
+      type: object
+      properties:
+        tagIds:
+          type: array
+          items:
+            maxLength: 24
+            minLength: 24
+            type: string
+          description: 'The complete desired set of tag identifiers for the item. Please reference the /api/item-tags/list endpoint.
+
+            Duplicate ids are ignored. An empty set clears all tags from the item. At most
+
+            FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDtoValidator.MAX_TAG_COUNT ids may be provided.'
+      additionalProperties: false
+      description: 'The full set of tags that should be associated to an item. Any tag currently on the item that is
+
+        not present in FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDto.TagIds will be removed; any new id will be added.'
+    CommonEnumStyleEnum:
+      enum:
+      - primary
+      - secondary
+      - success
+      - danger
+      - warning
+      - info
+      - light
+      - dark
+      - connected
+      type: string
+      description: Style enum (for tags).
     CommonEnumTagTypeEnum:
       enum:
       - item
@@ -286,109 +389,6 @@ components:
           description: Indicate if this tag has been deleted.
       additionalProperties: false
       description: Represents a tag
-    ItemTagReplaceItemTagsDto:
-      required:
-      - tagIds
-      type: object
-      properties:
-        tagIds:
-          type: array
-          items:
-            maxLength: 24
-            minLength: 24
-            type: string
-          description: 'The complete desired set of tag identifiers for the item. Please reference the /api/item-tags/list endpoint.
-
-            Duplicate ids are ignored. An empty set clears all tags from the item. At most
-
-            FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDtoValidator.MAX_TAG_COUNT ids may be provided.'
-      additionalProperties: false
-      description: 'The full set of tags that should be associated to an item. Any tag currently on the item that is
-
-        not present in FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDto.TagIds will be removed; any new id will be added.'
-    TagRequestFindParametersBase:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter tags based on their name.
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter tags based on matching ids.
-      additionalProperties: false
-      description: Parameters used for searching/finding accounting codes.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonEnumStyleEnum:
-      enum:
-      - primary
-      - secondary
-      - success
-      - danger
-      - warning
-      - info
-      - light
-      - dark
-      - connected
-      type: string
-      description: Style enum (for tags).
-    DtoPagedResultDtoTagDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
   securitySchemes:
     bearer:
       type: http

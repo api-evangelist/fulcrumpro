@@ -278,11 +278,28 @@ paths:
       - Orders-PurchaseOrders-View Purchase Order
 components:
   schemas:
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
+    PurchaseOrderLineItemTaxAllocationResponseDto:
+      type: object
+      properties:
+        appliedTaxes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
+          description: 'Tax amounts allocated to this line item from PO-level tax lines.
+
+            Null if the line item is not taxable or has no tax allocations.'
+        totalTax:
+          type:
+          - number
+          - 'null'
+          description: 'Total tax amount allocated to this line item across all applicable tax lines.
+
+            Null if the line item is not taxable.'
+          format: double
+      additionalProperties: false
+      description: Tax allocation data for a purchase order line item.
     PurchaseOrderOutsideProcessingLineItemDto:
       required:
       - accountingDetails
@@ -383,46 +400,6 @@ components:
           format: date-time
       additionalProperties: false
       description: Represents an outside processing line item on a purchase order.
-    CommonAccountingDetailsDto:
-      type: object
-      properties:
-        classId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-      additionalProperties: false
-      description: An object that contains all accounting details.
     PurchaseOrderAppliedTaxDto:
       required:
       - taxAmount
@@ -461,6 +438,58 @@ components:
           format: double
       additionalProperties: false
       description: Represents a tax allocation from a PO-level tax line item to an individual line item.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    PurchaseOrderOutsideProcessingLineItemUpdateDto:
+      type: object
+      properties:
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The line item price.
+          format: double
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        expectedReceiveDate:
+          type:
+          - string
+          - 'null'
+          description: Expected receipt date for this line item.
+          format: date-time
+        promiseDate:
+          type:
+          - string
+          - 'null'
+          description: Promise date (UTC).
+          format: date-time
+      additionalProperties: false
+      description: Represents an outside processing line item on a purchase order
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -515,44 +544,13 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    PurchaseOrderOutsideProcessingLineItemUpdateDto:
-      type: object
-      properties:
-        quantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The line item quantity
-          format: double
-        price:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The line item price.
-          format: double
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-        expectedReceiveDate:
-          type:
-          - string
-          - 'null'
-          description: Expected receipt date for this line item.
-          format: date-time
-        promiseDate:
-          type:
-          - string
-          - 'null'
-          description: Promise date (UTC).
-          format: date-time
-      additionalProperties: false
-      description: Represents an outside processing line item on a purchase order
+    PurchaseOrderEnumLineItemReceiptStatusEnum:
+      enum:
+      - open
+      - partiallyReceived
+      - received
+      type: string
+      description: Purchase order line item receipt status
     PurchaseOrderOutsideProcessingLineItemCreateDto:
       required:
       - jobId
@@ -597,44 +595,6 @@ components:
           format: date-time
       additionalProperties: false
       description: Represents an outside processing line item on a purchase order.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    PurchaseOrderLineItemTaxAllocationResponseDto:
-      type: object
-      properties:
-        appliedTaxes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
-          description: 'Tax amounts allocated to this line item from PO-level tax lines.
-
-            Null if the line item is not taxable or has no tax allocations.'
-        totalTax:
-          type:
-          - number
-          - 'null'
-          description: 'Total tax amount allocated to this line item across all applicable tax lines.
-
-            Null if the line item is not taxable.'
-          format: double
-      additionalProperties: false
-      description: Tax allocation data for a purchase order line item.
-    PurchaseOrderEnumLineItemReceiptStatusEnum:
-      enum:
-      - open
-      - partiallyReceived
-      - received
-      type: string
-      description: Purchase order line item receipt status
     CreatedResponseDto:
       required:
       - id
@@ -646,6 +606,46 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
   securitySchemes:
     bearer:
       type: http
