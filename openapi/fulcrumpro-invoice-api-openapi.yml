@@ -212,25 +212,61 @@ paths:
       - Invoicing-Invoicing-Edit Invoices
 components:
   schemas:
-    CommonReferenceDto:
+    InvoiceRequestFindParameters:
       type: object
       properties:
-        id:
-          maxLength: 24
-          minLength: 24
+        numbers:
+          maxItems: 500
+          minItems: 1
           type:
-          - string
+          - array
           - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
+          items:
+            type: integer
+            format: int32
+          description: Filter invoices to only given numbers
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
       additionalProperties: false
-      description: Represents a reference to a document in a DB collection
+      description: Parameters used for searching/finding invoices.
+    InvoiceUpdateDto:
+      type: object
+      properties:
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Represents an update on an invoice.
+    InvoiceStatusEnum:
+      enum:
+      - new
+      - needsApproval
+      - approved
+      - issued
+      - paid
+      type: string
+      description: Invoice status
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     CommonAddressDto:
       required:
       - address1
@@ -302,34 +338,56 @@ components:
           format: email
       additionalProperties: false
       description: Address definition
-    InvoiceRequestFindParameters:
+    CommonExternalReferenceFindDto:
+      required:
+      - key
       type: object
       properties:
-        numbers:
-          maxItems: 500
-          minItems: 1
+        key:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
           type:
-          - array
+          - string
           - 'null'
-          items:
-            type: integer
-            format: int32
-          description: Filter invoices to only given numbers
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-        status:
-          $ref: '#/components/schemas/InvoiceStatusEnum'
+          description: Arbitrary sub-key that can be used to qualify the value
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external identifier
       additionalProperties: false
-      description: Parameters used for searching/finding invoices.
-    JsonPatchOperation:
+      description: Search parameter for identifier record(s) via their external identifiers.
+    CommonReferenceDto:
       type: object
       properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -384,47 +442,24 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    InvoiceRequestUpdateStatus:
+    CurrencyInfoDto:
       required:
-      - status
+      - documentCurrencyCode
+      - primaryCurrencyCode
       type: object
       properties:
-        status:
-          $ref: '#/components/schemas/InvoiceStatusEnum'
-        paidDate:
-          type:
-          - string
-          - 'null'
-          description: The date that the invoice was paid.
-          format: date-time
+        documentCurrencyCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Document Currency Code
+        primaryCurrencyCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary Currency Code
       additionalProperties: false
-      description: Update an invoice status.
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    InvoiceStatusEnum:
-      enum:
-      - new
-      - needsApproval
-      - approved
-      - issued
-      - paid
-      type: string
-      description: Invoice status
-    InvoiceUpdateDto:
-      type: object
-      properties:
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents an update on an invoice.
+      description: Currency Info Dto
     InvoiceDto:
       required:
       - customerId
@@ -540,56 +575,21 @@ components:
           description: Indicates whether this invoice has been deleted
       additionalProperties: false
       description: Represents an invoice
-    CurrencyInfoDto:
+    InvoiceRequestUpdateStatus:
       required:
-      - documentCurrencyCode
-      - primaryCurrencyCode
+      - status
       type: object
       properties:
-        documentCurrencyCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Document Currency Code
-        primaryCurrencyCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary Currency Code
-      additionalProperties: false
-      description: Currency Info Dto
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonExternalReferenceFindDto:
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
-        type:
-          maxLength: 50
-          minLength: 0
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+        paidDate:
           type:
           - string
           - 'null'
-          description: Arbitrary sub-key that can be used to qualify the value
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The external identifier
+          description: The date that the invoice was paid.
+          format: date-time
       additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
+      description: Update an invoice status.
   securitySchemes:
     bearer:
       type: http

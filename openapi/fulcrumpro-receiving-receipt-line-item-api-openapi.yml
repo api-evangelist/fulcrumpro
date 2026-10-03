@@ -195,18 +195,6 @@ paths:
       - Receiving-Receiving-View Receiving
 components:
   schemas:
-    ReceivingLineItemReceiptLineItemUpdateDto:
-      type: object
-      properties:
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt line item object.
-      additionalProperties: false
-      description: Represents a receiving line item on a purchase order or sales order receiving record
     JsonPatchOperation:
       type: object
       properties:
@@ -216,6 +204,61 @@ components:
           type: string
         path:
           type: string
+    ReceivingLineItemReceiptLineItemDto:
+      required:
+      - fullyReceived
+      - id
+      - lineItemId
+      - rolledBack
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        lineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of the purchase order line item corresponding to this update
+        fullyReceived:
+          type: boolean
+          description: Indicates whether the entire quantity of this line item have been received
+        rolledBack:
+          type: boolean
+          description: Indicates whether this update is active.
+        quantityReceived:
+          type:
+          - number
+          - 'null'
+          description: Quantity of the associated item that has been received on this update in the specified unit of measure (non-cumulative)
+          format: double
+        unitOfMeasureMultiplier:
+          type: number
+          description: 'If the receipt has a different unit of measure than the item is stored in fulcrum, you would use this multiplier with the QuantityReceived to get the amount you received into
+
+            Fulcrum.'
+          format: double
+        convertedQuantityReceived:
+          type: number
+          description: Quantity of the associated item that has been received in Fulcrum's unit of measure
+          format: double
+          readOnly: true
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Represents a line item on a receipt for a purchase or sales order
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -270,61 +313,18 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    ReceivingLineItemReceiptLineItemDto:
-      required:
-      - fullyReceived
-      - id
-      - lineItemId
-      - rolledBack
+    ReceivingLineItemReceiptLineItemUpdateDto:
       type: object
       properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
-        lineItemId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Id of the purchase order line item corresponding to this update
-        fullyReceived:
-          type: boolean
-          description: Indicates whether the entire quantity of this line item have been received
-        rolledBack:
-          type: boolean
-          description: Indicates whether this update is active.
-        quantityReceived:
-          type:
-          - number
-          - 'null'
-          description: Quantity of the associated item that has been received on this update in the specified unit of measure (non-cumulative)
-          format: double
-        unitOfMeasureMultiplier:
-          type: number
-          description: 'If the receipt has a different unit of measure than the item is stored in fulcrum, you would use this multiplier with the QuantityReceived to get the amount you received into
-
-            Fulcrum.'
-          format: double
-        convertedQuantityReceived:
-          type: number
-          description: Quantity of the associated item that has been received in Fulcrum's unit of measure
-          format: double
-          readOnly: true
         externalReferences:
           type:
           - object
           - 'null'
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt line item object.
       additionalProperties: false
-      description: Represents a line item on a receipt for a purchase or sales order
+      description: Represents a receiving line item on a purchase order or sales order receiving record
   securitySchemes:
     bearer:
       type: http

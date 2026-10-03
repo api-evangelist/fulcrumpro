@@ -203,49 +203,19 @@ paths:
       - System-System Data-Manage System Data
 components:
   schemas:
-    TagCreateDto:
-      required:
-      - name
-      - style
-      - types
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-        style:
-          $ref: '#/components/schemas/CommonEnumStyleEnum'
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-        types:
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
-          description: The type(s) of this tag.
-      additionalProperties: false
-      description: Represents a tag for creation
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
+    CommonEnumStyleEnum:
+      enum:
+      - primary
+      - secondary
+      - success
+      - danger
+      - warning
+      - info
+      - light
+      - dark
+      - connected
+      type: string
+      description: Style enum (for tags).
     TagRequestFindParameters:
       type: object
       properties:
@@ -272,71 +242,6 @@ components:
           description: Filter tags based on matching types.
       additionalProperties: false
       description: Parameters used for searching/finding accounting codes.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonEnumTagTypeEnum:
-      enum:
-      - item
-      - accountingCode
-      - itemCategory
-      - itemShape
-      - itemMaterial
-      - itemGrade
-      - itemGauge
-      - itemShippingContainer
-      - itemClass
-      - breakReasonCode
-      - refundReasonCode
-      - vendorOrderIssueCode
-      - chartOfAccounts
-      type: string
-      description: What the tag is used for (can be many).
-    CommonEnumStyleEnum:
-      enum:
-      - primary
-      - secondary
-      - success
-      - danger
-      - warning
-      - info
-      - light
-      - dark
-      - connected
-      type: string
-      description: Style enum (for tags).
-    TagUpdateDto:
-      required:
-      - name
-      - style
-      - types
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-        style:
-          $ref: '#/components/schemas/CommonEnumStyleEnum'
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-        types:
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
-          description: The type(s) of this tag.
-      additionalProperties: false
-      description: Represents a tag for update
     CreatedResponseDto:
       required:
       - id
@@ -348,6 +253,21 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     TagDto:
       required:
       - id
@@ -387,6 +307,86 @@ components:
           description: Indicate if this tag has been deleted.
       additionalProperties: false
       description: Represents a tag
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonEnumTagTypeEnum:
+      enum:
+      - item
+      - accountingCode
+      - itemCategory
+      - itemShape
+      - itemMaterial
+      - itemGrade
+      - itemGauge
+      - itemShippingContainer
+      - itemClass
+      - breakReasonCode
+      - refundReasonCode
+      - vendorOrderIssueCode
+      - chartOfAccounts
+      type: string
+      description: What the tag is used for (can be many).
+    TagUpdateDto:
+      required:
+      - name
+      - style
+      - types
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+        style:
+          $ref: '#/components/schemas/CommonEnumStyleEnum'
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+        types:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
+          description: The type(s) of this tag.
+      additionalProperties: false
+      description: Represents a tag for update
+    TagCreateDto:
+      required:
+      - name
+      - style
+      - types
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+        style:
+          $ref: '#/components/schemas/CommonEnumStyleEnum'
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+        types:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
+          description: The type(s) of this tag.
+      additionalProperties: false
+      description: Represents a tag for creation
   securitySchemes:
     bearer:
       type: http

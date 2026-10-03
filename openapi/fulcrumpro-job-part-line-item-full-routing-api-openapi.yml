@@ -60,6 +60,12 @@ paths:
       - Jobs-Jobs-View Job
 components:
   schemas:
+    DomainInProcessTrackingFieldCheckpointPhase:
+      enum:
+      - preOperation
+      - duringOperation
+      - postOperation
+      type: string
     ItemRoutingIptDto:
       required:
       - fieldTypeId
@@ -125,12 +131,6 @@ components:
             completed items to inventory if target is not met.'
       additionalProperties: false
       description: An in process tracking field for a routing step
-    DomainInProcessTrackingFieldCheckpointPhase:
-      enum:
-      - preOperation
-      - duringOperation
-      - postOperation
-      type: string
   securitySchemes:
     bearer:
       type: http

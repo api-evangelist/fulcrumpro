@@ -96,6 +96,56 @@ paths:
                   $ref: '#/components/schemas/CompanyInfoDto'
 components:
   schemas:
+    CompanyInfoDto:
+      required:
+      - id
+      - isPrimary
+      - name
+      - remitToAddress
+      - shipToAddress
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        isPrimary:
+          type: boolean
+          description: Denotes whether this is the primary/default company information
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Company name
+        shipToAddress:
+          $ref: '#/components/schemas/CommonAddressDto'
+        remitToAddress:
+          $ref: '#/components/schemas/CommonAddressDto'
+        websiteUrl:
+          type:
+          - string
+          - 'null'
+          description: Company website
+          format: uri
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          description: Company phone number
+        faxNumber:
+          type:
+          - string
+          - 'null'
+          description: Company fax number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Company email address
+          format: email
+      additionalProperties: false
+      description: Company information
     CompanyInfoRequestFindParameters:
       type: object
       properties:
@@ -183,56 +233,6 @@ components:
       - descending
       type: string
       description: Specify sorting direction.
-    CompanyInfoDto:
-      required:
-      - id
-      - isPrimary
-      - name
-      - remitToAddress
-      - shipToAddress
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        isPrimary:
-          type: boolean
-          description: Denotes whether this is the primary/default company information
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Company name
-        shipToAddress:
-          $ref: '#/components/schemas/CommonAddressDto'
-        remitToAddress:
-          $ref: '#/components/schemas/CommonAddressDto'
-        websiteUrl:
-          type:
-          - string
-          - 'null'
-          description: Company website
-          format: uri
-        phoneNumber:
-          type:
-          - string
-          - 'null'
-          description: Company phone number
-        faxNumber:
-          type:
-          - string
-          - 'null'
-          description: Company fax number
-        email:
-          type:
-          - string
-          - 'null'
-          description: Company email address
-          format: email
-      additionalProperties: false
-      description: Company information
   securitySchemes:
     bearer:
       type: http

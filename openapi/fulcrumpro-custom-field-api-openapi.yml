@@ -96,6 +96,30 @@ paths:
                   $ref: '#/components/schemas/CustomFieldDto'
 components:
   schemas:
+    DomainSystemDataCustomFieldDefinitionModule:
+      enum:
+      - item
+      - item_Make
+      - item_Buy
+      - customer
+      - vendor
+      - quote
+      - sales_Order
+      - job
+      - invoice
+      - purchase_Order
+      - receive_Order
+      - ship_Order
+      - quote_Part_LineItem
+      - sales_Order_Part_LineItem
+      - purchase_Order_Part_LineItem
+      - outsideProcessing_LineItem
+      - shipping_Part_LineItem
+      - invoice_Part_LineItem
+      - job_Operation
+      - ncr
+      - capa
+      type: string
     CustomFieldRequestFindParameters:
       type: object
       properties:
@@ -119,6 +143,26 @@ components:
           $ref: '#/components/schemas/DomainSystemDataCustomFieldDefinitionType'
       additionalProperties: false
       description: Parameters used for searching/finding custom fields.
+    DomainSystemDataCustomFieldDefinitionType:
+      enum:
+      - text
+      - multilineText
+      - dropdown
+      - multipleChoiceDropdown
+      - integerNumber
+      - decimalNumber
+      - floatingPointNumber
+      - boolean
+      - list
+      - date
+      - multipleChoiceUser
+      type: string
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     CustomFieldDto:
       required:
       - id
@@ -175,50 +219,6 @@ components:
           description: Help information that will be visble to the user.
       additionalProperties: false
       description: Custom field definition.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    DomainSystemDataCustomFieldDefinitionType:
-      enum:
-      - text
-      - multilineText
-      - dropdown
-      - multipleChoiceDropdown
-      - integerNumber
-      - decimalNumber
-      - floatingPointNumber
-      - boolean
-      - list
-      - date
-      - multipleChoiceUser
-      type: string
-    DomainSystemDataCustomFieldDefinitionModule:
-      enum:
-      - item
-      - item_Make
-      - item_Buy
-      - customer
-      - vendor
-      - quote
-      - sales_Order
-      - job
-      - invoice
-      - purchase_Order
-      - receive_Order
-      - ship_Order
-      - quote_Part_LineItem
-      - sales_Order_Part_LineItem
-      - purchase_Order_Part_LineItem
-      - outsideProcessing_LineItem
-      - shipping_Part_LineItem
-      - invoice_Part_LineItem
-      - job_Operation
-      - ncr
-      - capa
-      type: string
   securitySchemes:
     bearer:
       type: http

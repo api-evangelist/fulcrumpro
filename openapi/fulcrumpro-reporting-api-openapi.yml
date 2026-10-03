@@ -497,642 +497,6 @@ paths:
       - Time-Time-View Time Management
 components:
   schemas:
-    DtoReportingJobActivityReportFilter:
-      type: object
-      properties:
-        operationStatus:
-          type:
-          - string
-          - 'null'
-          description: 'Optional exact-match filter on the operation lifecycle status (e.g. "Running", "Complete"). Null
-
-            means no operation-status filter.'
-        jobStatus:
-          type:
-          - string
-          - 'null'
-          description: 'Optional exact-match filter on the job lifecycle status (e.g. "In Progress", "Complete"). Null
-
-            means no job-status filter.'
-        department:
-          type:
-          - string
-          - 'null'
-          description: 'Optional exact-match filter on the department containing the operation''s scheduled work center.
-
-            Null means no department filter.'
-        productionDueDateFrom:
-          type:
-          - string
-          - 'null'
-          description: Inclusive lower bound applied to the job's Production Due Date. Null means no lower bound.
-          format: date-time
-        productionDueDateTo:
-          type:
-          - string
-          - 'null'
-          description: 'Inclusive upper bound applied to the job''s Production Due Date (the whole `to` day is
-
-            included). Null means no upper bound.'
-          format: date-time
-      additionalProperties: false
-      description: 'Constrained filter for the job-activity reporting list endpoint. Every field maps to a fixed,
-
-        server-controlled column; values are always bound as Dapper parameters and never concatenated
-
-        into SQL.'
-    DtoReportingInvoiceReportRow:
-      type: object
-      properties:
-        company:
-          type:
-          - string
-          - 'null'
-          description: Issuing company / tenant company name.
-        invoiceNumber:
-          type:
-          - integer
-          - 'null'
-          description: Numeric invoice identifier assigned by Fulcrum.
-          format: int32
-        invoiceStatus:
-          type:
-          - string
-          - 'null'
-          description: Lifecycle state — typically New, Approved, Issued, Paid.
-        salesOrderNumber:
-          type:
-          - integer
-          - 'null'
-          description: Number identifying the sales order being invoiced.
-          format: int32
-        customerPurchaseOrder:
-          type:
-          - string
-          - 'null'
-          description: Customer's PO number recorded on the sales order.
-        customerName:
-          type:
-          - string
-          - 'null'
-          description: Display name of the billed customer.
-        salesPerson:
-          type:
-          - string
-          - 'null'
-          description: Name of the salesperson associated with the sales order.
-        isDeposit:
-          type:
-          - string
-          - 'null'
-          description: Set to the string "Deposit" when the row represents a deposit; null otherwise.
-        createdDate:
-          type:
-          - string
-          - 'null'
-          description: UTC timestamp when the invoice record was created.
-          format: date-time
-        lineType:
-          type:
-          - string
-          - 'null'
-          description: Discriminator — Part, Shipping, Fee, Deposit, Discount, Refund, Tax, or NA.
-        lineItemName:
-          type:
-          - string
-          - 'null'
-          description: Item name (for part lines) or descriptive label for non-part lines.
-        customerPartNumber:
-          type:
-          - string
-          - 'null'
-          description: Customer's part number for this line, when supplied.
-        customerPartDescription:
-          type:
-          - string
-          - 'null'
-          description: Customer's description for this line, when supplied.
-        itemDescription:
-          type:
-          - string
-          - 'null'
-          description: Internal item description for the line.
-        accountingCode:
-          type:
-          - string
-          - 'null'
-          description: Accounting code mapped to the invoice line.
-        itemTags:
-          type:
-          - string
-          - 'null'
-          description: Comma-separated list of descriptive tags from the item.
-        issuedDate:
-          type:
-          - string
-          - 'null'
-          description: Date the invoice was issued. NULL for drafts.
-          format: date-time
-        dueDate:
-          type:
-          - string
-          - 'null'
-          description: Date payment is due per the invoice's payment terms.
-          format: date-time
-        salesOrderTotal:
-          type:
-          - number
-          - 'null'
-          description: Total of the source sales order (may differ from invoice total).
-          format: double
-        unitPrice:
-          type:
-          - number
-          - 'null'
-          description: Per-unit price for the line (varies by Line Type; negative for discounts).
-          format: double
-        quantityInvoiced:
-          type:
-          - number
-          - 'null'
-          description: Quantity billed on this line.
-          format: double
-        invoiceAmount:
-          type:
-          - number
-          - 'null'
-          description: Extended amount for this line before tax.
-          format: double
-        isTaxable:
-          type:
-          - integer
-          - 'null'
-          description: 1 when the line is subject to taxation, otherwise 0. (Computed 1/0 flag in the view.)
-          format: int32
-        taxCode:
-          type:
-          - string
-          - 'null'
-          description: Descriptive name of the tax code applied to the line, when applicable.
-        taxTotal:
-          type:
-          - number
-          - 'null'
-          description: Equivalent to Invoice Amount for tax line items; 0 otherwise.
-          format: double
-        invoiceTotalWithoutTax:
-          type:
-          - number
-          - 'null'
-          description: Invoice-level total excluding tax (repeats on every line of the invoice).
-          format: double
-        invoiceTotalWithTax:
-          type:
-          - number
-          - 'null'
-          description: Invoice-level total including tax (repeats on every line of the invoice).
-          format: double
-        paidDate:
-          type:
-          - string
-          - 'null'
-          description: Date the invoice was marked paid; null while open.
-          format: date-time
-        late:
-          type:
-          - integer
-          - 'null'
-          description: 1 when the invoice is past Due Date and unpaid or was paid late, otherwise 0. (Computed 1/0 flag in the view.)
-          format: int32
-        daysLate:
-          type:
-          - integer
-          - 'null'
-          description: Days between Due Date and either Paid Date (if paid) or today (if open). 0 if not yet due.
-          format: int32
-        customerCurrencyCode:
-          type:
-          - string
-          - 'null'
-          description: ISO currency code of the customer's billing currency.
-        shipmentName:
-          type:
-          - string
-          - 'null'
-          description: Concatenated names of shipments invoiced on this line (comma-separated).
-        shipmentsLine1s:
-          type:
-          - string
-          - 'null'
-          description: Together with ShipmentsLine2s, concatenated shipment address values (comma-separated).
-        shipmentsLine2s:
-          type:
-          - string
-          - 'null'
-          description: Together with ShipmentsLine1s, concatenated shipment address values (comma-separated).
-        shipmentsCities:
-          type:
-          - string
-          - 'null'
-          description: Concatenated shipment cities (comma-separated).
-        shipmentsStates:
-          type:
-          - string
-          - 'null'
-          description: Concatenated shipment state/provinces (comma-separated).
-        shipmentsCountries:
-          type:
-          - string
-          - 'null'
-          description: Concatenated shipment countries (comma-separated).
-        accountingClass:
-          type:
-          - string
-          - 'null'
-          description: Accounting classification for the item associated to the line, if applicable.
-      additionalProperties: false
-      description: 'One row of the pre-joined invoice reporting view (`rpt.View_ExposedReportingData_Invoice`): one
-
-        invoice line item, joined to sales-order and shipment context with line type, pricing, tax, and aging
-
-        detail. Property names are clean identifiers; the query aliases each source column (e.g.
-
-        `[Issued Date]`) to the matching property so Dapper can bind it.'
-    DtoReportingJobActivityByOperatorReportFilter:
-      type: object
-      properties:
-        startedOrCreatedDateFrom:
-          type:
-          - string
-          - 'null'
-          description: Inclusive lower bound applied to the run's Started or Created Date. Null means no lower bound.
-          format: date-time
-        startedOrCreatedDateTo:
-          type:
-          - string
-          - 'null'
-          description: 'Inclusive upper bound applied to the run''s Started or Created Date (the whole `to` day is
-
-            included). Null means no upper bound.'
-          format: date-time
-        employee:
-          type:
-          - string
-          - 'null'
-          description: Optional exact-match filter on the operator / employee name. Null means no operator filter.
-        department:
-          type:
-          - string
-          - 'null'
-          description: 'Optional exact-match filter on the department containing the operation''s work center. Null means
-
-            no department filter.'
-      additionalProperties: false
-      description: 'Constrained filter for the job-activity-by-operator reporting list endpoint. Every field maps to a
-
-        fixed, server-controlled column; values are always bound as Dapper parameters and never concatenated
-
-        into SQL.'
-    DtoPagedResultDtoDtoReportingInventoryReportRow:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DtoReportingInventoryReportRow'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    DtoReportingInventoryReportRow:
-      type: object
-      properties:
-        number:
-          type:
-          - string
-          - 'null'
-          description: Item number (the user-facing identifier for an item).
-        description:
-          type:
-          - string
-          - 'null'
-          description: Item description.
-        revision:
-          type:
-          - string
-          - 'null'
-          description: Item revision label.
-        origin:
-          type:
-          - string
-          - 'null'
-          description: Item origin classification (e.g. Make, Buy, MakeOrBuy, CustomerSupplied).
-        isSellable:
-          type:
-          - string
-          - 'null'
-          description: '"Sellable" when the item can appear on a sales order line, otherwise empty.'
-        primaryVendorName:
-          type:
-          - string
-          - 'null'
-          description: Default vendor name for purchasing the item (Buy or MakeOrBuy items only).
-        tags:
-          type:
-          - string
-          - 'null'
-          description: Comma-separated list of descriptive, user-applied tags on the item.
-        minimumStockOnHand:
-          type:
-          - number
-          - 'null'
-          description: Configured minimum stock threshold for reorder planning.
-          format: double
-        unitOfMeasureName:
-          type:
-          - string
-          - 'null'
-          description: Inventory unit of measure (e.g. Piece, Foot, Centimeter).
-        accountingCode1:
-          type:
-          - string
-          - 'null'
-          description: Primary accounting code mapped to this item.
-        accountingCode2:
-          type:
-          - string
-          - 'null'
-          description: Secondary accounting code, when configured.
-        accountingClass:
-          type:
-          - string
-          - 'null'
-          description: Accounting classification.
-        category:
-          type:
-          - string
-          - 'null'
-          description: Item category for grouping.
-        isArchived:
-          type:
-          - string
-          - 'null'
-          description: '"Archived" when the item is archived and no longer in active use, otherwise empty.'
-        shippingUnitWeight:
-          type:
-          - number
-          - 'null'
-          description: Weight per inventory unit used for shipping calculations.
-          format: double
-        materialUnitWeightLbs:
-          type:
-          - number
-          - 'null'
-          description: Underlying material weight per unit, in pounds, for raw-material shape items.
-          format: double
-        onHandQty:
-          type:
-          - number
-          - 'null'
-          description: Quantity currently on hand for this lot at this location.
-          format: double
-        lotNumber:
-          type:
-          - string
-          - 'null'
-          description: Lot identifier.
-        expirationDate:
-          type:
-          - string
-          - 'null'
-          description: Lot expiration date when applicable.
-          format: date-time
-        locationName:
-          type:
-          - string
-          - 'null'
-          description: Inventory location name.
-        isCustom:
-          type:
-          - string
-          - 'null'
-          description: '"Custom" when the lot holds customized / non-standard variations of an item, otherwise empty.'
-        materialValue:
-          type:
-          - number
-          - 'null'
-          description: Per-unit value of input materials required to produce the items in this lot.
-          format: double
-        laborValue:
-          type:
-          - number
-          - 'null'
-          description: Per-unit value of labor required to produce the items in this lot.
-          format: double
-        machineValue:
-          type:
-          - number
-          - 'null'
-          description: Per-unit value of equipment time required to produce the items in this lot.
-          format: double
-        outsideProcessingValue:
-          type:
-          - number
-          - 'null'
-          description: Per-unit value of outside processes required to produce the items in this lot.
-          format: double
-        totalUnitValue:
-          type:
-          - number
-          - 'null'
-          description: Sum of per-unit cost components (material + labor + machine + OP).
-          format: double
-        totalValue:
-          type:
-          - number
-          - 'null'
-          description: On-hand quantity × total unit value (extended inventory value).
-          format: double
-      additionalProperties: false
-      description: 'One row of the pre-joined inventory reporting view (`rpt.View_ExposedReportingData_Inventory`):
-
-        one (item, lot, location) combination, carrying on-hand quantity, per-unit and extended valuation
-
-        (material/labor/machine/OP), lot and location context, and item categorization. Property names are
-
-        clean identifiers; the query aliases each source column (e.g. `[On Hand Qty]`) to the matching
-
-        property so Dapper can bind it.'
-    DtoReportingSalesOrderLinesReportFilter:
-      type: object
-      properties:
-        orderedDateFrom:
-          type:
-          - string
-          - 'null'
-          description: Inclusive lower bound applied to the order's Ordered Date. Null means no lower bound.
-          format: date-time
-        orderedDateTo:
-          type:
-          - string
-          - 'null'
-          description: 'Inclusive upper bound applied to the order''s Ordered Date (the whole `to` day is included).
-
-            Null means no upper bound.'
-          format: date-time
-        deliveryDueDateFrom:
-          type:
-          - string
-          - 'null'
-          description: Inclusive lower bound applied to the line's Delivery Due Date. Null means no lower bound.
-          format: date-time
-        deliveryDueDateTo:
-          type:
-          - string
-          - 'null'
-          description: 'Inclusive upper bound applied to the line''s Delivery Due Date (the whole `to` day is
-
-            included). Null means no upper bound.'
-          format: date-time
-        salesOrderStatus:
-          type:
-          - string
-          - 'null'
-          description: Optional exact-match filter on the sales-order lifecycle status. Null means no status filter.
-        customerName:
-          type:
-          - string
-          - 'null'
-          description: Optional exact-match filter on the customer name. Null means no customer filter.
-        accountingCode:
-          type:
-          - string
-          - 'null'
-          description: 'Optional exact-match filter on the accounting code mapped to the line. Null means no accounting
-
-            code filter.'
-        unshippedOnly:
-          type:
-          - boolean
-          - 'null'
-          description: 'When true, returns only lines with quantity remaining to ship (Quantity to Ship > 0). When
-
-            false or null, no ship-status filter is applied.'
-      additionalProperties: false
-      description: 'Constrained filter for the sales-order line-items reporting list endpoint. Every field maps to a
-
-        fixed, server-controlled column; values are always bound as Dapper parameters and never concatenated
-
-        into SQL.'
-    DtoReportingShippingReportFilter:
-      type: object
-      properties:
-        shipByDateFrom:
-          type:
-          - string
-          - 'null'
-          description: Inclusive lower bound applied to the shipment's Ship By Date. Null means no lower bound.
-          format: date-time
-        shipByDateTo:
-          type:
-          - string
-          - 'null'
-          description: 'Inclusive upper bound applied to the shipment''s Ship By Date (the whole `to` day is
-
-            included). Null means no upper bound.'
-          format: date-time
-        status:
-          type:
-          - string
-          - 'null'
-          description: 'Optional exact-match filter on the shipment lifecycle status (e.g. "Shipped", "Open"). Null
-
-            means no status filter.'
-      additionalProperties: false
-      description: 'Constrained filter for the shipping reporting list endpoint. Every field maps to a fixed,
-
-        server-controlled column; values are always bound as Dapper parameters and never concatenated
-
-        into SQL.'
-    DtoPagedResultDtoDtoReportingInvoiceReportRow:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DtoReportingInvoiceReportRow'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
     DtoReportingInventoryReportFilter:
       type: object
       properties:
@@ -1159,304 +523,6 @@ components:
         server-controlled column; values are always bound as Dapper parameters and never concatenated
 
         into SQL.'
-    DtoReportingJobActivityByOperatorReportRow:
-      type: object
-      properties:
-        jobName:
-          type:
-          - string
-          - 'null'
-          description: Job name.
-        item:
-          type:
-          - string
-          - 'null'
-          description: Item being produced.
-        operationName:
-          type:
-          - string
-          - 'null'
-          description: Operation name within the routing.
-        operationNumber:
-          type:
-          - integer
-          - 'null'
-          description: Operation sequence number within the routing.
-          format: int32
-        employee:
-          type:
-          - string
-          - 'null'
-          description: Operator name.
-        startedOrCreatedDate:
-          type:
-          - string
-          - 'null'
-          description: Date the operator's run started (or the row was created).
-          format: date-time
-        jobCompletedDate:
-          type:
-          - string
-          - 'null'
-          description: Completion date of the job overall.
-          format: date-time
-        itemDescription:
-          type:
-          - string
-          - 'null'
-          description: Item description.
-        itemRevision:
-          type:
-          - string
-          - 'null'
-          description: Item revision when applicable.
-        isParent:
-          type:
-          - integer
-          - 'null'
-          description: 1 when this item is a parent assembly within the job, otherwise 0. (Computed 1/0 flag.)
-          format: int32
-        lastOperationOnItem:
-          type:
-          - integer
-          - 'null'
-          description: 1 when this is the final operation in the item's routing, otherwise 0. (Computed 1/0 flag.)
-          format: int32
-        productionDueDate:
-          type:
-          - string
-          - 'null'
-          description: Job's production due date.
-          format: date-time
-        salesOrderNumber:
-          type:
-          - string
-          - 'null'
-          description: Source sales order number.
-        customer:
-          type:
-          - string
-          - 'null'
-          description: Customer name from the sales order.
-        customerPurchaseOrder:
-          type:
-          - string
-          - 'null'
-          description: Customer's PO number from the sales order.
-        jobPriority:
-          type:
-          - string
-          - 'null'
-          description: Job priority value.
-        jobStatus:
-          type:
-          - string
-          - 'null'
-          description: Job lifecycle status.
-        jobScheduledStart:
-          type:
-          - string
-          - 'null'
-          description: Scheduled start time of the job.
-          format: date-time
-        jobScheduledEnd:
-          type:
-          - string
-          - 'null'
-          description: Scheduled end time of the job.
-          format: date-time
-        jobLateStatus:
-          type:
-          - string
-          - 'null'
-          description: Late classification for the job (Late or On Time).
-        jobPlannedQty:
-          type:
-          - number
-          - 'null'
-          description: Planned quantity for the job.
-          format: double
-        uoM:
-          type:
-          - string
-          - 'null'
-          description: Unit of measure for the item being produced.
-        department:
-          type:
-          - string
-          - 'null'
-          description: Department containing the work center.
-        shift:
-          type:
-          - string
-          - 'null'
-          description: Shift assigned to the operation.
-        scheduledEquipment:
-          type:
-          - string
-          - 'null'
-          description: Equipment scheduled for this operation.
-        operationStatus:
-          type:
-          - string
-          - 'null'
-          description: Operation lifecycle status (Ready, Pending, Running, Paused, Complete).
-        operationCompletedDate:
-          type:
-          - string
-          - 'null'
-          description: Completion date of the operation.
-          format: date-time
-        setupComplete:
-          type:
-          - string
-          - 'null'
-          description: '"TRUE" when the setup phase is complete, otherwise "FALSE".'
-        runComplete:
-          type:
-          - string
-          - 'null'
-          description: '"TRUE" when the run phase is complete, otherwise "FALSE".'
-        estimatedSetupTimeHours:
-          type:
-          - number
-          - 'null'
-          description: Estimated setup hours for the operation.
-          format: double
-        estimatedRunTimeHours:
-          type:
-          - number
-          - 'null'
-          description: Estimated run hours for the operation.
-          format: double
-        estimatedMachineTimeHours:
-          type:
-          - number
-          - 'null'
-          description: Estimated machine hours for the operation.
-          format: double
-        unitsCompletedOnOperation:
-          type:
-          - number
-          - 'null'
-          description: Quantity completed on the operation overall.
-          format: double
-        isOutsideProcessing:
-          type:
-          - string
-          - 'null'
-          description: '"Outside Processing" when the operation is performed by an outside vendor, otherwise empty.'
-        setupTimeHours:
-          type:
-          - number
-          - 'null'
-          description: Operator's actual setup hours on this run.
-          format: double
-        laborTimeHours:
-          type:
-          - number
-          - 'null'
-          description: Operator's actual labor hours on this run.
-          format: double
-        machineTimeHours:
-          type:
-          - number
-          - 'null'
-          description: Machine hours recorded on this run.
-          format: double
-        startedOn:
-          type:
-          - string
-          - 'null'
-          description: Timer start timestamp for this run.
-          format: date-time
-        stoppedOn:
-          type:
-          - string
-          - 'null'
-          description: Timer stop timestamp for this run.
-          format: date-time
-        qtyCompletedThisRun:
-          type:
-          - number
-          - 'null'
-          description: Quantity completed in this specific run.
-          format: double
-        qtyInventoriedThisRun:
-          type:
-          - number
-          - 'null'
-          description: Quantity moved to inventory in this specific run.
-          format: double
-        unitsPerHour:
-          type:
-          - number
-          - 'null'
-          description: Throughput rate for this run (units / labor hour).
-          format: double
-        setupRate:
-          type:
-          - number
-          - 'null'
-          description: Hourly rate applied to setup hours.
-          format: double
-        laborRate:
-          type:
-          - number
-          - 'null'
-          description: Hourly rate applied to labor hours.
-          format: double
-        machineRate:
-          type:
-          - number
-          - 'null'
-          description: Hourly rate applied to machine hours.
-          format: double
-        setupCost:
-          type:
-          - number
-          - 'null'
-          description: Computed setup cost for this run (hours × rate).
-          format: double
-        laborCost:
-          type:
-          - number
-          - 'null'
-          description: Computed labor cost for this run (hours × rate).
-          format: double
-        machineCost:
-          type:
-          - number
-          - 'null'
-          description: Computed machine cost for this run (hours × rate).
-          format: double
-        operationScheduledStart:
-          type:
-          - string
-          - 'null'
-          description: Scheduled start time for this operation.
-          format: date-time
-        operationScheduledEnd:
-          type:
-          - string
-          - 'null'
-          description: Scheduled end time for this operation.
-          format: date-time
-        systemOperationId:
-          type:
-          - string
-          - 'null'
-          description: Internal stable identifier for the operation.
-      additionalProperties: false
-      description: 'One row of the pre-joined job-activity-by-operator reporting view
-
-        (`rpt.View_ExposedReportingData_JobActivityByOperator`): one operation, day, and operator,
-
-        carrying per-operator setup/labor/machine time and cost, run-by-run quantities, rates, and job/routing
-
-        context. Property names are clean identifiers; the query aliases each source column
-
-        (e.g. `[Started or Created Date]`) to the matching property so Dapper can bind it.'
     DtoReportingJobActivityReportRow:
       type: object
       properties:
@@ -1777,121 +843,6 @@ components:
         query aliases each source column (e.g. `[QuotedDate]`) to the matching property so Dapper can
 
         bind it.'
-    DtoReportingQuoteReportFilter:
-      type: object
-      properties:
-        quotedDateFrom:
-          type:
-          - string
-          - 'null'
-          description: Inclusive lower bound applied to the quote's Quoted Date. Null means no lower bound.
-          format: date-time
-        quotedDateTo:
-          type:
-          - string
-          - 'null'
-          description: 'Inclusive upper bound applied to the quote''s Quoted Date (the whole `to` day is included).
-
-            Null means no upper bound.'
-          format: date-time
-        status:
-          type:
-          - string
-          - 'null'
-          description: Optional exact-match filter on the quote lifecycle status. Null means no status filter.
-        customerName:
-          type:
-          - string
-          - 'null'
-          description: Optional exact-match filter on the customer name. Null means no customer filter.
-      additionalProperties: false
-      description: 'Constrained filter for the quote reporting list endpoint. Every field maps to a fixed,
-
-        server-controlled column; values are always bound as Dapper parameters and never concatenated
-
-        into SQL.'
-    DtoPagedResultDtoDtoReportingJobActivityReportRow:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DtoReportingJobActivityReportRow'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    DtoReportingInvoiceReportFilter:
-      type: object
-      properties:
-        issuedDateFrom:
-          type:
-          - string
-          - 'null'
-          description: Inclusive lower bound applied to the invoice's Issued Date. Null means no lower bound.
-          format: date-time
-        issuedDateTo:
-          type:
-          - string
-          - 'null'
-          description: 'Inclusive upper bound applied to the invoice''s Issued Date (the whole `to` day is included).
-
-            Null means no upper bound.'
-          format: date-time
-        invoiceStatus:
-          type:
-          - string
-          - 'null'
-          description: 'Optional exact-match filter on the invoice lifecycle status (e.g. "Issued", "Paid"). Null means
-
-            no status filter.'
-        lineType:
-          type:
-          - string
-          - 'null'
-          description: 'Optional exact-match filter on the line type (Part, Shipping, Fee, Deposit, Discount, Refund,
-
-            Tax, or NA). Null means no line-type filter.'
-      additionalProperties: false
-      description: 'Constrained filter for the invoice reporting list endpoint. Every field maps to a fixed,
-
-        server-controlled column; values are always bound as Dapper parameters and never concatenated
-
-        into SQL.'
     DtoPagedResultDtoDtoReportingShippingReportRow:
       required:
       - data
@@ -1907,51 +858,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DtoReportingShippingReportRow'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    DtoPagedResultDtoDtoReportingJobActivityByOperatorReportRow:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DtoReportingJobActivityByOperatorReportRow'
           description: The data
         page:
           type: integer
@@ -2027,46 +933,7 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    DtoReportingTimeClockReportFilter:
-      type: object
-      properties:
-        startedFrom:
-          type:
-          - string
-          - 'null'
-          description: Inclusive lower bound applied to the entry's clock-in time (Started). Null means no lower bound.
-          format: date-time
-        startedTo:
-          type:
-          - string
-          - 'null'
-          description: 'Inclusive upper bound applied to the entry''s clock-in time (Started); the whole `to` day is
-
-            included. Null means no upper bound.'
-          format: date-time
-        employee:
-          type:
-          - string
-          - 'null'
-          description: Optional exact-match filter on the operator / employee name. Null means no employee filter.
-        type:
-          type:
-          - string
-          - 'null'
-          description: Optional exact-match filter on the timer-entry type (ClockIn or Break). Null means no type filter.
-      additionalProperties: false
-      description: 'Constrained filter for the time-clock reporting list endpoint. Every field maps to a fixed,
-
-        server-controlled column; values are always bound as Dapper parameters and never concatenated
-
-        into SQL.'
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    DtoPagedResultDtoDtoReportingTimeClockReportRow:
+    DtoPagedResultDtoDtoReportingInvoiceReportRow:
       required:
       - data
       - hasNextPage
@@ -2080,7 +947,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/DtoReportingTimeClockReportRow'
+            $ref: '#/components/schemas/DtoReportingInvoiceReportRow'
           description: The data
         page:
           type: integer
@@ -2393,6 +1260,1176 @@ components:
         dollar values. Property names are clean identifiers; the query aliases each source column
 
         (e.g. `[$ Shipped]`) to the matching property so Dapper can bind it.'
+    DtoReportingJobActivityReportFilter:
+      type: object
+      properties:
+        operationStatus:
+          type:
+          - string
+          - 'null'
+          description: 'Optional exact-match filter on the operation lifecycle status (e.g. "Running", "Complete"). Null
+
+            means no operation-status filter.'
+        jobStatus:
+          type:
+          - string
+          - 'null'
+          description: 'Optional exact-match filter on the job lifecycle status (e.g. "In Progress", "Complete"). Null
+
+            means no job-status filter.'
+        department:
+          type:
+          - string
+          - 'null'
+          description: 'Optional exact-match filter on the department containing the operation''s scheduled work center.
+
+            Null means no department filter.'
+        productionDueDateFrom:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound applied to the job's Production Due Date. Null means no lower bound.
+          format: date-time
+        productionDueDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive upper bound applied to the job''s Production Due Date (the whole `to` day is
+
+            included). Null means no upper bound.'
+          format: date-time
+      additionalProperties: false
+      description: 'Constrained filter for the job-activity reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoPagedResultDtoDtoReportingJobActivityReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingJobActivityReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoPagedResultDtoDtoReportingJobActivityByOperatorReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingJobActivityByOperatorReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingTimeClockReportFilter:
+      type: object
+      properties:
+        startedFrom:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound applied to the entry's clock-in time (Started). Null means no lower bound.
+          format: date-time
+        startedTo:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive upper bound applied to the entry''s clock-in time (Started); the whole `to` day is
+
+            included. Null means no upper bound.'
+          format: date-time
+        employee:
+          type:
+          - string
+          - 'null'
+          description: Optional exact-match filter on the operator / employee name. Null means no employee filter.
+        type:
+          type:
+          - string
+          - 'null'
+          description: Optional exact-match filter on the timer-entry type (ClockIn or Break). Null means no type filter.
+      additionalProperties: false
+      description: 'Constrained filter for the time-clock reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoPagedResultDtoDtoReportingSalesOrderLinesReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingSalesOrderLinesReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingTimeClockReportRow:
+      type: object
+      properties:
+        employee:
+          type:
+          - string
+          - 'null'
+          description: Operator / employee name.
+        overridden:
+          type:
+          - string
+          - 'null'
+          description: '"Yes" when the entry''s start or stop time was manually overridden, otherwise "No".'
+        type:
+          type:
+          - string
+          - 'null'
+          description: Timer-entry type classification (ClockIn or Break).
+        started:
+          type:
+          - string
+          - 'null'
+          description: Clock-in timestamp.
+          format: date-time
+        stopped:
+          type:
+          - string
+          - 'null'
+          description: Clock-out timestamp; null if not yet stopped.
+          format: date-time
+        shiftHoursWorked:
+          type:
+          - number
+          - 'null'
+          description: Computed hours between Started and Stopped.
+          format: double
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Reason code for the entry, when applicable.
+        clockCode:
+          type:
+          - string
+          - 'null'
+          description: Clock-code tag attached to the entry, when applicable.
+        createdByName:
+          type:
+          - string
+          - 'null'
+          description: User who created the entry.
+        modifiedByName:
+          type:
+          - string
+          - 'null'
+          description: Most recent user to modify the entry.
+        startedOnOverrideByName:
+          type:
+          - string
+          - 'null'
+          description: User who overrode the start time, when applicable.
+        stoppedOnOverrideByName:
+          type:
+          - string
+          - 'null'
+          description: User who overrode the stop time, when applicable.
+      additionalProperties: false
+      description: 'One row of the pre-joined time-clock reporting view (`rpt.View_ExposedReportingData_TimeClock`):
+
+        one timer entry (clock-in or break), carrying clock-in/clock-out times, computed shift hours, reason
+
+        and clock codes, and override-audit context. Property names are clean identifiers; the query aliases
+
+        each source column (e.g. `[Shift Hours Worked]`) to the matching property so Dapper can bind it.'
+    DtoReportingShippingReportFilter:
+      type: object
+      properties:
+        shipByDateFrom:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound applied to the shipment's Ship By Date. Null means no lower bound.
+          format: date-time
+        shipByDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive upper bound applied to the shipment''s Ship By Date (the whole `to` day is
+
+            included). Null means no upper bound.'
+          format: date-time
+        status:
+          type:
+          - string
+          - 'null'
+          description: 'Optional exact-match filter on the shipment lifecycle status (e.g. "Shipped", "Open"). Null
+
+            means no status filter.'
+      additionalProperties: false
+      description: 'Constrained filter for the shipping reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoReportingInvoiceReportRow:
+      type: object
+      properties:
+        company:
+          type:
+          - string
+          - 'null'
+          description: Issuing company / tenant company name.
+        invoiceNumber:
+          type:
+          - integer
+          - 'null'
+          description: Numeric invoice identifier assigned by Fulcrum.
+          format: int32
+        invoiceStatus:
+          type:
+          - string
+          - 'null'
+          description: Lifecycle state — typically New, Approved, Issued, Paid.
+        salesOrderNumber:
+          type:
+          - integer
+          - 'null'
+          description: Number identifying the sales order being invoiced.
+          format: int32
+        customerPurchaseOrder:
+          type:
+          - string
+          - 'null'
+          description: Customer's PO number recorded on the sales order.
+        customerName:
+          type:
+          - string
+          - 'null'
+          description: Display name of the billed customer.
+        salesPerson:
+          type:
+          - string
+          - 'null'
+          description: Name of the salesperson associated with the sales order.
+        isDeposit:
+          type:
+          - string
+          - 'null'
+          description: Set to the string "Deposit" when the row represents a deposit; null otherwise.
+        createdDate:
+          type:
+          - string
+          - 'null'
+          description: UTC timestamp when the invoice record was created.
+          format: date-time
+        lineType:
+          type:
+          - string
+          - 'null'
+          description: Discriminator — Part, Shipping, Fee, Deposit, Discount, Refund, Tax, or NA.
+        lineItemName:
+          type:
+          - string
+          - 'null'
+          description: Item name (for part lines) or descriptive label for non-part lines.
+        customerPartNumber:
+          type:
+          - string
+          - 'null'
+          description: Customer's part number for this line, when supplied.
+        customerPartDescription:
+          type:
+          - string
+          - 'null'
+          description: Customer's description for this line, when supplied.
+        itemDescription:
+          type:
+          - string
+          - 'null'
+          description: Internal item description for the line.
+        accountingCode:
+          type:
+          - string
+          - 'null'
+          description: Accounting code mapped to the invoice line.
+        itemTags:
+          type:
+          - string
+          - 'null'
+          description: Comma-separated list of descriptive tags from the item.
+        issuedDate:
+          type:
+          - string
+          - 'null'
+          description: Date the invoice was issued. NULL for drafts.
+          format: date-time
+        dueDate:
+          type:
+          - string
+          - 'null'
+          description: Date payment is due per the invoice's payment terms.
+          format: date-time
+        salesOrderTotal:
+          type:
+          - number
+          - 'null'
+          description: Total of the source sales order (may differ from invoice total).
+          format: double
+        unitPrice:
+          type:
+          - number
+          - 'null'
+          description: Per-unit price for the line (varies by Line Type; negative for discounts).
+          format: double
+        quantityInvoiced:
+          type:
+          - number
+          - 'null'
+          description: Quantity billed on this line.
+          format: double
+        invoiceAmount:
+          type:
+          - number
+          - 'null'
+          description: Extended amount for this line before tax.
+          format: double
+        isTaxable:
+          type:
+          - integer
+          - 'null'
+          description: 1 when the line is subject to taxation, otherwise 0. (Computed 1/0 flag in the view.)
+          format: int32
+        taxCode:
+          type:
+          - string
+          - 'null'
+          description: Descriptive name of the tax code applied to the line, when applicable.
+        taxTotal:
+          type:
+          - number
+          - 'null'
+          description: Equivalent to Invoice Amount for tax line items; 0 otherwise.
+          format: double
+        invoiceTotalWithoutTax:
+          type:
+          - number
+          - 'null'
+          description: Invoice-level total excluding tax (repeats on every line of the invoice).
+          format: double
+        invoiceTotalWithTax:
+          type:
+          - number
+          - 'null'
+          description: Invoice-level total including tax (repeats on every line of the invoice).
+          format: double
+        paidDate:
+          type:
+          - string
+          - 'null'
+          description: Date the invoice was marked paid; null while open.
+          format: date-time
+        late:
+          type:
+          - integer
+          - 'null'
+          description: 1 when the invoice is past Due Date and unpaid or was paid late, otherwise 0. (Computed 1/0 flag in the view.)
+          format: int32
+        daysLate:
+          type:
+          - integer
+          - 'null'
+          description: Days between Due Date and either Paid Date (if paid) or today (if open). 0 if not yet due.
+          format: int32
+        customerCurrencyCode:
+          type:
+          - string
+          - 'null'
+          description: ISO currency code of the customer's billing currency.
+        shipmentName:
+          type:
+          - string
+          - 'null'
+          description: Concatenated names of shipments invoiced on this line (comma-separated).
+        shipmentsLine1s:
+          type:
+          - string
+          - 'null'
+          description: Together with ShipmentsLine2s, concatenated shipment address values (comma-separated).
+        shipmentsLine2s:
+          type:
+          - string
+          - 'null'
+          description: Together with ShipmentsLine1s, concatenated shipment address values (comma-separated).
+        shipmentsCities:
+          type:
+          - string
+          - 'null'
+          description: Concatenated shipment cities (comma-separated).
+        shipmentsStates:
+          type:
+          - string
+          - 'null'
+          description: Concatenated shipment state/provinces (comma-separated).
+        shipmentsCountries:
+          type:
+          - string
+          - 'null'
+          description: Concatenated shipment countries (comma-separated).
+        accountingClass:
+          type:
+          - string
+          - 'null'
+          description: Accounting classification for the item associated to the line, if applicable.
+      additionalProperties: false
+      description: 'One row of the pre-joined invoice reporting view (`rpt.View_ExposedReportingData_Invoice`): one
+
+        invoice line item, joined to sales-order and shipment context with line type, pricing, tax, and aging
+
+        detail. Property names are clean identifiers; the query aliases each source column (e.g.
+
+        `[Issued Date]`) to the matching property so Dapper can bind it.'
+    DtoReportingQuoteReportFilter:
+      type: object
+      properties:
+        quotedDateFrom:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound applied to the quote's Quoted Date. Null means no lower bound.
+          format: date-time
+        quotedDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive upper bound applied to the quote''s Quoted Date (the whole `to` day is included).
+
+            Null means no upper bound.'
+          format: date-time
+        status:
+          type:
+          - string
+          - 'null'
+          description: Optional exact-match filter on the quote lifecycle status. Null means no status filter.
+        customerName:
+          type:
+          - string
+          - 'null'
+          description: Optional exact-match filter on the customer name. Null means no customer filter.
+      additionalProperties: false
+      description: 'Constrained filter for the quote reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoPagedResultDtoDtoReportingInventoryReportRow:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoReportingInventoryReportRow'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    DtoReportingInventoryReportRow:
+      type: object
+      properties:
+        number:
+          type:
+          - string
+          - 'null'
+          description: Item number (the user-facing identifier for an item).
+        description:
+          type:
+          - string
+          - 'null'
+          description: Item description.
+        revision:
+          type:
+          - string
+          - 'null'
+          description: Item revision label.
+        origin:
+          type:
+          - string
+          - 'null'
+          description: Item origin classification (e.g. Make, Buy, MakeOrBuy, CustomerSupplied).
+        isSellable:
+          type:
+          - string
+          - 'null'
+          description: '"Sellable" when the item can appear on a sales order line, otherwise empty.'
+        primaryVendorName:
+          type:
+          - string
+          - 'null'
+          description: Default vendor name for purchasing the item (Buy or MakeOrBuy items only).
+        tags:
+          type:
+          - string
+          - 'null'
+          description: Comma-separated list of descriptive, user-applied tags on the item.
+        minimumStockOnHand:
+          type:
+          - number
+          - 'null'
+          description: Configured minimum stock threshold for reorder planning.
+          format: double
+        unitOfMeasureName:
+          type:
+          - string
+          - 'null'
+          description: Inventory unit of measure (e.g. Piece, Foot, Centimeter).
+        accountingCode1:
+          type:
+          - string
+          - 'null'
+          description: Primary accounting code mapped to this item.
+        accountingCode2:
+          type:
+          - string
+          - 'null'
+          description: Secondary accounting code, when configured.
+        accountingClass:
+          type:
+          - string
+          - 'null'
+          description: Accounting classification.
+        category:
+          type:
+          - string
+          - 'null'
+          description: Item category for grouping.
+        isArchived:
+          type:
+          - string
+          - 'null'
+          description: '"Archived" when the item is archived and no longer in active use, otherwise empty.'
+        shippingUnitWeight:
+          type:
+          - number
+          - 'null'
+          description: Weight per inventory unit used for shipping calculations.
+          format: double
+        materialUnitWeightLbs:
+          type:
+          - number
+          - 'null'
+          description: Underlying material weight per unit, in pounds, for raw-material shape items.
+          format: double
+        onHandQty:
+          type:
+          - number
+          - 'null'
+          description: Quantity currently on hand for this lot at this location.
+          format: double
+        lotNumber:
+          type:
+          - string
+          - 'null'
+          description: Lot identifier.
+        expirationDate:
+          type:
+          - string
+          - 'null'
+          description: Lot expiration date when applicable.
+          format: date-time
+        locationName:
+          type:
+          - string
+          - 'null'
+          description: Inventory location name.
+        isCustom:
+          type:
+          - string
+          - 'null'
+          description: '"Custom" when the lot holds customized / non-standard variations of an item, otherwise empty.'
+        materialValue:
+          type:
+          - number
+          - 'null'
+          description: Per-unit value of input materials required to produce the items in this lot.
+          format: double
+        laborValue:
+          type:
+          - number
+          - 'null'
+          description: Per-unit value of labor required to produce the items in this lot.
+          format: double
+        machineValue:
+          type:
+          - number
+          - 'null'
+          description: Per-unit value of equipment time required to produce the items in this lot.
+          format: double
+        outsideProcessingValue:
+          type:
+          - number
+          - 'null'
+          description: Per-unit value of outside processes required to produce the items in this lot.
+          format: double
+        totalUnitValue:
+          type:
+          - number
+          - 'null'
+          description: Sum of per-unit cost components (material + labor + machine + OP).
+          format: double
+        totalValue:
+          type:
+          - number
+          - 'null'
+          description: On-hand quantity × total unit value (extended inventory value).
+          format: double
+      additionalProperties: false
+      description: 'One row of the pre-joined inventory reporting view (`rpt.View_ExposedReportingData_Inventory`):
+
+        one (item, lot, location) combination, carrying on-hand quantity, per-unit and extended valuation
+
+        (material/labor/machine/OP), lot and location context, and item categorization. Property names are
+
+        clean identifiers; the query aliases each source column (e.g. `[On Hand Qty]`) to the matching
+
+        property so Dapper can bind it.'
+    DtoReportingJobActivityByOperatorReportRow:
+      type: object
+      properties:
+        jobName:
+          type:
+          - string
+          - 'null'
+          description: Job name.
+        item:
+          type:
+          - string
+          - 'null'
+          description: Item being produced.
+        operationName:
+          type:
+          - string
+          - 'null'
+          description: Operation name within the routing.
+        operationNumber:
+          type:
+          - integer
+          - 'null'
+          description: Operation sequence number within the routing.
+          format: int32
+        employee:
+          type:
+          - string
+          - 'null'
+          description: Operator name.
+        startedOrCreatedDate:
+          type:
+          - string
+          - 'null'
+          description: Date the operator's run started (or the row was created).
+          format: date-time
+        jobCompletedDate:
+          type:
+          - string
+          - 'null'
+          description: Completion date of the job overall.
+          format: date-time
+        itemDescription:
+          type:
+          - string
+          - 'null'
+          description: Item description.
+        itemRevision:
+          type:
+          - string
+          - 'null'
+          description: Item revision when applicable.
+        isParent:
+          type:
+          - integer
+          - 'null'
+          description: 1 when this item is a parent assembly within the job, otherwise 0. (Computed 1/0 flag.)
+          format: int32
+        lastOperationOnItem:
+          type:
+          - integer
+          - 'null'
+          description: 1 when this is the final operation in the item's routing, otherwise 0. (Computed 1/0 flag.)
+          format: int32
+        productionDueDate:
+          type:
+          - string
+          - 'null'
+          description: Job's production due date.
+          format: date-time
+        salesOrderNumber:
+          type:
+          - string
+          - 'null'
+          description: Source sales order number.
+        customer:
+          type:
+          - string
+          - 'null'
+          description: Customer name from the sales order.
+        customerPurchaseOrder:
+          type:
+          - string
+          - 'null'
+          description: Customer's PO number from the sales order.
+        jobPriority:
+          type:
+          - string
+          - 'null'
+          description: Job priority value.
+        jobStatus:
+          type:
+          - string
+          - 'null'
+          description: Job lifecycle status.
+        jobScheduledStart:
+          type:
+          - string
+          - 'null'
+          description: Scheduled start time of the job.
+          format: date-time
+        jobScheduledEnd:
+          type:
+          - string
+          - 'null'
+          description: Scheduled end time of the job.
+          format: date-time
+        jobLateStatus:
+          type:
+          - string
+          - 'null'
+          description: Late classification for the job (Late or On Time).
+        jobPlannedQty:
+          type:
+          - number
+          - 'null'
+          description: Planned quantity for the job.
+          format: double
+        uoM:
+          type:
+          - string
+          - 'null'
+          description: Unit of measure for the item being produced.
+        department:
+          type:
+          - string
+          - 'null'
+          description: Department containing the work center.
+        shift:
+          type:
+          - string
+          - 'null'
+          description: Shift assigned to the operation.
+        scheduledEquipment:
+          type:
+          - string
+          - 'null'
+          description: Equipment scheduled for this operation.
+        operationStatus:
+          type:
+          - string
+          - 'null'
+          description: Operation lifecycle status (Ready, Pending, Running, Paused, Complete).
+        operationCompletedDate:
+          type:
+          - string
+          - 'null'
+          description: Completion date of the operation.
+          format: date-time
+        setupComplete:
+          type:
+          - string
+          - 'null'
+          description: '"TRUE" when the setup phase is complete, otherwise "FALSE".'
+        runComplete:
+          type:
+          - string
+          - 'null'
+          description: '"TRUE" when the run phase is complete, otherwise "FALSE".'
+        estimatedSetupTimeHours:
+          type:
+          - number
+          - 'null'
+          description: Estimated setup hours for the operation.
+          format: double
+        estimatedRunTimeHours:
+          type:
+          - number
+          - 'null'
+          description: Estimated run hours for the operation.
+          format: double
+        estimatedMachineTimeHours:
+          type:
+          - number
+          - 'null'
+          description: Estimated machine hours for the operation.
+          format: double
+        unitsCompletedOnOperation:
+          type:
+          - number
+          - 'null'
+          description: Quantity completed on the operation overall.
+          format: double
+        isOutsideProcessing:
+          type:
+          - string
+          - 'null'
+          description: '"Outside Processing" when the operation is performed by an outside vendor, otherwise empty.'
+        setupTimeHours:
+          type:
+          - number
+          - 'null'
+          description: Operator's actual setup hours on this run.
+          format: double
+        laborTimeHours:
+          type:
+          - number
+          - 'null'
+          description: Operator's actual labor hours on this run.
+          format: double
+        machineTimeHours:
+          type:
+          - number
+          - 'null'
+          description: Machine hours recorded on this run.
+          format: double
+        startedOn:
+          type:
+          - string
+          - 'null'
+          description: Timer start timestamp for this run.
+          format: date-time
+        stoppedOn:
+          type:
+          - string
+          - 'null'
+          description: Timer stop timestamp for this run.
+          format: date-time
+        qtyCompletedThisRun:
+          type:
+          - number
+          - 'null'
+          description: Quantity completed in this specific run.
+          format: double
+        qtyInventoriedThisRun:
+          type:
+          - number
+          - 'null'
+          description: Quantity moved to inventory in this specific run.
+          format: double
+        unitsPerHour:
+          type:
+          - number
+          - 'null'
+          description: Throughput rate for this run (units / labor hour).
+          format: double
+        setupRate:
+          type:
+          - number
+          - 'null'
+          description: Hourly rate applied to setup hours.
+          format: double
+        laborRate:
+          type:
+          - number
+          - 'null'
+          description: Hourly rate applied to labor hours.
+          format: double
+        machineRate:
+          type:
+          - number
+          - 'null'
+          description: Hourly rate applied to machine hours.
+          format: double
+        setupCost:
+          type:
+          - number
+          - 'null'
+          description: Computed setup cost for this run (hours × rate).
+          format: double
+        laborCost:
+          type:
+          - number
+          - 'null'
+          description: Computed labor cost for this run (hours × rate).
+          format: double
+        machineCost:
+          type:
+          - number
+          - 'null'
+          description: Computed machine cost for this run (hours × rate).
+          format: double
+        operationScheduledStart:
+          type:
+          - string
+          - 'null'
+          description: Scheduled start time for this operation.
+          format: date-time
+        operationScheduledEnd:
+          type:
+          - string
+          - 'null'
+          description: Scheduled end time for this operation.
+          format: date-time
+        systemOperationId:
+          type:
+          - string
+          - 'null'
+          description: Internal stable identifier for the operation.
+      additionalProperties: false
+      description: 'One row of the pre-joined job-activity-by-operator reporting view
+
+        (`rpt.View_ExposedReportingData_JobActivityByOperator`): one operation, day, and operator,
+
+        carrying per-operator setup/labor/machine time and cost, run-by-run quantities, rates, and job/routing
+
+        context. Property names are clean identifiers; the query aliases each source column
+
+        (e.g. `[Started or Created Date]`) to the matching property so Dapper can bind it.'
+    DtoReportingSalesOrderLinesReportFilter:
+      type: object
+      properties:
+        orderedDateFrom:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound applied to the order's Ordered Date. Null means no lower bound.
+          format: date-time
+        orderedDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive upper bound applied to the order''s Ordered Date (the whole `to` day is included).
+
+            Null means no upper bound.'
+          format: date-time
+        deliveryDueDateFrom:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound applied to the line's Delivery Due Date. Null means no lower bound.
+          format: date-time
+        deliveryDueDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive upper bound applied to the line''s Delivery Due Date (the whole `to` day is
+
+            included). Null means no upper bound.'
+          format: date-time
+        salesOrderStatus:
+          type:
+          - string
+          - 'null'
+          description: Optional exact-match filter on the sales-order lifecycle status. Null means no status filter.
+        customerName:
+          type:
+          - string
+          - 'null'
+          description: Optional exact-match filter on the customer name. Null means no customer filter.
+        accountingCode:
+          type:
+          - string
+          - 'null'
+          description: 'Optional exact-match filter on the accounting code mapped to the line. Null means no accounting
+
+            code filter.'
+        unshippedOnly:
+          type:
+          - boolean
+          - 'null'
+          description: 'When true, returns only lines with quantity remaining to ship (Quantity to Ship > 0). When
+
+            false or null, no ship-status filter is applied.'
+      additionalProperties: false
+      description: 'Constrained filter for the sales-order line-items reporting list endpoint. Every field maps to a
+
+        fixed, server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    DtoReportingJobActivityByOperatorReportFilter:
+      type: object
+      properties:
+        startedOrCreatedDateFrom:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound applied to the run's Started or Created Date. Null means no lower bound.
+          format: date-time
+        startedOrCreatedDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive upper bound applied to the run''s Started or Created Date (the whole `to` day is
+
+            included). Null means no upper bound.'
+          format: date-time
+        employee:
+          type:
+          - string
+          - 'null'
+          description: Optional exact-match filter on the operator / employee name. Null means no operator filter.
+        department:
+          type:
+          - string
+          - 'null'
+          description: 'Optional exact-match filter on the department containing the operation''s work center. Null means
+
+            no department filter.'
+      additionalProperties: false
+      description: 'Constrained filter for the job-activity-by-operator reporting list endpoint. Every field maps to a
+
+        fixed, server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     DtoReportingSalesOrderLinesReportRow:
       type: object
       properties:
@@ -2776,81 +2813,7 @@ components:
         names are clean identifiers; the query aliases each source column (e.g. `[Sales Order Number]`)
 
         to the matching property so Dapper can bind it.'
-    DtoReportingTimeClockReportRow:
-      type: object
-      properties:
-        employee:
-          type:
-          - string
-          - 'null'
-          description: Operator / employee name.
-        overridden:
-          type:
-          - string
-          - 'null'
-          description: '"Yes" when the entry''s start or stop time was manually overridden, otherwise "No".'
-        type:
-          type:
-          - string
-          - 'null'
-          description: Timer-entry type classification (ClockIn or Break).
-        started:
-          type:
-          - string
-          - 'null'
-          description: Clock-in timestamp.
-          format: date-time
-        stopped:
-          type:
-          - string
-          - 'null'
-          description: Clock-out timestamp; null if not yet stopped.
-          format: date-time
-        shiftHoursWorked:
-          type:
-          - number
-          - 'null'
-          description: Computed hours between Started and Stopped.
-          format: double
-        reason:
-          type:
-          - string
-          - 'null'
-          description: Reason code for the entry, when applicable.
-        clockCode:
-          type:
-          - string
-          - 'null'
-          description: Clock-code tag attached to the entry, when applicable.
-        createdByName:
-          type:
-          - string
-          - 'null'
-          description: User who created the entry.
-        modifiedByName:
-          type:
-          - string
-          - 'null'
-          description: Most recent user to modify the entry.
-        startedOnOverrideByName:
-          type:
-          - string
-          - 'null'
-          description: User who overrode the start time, when applicable.
-        stoppedOnOverrideByName:
-          type:
-          - string
-          - 'null'
-          description: User who overrode the stop time, when applicable.
-      additionalProperties: false
-      description: 'One row of the pre-joined time-clock reporting view (`rpt.View_ExposedReportingData_TimeClock`):
-
-        one timer entry (clock-in or break), carrying clock-in/clock-out times, computed shift hours, reason
-
-        and clock codes, and override-audit context. Property names are clean identifiers; the query aliases
-
-        each source column (e.g. `[Shift Hours Worked]`) to the matching property so Dapper can bind it.'
-    DtoPagedResultDtoDtoReportingSalesOrderLinesReportRow:
+    DtoPagedResultDtoDtoReportingTimeClockReportRow:
       required:
       - data
       - hasNextPage
@@ -2864,7 +2827,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/DtoReportingSalesOrderLinesReportRow'
+            $ref: '#/components/schemas/DtoReportingTimeClockReportRow'
           description: The data
         page:
           type: integer
@@ -2895,6 +2858,43 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
+    DtoReportingInvoiceReportFilter:
+      type: object
+      properties:
+        issuedDateFrom:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound applied to the invoice's Issued Date. Null means no lower bound.
+          format: date-time
+        issuedDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive upper bound applied to the invoice''s Issued Date (the whole `to` day is included).
+
+            Null means no upper bound.'
+          format: date-time
+        invoiceStatus:
+          type:
+          - string
+          - 'null'
+          description: 'Optional exact-match filter on the invoice lifecycle status (e.g. "Issued", "Paid"). Null means
+
+            no status filter.'
+        lineType:
+          type:
+          - string
+          - 'null'
+          description: 'Optional exact-match filter on the line type (Part, Shipping, Fee, Deposit, Discount, Refund,
+
+            Tax, or NA). Null means no line-type filter.'
+      additionalProperties: false
+      description: 'Constrained filter for the invoice reporting list endpoint. Every field maps to a fixed,
+
+        server-controlled column; values are always bound as Dapper parameters and never concatenated
+
+        into SQL.'
   securitySchemes:
     bearer:
       type: http

@@ -96,6 +96,30 @@ paths:
                   $ref: '#/components/schemas/ShippingMethodDto'
 components:
   schemas:
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ShippingMethodDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+      additionalProperties: false
+      description: Shipping method definition.
     ShippingMethodRequestFindParameters:
       type: object
       properties:
@@ -115,30 +139,6 @@ components:
           description: Filter shipping methods based on matching ids.
       additionalProperties: false
       description: Parameters used for searching/finding shipping methods.
-    ShippingMethodDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-      additionalProperties: false
-      description: Shipping method definition.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

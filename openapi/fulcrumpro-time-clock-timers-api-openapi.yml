@@ -123,6 +123,105 @@ paths:
       - Time-Time-View Time Management
 components:
   schemas:
+    DomainTimeTrackingTimer_Type:
+      enum:
+      - setup
+      - run
+      - clockIn
+      - break
+      - labor
+      - machine
+      type: string
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    DtoCommonDateRangeFilter:
+      type: object
+      properties:
+        start:
+          type:
+          - string
+          - 'null'
+          description: Inclusive start date to filter by
+          format: date-time
+        end:
+          type:
+          - string
+          - 'null'
+          description: Inclusive end date to filter by
+          format: date-time
+      additionalProperties: false
+      description: Date range used for filters
+    TimeClockClockInDto:
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the clock in to.  If not supplied, will use the user assigned to the api key used for authorization
+      additionalProperties: false
+      description: Model for clocking in via the public api
+    TimeClockDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The timer identifier
+        startedById:
+          type:
+          - string
+          - 'null'
+          description: The user identifier who started the timer
+        startedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: When the timer was started in UTC time.
+          format: date-time
+        stoppedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: When the timer was stopped in UTC time.
+          format: date-time
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+        isRunning:
+          type: boolean
+          description: Whether the timer is running or not
+          readOnly: true
+        reasonCodeId:
+          type:
+          - string
+          - 'null'
+          description: The tag identifier for the reason code
+        clockInCodeId:
+          type:
+          - string
+          - 'null'
+          description: The tag identifier for the clock in code
+      additionalProperties: false
+      description: Data transfer object for Timer entity
+    TimeClockClockOutDto:
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
+      additionalProperties: false
+      description: Model for clocking a user out
     DtoPagedResultDtoTimeClockDto:
       required:
       - data
@@ -168,105 +267,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    DomainTimeTrackingTimer_Type:
-      enum:
-      - setup
-      - run
-      - clockIn
-      - break
-      - labor
-      - machine
-      type: string
-    DtoCommonDateRangeFilter:
-      type: object
-      properties:
-        start:
-          type:
-          - string
-          - 'null'
-          description: Inclusive start date to filter by
-          format: date-time
-        end:
-          type:
-          - string
-          - 'null'
-          description: Inclusive end date to filter by
-          format: date-time
-      additionalProperties: false
-      description: Date range used for filters
-    TimeClockClockOutDto:
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
-      additionalProperties: false
-      description: Model for clocking a user out
-    TimeClockClockInDto:
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the clock in to.  If not supplied, will use the user assigned to the api key used for authorization
-      additionalProperties: false
-      description: Model for clocking in via the public api
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    TimeClockDto:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The timer identifier
-        startedById:
-          type:
-          - string
-          - 'null'
-          description: The user identifier who started the timer
-        startedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: When the timer was started in UTC time.
-          format: date-time
-        stoppedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: When the timer was stopped in UTC time.
-          format: date-time
-        type:
-          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
-        isRunning:
-          type: boolean
-          description: Whether the timer is running or not
-          readOnly: true
-        reasonCodeId:
-          type:
-          - string
-          - 'null'
-          description: The tag identifier for the reason code
-        clockInCodeId:
-          type:
-          - string
-          - 'null'
-          description: The tag identifier for the clock in code
-      additionalProperties: false
-      description: Data transfer object for Timer entity
     TimeClockRequestListTimeClocksParameters:
       type: object
       properties:

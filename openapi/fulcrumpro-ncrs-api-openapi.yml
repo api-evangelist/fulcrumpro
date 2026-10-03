@@ -96,6 +96,45 @@ paths:
       - Quality-NCR-View NCR
 components:
   schemas:
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CommonImpactDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID for this object.
+          format: uuid
+        operation:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        workCenter:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        scheduledEquipment:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        job:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        salesOrder:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        quantityImpacted:
+          type:
+          - number
+          - 'null'
+          description: Quantity Impacted
+          format: double
+        incrementalCost:
+          type:
+          - number
+          - 'null'
+          description: Incremental Cost
+          format: double
+      additionalProperties: false
+      description: Impact Dto.
     CommonReferenceDto:
       type: object
       properties:
@@ -115,41 +154,51 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a reference to a document in a DB collection
-    NCRRequestNcrListParameters:
+    DtoPagedResultDtoNCRNcrDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
       type: object
       properties:
-        status:
-          type:
-          - string
-          - 'null'
-          description: 'Filter NCRs by a specific status
-
-            Accepted Values:
-
-            Closed, Hold, New, Quality Review, Engineering Review'
-        type:
-          type:
-          - string
-          - 'null'
-          description: Filter NCRs by a specific type. Available values are configured per tenant in Quality settings (NCR dropdowns).
-        cause:
-          type:
-          - string
-          - 'null'
-          description: Filter NCRs by a specific cause. Available values are configured per tenant in Quality settings (NCR dropdowns).
-        reason:
-          type:
-          - string
-          - 'null'
-          description: Filter NCRs by a specific reason. Available values are configured per tenant in Quality settings (NCR dropdowns).
-        createdUtc:
-          type:
-          - string
-          - 'null'
-          description: Filter NCRs created after a certain date
-          format: date-time
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NCRNcrDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
       additionalProperties: false
-      description: Parameters used for searching NCRs
+      description: Paged result
     NCRNcrDto:
       required:
       - cause
@@ -275,90 +324,41 @@ components:
           description: Impact information.
       additionalProperties: false
       description: Represents an NCR
-    DtoPagedResultDtoNCRNcrDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
+    NCRRequestNcrListParameters:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/NCRNcrDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    CommonImpactDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID for this object.
-          format: uuid
-        operation:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        workCenter:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        scheduledEquipment:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        job:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        salesOrder:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        quantityImpacted:
+        status:
           type:
-          - number
+          - string
           - 'null'
-          description: Quantity Impacted
-          format: double
-        incrementalCost:
+          description: 'Filter NCRs by a specific status
+
+            Accepted Values:
+
+            Closed, Hold, New, Quality Review, Engineering Review'
+        type:
           type:
-          - number
+          - string
           - 'null'
-          description: Incremental Cost
-          format: double
+          description: Filter NCRs by a specific type. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        cause:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs by a specific cause. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs by a specific reason. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        createdUtc:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs created after a certain date
+          format: date-time
       additionalProperties: false
-      description: Impact Dto.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
+      description: Parameters used for searching NCRs
   securitySchemes:
     bearer:
       type: http

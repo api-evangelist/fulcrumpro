@@ -68,81 +68,6 @@ paths:
       - ItemsAndInventory-Items-View Inventory
 components:
   schemas:
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
-    InventoryTransactionsListParameters:
-      type: object
-      properties:
-        itemIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter inventory transactions based on item identifiers.
-        dateRange:
-          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
-        sourceType:
-          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
-        relatedEntityType:
-          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
-        relatedEntityId:
-          type:
-          - string
-          - 'null'
-          description: The transaction's related entity identifier
-      additionalProperties: false
-      description: Parameters used for searching inventory transactions
-    InventoryEventType:
-      enum:
-      - pick
-      - receive
-      - revert
-      - adjustment
-      - setItemValue
-      - eventOverride
-      type: string
-      description: Primary inventory event type.
-    DtoCommonDateRangeFilter:
-      type: object
-      properties:
-        start:
-          type:
-          - string
-          - 'null'
-          description: Inclusive start date to filter by
-          format: date-time
-        end:
-          type:
-          - string
-          - 'null'
-          description: Inclusive end date to filter by
-          format: date-time
-      additionalProperties: false
-      description: Date range used for filters
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     InventoryTransactionDto:
       type: object
       properties:
@@ -232,6 +157,81 @@ components:
       - stockTake
       type: string
       description: Secondary, verbose description for an event.
+    InventoryEventType:
+      enum:
+      - pick
+      - receive
+      - revert
+      - adjustment
+      - setItemValue
+      - eventOverride
+      type: string
+      description: Primary inventory event type.
+    DtoCommonDateRangeFilter:
+      type: object
+      properties:
+        start:
+          type:
+          - string
+          - 'null'
+          description: Inclusive start date to filter by
+          format: date-time
+        end:
+          type:
+          - string
+          - 'null'
+          description: Inclusive end date to filter by
+          format: date-time
+      additionalProperties: false
+      description: Date range used for filters
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    InventoryTransactionsListParameters:
+      type: object
+      properties:
+        itemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter inventory transactions based on item identifiers.
+        dateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        sourceType:
+          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
+        relatedEntityType:
+          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
+        relatedEntityId:
+          type:
+          - string
+          - 'null'
+          description: The transaction's related entity identifier
+      additionalProperties: false
+      description: Parameters used for searching inventory transactions
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
     V2InventoryDataEventSourceType:
       enum:
       - purchaseOrder

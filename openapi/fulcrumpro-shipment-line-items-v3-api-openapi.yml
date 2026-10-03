@@ -69,51 +69,72 @@ paths:
       - Shipping-Shipping-View Shipments
 components:
   schemas:
-    DtoPagedResultDtoShipmentLineItemDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
+    ShippingDataShipmentType:
+      enum:
+      - unknown
+      - standard
+      - outsideProcessing
+      type: string
+    ShipmentLineItemPackingDetailDto:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShipmentLineItemDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
+        lotId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Lot identifier. Please reference /api/inventory-lots endpoint.
+        lotName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Lot name.
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Location identifier. Please reference /api/locations endpoint.
+        locationName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Location name.
+        quantityPacked:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Quantity packed for this shipment line item that are associated to this lot.
+          format: double
+        box:
+          maxLength: 36
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Box identifier this packing detail was packed into. Free-form (e.g., "1", "A1").
       additionalProperties: false
-      description: Paged result
+      description: Packing detail associated to a shipment line item.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ShippingDataPackingStatus:
+      enum:
+      - notPacked
+      - partiallyPacked
+      - fullyPacked
+      - overPacked
+      type: string
     ShipmentLineItemDto:
       required:
       - id
@@ -232,13 +253,58 @@ components:
           description: Packing details indicating how quantities were split amongst lots/locations.
       additionalProperties: false
       description: Shipment line item data transfer object
-    ShippingDataPackingStatus:
+    ShippingDataShipmentStatus:
       enum:
-      - notPacked
-      - partiallyPacked
-      - fullyPacked
-      - overPacked
+      - pending
+      - open
+      - shipped
+      - cancelled
       type: string
+    DtoPagedResultDtoShipmentLineItemDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentLineItemDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
     ShipmentLineItemsListParameters:
       type: object
       properties:
@@ -289,72 +355,6 @@ components:
           $ref: '#/components/schemas/ShippingDataShipmentType'
       additionalProperties: false
       description: Parameters used for searching V3 shipment line items
-    ShipmentLineItemPackingDetailDto:
-      type: object
-      properties:
-        lotId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Lot identifier. Please reference /api/inventory-lots endpoint.
-        lotName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Lot name.
-        locationId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Location identifier. Please reference /api/locations endpoint.
-        locationName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Location name.
-        quantityPacked:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Quantity packed for this shipment line item that are associated to this lot.
-          format: double
-        box:
-          maxLength: 36
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Box identifier this packing detail was packed into. Free-form (e.g., "1", "A1").
-      additionalProperties: false
-      description: Packing detail associated to a shipment line item.
-    ShippingDataShipmentType:
-      enum:
-      - unknown
-      - standard
-      - outsideProcessing
-      type: string
-    ShippingDataShipmentStatus:
-      enum:
-      - pending
-      - open
-      - shipped
-      - cancelled
-      type: string
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

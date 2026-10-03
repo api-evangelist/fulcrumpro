@@ -1093,154 +1093,64 @@ paths:
       - ItemsAndInventory-Items-View Item
 components:
   schemas:
-    ItemRoutingInputMaterialNestingCreateDto:
+    CommonEnumMaterialVendorPriceUnitEnum:
+      enum:
+      - kilogram
+      - pound
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    CommonEnumMaterialFormEnum:
+      enum:
+      - sheet
+      - plate
+      - roundBar
+      - flatBar
+      - channel
+      - squareTube
+      - angle
+      - treadPlate
+      - hexBar
+      - squareBar
+      - teeBar
+      - hBeam
+      - rectTube
+      - pipe
+      - wBeam
+      - sBeam
+      - roundTube
+      - rectBar
+      - wideBar
+      type: string
+      description: Specifies the form of the material.
+    ItemRoutingInputMaterialUpdateDto:
       required:
-      - d2
-      - d3
-      - produces
+      - costing
       type: object
       properties:
-        d2:
-          type: number
-          description: Length
-          format: double
-        d3:
-          type: number
-          description: For Sheets, the Width
-          format: double
-        produces:
-          type: integer
-          description: The quantity produced, given the bounding box dimensions (D2 x D3).
-          format: int32
-        useForEstimatedCosting:
-          type: boolean
-          description: 'Indicates if this nesting record will be used for estimated costing.
-
-            NOTE: Only one nesting record for a material can have this value set to true.'
-      additionalProperties: false
-      description: An input material nesting for routing
-    MaterialShapeVendorDto:
-      required:
-      - id
-      - isPrimary
-      - priceBreaks
-      - priceUnit
-      - vendorId
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique id associated to this entity.
-          format: uuid
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor identifier. Pelase reference /api/vendors endpoint.
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this material.
-        currencyCode:
-          type:
-          - string
-          - 'null'
-          description: Currency code/denomination associated to this vendor.
-        priceUnit:
-          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
-        leadTimeInDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Number of days required between order and receipt
-          format: int32
-        priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakDto'
-          description: Vendor price breaks
-      additionalProperties: false
-      description: Material vendor definition
-    MaterialShapeVendorPriceBreakDto:
-      required:
-      - id
-      - price
-      - quantity
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique id associated to this entity.
-          format: uuid
-        quantity:
-          minimum: 0
-          type: integer
-          description: The minimum quantity to associate this price break to.
-          format: int32
-        price:
-          type: number
-          description: The price per unit.
-          format: double
-      additionalProperties: false
-      description: Vendor prices breaks for a material shape.
-    ItemRoutingOperationDto:
-      required:
-      - id
-      - name
-      - systemOperationId
-      type: object
-      properties:
-        id:
+        costing:
+          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
+        routingStepId:
           maxLength: 36
           minLength: 36
-          type: string
-          description: The Id of this operation specific to this item's routing
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Name of the system operation
-        systemOperationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Id of the system operation
-        order:
-          minimum: 0
-          type: integer
-          description: The order of this operation.  Operations with the same order are expected to run in parallel
-          format: int32
-        isOutsideProcessing:
-          type: boolean
-          description: Specifies whether this is an outside processing operation
-        outsideProcessingOperation:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
-        operation:
-          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
-        leadDays:
-          minimum: 0
-          type: integer
-          description: Lead days
-          format: int32
-        unattended:
-          type:
-          - boolean
-          - 'null'
-          description: 'If `true`, the run portion of this step is unattended by
-
-            an operator.'
-        machineTrackingEnabled:
-          type: boolean
-          description: Whether machine tracking is enabled.
-        instructions:
-          maxLength: 2000
-          minLength: 1
           type:
           - string
           - 'null'
-          description: Instructions for this operation.
+          description: 'The routing step id.
+
+            This value should be the Id from the response from items/{itemId}/routing/operations/list'
       additionalProperties: false
-      description: A routing operation (step)
+      description: Update an input material for routing
+    ItemRoutingOperationTime:
+      type: object
+      properties:
+        time:
+          type: number
+          description: Time or units of this operation
+          format: double
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
+      additionalProperties: false
+      description: Operation time and type
     ItemRoutingOperationCreateDto:
       required:
       - systemOperationId
@@ -1331,6 +1241,12 @@ components:
           description: Instructions for this operation.
       additionalProperties: false
       description: A routing operation (step)
+    CommonEnumInputItemValueTypeEnum:
+      enum:
+      - creates
+      - requires
+      type: string
+      description: Specifies how a routing input item quantity is measured.
     ItemRoutingOutsideProcessingOperationDto:
       type: object
       properties:
@@ -1345,6 +1261,55 @@ components:
           description: Outside processing vendor
       additionalProperties: false
       description: Defines outside processing fields
+    ItemRoutingInputItemUpdateDto:
+      required:
+      - valueTypeUnits
+      type: object
+      properties:
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemUpdateDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An input item for routing
+    ItemRoutingInputMaterialCreateDto:
+      required:
+      - costing
+      - materialId
+      type: object
+      properties:
+        materialId:
+          minLength: 1
+          type: string
+          description: The material id to be added. Please reference /api/materials endpoint.
+        costing:
+          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
+        nestings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ItemRoutingInputMaterialNestingCreateDto'
+          description: Nestings associated to this material indicating bounding box dimensions and production quantities.
+        routingStepId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: 'The routing step id.
+
+            This value should be the Id from the response from items/{itemId}/routing/operations/list'
+      additionalProperties: false
+      description: Create an input material for routing
+    CommonEnumMaterialRequirementCostingEnum:
+      enum:
+      - fullCost
+      - usageBased
+      type: string
+      description: Specifies the costing of the material.
     ItemRoutingInputMaterialNestingDto:
       required:
       - d2
@@ -1378,183 +1343,18 @@ components:
             NOTE: Only one nesting record for a material can have this value set to true.'
       additionalProperties: false
       description: Create an input material nesting for routing
-    ItemRoutingInputItemCreateDto:
+    BatchCreatedResponseDto:
       required:
-      - itemId
-      - valueType
-      - valueTypeUnits
+      - ids
       type: object
       properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The item id to be added. Please reference /api/items endpoint.
-        valueTypeUnits:
-          type: number
-          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemCreateDto.ValueType
-          format: double
-        valueType:
-          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
-      additionalProperties: false
-      description: An input item for routing
-    ItemRoutingOutsideProcessingCostOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-      description: The cost option for the outside processing operation
-    ItemRoutingInputMaterialCreateDto:
-      required:
-      - costing
-      - materialId
-      type: object
-      properties:
-        materialId:
-          minLength: 1
-          type: string
-          description: The material id to be added. Please reference /api/materials endpoint.
-        costing:
-          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
-        nestings:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ItemRoutingInputMaterialNestingCreateDto'
-          description: Nestings associated to this material indicating bounding box dimensions and production quantities.
-        routingStepId:
-          maxLength: 36
-          minLength: 36
-          type:
-          - string
-          - 'null'
-          description: 'The routing step id.
-
-            This value should be the Id from the response from items/{itemId}/routing/operations/list'
-      additionalProperties: false
-      description: Create an input material for routing
-    RoutingRequestOperationFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to operations who's name contains the given string
-      additionalProperties: false
-      description: Parameters used for searching/finding operations on an item's routing.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    ItemRoutingInputItemDto:
-      required:
-      - description
-      - id
-      - itemId
-      - number
-      - valueType
-      - valueTypeUnits
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Id of this input item in the item's routing
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item Id
-          readOnly: true
-        number:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The number to give the item.
-          readOnly: true
-        revision:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The revision of the item
-          readOnly: true
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-          description: The description to give the item.
-          readOnly: true
-        valueTypeUnits:
-          type: number
-          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemDto.ValueType
-          format: double
-        valueType:
-          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
-      additionalProperties: false
-      description: An item
-    CommonEnumInputItemValueTypeEnum:
-      enum:
-      - creates
-      - requires
-      type: string
-      description: Specifies how a routing input item quantity is measured.
-    ItemRoutingUpdateDto:
-      type: object
-      properties:
-        allowContinuousFlow:
-          type:
-          - boolean
-          - 'null'
-          description: Allow an operation to start before previous operations in the routing end
-      additionalProperties: false
-      description: Represents updates to an item's routing
-    ItemRoutingOperationTimeOption:
-      enum:
-      - fixedSeconds
-      - fixedMinutes
-      - fixedHours
-      - fixedDays
-      - secondsPerUnit
-      - minutesPerUnit
-      - hoursPerUnit
-      - daysPerUnit
-      - unitsPerHour
-      type: string
-      description: The time unit or option used in operation times
-    ItemRoutingNormalOperationDto:
-      type: object
-      properties:
-        setupTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        laborTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        machineTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        anyEquipment:
-          type: boolean
-          description: Specifies that any equipment associated with this operation can be used
-        selectedEquipmentIds:
+        ids:
           type: array
           items:
             type: string
-          description: List of equipment ids selected from equipment associated with this operation
-        isNestable:
-          type: boolean
-          description: Indicate if this operation is nestable.
+          description: The ids of the created records
       additionalProperties: false
-      description: Defines non-outside-processing fields
+      description: Response for a batch created record
     MaterialShapeDto:
       required:
       - form
@@ -1630,35 +1430,136 @@ components:
           description: Vendors that supply this material.
       additionalProperties: false
       description: Material definition.
-    CommonEnumMaterialRequirementCostingEnum:
+    SalesOrderPartLineItemInputItemCreateBatchDto:
+      required:
+      - lineItems
+      type: object
+      properties:
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          description: The input items to add to an item.
+      additionalProperties: false
+      description: Represents a batch of input items to add to an item.
+    ItemRoutingInputItemCreateDto:
+      required:
+      - itemId
+      - valueType
+      - valueTypeUnits
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The item id to be added. Please reference /api/items endpoint.
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemCreateDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An input item for routing
+    RoutingRequestOperationFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter to operations who's name contains the given string
+      additionalProperties: false
+      description: Parameters used for searching/finding operations on an item's routing.
+    ItemRoutingOutsideProcessingCostOption:
       enum:
-      - fullCost
-      - usageBased
+      - fixed
+      - perUnit
       type: string
-      description: Specifies the costing of the material.
-    CommonEnumMaterialFormEnum:
+      description: The cost option for the outside processing operation
+    ItemRoutingUpdateDto:
+      type: object
+      properties:
+        allowContinuousFlow:
+          type:
+          - boolean
+          - 'null'
+          description: Allow an operation to start before previous operations in the routing end
+      additionalProperties: false
+      description: Represents updates to an item's routing
+    ItemRoutingDto:
+      type: object
+      properties:
+        allowContinuousFlow:
+          type:
+          - boolean
+          - 'null'
+          description: Allow an operation to start before previous operations in the routing end
+      additionalProperties: false
+      description: Represents an item's routing
+    ItemRoutingInputItemDto:
+      required:
+      - description
+      - id
+      - itemId
+      - number
+      - valueType
+      - valueTypeUnits
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of this input item in the item's routing
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item Id
+          readOnly: true
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The number to give the item.
+          readOnly: true
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The revision of the item
+          readOnly: true
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The description to give the item.
+          readOnly: true
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An item
+    ItemRoutingOperationTimeOption:
       enum:
-      - sheet
-      - plate
-      - roundBar
-      - flatBar
-      - channel
-      - squareTube
-      - angle
-      - treadPlate
-      - hexBar
-      - squareBar
-      - teeBar
-      - hBeam
-      - rectTube
-      - pipe
-      - wBeam
-      - sBeam
-      - roundTube
-      - rectBar
-      - wideBar
+      - fixedSeconds
+      - fixedMinutes
+      - fixedHours
+      - fixedDays
+      - secondsPerUnit
+      - minutesPerUnit
+      - hoursPerUnit
+      - daysPerUnit
+      - unitsPerHour
       type: string
-      description: Specifies the form of the material.
+      description: The time unit or option used in operation times
     ItemRoutingInputMaterialDto:
       required:
       - costing
@@ -1702,67 +1603,32 @@ components:
             This value should be the Id from the response from items/{itemId}/routing/operations/list'
       additionalProperties: false
       description: An item input material
-    ItemRoutingInputItemUpdateDto:
+    ItemRoutingInputMaterialNestingCreateDto:
       required:
-      - valueTypeUnits
+      - d2
+      - d3
+      - produces
       type: object
       properties:
-        valueTypeUnits:
+        d2:
           type: number
-          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemUpdateDto.ValueType
+          description: Length
           format: double
-        valueType:
-          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
-      additionalProperties: false
-      description: An input item for routing
-    BatchCreatedResponseDto:
-      required:
-      - ids
-      type: object
-      properties:
-        ids:
-          type: array
-          items:
-            type: string
-          description: The ids of the created records
-      additionalProperties: false
-      description: Response for a batch created record
-    CommonEnumMaterialVendorPriceUnitEnum:
-      enum:
-      - kilogram
-      - pound
-      type: string
-      description: Specifies how a routing input item quantity is measured.
-    SalesOrderPartLineItemInputItemCreateBatchDto:
-      required:
-      - lineItems
-      type: object
-      properties:
-        lineItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
-          description: The input items to add to an item.
-      additionalProperties: false
-      description: Represents a batch of input items to add to an item.
-    ItemRoutingInputMaterialUpdateDto:
-      required:
-      - costing
-      type: object
-      properties:
-        costing:
-          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
-        routingStepId:
-          maxLength: 36
-          minLength: 36
-          type:
-          - string
-          - 'null'
-          description: 'The routing step id.
+        d3:
+          type: number
+          description: For Sheets, the Width
+          format: double
+        produces:
+          type: integer
+          description: The quantity produced, given the bounding box dimensions (D2 x D3).
+          format: int32
+        useForEstimatedCosting:
+          type: boolean
+          description: 'Indicates if this nesting record will be used for estimated costing.
 
-            This value should be the Id from the response from items/{itemId}/routing/operations/list'
+            NOTE: Only one nesting record for a material can have this value set to true.'
       additionalProperties: false
-      description: Update an input material for routing
+      description: An input material nesting for routing
     RoutingRequestItemFindParameters:
       type: object
       properties:
@@ -1775,17 +1641,6 @@ components:
           description: Filter to items who's number contains the given string
       additionalProperties: false
       description: Parameters used for searching/finding input items on an item's routing.
-    ItemRoutingOperationTime:
-      type: object
-      properties:
-        time:
-          type: number
-          description: Time or units of this operation
-          format: double
-        option:
-          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
-      additionalProperties: false
-      description: Operation time and type
     ItemRoutingOutsideProcessingOperationCost:
       type: object
       properties:
@@ -1805,16 +1660,161 @@ components:
           format: double
       additionalProperties: false
       description: Outside processing operation cost
-    ItemRoutingDto:
+    ItemRoutingOperationDto:
+      required:
+      - id
+      - name
+      - systemOperationId
       type: object
       properties:
-        allowContinuousFlow:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The Id of this operation specific to this item's routing
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the system operation
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of the system operation
+        order:
+          minimum: 0
+          type: integer
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days
+          format: int32
+        unattended:
           type:
           - boolean
           - 'null'
-          description: Allow an operation to start before previous operations in the routing end
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+        machineTrackingEnabled:
+          type: boolean
+          description: Whether machine tracking is enabled.
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Instructions for this operation.
       additionalProperties: false
-      description: Represents an item's routing
+      description: A routing operation (step)
+    MaterialShapeVendorPriceBreakDto:
+      required:
+      - id
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          type: number
+          description: The price per unit.
+          format: double
+      additionalProperties: false
+      description: Vendor prices breaks for a material shape.
+    ItemRoutingNormalOperationDto:
+      type: object
+      properties:
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        anyEquipment:
+          type: boolean
+          description: Specifies that any equipment associated with this operation can be used
+        selectedEquipmentIds:
+          type: array
+          items:
+            type: string
+          description: List of equipment ids selected from equipment associated with this operation
+        isNestable:
+          type: boolean
+          description: Indicate if this operation is nestable.
+      additionalProperties: false
+      description: Defines non-outside-processing fields
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    MaterialShapeVendorDto:
+      required:
+      - id
+      - isPrimary
+      - priceBreaks
+      - priceUnit
+      - vendorId
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor identifier. Pelase reference /api/vendors endpoint.
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: Currency code/denomination associated to this vendor.
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        leadTimeInDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Number of days required between order and receipt
+          format: int32
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Material vendor definition
   securitySchemes:
     bearer:
       type: http

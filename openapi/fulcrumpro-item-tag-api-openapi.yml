@@ -230,6 +230,84 @@ paths:
       - ItemsAndInventory-Items-Edit Item
 components:
   schemas:
+    CommonEnumStyleEnum:
+      enum:
+      - primary
+      - secondary
+      - success
+      - danger
+      - warning
+      - info
+      - light
+      - dark
+      - connected
+      type: string
+      description: Style enum (for tags).
+    TagDto:
+      required:
+      - id
+      - name
+      - style
+      - types
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+        style:
+          $ref: '#/components/schemas/CommonEnumStyleEnum'
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
+          description: Represents where/how this tag is used.
+        deleted:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if this tag has been deleted.
+      additionalProperties: false
+      description: Represents a tag
+    ItemTagReplaceItemTagsDto:
+      required:
+      - tagIds
+      type: object
+      properties:
+        tagIds:
+          type: array
+          items:
+            maxLength: 24
+            minLength: 24
+            type: string
+          description: 'The complete desired set of tag identifiers for the item. Please reference the /api/item-tags/list endpoint.
+
+            Duplicate ids are ignored. An empty set clears all tags from the item. At most
+
+            FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDtoValidator.MAX_TAG_COUNT ids may be provided.'
+      additionalProperties: false
+      description: 'The full set of tags that should be associated to an item. Any tag currently on the item that is
+
+        not present in FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDto.TagIds will be removed; any new id will be added.'
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     TagRequestFindParametersBase:
       type: object
       properties:
@@ -249,12 +327,6 @@ components:
           description: Filter tags based on matching ids.
       additionalProperties: false
       description: Parameters used for searching/finding accounting codes.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     DtoPagedResultDtoTagDto:
       required:
       - data
@@ -300,39 +372,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    ItemTagReplaceItemTagsDto:
-      required:
-      - tagIds
-      type: object
-      properties:
-        tagIds:
-          type: array
-          items:
-            maxLength: 24
-            minLength: 24
-            type: string
-          description: 'The complete desired set of tag identifiers for the item. Please reference the /api/item-tags/list endpoint.
-
-            Duplicate ids are ignored. An empty set clears all tags from the item. At most
-
-            FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDtoValidator.MAX_TAG_COUNT ids may be provided.'
-      additionalProperties: false
-      description: 'The full set of tags that should be associated to an item. Any tag currently on the item that is
-
-        not present in FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDto.TagIds will be removed; any new id will be added.'
-    CommonEnumStyleEnum:
-      enum:
-      - primary
-      - secondary
-      - success
-      - danger
-      - warning
-      - info
-      - light
-      - dark
-      - connected
-      type: string
-      description: Style enum (for tags).
     CommonEnumTagTypeEnum:
       enum:
       - item
@@ -350,45 +389,6 @@ components:
       - chartOfAccounts
       type: string
       description: What the tag is used for (can be many).
-    TagDto:
-      required:
-      - id
-      - name
-      - style
-      - types
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-        style:
-          $ref: '#/components/schemas/CommonEnumStyleEnum'
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-        types:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
-          description: Represents where/how this tag is used.
-        deleted:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate if this tag has been deleted.
-      additionalProperties: false
-      description: Represents a tag
   securitySchemes:
     bearer:
       type: http

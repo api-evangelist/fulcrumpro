@@ -76,60 +76,46 @@ paths:
       - Invoicing-Invoicing-View Invoices
 components:
   schemas:
-    CommonExternalReferenceDto:
-      required:
-      - externalId
+    CommonAccountingDetailsDto:
       type: object
       properties:
-        type:
-          maxLength: 50
-          minLength: 0
+        classId:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: A status for the external reference
-        url:
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: An external url for the reference
-        modifiedUtc:
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+      description: An object that contains all accounting details.
     InvoiceDepositLineItemDto:
       required:
       - accountingDetails
@@ -190,46 +176,60 @@ components:
           $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Represents a deposit line item on an invoice.
-    CommonAccountingDetailsDto:
+    CommonExternalReferenceDto:
+      required:
+      - externalId
       type: object
       properties:
-        classId:
-          maxLength: 24
-          minLength: 24
+        type:
+          maxLength: 50
+          minLength: 0
           type:
           - string
           - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
           type:
           - string
           - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
           type:
           - string
           - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
+          description: A status for the external reference
+        url:
           type:
           - string
           - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
+          description: An external url for the reference
+        modifiedUtc:
           type:
           - string
           - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
       additionalProperties: false
-      description: An object that contains all accounting details.
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
   securitySchemes:
     bearer:
       type: http

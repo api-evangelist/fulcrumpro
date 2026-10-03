@@ -103,35 +103,6 @@ paths:
       - Orders-Quotes-Edit Quote
 components:
   schemas:
-    QuoteDiscountLineItemUpdateDto:
-      required:
-      - amount
-      - isPercentage
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The name of the discount line.
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The description of the discount line.
-        isPercentage:
-          type: boolean
-          description: Indicates whether "Amount" value is percentage based or an absolute amount.
-        amount:
-          minimum: 0
-          type: number
-          description: The amount of the discount.
-          format: double
-      additionalProperties: false
-      description: Represents a discount line item on a quote.
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -172,6 +143,35 @@ components:
           description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
       description: An object that contains all accounting details.
+    QuoteDiscountLineItemUpdateDto:
+      required:
+      - amount
+      - isPercentage
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of the discount line.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The description of the discount line.
+        isPercentage:
+          type: boolean
+          description: Indicates whether "Amount" value is percentage based or an absolute amount.
+        amount:
+          minimum: 0
+          type: number
+          description: The amount of the discount.
+          format: double
+      additionalProperties: false
+      description: Represents a discount line item on a quote.
     QuoteDiscountLineItemDto:
       required:
       - accountingDetails

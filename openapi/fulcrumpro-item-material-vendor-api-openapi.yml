@@ -142,39 +142,17 @@ paths:
       - ItemsAndInventory-Items-Edit Item
 components:
   schemas:
-    ItemMaterialVendorCreateDto:
+    CreatedResponseDto:
       required:
-      - vendorId
+      - id
       type: object
       properties:
-        vendorId:
-          maxLength: 24
-          minLength: 24
+        id:
+          minLength: 1
           type: string
-          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
-        vendorItemNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item number for this vendor.
-        vendorItemName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item name for this vendor.
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Notes to the vendor.
+          description: The id of the created record
       additionalProperties: false
-      description: Vendor with additional context for a material-based item.
+      description: Response for a created record
     ItemMaterialVendorUpdateDto:
       type: object
       properties:
@@ -201,17 +179,6 @@ components:
           description: Notes to the vendor.
       additionalProperties: false
       description: Vendor with additional context for a material-based item.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     ItemMaterialVendorDto:
       required:
       - id
@@ -251,6 +218,39 @@ components:
           description: Notes to the vendor.
       additionalProperties: false
       description: Material vendor with additional context for an item.
+    ItemMaterialVendorCreateDto:
+      required:
+      - vendorId
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item number for this vendor.
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this vendor.
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes to the vendor.
+      additionalProperties: false
+      description: Vendor with additional context for a material-based item.
   securitySchemes:
     bearer:
       type: http

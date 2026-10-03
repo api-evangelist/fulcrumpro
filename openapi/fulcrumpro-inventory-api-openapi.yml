@@ -217,73 +217,6 @@ paths:
       - ItemsAndInventory-Inventory-Adjust Inventory
 components:
   schemas:
-    InventoryRequestFindParameters:
-      type: object
-      properties:
-        lotIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter inventory based on lot ids.
-        itemIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter inventory based on item ids.
-        locationIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter inventory based on location ids.
-      additionalProperties: false
-      description: Parameters used for searching/finding inventory.
-    InventoryPickDto:
-      required:
-      - itemId
-      - quantity
-      - secondaryType
-      type: object
-      properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item identifier. Please reference /api/items endpoint.
-        secondaryType:
-          $ref: '#/components/schemas/InventoryPickEventSecondaryType'
-        quantity:
-          type: number
-          description: Quantity of the item to pick.
-          format: double
-        locationId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Location id that inventory is picked from. Please reference /api/locations endpoint
-        lotId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Lot identifier for this block of inventory. Please reference /api/inventory-lots endpoint
-        note:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Notes associated to this transaction.
-      additionalProperties: false
-      description: Pick event for item inventory.
     InventoryReceiveDto:
       required:
       - itemId
@@ -360,47 +293,6 @@ components:
           format: double
       additionalProperties: false
       description: Receive event for item inventory.
-    InventoryOverrideDto:
-      required:
-      - itemId
-      - quantity
-      type: object
-      properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item identifier.
-        quantity:
-          type: number
-          description: The quantity to set the item's inventory level to.
-          format: double
-        lotId:
-          type:
-          - string
-          - 'null'
-          description: The lot identifier to apply this override to
-        locationId:
-          type:
-          - string
-          - 'null'
-          description: The location identifier to apply this override to.  ```null``` signifies no location.
-        note:
-          type:
-          - string
-          - 'null'
-          description: The note to add to the override transaction.
-      additionalProperties: false
-      description: Override event for item inventory
-    InventoryPickEventSecondaryType:
-      enum:
-      - pick
-      - consume
-      - scrap
-      - stockAdjustmentDecrease
-      - otherDecrease
-      type: string
-      description: Secondary event type specifically for picking.
     InventoryReceiveEventSecondaryType:
       enum:
       - receive
@@ -409,12 +301,47 @@ components:
       - otherIncrease
       type: string
       description: Secondary event type specifically for receiving.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
+    InventoryPickDto:
+      required:
+      - itemId
+      - quantity
+      - secondaryType
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item identifier. Please reference /api/items endpoint.
+        secondaryType:
+          $ref: '#/components/schemas/InventoryPickEventSecondaryType'
+        quantity:
+          type: number
+          description: Quantity of the item to pick.
+          format: double
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Location id that inventory is picked from. Please reference /api/locations endpoint
+        lotId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Lot identifier for this block of inventory. Please reference /api/inventory-lots endpoint
+        note:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes associated to this transaction.
+      additionalProperties: false
+      description: Pick event for item inventory.
     InventoryDto:
       required:
       - id
@@ -472,6 +399,79 @@ components:
           description: The description of the item
       additionalProperties: false
       description: An item inventory record.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    InventoryPickEventSecondaryType:
+      enum:
+      - pick
+      - consume
+      - scrap
+      - stockAdjustmentDecrease
+      - otherDecrease
+      type: string
+      description: Secondary event type specifically for picking.
+    InventoryRequestFindParameters:
+      type: object
+      properties:
+        lotIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter inventory based on lot ids.
+        itemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter inventory based on item ids.
+        locationIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter inventory based on location ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding inventory.
+    InventoryOverrideDto:
+      required:
+      - itemId
+      - quantity
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item identifier.
+        quantity:
+          type: number
+          description: The quantity to set the item's inventory level to.
+          format: double
+        lotId:
+          type:
+          - string
+          - 'null'
+          description: The lot identifier to apply this override to
+        locationId:
+          type:
+          - string
+          - 'null'
+          description: The location identifier to apply this override to.  ```null``` signifies no location.
+        note:
+          type:
+          - string
+          - 'null'
+          description: The note to add to the override transaction.
+      additionalProperties: false
+      description: Override event for item inventory
   securitySchemes:
     bearer:
       type: http

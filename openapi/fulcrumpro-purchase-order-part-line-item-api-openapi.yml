@@ -272,232 +272,6 @@ paths:
       - Orders-PurchaseOrders-View Purchase Order
 components:
   schemas:
-    PurchaseOrderLineItemTaxAllocationResponseDto:
-      type: object
-      properties:
-        appliedTaxes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
-          description: 'Tax amounts allocated to this line item from PO-level tax lines.
-
-            Null if the line item is not taxable or has no tax allocations.'
-        totalTax:
-          type:
-          - number
-          - 'null'
-          description: 'Total tax amount allocated to this line item across all applicable tax lines.
-
-            Null if the line item is not taxable.'
-          format: double
-      additionalProperties: false
-      description: Tax allocation data for a purchase order line item.
-    PurchaseOrderAppliedTaxDto:
-      required:
-      - taxAmount
-      - taxLineItemId
-      type: object
-      properties:
-        taxLineItemId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: 'The id of the PO-level tax line item that generated this tax amount.
-
-            Reference /api/purchase-orders/{id}/tax-line-items for full details.'
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The tax code id. Please reference /api/tax-rates endpoint.
-        taxCodeCode:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The tax code identifier string (e.g., "CA State Tax").
-        taxRate:
-          minimum: 0
-          type: number
-          description: The tax rate applied (as a decimal, e.g., 0.0725 for 7.25%).
-          format: double
-        taxAmount:
-          type: number
-          description: The calculated tax amount allocated to this line item from this tax line.
-          format: double
-      additionalProperties: false
-      description: Represents a tax allocation from a PO-level tax line item to an individual line item.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    PurchaseOrderEnumLineItemReceiptStatusEnum:
-      enum:
-      - open
-      - partiallyReceived
-      - received
-      type: string
-      description: Purchase order line item receipt status
-    PurchaseOrderPartLineItemCreateDto:
-      required:
-      - itemId
-      type: object
-      properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item id associated with this line item.
-        quantity:
-          minimum: 0
-          type: number
-          description: The line item quantity
-          format: double
-        price:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The line item unit price. Defaults to item's vendor price, if not provided.
-          format: double
-        isTaxExempt:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if this line item is tax exempt.  Defaults to item details, if not provided.
-        expectedReceiveDate:
-          type:
-          - string
-          - 'null'
-          description: Expected receipt date for this line item.
-          format: date-time
-        promiseDate:
-          type:
-          - string
-          - 'null'
-          description: Promise date (UTC).
-          format: date-time
-      additionalProperties: false
-      description: Represents a part line item on a purchase order.
-    PurchaseOrderPartLineItemUpdateDto:
-      required:
-      - quantity
-      type: object
-      properties:
-        quantity:
-          minimum: 0
-          type: number
-          description: The line item quantity
-          format: double
-        price:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The line item unit price. Defaults to item's vendor price, if not provided.
-          format: double
-        isTaxExempt:
-          type:
-          - boolean
-          - 'null'
-          description: Override tax exempt status of the part line item, if present.
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-        vendorNote:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Notes intended for the vendor for this part line item
-        expectedReceiveDate:
-          type:
-          - string
-          - 'null'
-          description: Expected receipt date (UTC)
-          format: date-time
-        promiseDate:
-          type:
-          - string
-          - 'null'
-          description: Promise date (UTC).
-          format: date-time
-      additionalProperties: false
-      description: Represents a part line item on a purchase order.
     PurchaseOrderPartLineItemDto:
       required:
       - accountingDetails
@@ -665,17 +439,6 @@ components:
           description: Indicate if this item is an inventoried item.
       additionalProperties: false
       description: Represents a part line item on a purchase order.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -716,6 +479,243 @@ components:
           description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
       description: An object that contains all accounting details.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    PurchaseOrderEnumLineItemReceiptStatusEnum:
+      enum:
+      - open
+      - partiallyReceived
+      - received
+      type: string
+      description: Purchase order line item receipt status
+    PurchaseOrderAppliedTaxDto:
+      required:
+      - taxAmount
+      - taxLineItemId
+      type: object
+      properties:
+        taxLineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'The id of the PO-level tax line item that generated this tax amount.
+
+            Reference /api/purchase-orders/{id}/tax-line-items for full details.'
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The tax code id. Please reference /api/tax-rates endpoint.
+        taxCodeCode:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The tax code identifier string (e.g., "CA State Tax").
+        taxRate:
+          minimum: 0
+          type: number
+          description: The tax rate applied (as a decimal, e.g., 0.0725 for 7.25%).
+          format: double
+        taxAmount:
+          type: number
+          description: The calculated tax amount allocated to this line item from this tax line.
+          format: double
+      additionalProperties: false
+      description: Represents a tax allocation from a PO-level tax line item to an individual line item.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    PurchaseOrderLineItemTaxAllocationResponseDto:
+      type: object
+      properties:
+        appliedTaxes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
+          description: 'Tax amounts allocated to this line item from PO-level tax lines.
+
+            Null if the line item is not taxable or has no tax allocations.'
+        totalTax:
+          type:
+          - number
+          - 'null'
+          description: 'Total tax amount allocated to this line item across all applicable tax lines.
+
+            Null if the line item is not taxable.'
+          format: double
+      additionalProperties: false
+      description: Tax allocation data for a purchase order line item.
+    PurchaseOrderPartLineItemCreateDto:
+      required:
+      - itemId
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item id associated with this line item.
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The line item unit price. Defaults to item's vendor price, if not provided.
+          format: double
+        isTaxExempt:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if this line item is tax exempt.  Defaults to item details, if not provided.
+        expectedReceiveDate:
+          type:
+          - string
+          - 'null'
+          description: Expected receipt date for this line item.
+          format: date-time
+        promiseDate:
+          type:
+          - string
+          - 'null'
+          description: Promise date (UTC).
+          format: date-time
+      additionalProperties: false
+      description: Represents a part line item on a purchase order.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    PurchaseOrderPartLineItemUpdateDto:
+      required:
+      - quantity
+      type: object
+      properties:
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The line item unit price. Defaults to item's vendor price, if not provided.
+          format: double
+        isTaxExempt:
+          type:
+          - boolean
+          - 'null'
+          description: Override tax exempt status of the part line item, if present.
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        vendorNote:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes intended for the vendor for this part line item
+        expectedReceiveDate:
+          type:
+          - string
+          - 'null'
+          description: Expected receipt date (UTC)
+          format: date-time
+        promiseDate:
+          type:
+          - string
+          - 'null'
+          description: Promise date (UTC).
+          format: date-time
+      additionalProperties: false
+      description: Represents a part line item on a purchase order.
   securitySchemes:
     bearer:
       type: http

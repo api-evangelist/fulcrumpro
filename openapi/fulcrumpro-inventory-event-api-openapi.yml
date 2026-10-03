@@ -96,20 +96,134 @@ paths:
       - ItemsAndInventory-Items-View Inventory
 components:
   schemas:
-    InventoryEventDetailsDto:
+    DomainCommonEntityType:
+      enum:
+      - job
+      - salesOrder
+      - shipment
+      - shipmentLineItem
+      - invoice
+      - invoiceLineItem
+      - customer
+      - customerAddress
+      - item
+      - receivingInspection
+      - failedInspection
+      type: string
+    DtoPagedResultDtoInventoryEventsInventoryEventDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
       type: object
       properties:
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: External references associated with this entity.
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryEventsInventoryEventDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
       additionalProperties: false
-      description: 'Inventory event details.
-
-        Additional metadata for Inventory Events.'
+      description: Paged result
+    CommonCostDto:
+      required:
+      - perUnit
+      - total
+      type: object
+      properties:
+        total:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        perUnit:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Cost information
+    InventoryEventSecondaryType:
+      enum:
+      - pick
+      - receive
+      - override
+      - revert
+      - deposit
+      - create
+      - consume
+      - ship
+      - sold
+      - transferOut
+      - transferIn
+      - found
+      - expired
+      - damaged
+      - lost
+      - returnVendor
+      - returnStock
+      - receivedNoPo
+      - returnIncrease
+      - returnDecrease
+      - otherIncrease
+      - otherDecrease
+      - scrap
+      - waste
+      - transferredFromSalesOrder
+      - overrideItemValue
+      - transferFromLot
+      - transferToLot
+      - stockAdjustmentIncrease
+      - stockAdjustmentDecrease
+      - stockTake
+      type: string
+      description: Secondary, verbose description for an event.
+    InventoryEventType:
+      enum:
+      - pick
+      - receive
+      - revert
+      - adjustment
+      - setItemValue
+      - eventOverride
+      type: string
+      description: Primary inventory event type.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     DtoInventoryEventsInventoryEventChangeDetails:
       required:
       - quantity
@@ -141,34 +255,6 @@ components:
           $ref: '#/components/schemas/CommonCostDto'
       additionalProperties: false
       description: Inventory event change information.
-    CommonCostDto:
-      required:
-      - perUnit
-      - total
-      type: object
-      properties:
-        total:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        perUnit:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Cost information
-    InventoryEventType:
-      enum:
-      - pick
-      - receive
-      - revert
-      - adjustment
-      - setItemValue
-      - eventOverride
-      type: string
-      description: Primary inventory event type.
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -223,197 +309,6 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    InventoryEventRequestFindParameters:
-      type: object
-      properties:
-        createdBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters events created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        createdAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters events created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        types:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/InventoryEventType'
-          description: Inventory event type(s).
-        secondaryTypes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/InventoryEventSecondaryType'
-          description: Inventory event secondary type(s).
-        sourceTypes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/InventoryEnumEventSourceType'
-          description: Inventory event source type(s).
-        itemIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Item id. Please reference /api/items endpoint.
-        itemToMakeIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Item id. Please reference /api/items endpoint.
-        reservedForTypes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DomainCommonEntityType'
-          description: Inventory reservation types.
-        reservedForIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Inventory reservation ids.
-        inventoryEventIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Inventory event ids.
-      additionalProperties: false
-      description: Parameters used for searching/finding inventory.
-    InventoryEnumEventSourceType:
-      enum:
-      - purchaseOrder
-      - job
-      - shipment
-      - shipmentLineItem
-      - shipping
-      - receiving
-      - item
-      - workOrder
-      - salesOrder
-      - jobOperation
-      - workOrderOperation
-      - fulfillment
-      - itemToMakeMaterialRemnant
-      - poRcvValueAdj
-      type: string
-      description: Indicator for the initial source of the event.
-    DomainCommonEntityType:
-      enum:
-      - job
-      - salesOrder
-      - shipment
-      - shipmentLineItem
-      - invoice
-      - invoiceLineItem
-      - customer
-      - customerAddress
-      - item
-      - receivingInspection
-      - failedInspection
-      type: string
-    InventoryEventSecondaryType:
-      enum:
-      - pick
-      - receive
-      - override
-      - revert
-      - deposit
-      - create
-      - consume
-      - ship
-      - sold
-      - transferOut
-      - transferIn
-      - found
-      - expired
-      - damaged
-      - lost
-      - returnVendor
-      - returnStock
-      - receivedNoPo
-      - returnIncrease
-      - returnDecrease
-      - otherIncrease
-      - otherDecrease
-      - scrap
-      - waste
-      - transferredFromSalesOrder
-      - overrideItemValue
-      - transferFromLot
-      - transferToLot
-      - stockAdjustmentIncrease
-      - stockAdjustmentDecrease
-      - stockTake
-      type: string
-      description: Secondary, verbose description for an event.
-    DtoPagedResultDtoInventoryEventsInventoryEventDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/InventoryEventsInventoryEventDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    V2InventoryRestResourcesTransactionChangeType:
-      enum:
-      - increase
-      - decrease
-      - static
-      type: string
     InventoryEventsInventoryEventDto:
       required:
       - id
@@ -532,12 +427,117 @@ components:
           $ref: '#/components/schemas/InventoryEventDetailsDto'
       additionalProperties: false
       description: An inventory event
-    CommonEnumSortDirectionEnum:
+    InventoryEventRequestFindParameters:
+      type: object
+      properties:
+        createdBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters events created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        createdAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters events created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        types:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InventoryEventType'
+          description: Inventory event type(s).
+        secondaryTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InventoryEventSecondaryType'
+          description: Inventory event secondary type(s).
+        sourceTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InventoryEnumEventSourceType'
+          description: Inventory event source type(s).
+        itemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Item id. Please reference /api/items endpoint.
+        itemToMakeIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Item id. Please reference /api/items endpoint.
+        reservedForTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DomainCommonEntityType'
+          description: Inventory reservation types.
+        reservedForIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Inventory reservation ids.
+        inventoryEventIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Inventory event ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding inventory.
+    InventoryEnumEventSourceType:
       enum:
-      - ascending
-      - descending
+      - purchaseOrder
+      - job
+      - shipment
+      - shipmentLineItem
+      - shipping
+      - receiving
+      - item
+      - workOrder
+      - salesOrder
+      - jobOperation
+      - workOrderOperation
+      - fulfillment
+      - itemToMakeMaterialRemnant
+      - poRcvValueAdj
       type: string
-      description: Specify sorting direction.
+      description: Indicator for the initial source of the event.
+    InventoryEventDetailsDto:
+      type: object
+      properties:
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+      additionalProperties: false
+      description: 'Inventory event details.
+
+        Additional metadata for Inventory Events.'
+    V2InventoryRestResourcesTransactionChangeType:
+      enum:
+      - increase
+      - decrease
+      - static
+      type: string
   securitySchemes:
     bearer:
       type: http

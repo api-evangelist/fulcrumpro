@@ -175,6 +175,46 @@ paths:
                   $ref: '#/components/schemas/TaxRateDto'
 components:
   schemas:
+    TaxRateUpdateDto:
+      required:
+      - code
+      - rate
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The code for the tax rate. Must be unique to all active tax rates.
+        rate:
+          minimum: 0
+          type: number
+          description: Tax rate. This is the proportion (0.17 = 17%)
+          format: double
+        applyToLandedCosts:
+          type: boolean
+          description: Indicate if this tax rate applies to landed costs.
+      additionalProperties: false
+      description: Details of tax rate to be update
+    TaxRateRequestFindParameters:
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter tax rates based on their code.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter tax rates based on matching ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding tax rates.
     TaxRateDto:
       required:
       - code
@@ -206,25 +246,23 @@ components:
           description: Indicate if this record is deleted.
       additionalProperties: false
       description: Tax rate definition.
-    TaxRateRequestFindParameters:
+    CreatedResponseDto:
+      required:
+      - id
       type: object
       properties:
-        code:
-          maxLength: 200
+        id:
           minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter tax rates based on their code.
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter tax rates based on matching ids.
+          type: string
+          description: The id of the created record
       additionalProperties: false
-      description: Parameters used for searching/finding tax rates.
+      description: Response for a created record
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     DomainSystemDataTaxCodeProvider:
       enum:
       - avalaraOrder
@@ -251,44 +289,6 @@ components:
           description: Indicate if this tax rate applies to landed costs.
       additionalProperties: false
       description: Details of tax rate to be created
-    TaxRateUpdateDto:
-      required:
-      - code
-      - rate
-      type: object
-      properties:
-        code:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The code for the tax rate. Must be unique to all active tax rates.
-        rate:
-          minimum: 0
-          type: number
-          description: Tax rate. This is the proportion (0.17 = 17%)
-          format: double
-        applyToLandedCosts:
-          type: boolean
-          description: Indicate if this tax rate applies to landed costs.
-      additionalProperties: false
-      description: Details of tax rate to be update
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

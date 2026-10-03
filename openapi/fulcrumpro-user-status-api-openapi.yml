@@ -75,16 +75,39 @@ paths:
       - System-Users-View Users
 components:
   schemas:
-    ControllerUsersListUserStatus_UserStatusListParams:
+    DtoUserJobOpTimer:
       type: object
       properties:
-        userIds:
-          type: array
-          items:
-            type: string
-          description: The user identifiers
+        jobId:
+          type:
+          - string
+          - 'null'
+          description: The job id
+        jobName:
+          type:
+          - string
+          - 'null'
+          description: The job name
+        operationId:
+          type:
+          - string
+          - 'null'
+          description: The operation id
+        operationName:
+          type:
+          - string
+          - 'null'
+          description: The operation name
+        elapsedTimeInSeconds:
+          type: number
+          description: The time working on the operation in seconds
+          format: double
+        estimatedTimeToCompleteInSeconds:
+          type: number
+          description: The estimate time to complete this operation in seconds.
+          format: double
       additionalProperties: false
-      description: The user status list params
+      description: A job timer
     UserStatusDto:
       type: object
       properties:
@@ -137,39 +160,16 @@ components:
           description: The jobs the user is working on.
       additionalProperties: false
       description: A user object that contains information about the jobs/operations the user is clocked into, as well as if the user is on break.
-    DtoUserJobOpTimer:
+    ControllerUsersListUserStatus_UserStatusListParams:
       type: object
       properties:
-        jobId:
-          type:
-          - string
-          - 'null'
-          description: The job id
-        jobName:
-          type:
-          - string
-          - 'null'
-          description: The job name
-        operationId:
-          type:
-          - string
-          - 'null'
-          description: The operation id
-        operationName:
-          type:
-          - string
-          - 'null'
-          description: The operation name
-        elapsedTimeInSeconds:
-          type: number
-          description: The time working on the operation in seconds
-          format: double
-        estimatedTimeToCompleteInSeconds:
-          type: number
-          description: The estimate time to complete this operation in seconds.
-          format: double
+        userIds:
+          type: array
+          items:
+            type: string
+          description: The user identifiers
       additionalProperties: false
-      description: A job timer
+      description: The user status list params
   securitySchemes:
     bearer:
       type: http

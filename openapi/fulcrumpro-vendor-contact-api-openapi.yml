@@ -200,65 +200,6 @@ paths:
       - Vendor-Vendors-View Vendor
 components:
   schemas:
-    VendorContactUpdateDto:
-      required:
-      - firstName
-      type: object
-      properties:
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Last name
-        position:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Position / Job Title
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number
-        cellPhone:
-          type:
-          - string
-          - 'null'
-          description: Cellphone number
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-        fax:
-          type:
-          - string
-          - 'null'
-          description: Fax number
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Internal notes about this contact.
-        emailPurchaseOrders:
-          type:
-          - boolean
-          - 'null'
-          description: Whether this contact should receive purchase order emails. When omitted, the existing value is preserved.
-      additionalProperties: false
-      description: A vendor contact
     VendorContactDto:
       required:
       - firstName
@@ -387,6 +328,65 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    VendorContactUpdateDto:
+      required:
+      - firstName
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Position / Job Title
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        cellPhone:
+          type:
+          - string
+          - 'null'
+          description: Cellphone number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+        fax:
+          type:
+          - string
+          - 'null'
+          description: Fax number
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Internal notes about this contact.
+        emailPurchaseOrders:
+          type:
+          - boolean
+          - 'null'
+          description: Whether this contact should receive purchase order emails. When omitted, the existing value is preserved.
+      additionalProperties: false
+      description: A vendor contact
   securitySchemes:
     bearer:
       type: http

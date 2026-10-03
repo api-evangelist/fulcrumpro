@@ -182,25 +182,6 @@ paths:
       - System-System Data-Manage System Data
 components:
   schemas:
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
     OperationDto:
       required:
       - id
@@ -278,25 +259,6 @@ components:
           description: Instructions.
       additionalProperties: false
       description: Operation definition.
-    ItemRoutingOutsideProcessingOperationCost:
-      type: object
-      properties:
-        costOption:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
-        fixedCost:
-          type:
-          - number
-          - 'null'
-          description: The fixed total cost for the operation
-          format: double
-        perUnitCost:
-          type:
-          - number
-          - 'null'
-          description: The cost per unit for the operation
-          format: double
-      additionalProperties: false
-      description: Outside processing operation cost
     OperationCreateDto:
       required:
       - description
@@ -364,18 +326,6 @@ components:
           description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
       additionalProperties: false
       description: Details of operation to be created
-    ItemRoutingOutsideProcessingCostOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-      description: The cost option for the outside processing operation
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     OperationRequestFindParameters:
       type: object
       properties:
@@ -402,28 +352,6 @@ components:
           format: date-time
       additionalProperties: false
       description: Parameters used for searching/finding operations.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    ItemRoutingOperationTime:
-      type: object
-      properties:
-        time:
-          type: number
-          description: Time or units of this operation
-          format: double
-        option:
-          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
-      additionalProperties: false
-      description: Operation time and type
     ItemRoutingOperationTimeOption:
       enum:
       - fixedSeconds
@@ -437,6 +365,17 @@ components:
       - unitsPerHour
       type: string
       description: The time unit or option used in operation times
+    ItemRoutingOperationTime:
+      type: object
+      properties:
+        time:
+          type: number
+          description: Time or units of this operation
+          format: double
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
+      additionalProperties: false
+      description: Operation time and type
     OperationUpdateDto:
       required:
       - description
@@ -506,6 +445,67 @@ components:
       description: 'Details of an operation to be updated. This is a full replacement of the publicly-exposed fields.
 
         Internal-only fields not exposed here (in-process tracking, tolerances, shop rates) are preserved.'
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ItemRoutingOutsideProcessingOperationCost:
+      type: object
+      properties:
+        costOption:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
+        fixedCost:
+          type:
+          - number
+          - 'null'
+          description: The fixed total cost for the operation
+          format: double
+        perUnitCost:
+          type:
+          - number
+          - 'null'
+          description: The cost per unit for the operation
+          format: double
+      additionalProperties: false
+      description: Outside processing operation cost
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    ItemRoutingOutsideProcessingCostOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+      description: The cost option for the outside processing operation
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

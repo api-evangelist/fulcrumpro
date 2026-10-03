@@ -298,288 +298,6 @@ paths:
       - Jobs-Jobs-Edit Job
 components:
   schemas:
-    JobDto:
-      required:
-      - id
-      - name
-      - number
-      - parentItemId
-      - priority
-      - quantityToMake
-      - status
-      - workOrderIds
-      - workOrders
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to this entity
-        number:
-          minimum: 0
-          type: integer
-          description: Job number
-          format: int32
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Job name, defaults to number unless otherwise specified.
-        parentItemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Unique identifier of the parent item produced by this job.
-
-            Please reference api/items endpoint.'
-        quantityToMake:
-          minimum: 0
-          type: number
-          description: Quantity of parent item produced by this job
-          format: double
-        productionDueDate:
-          type:
-          - string
-          - 'null'
-          description: Due date
-          format: date-time
-        earliestStartDate:
-          type:
-          - string
-          - 'null'
-          description: If set, this is the earliest date that the job should be scheduled to begin.
-          format: date-time
-        salesOrderId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Identifier of sales order fulfilled by this job, if applicable.
-
-            Please reference api/sales-orders endpoint.'
-        salesOrderLineItemId:
-          maxLength: 36
-          minLength: 36
-          type:
-          - string
-          - 'null'
-          description: 'Identifier of sales order line item fulfilled by this job, if applicable.
-
-            Please reference endpoints nested under api/sales-orders.'
-        createdUtc:
-          type: string
-          description: The date the job was created
-          format: date-time
-        originalScheduledStartUtc:
-          type:
-          - string
-          - 'null'
-          description: The first scheduled start time.
-          format: date-time
-        originalScheduledEndUtc:
-          type:
-          - string
-          - 'null'
-          description: The first scheduled end time.
-          format: date-time
-        scheduledStartUtc:
-          type:
-          - string
-          - 'null'
-          description: The current scheduled start time.
-          format: date-time
-        scheduledEndUtc:
-          type:
-          - string
-          - 'null'
-          description: The current scheduled end time.
-          format: date-time
-        completedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: The job completion datetime.
-          format: date-time
-        cancelledOnUtc:
-          type:
-          - string
-          - 'null'
-          description: The job cancelled datetime.
-          format: date-time
-        revenue:
-          type:
-          - number
-          - 'null'
-          description: Revenue
-          format: double
-        notes:
-          type:
-          - string
-          - 'null'
-          description: Job level internal notes
-        workOrderIds:
-          type: array
-          items:
-            type: string
-          description: 'Identifier of work order(s) that this job is associated to, if applicable.
-
-            Please reference api/work-orders endpoint.'
-        workOrders:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkOrderReferenceDto'
-          description: Work order information, if applicable.
-        status:
-          $ref: '#/components/schemas/JobStatusEnum'
-        priority:
-          $ref: '#/components/schemas/JobPriorityEnum'
-        customFields:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: Custom fields that have been defined on this entity.
-      additionalProperties: false
-      description: Represents a job
-    CommonCostBreakdownDto:
-      required:
-      - calculatedOn
-      - componentLabor
-      - componentMachine
-      - componentMaterial
-      - componentOutsideProcessing
-      - cumulative
-      - cumulativeLabor
-      - cumulativeMachine
-      - cumulativeMaterial
-      - cumulativeOutsideProcessing
-      - id
-      - itemLabor
-      - itemMachine
-      - itemMaterial
-      - itemOutsideProcessing
-      - lines
-      - quantity
-      - shopRateMachine
-      - shopRateRun
-      - shopRateSetup
-      - time
-      - type
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 24
-          type: string
-          description: The id of the parent item.
-        type:
-          $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
-        quantity:
-          minimum: 0
-          type: integer
-          description: Number of units.
-          format: int32
-        quantityScrapped:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Number of units scrapped.
-          format: int32
-        calculatedOn:
-          type: string
-          description: When was this cost breakdown last calculated/aggregated.
-          format: date-time
-        time:
-          $ref: '#/components/schemas/CommonTimeDto'
-        cumulative:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeMaterial:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeLabor:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeOutsideProcessing:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemMaterial:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemLabor:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemOutsideProcessing:
-          $ref: '#/components/schemas/CommonCostDto'
-        shopRateSetup:
-          $ref: '#/components/schemas/CommonCostDto'
-        shopRateRun:
-          $ref: '#/components/schemas/CommonCostDto'
-        shopRateMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentMaterial:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentLabor:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentOutsideProcessing:
-          $ref: '#/components/schemas/CommonCostDto'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonCostBreakdownLineDto'
-          description: Cost breakdown line details.
-      additionalProperties: false
-      description: Cost breakdown
-    CommonCostBreakdownOperationDto:
-      required:
-      - operationId
-      type: object
-      properties:
-        operationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Operation id. Please reference /api/operations
-        name:
-          type:
-          - string
-          - 'null'
-          description: Operation name.
-        timeInSeconds:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Time in seconds.
-          format: double
-          readOnly: true
-        timeInHours:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Time in hours
-          format: double
-        ratePerSecond:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Rate per second
-          format: double
-          readOnly: true
-        ratePerHour:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Rate per hour
-          format: double
-      additionalProperties: false
-      description: Operation information
     JobItemToMakeOpStatusEnum:
       enum:
       - pending
@@ -590,178 +308,27 @@ components:
       - cancelled
       type: string
       description: Job Item to Make Operation status
-    CommonTimeDto:
+    JobRequestUpdateStatus:
       required:
-      - labor
-      - machine
-      - setup
+      - status
       type: object
       properties:
-        labor:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        machine:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-        setup:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Time information
-    ItemsAndInventoryRoutingsCostBreakdownType:
-      enum:
-      - estimated
-      - inProgressJob
-      - completedJob
-      - cancelledJob
-      type: string
-    JobTrackingOperationReworkDto:
-      type: object
-      properties:
-        reasonId:
-          type:
-          - string
-          - 'null'
-          description: Identifier of the rework reason.
-        reason:
-          type:
-          - string
-          - 'null'
-          description: The rework reason.
-        notes:
-          type:
-          - string
-          - 'null'
-          description: Free-text notes captured when the rework was recorded.
-        quantityToRework:
-          type: integer
-          description: The quantity sent for rework.
-          format: int32
-        quantityScrapped:
-          type: integer
-          description: The quantity scrapped as part of the rework.
-          format: int32
-        hasScrapMaterials:
-          type: boolean
-          description: Whether scrap materials were tracked as part of the rework.
-        createdByUserId:
-          type:
-          - string
-          - 'null'
-          description: Identifier of the user who recorded the rework. Please reference /api/users endpoint.
-        createdUtc:
-          type: string
-          description: The datetime the rework was recorded.
-          format: date-time
-      additionalProperties: false
-      description: Rework details associated with a job operation.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    JobRequestFindParameters:
-      type: object
-      properties:
-        jobIds:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter to jobs whose ids are in the list
-        numbers:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-          description: Filter jobs to only given numbers
-        jobNames:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter jobs to only given names
         status:
           $ref: '#/components/schemas/JobStatusEnum'
-        statuses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/JobStatusEnum'
-          description: Filter jobs to match the given statuses
-        parentItemId:
-          type:
-          - string
-          - 'null'
-          description: Filter jobs based on the id of the parent item they produce
-        hasIncompleteOperations:
+        createPOs:
           type:
           - boolean
           - 'null'
-          description: "Filters jobs to have those that have at least 1 incomplete operation.\nNote that this will filter out jobs that haven't been approved yet because they technically have \nno operations on them until approved."
-        salesOrderId:
-          maxLength: 24
-          minLength: 24
+          description: 'Create Purchase Orders for the Job. Required for the following statuses: Engineering, Approved'
+        isInitialDataImport:
           type:
-          - string
+          - boolean
           - 'null'
-          description: 'Filters for jobs that are for this sales order id.
+          description: 'The job will be created as Complete. No inventory transactions. This is should mostly be used when importing jobs from legacy systems.
 
-            Please reference /api/sales-orders endpoint.'
-        createdBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters jobs created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        createdAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters jobs created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters jobs modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Filters jobs modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-
-            Useful for polling incrementally instead of re-syncing every job.'
-          format: date-time
+            Required for the following statuses: Complete'
       additionalProperties: false
-      description: Parameters used for searching/finding jobs.
+      description: Update a job status.
     JobTrackingDto:
       required:
       - id
@@ -989,206 +556,6 @@ components:
           description: The customer that this job is associated with
       additionalProperties: false
       description: Represents a job (for tracking purposes). This is essentially a summary of the job's current state.
-    DomainOperationsRouting_Step_RunTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      - unitsPerHour
-      type: string
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    JobTrackingItemToMakeDto:
-      required:
-      - depth
-      - id
-      - isCustom
-      - itemId
-      - quantityToMake
-      - status
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique Id associated to this entity
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Id of the item on which this entity is based.
-
-            Please reference /api/items endpoint.'
-        quantityToMake:
-          type: number
-          description: Quantity of this item produced by the associated job.
-          format: double
-        isCustom:
-          type: boolean
-          description: Denotes whether this job produces a customized version of the base item
-        status:
-          $ref: '#/components/schemas/JobItemToMakeStatusEnum'
-        quantityMade:
-          type:
-          - number
-          - 'null'
-          description: Quantity already produced, if the job is in progress.
-          format: double
-        depth:
-          type: integer
-          description: 'Structurally, identify where in the tree of building the parent item this item lies.
-
-            Example: The top-level item would have a depth of zero and it''s direct subcomponents would be 1.
-
-            This cascades down so that a subcomponent to a subcomponent would be 2... and so on.'
-          format: int32
-        routingNotes:
-          type:
-          - string
-          - 'null'
-          description: 'The routing notes (the "Routing Notes" field) captured on this job''s routing for the item.
-
-            Null when the job''s routing has no note for the item.'
-        costBreakdown:
-          $ref: '#/components/schemas/CommonCostBreakdownDto'
-        costBreakdownEstimated:
-          $ref: '#/components/schemas/CommonCostBreakdownDto'
-        itemReference:
-          $ref: '#/components/schemas/ItemReferenceDto'
-      additionalProperties: false
-      description: Represents an item to make on a job (for tracking purposes)
-    CommonEnumOperationTypeEnum:
-      enum:
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      type: string
-      description: Operation type
-    CommonCostBreakdownLineDto:
-      required:
-      - cost
-      - costType
-      - name
-      type: object
-      properties:
-        costType:
-          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
-        operationType:
-          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
-        name:
-          minLength: 1
-          type: string
-          description: Decription of this line.
-        cost:
-          minimum: 0
-          type: number
-          description: Cost.
-          format: double
-        quantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Quantity (if applicable)
-          format: double
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Id of the item that was picked. Please reference /api/items endpoint.
-        itemName:
-          type:
-          - string
-          - 'null'
-          description: The name of the item that was picked.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
-        operationInformation:
-          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
-      additionalProperties: false
-      description: Cost breakdown line information.
-    CommonCostDto:
-      required:
-      - perUnit
-      - total
-      type: object
-      properties:
-        total:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        perUnit:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Cost information
-    JobStatusEnum:
-      enum:
-      - draft
-      - needsReview
-      - approved
-      - engineering
-      - scheduled
-      - inProgress
-      - complete
-      - cancelled
-      - hold
-      type: string
-      description: Job status
-    JobRequestUpdateStatus:
-      required:
-      - status
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/JobStatusEnum'
-        createPOs:
-          type:
-          - boolean
-          - 'null'
-          description: 'Create Purchase Orders for the Job. Required for the following statuses: Engineering, Approved'
-        isInitialDataImport:
-          type:
-          - boolean
-          - 'null'
-          description: 'The job will be created as Complete. No inventory transactions. This is should mostly be used when importing jobs from legacy systems.
-
-            Required for the following statuses: Complete'
-      additionalProperties: false
-      description: Update a job status.
-    JobPriorityEnum:
-      enum:
-      - low
-      - moderate
-      - high
-      type: string
-      description: Job priority
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     CommonEnumCostBreakdownLineTypeEnum:
       enum:
       - material
@@ -1206,95 +573,96 @@ components:
       - unknown
       type: string
       description: Cost breakdown types
-    ItemReferenceDto:
+    CommonCostBreakdownDto:
       required:
+      - calculatedOn
+      - componentLabor
+      - componentMachine
+      - componentMaterial
+      - componentOutsideProcessing
+      - cumulative
+      - cumulativeLabor
+      - cumulativeMachine
+      - cumulativeMaterial
+      - cumulativeOutsideProcessing
       - id
+      - itemLabor
+      - itemMachine
+      - itemMaterial
+      - itemOutsideProcessing
+      - lines
+      - quantity
+      - shopRateMachine
+      - shopRateRun
+      - shopRateSetup
+      - time
+      - type
       type: object
       properties:
         id:
-          maxLength: 24
+          maxLength: 36
           minLength: 24
           type: string
-          description: Unique Id associated to this entity
-        number:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Item number.
-        revision:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Revision name.
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Item name.
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Item description.
-      additionalProperties: false
-      description: Item reference
-    JobItemToMakeStatusEnum:
-      enum:
-      - new
-      - working
-      - complete
-      - cancelled
-      type: string
-      description: Job Item to Make status
-    DomainOperationsRouting_Step_SetupTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-    WorkOrderReferenceDto:
-      required:
-      - id
-      - name
-      - number
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Identifier of work order.
-
-            Please reference api/work-orders endpoint for additional information.'
-        number:
+          description: The id of the parent item.
+        type:
+          $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
+        quantity:
           minimum: 0
           type: integer
-          description: Number
+          description: Number of units.
           format: int32
-        name:
-          maxLength: 200
-          minLength: 1
+        quantityScrapped:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Number of units scrapped.
+          format: int32
+        calculatedOn:
           type: string
-          description: Work order name, defaults to number unless otherwise specified.
+          description: When was this cost breakdown last calculated/aggregated.
+          format: date-time
+        time:
+          $ref: '#/components/schemas/CommonTimeDto'
+        cumulative:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateSetup:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateRun:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonCostBreakdownLineDto'
+          description: Cost breakdown line details.
       additionalProperties: false
-      description: Work order reference information
-    JobTrackingOperationDetailsDto:
-      required:
-      - itemToMake
-      - operation
-      type: object
-      properties:
-        itemToMake:
-          $ref: '#/components/schemas/JobTrackingItemToMakeDto'
-        operation:
-          $ref: '#/components/schemas/JobTrackingOperationDto'
-      additionalProperties: false
-      description: Represents a job operation and the item affected (for tracking purposes).
+      description: Cost breakdown
     JobTrackingOperationDto:
       required:
       - id
@@ -1459,27 +827,93 @@ components:
           $ref: '#/components/schemas/JobTrackingOperationReworkDto'
       additionalProperties: false
       description: Represents a job operation (for tracking purposes).
-    JobUpdateDto:
+    JobStatusEnum:
+      enum:
+      - draft
+      - needsReview
+      - approved
+      - engineering
+      - scheduled
+      - inProgress
+      - complete
+      - cancelled
+      - hold
+      type: string
+      description: Job status
+    DomainOperationsRouting_Step_SetupTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+    CommonTimeDto:
+      required:
+      - labor
+      - machine
+      - setup
       type: object
       properties:
+        labor:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        machine:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+        setup:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Time information
+    JobDto:
+      required:
+      - id
+      - name
+      - number
+      - parentItemId
+      - priority
+      - quantityToMake
+      - status
+      - workOrderIds
+      - workOrders
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to this entity
+        number:
+          minimum: 0
+          type: integer
+          description: Job number
+          format: int32
         name:
-          type:
-          - string
-          - 'null'
-          description: The name of the job
-        priority:
-          $ref: '#/components/schemas/JobPriorityEnum'
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Job name, defaults to number unless otherwise specified.
+        parentItemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Unique identifier of the parent item produced by this job.
+
+            Please reference api/items endpoint.'
         quantityToMake:
-          type:
-          - number
-          - 'null'
-          description: The quantity the job should make
+          minimum: 0
+          type: number
+          description: Quantity of parent item produced by this job
           format: double
         productionDueDate:
           type:
           - string
           - 'null'
-          description: The production due date
+          description: Due date
           format: date-time
         earliestStartDate:
           type:
@@ -1487,13 +921,345 @@ components:
           - 'null'
           description: If set, this is the earliest date that the job should be scheduled to begin.
           format: date-time
+        salesOrderId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of sales order fulfilled by this job, if applicable.
+
+            Please reference api/sales-orders endpoint.'
+        salesOrderLineItemId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of sales order line item fulfilled by this job, if applicable.
+
+            Please reference endpoints nested under api/sales-orders.'
+        createdUtc:
+          type: string
+          description: The date the job was created
+          format: date-time
+        originalScheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: The first scheduled start time.
+          format: date-time
+        originalScheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: The first scheduled end time.
+          format: date-time
+        scheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: The current scheduled start time.
+          format: date-time
+        scheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: The current scheduled end time.
+          format: date-time
+        completedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: The job completion datetime.
+          format: date-time
+        cancelledOnUtc:
+          type:
+          - string
+          - 'null'
+          description: The job cancelled datetime.
+          format: date-time
+        revenue:
+          type:
+          - number
+          - 'null'
+          description: Revenue
+          format: double
         notes:
           type:
           - string
           - 'null'
-          description: The internal notes
+          description: Job level internal notes
+        workOrderIds:
+          type: array
+          items:
+            type: string
+          description: 'Identifier of work order(s) that this job is associated to, if applicable.
+
+            Please reference api/work-orders endpoint.'
+        workOrders:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderReferenceDto'
+          description: Work order information, if applicable.
+        status:
+          $ref: '#/components/schemas/JobStatusEnum'
+        priority:
+          $ref: '#/components/schemas/JobPriorityEnum'
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
       additionalProperties: false
-      description: Represents an update on an Job.
+      description: Represents a job
+    JobRequestFindParameters:
+      type: object
+      properties:
+        jobIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter to jobs whose ids are in the list
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Filter jobs to only given numbers
+        jobNames:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter jobs to only given names
+        status:
+          $ref: '#/components/schemas/JobStatusEnum'
+        statuses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/JobStatusEnum'
+          description: Filter jobs to match the given statuses
+        parentItemId:
+          type:
+          - string
+          - 'null'
+          description: Filter jobs based on the id of the parent item they produce
+        hasIncompleteOperations:
+          type:
+          - boolean
+          - 'null'
+          description: "Filters jobs to have those that have at least 1 incomplete operation.\nNote that this will filter out jobs that haven't been approved yet because they technically have \nno operations on them until approved."
+        salesOrderId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Filters for jobs that are for this sales order id.
+
+            Please reference /api/sales-orders endpoint.'
+        createdBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        createdAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filters jobs modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Useful for polling incrementally instead of re-syncing every job.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding jobs.
+    JobTrackingOperationDetailsDto:
+      required:
+      - itemToMake
+      - operation
+      type: object
+      properties:
+        itemToMake:
+          $ref: '#/components/schemas/JobTrackingItemToMakeDto'
+        operation:
+          $ref: '#/components/schemas/JobTrackingOperationDto'
+      additionalProperties: false
+      description: Represents a job operation and the item affected (for tracking purposes).
+    JobTrackingOperationReworkDto:
+      type: object
+      properties:
+        reasonId:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the rework reason.
+        reason:
+          type:
+          - string
+          - 'null'
+          description: The rework reason.
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes captured when the rework was recorded.
+        quantityToRework:
+          type: integer
+          description: The quantity sent for rework.
+          format: int32
+        quantityScrapped:
+          type: integer
+          description: The quantity scrapped as part of the rework.
+          format: int32
+        hasScrapMaterials:
+          type: boolean
+          description: Whether scrap materials were tracked as part of the rework.
+        createdByUserId:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the user who recorded the rework. Please reference /api/users endpoint.
+        createdUtc:
+          type: string
+          description: The datetime the rework was recorded.
+          format: date-time
+      additionalProperties: false
+      description: Rework details associated with a job operation.
+    CommonEnumOperationTypeEnum:
+      enum:
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      type: string
+      description: Operation type
+    DomainOperationsRouting_Step_RunTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      - unitsPerHour
+      type: string
+    CommonCostBreakdownLineDto:
+      required:
+      - cost
+      - costType
+      - name
+      type: object
+      properties:
+        costType:
+          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
+        operationType:
+          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        name:
+          minLength: 1
+          type: string
+          description: Decription of this line.
+        cost:
+          minimum: 0
+          type: number
+          description: Cost.
+          format: double
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Quantity (if applicable)
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Id of the item that was picked. Please reference /api/items endpoint.
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: The name of the item that was picked.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
+        operationInformation:
+          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+      additionalProperties: false
+      description: Cost breakdown line information.
+    ItemReferenceDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to this entity
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Item number.
+        revision:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Revision name.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Item name.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Item description.
+      additionalProperties: false
+      description: Item reference
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     JobCreateDto:
       required:
       - quantityToMake
@@ -1569,6 +1335,240 @@ components:
           description: Id of the item to make. If SalesOrderId/SalesOrderLineItemId is set then ItemToMakeId will be ignored
       additionalProperties: false
       description: Details of job to be created
+    JobUpdateDto:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the job
+        priority:
+          $ref: '#/components/schemas/JobPriorityEnum'
+        quantityToMake:
+          type:
+          - number
+          - 'null'
+          description: The quantity the job should make
+          format: double
+        productionDueDate:
+          type:
+          - string
+          - 'null'
+          description: The production due date
+          format: date-time
+        earliestStartDate:
+          type:
+          - string
+          - 'null'
+          description: If set, this is the earliest date that the job should be scheduled to begin.
+          format: date-time
+        notes:
+          type:
+          - string
+          - 'null'
+          description: The internal notes
+      additionalProperties: false
+      description: Represents an update on an Job.
+    ItemsAndInventoryRoutingsCostBreakdownType:
+      enum:
+      - estimated
+      - inProgressJob
+      - completedJob
+      - cancelledJob
+      type: string
+    JobPriorityEnum:
+      enum:
+      - low
+      - moderate
+      - high
+      type: string
+      description: Job priority
+    CommonCostDto:
+      required:
+      - perUnit
+      - total
+      type: object
+      properties:
+        total:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        perUnit:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Cost information
+    CommonCostBreakdownOperationDto:
+      required:
+      - operationId
+      type: object
+      properties:
+        operationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Operation id. Please reference /api/operations
+        name:
+          type:
+          - string
+          - 'null'
+          description: Operation name.
+        timeInSeconds:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in seconds.
+          format: double
+          readOnly: true
+        timeInHours:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in hours
+          format: double
+        ratePerSecond:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per second
+          format: double
+          readOnly: true
+        ratePerHour:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per hour
+          format: double
+      additionalProperties: false
+      description: Operation information
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    WorkOrderReferenceDto:
+      required:
+      - id
+      - name
+      - number
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of work order.
+
+            Please reference api/work-orders endpoint for additional information.'
+        number:
+          minimum: 0
+          type: integer
+          description: Number
+          format: int32
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Work order name, defaults to number unless otherwise specified.
+      additionalProperties: false
+      description: Work order reference information
+    JobTrackingItemToMakeDto:
+      required:
+      - depth
+      - id
+      - isCustom
+      - itemId
+      - quantityToMake
+      - status
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique Id associated to this entity
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Id of the item on which this entity is based.
+
+            Please reference /api/items endpoint.'
+        quantityToMake:
+          type: number
+          description: Quantity of this item produced by the associated job.
+          format: double
+        isCustom:
+          type: boolean
+          description: Denotes whether this job produces a customized version of the base item
+        status:
+          $ref: '#/components/schemas/JobItemToMakeStatusEnum'
+        quantityMade:
+          type:
+          - number
+          - 'null'
+          description: Quantity already produced, if the job is in progress.
+          format: double
+        depth:
+          type: integer
+          description: 'Structurally, identify where in the tree of building the parent item this item lies.
+
+            Example: The top-level item would have a depth of zero and it''s direct subcomponents would be 1.
+
+            This cascades down so that a subcomponent to a subcomponent would be 2... and so on.'
+          format: int32
+        routingNotes:
+          type:
+          - string
+          - 'null'
+          description: 'The routing notes (the "Routing Notes" field) captured on this job''s routing for the item.
+
+            Null when the job''s routing has no note for the item.'
+        costBreakdown:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
+        costBreakdownEstimated:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
+        itemReference:
+          $ref: '#/components/schemas/ItemReferenceDto'
+      additionalProperties: false
+      description: Represents an item to make on a job (for tracking purposes)
+    JobItemToMakeStatusEnum:
+      enum:
+      - new
+      - working
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make status
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

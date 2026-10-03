@@ -197,17 +197,49 @@ paths:
       - Orders-Quotes-View Quote
 components:
   schemas:
-    QuoteTaxLineItemDto:
-      required:
-      - accountingDetails
-      - id
+    CommonAccountingDetailsDto:
       type: object
       properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
+    QuoteTaxLineItemCreateDto:
+      type: object
+      properties:
         description:
           maxLength: 2000
           minLength: 0
@@ -221,31 +253,20 @@ components:
           type:
           - string
           - 'null'
-          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
+
+            If FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId will be ignored.'
         taxRate:
           minimum: 0
           type:
           - number
           - 'null'
-          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxRate will supercede the defined tax rate.
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxRate will supercede the defined tax rate.
           format: double
         avalaraOptions:
           $ref: '#/components/schemas/DtoCommonAvalaraOptions'
-        number:
-          type: integer
-          description: Line number
-          format: int32
-        accountingDetails:
-          $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
-      description: Represents a tax line item on a Quote.
-    DtoCommonAvalaraOptions:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/CommonAddressDto'
-      additionalProperties: false
-      description: Options for use with Avalara (if enabled).
+      description: Represents a tax line item on a quote.
     QuoteTaxLineItemUpdateDto:
       type: object
       properties:
@@ -347,9 +368,24 @@ components:
           format: email
       additionalProperties: false
       description: Address definition
-    QuoteTaxLineItemCreateDto:
+    DtoCommonAvalaraOptions:
       type: object
       properties:
+        address:
+          $ref: '#/components/schemas/CommonAddressDto'
+      additionalProperties: false
+      description: Options for use with Avalara (if enabled).
+    QuoteTaxLineItemDto:
+      required:
+      - accountingDetails
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
         description:
           maxLength: 2000
           minLength: 0
@@ -363,20 +399,24 @@ components:
           type:
           - string
           - 'null'
-          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
-
-            If FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId will be ignored.'
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
         taxRate:
           minimum: 0
           type:
           - number
           - 'null'
-          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxRate will supercede the defined tax rate.
+          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxRate will supercede the defined tax rate.
           format: double
         avalaraOptions:
           $ref: '#/components/schemas/DtoCommonAvalaraOptions'
+        number:
+          type: integer
+          description: Line number
+          format: int32
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
-      description: Represents a tax line item on a quote.
+      description: Represents a tax line item on a Quote.
     CreatedResponseDto:
       required:
       - id
@@ -388,46 +428,6 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CommonAccountingDetailsDto:
-      type: object
-      properties:
-        classId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-      additionalProperties: false
-      description: An object that contains all accounting details.
   securitySchemes:
     bearer:
       type: http

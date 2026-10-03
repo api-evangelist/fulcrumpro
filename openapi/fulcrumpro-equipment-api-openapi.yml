@@ -309,25 +309,12 @@ components:
       description: 'Details of a piece of equipment to be updated. This is a full replacement: any field omitted
 
         is treated as cleared.'
-    EquipmentStatus:
+    CommonEnumSortDirectionEnum:
       enum:
-      - good
-      - poor
-      - bad
-      - outOfService
+      - ascending
+      - descending
       type: string
-      description: Equipment status
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
+      description: Specify sorting direction.
     EquipmentRequestFindParameters:
       type: object
       properties:
@@ -347,12 +334,25 @@ components:
           description: Filter equipment based on their name.
       additionalProperties: false
       description: Parameters used for searching/finding equipment.
-    CommonEnumSortDirectionEnum:
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    EquipmentStatus:
       enum:
-      - ascending
-      - descending
+      - good
+      - poor
+      - bad
+      - outOfService
       type: string
-      description: Specify sorting direction.
+      description: Equipment status
     EquipmentDto:
       required:
       - id

@@ -76,71 +76,6 @@ paths:
       - Orders-PurchaseOrders-View Purchase Order
 components:
   schemas:
-    PurchaseOrderTaxLineItemDto:
-      required:
-      - accountingDetails
-      - code
-      - id
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
-        code:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying code. Must be unique.
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.PurchaseOrder.TaxLineItem.TaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.PurchaseOrder.TaxLineItem.TaxLineItemDto.TaxRate will supercede the defined tax rate.
-          format: double
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-        price:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax amount applied at this rate across the entire purchase order.
-          format: double
-        taxCodeEditable:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates if the tax code used is editable.
-        number:
-          type: integer
-          description: Line number
-          format: int32
-        accountingDetails:
-          $ref: '#/components/schemas/CommonAccountingDetailsDto'
-      additionalProperties: false
-      description: Represents a tax line item on a purchase order.
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -235,6 +170,71 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    PurchaseOrderTaxLineItemDto:
+      required:
+      - accountingDetails
+      - code
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+        code:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying code. Must be unique.
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.PurchaseOrder.TaxLineItem.TaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.PurchaseOrder.TaxLineItem.TaxLineItemDto.TaxRate will supercede the defined tax rate.
+          format: double
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax amount applied at this rate across the entire purchase order.
+          format: double
+        taxCodeEditable:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if the tax code used is editable.
+        number:
+          type: integer
+          description: Line number
+          format: int32
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+      additionalProperties: false
+      description: Represents a tax line item on a purchase order.
   securitySchemes:
     bearer:
       type: http

@@ -193,7 +193,18 @@ paths:
       - Customer-Customers-View Customer
 components:
   schemas:
-    CustomerAddressUpdateDto:
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    CommonAddressCreateDto:
       required:
       - address1
       - city
@@ -285,18 +296,7 @@ components:
           - 'null'
           description: General notes associated to this customer address
       additionalProperties: false
-      description: Address with additional context for updating for a customer
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
+      description: Address with additional context
     CustomerAddressDto:
       required:
       - address1
@@ -396,7 +396,7 @@ components:
           description: General notes associated to this customer address
       additionalProperties: false
       description: Address with additional context for a customer
-    CommonAddressCreateDto:
+    CustomerAddressUpdateDto:
       required:
       - address1
       - city
@@ -488,7 +488,7 @@ components:
           - 'null'
           description: General notes associated to this customer address
       additionalProperties: false
-      description: Address with additional context
+      description: Address with additional context for updating for a customer
   securitySchemes:
     bearer:
       type: http

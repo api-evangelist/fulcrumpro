@@ -220,12 +220,204 @@ components:
           description: Restrict to price breaks in the given currency.
       additionalProperties: false
       description: Filters for listing purchase price breaks.
+    PriceBreakListSalesPriceBreaksDto:
+      type: object
+      properties:
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Restrict to price breaks for the given customer.
+        customerTierId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Restrict to price breaks for the given customer tier.
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: Restrict to price breaks in the given currency.
+        baseOnly:
+          type:
+          - boolean
+          - 'null'
+          description: When true, include only the item's base price (no customer or customer tier).
+      additionalProperties: false
+      description: Filters for listing sales price breaks.
     DtoPriceBreakSalesPriceBreakPricingTypeEnum:
       enum:
       - price
       - margin
       type: string
       description: How a sales price break is calculated.
+    PriceBreakPurchasePriceBreakDto:
+      required:
+      - breakPoints
+      - id
+      - itemId
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the price break.
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the item this price break applies to.
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the vendor this price break applies to.
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: ISO 4217 currency code. Null indicates the company's primary currency.
+        unitOfMeasureName:
+          type:
+          - string
+          - 'null'
+          description: Purchasing unit of measure for this price break. Null indicates the item's default unit of measure.
+        unitPrice:
+          type:
+          - number
+          - 'null'
+          description: The unit price at quantity 1.
+          format: double
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The vendor's part number for this item, if different from the internal number.
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The vendor's part description for this item.
+        breakPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceBreakItemPriceBreakPointDto'
+          description: Quantity break points beyond quantity 1.
+        modifiedUtc:
+          type: string
+          description: When this price break was last modified.
+          format: date-time
+      additionalProperties: false
+      description: Purchase (vendor cost) price break for an item.
+    PriceBreakItemPriceBreakPointDto:
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: Identifier for this break point. Server-generated; ignored on write.
+        quantity:
+          maximum: 2147483647
+          minimum: 2
+          type: integer
+          description: 'The quantity at which this break point becomes active. Must be greater than 1
+
+            (the unit/base price covers quantity 1).'
+          format: int32
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: 'The price per unit at this break point. Required for Price-type sales breaks and all
+
+            purchase (Cost) breaks.'
+          format: double
+        margin:
+          type:
+          - number
+          - 'null'
+          description: The margin percentage at this break point. Used when the price break is calculated by Margin.
+          format: double
+        showOnPdf:
+          type: boolean
+          description: 'Whether this break point should be displayed on customer-facing PDFs (quotes, sales orders).
+
+            Has no effect for purchase price breaks.'
+      additionalProperties: false
+      description: A single quantity break inside a price break.
+    PriceBreakPurchasePriceBreakUpsertDto:
+      required:
+      - breakPoints
+      - vendorId
+      type: object
+      properties:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Identifier of the vendor this price break applies to.
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: 'ISO 4217 currency code. Null is treated as the vendor''s currency (or, if the vendor has no
+
+            currency, the company''s primary currency) for identity matching. When matching an existing
+
+            break, that break''s stored CurrencyCode is preserved. On insert, the value stored is the
+
+            supplied value or the vendor''s currency if none was supplied.'
+        unitOfMeasureName:
+          type:
+          - string
+          - 'null'
+          description: 'Purchasing unit of measure. Null indicates the item''s default unit of measure.
+
+            Same null/default-equivalence rules as FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.CurrencyCode.'
+        unitPrice:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The unit price at quantity 1. Required.
+          format: double
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The vendor's part number for this item, if different from the internal number.
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The vendor's part description for this item.
+        breakPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceBreakItemPriceBreakPointDto'
+          description: 'Quantity break points beyond quantity 1. The complete set of break points is replaced
+
+            on each upsert; omit a quantity to remove it.'
+      additionalProperties: false
+      description: "Upsert payload for a purchase (vendor cost) price break.\n            \nIdentity key (item-id is the route parameter):\n  FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.VendorId, FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.CurrencyCode, FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.UnitOfMeasureName.\nIf a price break already exists for this key, it is updated; otherwise a new one is created."
     PriceBreakSalesPriceBreakUpsertDto:
       required:
       - breakPoints
@@ -373,198 +565,6 @@ components:
       description: 'Sales price break for an item. A sales price break is targeted at one of:
 
         the item''s base price, a specific customer, or a customer tier.'
-    PriceBreakItemPriceBreakPointDto:
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type:
-          - string
-          - 'null'
-          description: Identifier for this break point. Server-generated; ignored on write.
-        quantity:
-          maximum: 2147483647
-          minimum: 2
-          type: integer
-          description: 'The quantity at which this break point becomes active. Must be greater than 1
-
-            (the unit/base price covers quantity 1).'
-          format: int32
-        price:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: 'The price per unit at this break point. Required for Price-type sales breaks and all
-
-            purchase (Cost) breaks.'
-          format: double
-        margin:
-          type:
-          - number
-          - 'null'
-          description: The margin percentage at this break point. Used when the price break is calculated by Margin.
-          format: double
-        showOnPdf:
-          type: boolean
-          description: 'Whether this break point should be displayed on customer-facing PDFs (quotes, sales orders).
-
-            Has no effect for purchase price breaks.'
-      additionalProperties: false
-      description: A single quantity break inside a price break.
-    PriceBreakPurchasePriceBreakUpsertDto:
-      required:
-      - breakPoints
-      - vendorId
-      type: object
-      properties:
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Identifier of the vendor this price break applies to.
-        currencyCode:
-          type:
-          - string
-          - 'null'
-          description: 'ISO 4217 currency code. Null is treated as the vendor''s currency (or, if the vendor has no
-
-            currency, the company''s primary currency) for identity matching. When matching an existing
-
-            break, that break''s stored CurrencyCode is preserved. On insert, the value stored is the
-
-            supplied value or the vendor''s currency if none was supplied.'
-        unitOfMeasureName:
-          type:
-          - string
-          - 'null'
-          description: 'Purchasing unit of measure. Null indicates the item''s default unit of measure.
-
-            Same null/default-equivalence rules as FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.CurrencyCode.'
-        unitPrice:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The unit price at quantity 1. Required.
-          format: double
-        vendorItemNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The vendor's part number for this item, if different from the internal number.
-        vendorItemName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The vendor's part description for this item.
-        breakPoints:
-          type: array
-          items:
-            $ref: '#/components/schemas/PriceBreakItemPriceBreakPointDto'
-          description: 'Quantity break points beyond quantity 1. The complete set of break points is replaced
-
-            on each upsert; omit a quantity to remove it.'
-      additionalProperties: false
-      description: "Upsert payload for a purchase (vendor cost) price break.\n            \nIdentity key (item-id is the route parameter):\n  FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.VendorId, FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.CurrencyCode, FulcrumProduct.PublicApi.Dto.PriceBreak.PurchasePriceBreakUpsertDto.UnitOfMeasureName.\nIf a price break already exists for this key, it is updated; otherwise a new one is created."
-    PriceBreakListSalesPriceBreaksDto:
-      type: object
-      properties:
-        customerId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Restrict to price breaks for the given customer.
-        customerTierId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Restrict to price breaks for the given customer tier.
-        currencyCode:
-          type:
-          - string
-          - 'null'
-          description: Restrict to price breaks in the given currency.
-        baseOnly:
-          type:
-          - boolean
-          - 'null'
-          description: When true, include only the item's base price (no customer or customer tier).
-      additionalProperties: false
-      description: Filters for listing sales price breaks.
-    PriceBreakPurchasePriceBreakDto:
-      required:
-      - breakPoints
-      - id
-      - itemId
-      - vendorId
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Identifier of the price break.
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Identifier of the item this price break applies to.
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Identifier of the vendor this price break applies to.
-        currencyCode:
-          type:
-          - string
-          - 'null'
-          description: ISO 4217 currency code. Null indicates the company's primary currency.
-        unitOfMeasureName:
-          type:
-          - string
-          - 'null'
-          description: Purchasing unit of measure for this price break. Null indicates the item's default unit of measure.
-        unitPrice:
-          type:
-          - number
-          - 'null'
-          description: The unit price at quantity 1.
-          format: double
-        vendorItemNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The vendor's part number for this item, if different from the internal number.
-        vendorItemName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The vendor's part description for this item.
-        breakPoints:
-          type: array
-          items:
-            $ref: '#/components/schemas/PriceBreakItemPriceBreakPointDto'
-          description: Quantity break points beyond quantity 1.
-        modifiedUtc:
-          type: string
-          description: When this price break was last modified.
-          format: date-time
-      additionalProperties: false
-      description: Purchase (vendor cost) price break for an item.
   securitySchemes:
     bearer:
       type: http

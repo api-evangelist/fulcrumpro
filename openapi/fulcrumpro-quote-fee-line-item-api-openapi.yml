@@ -197,6 +197,46 @@ paths:
       - Orders-Quotes-View Quote
 components:
   schemas:
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
     QuoteFeeLineItemCreateDto:
       required:
       - price
@@ -270,84 +310,6 @@ components:
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
       description: Represents a fee line item on a sales order.
-    QuoteFeeLineItemDto:
-      required:
-      - accountingDetails
-      - id
-      - price
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Verbose name for this entity.
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        quantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The line item quantity
-          format: double
-        price:
-          minimum: 0
-          type: number
-          description: The line item price.
-          format: double
-        unitOfMeasure:
-          $ref: '#/components/schemas/CommonEnumLineItemUomEnum'
-        isTaxable:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if this fee is taxable.
-        overrideTaxRate:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if the tax rate is overridden.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Tax code key identifier.
-        taxRate:
-          type:
-          - number
-          - 'null'
-          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.FeeLineItem.QuoteFeeLineItemDto.TaxCodeId is provided and FulcrumProduct.PublicApi.Dto.Quote.FeeLineItem.QuoteFeeLineItemDto.OverrideTaxRate = true, the provided FulcrumProduct.PublicApi.Dto.Quote.FeeLineItem.QuoteFeeLineItemDto.TaxRate will supercede the defined tax rate.
-          format: double
-        number:
-          type: integer
-          description: Line number
-          format: int32
-        accountingDetails:
-          $ref: '#/components/schemas/CommonAccountingDetailsDto'
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-      additionalProperties: false
-      description: Represents a fee line item on a sales order.
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -402,15 +364,6 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    CommonEnumLineItemUomEnum:
-      enum:
-      - notApplicable
-      - piece
-      - linearFeet
-      - hour
-      - yard
-      type: string
-      description: Line item unit of measure.
     QuoteFeeLineItemUpdateDto:
       required:
       - price
@@ -495,46 +448,93 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CommonAccountingDetailsDto:
+    QuoteFeeLineItemDto:
+      required:
+      - accountingDetails
+      - id
+      - price
       type: object
       properties:
-        classId:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Verbose name for this entity.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type: number
+          description: The line item price.
+          format: double
+        unitOfMeasure:
+          $ref: '#/components/schemas/CommonEnumLineItemUomEnum'
+        isTaxable:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if this fee is taxable.
+        overrideTaxRate:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if the tax rate is overridden.
+        taxCodeId:
           maxLength: 24
           minLength: 24
           type:
           - string
           - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
+          description: Tax code key identifier.
+        taxRate:
+          type:
+          - number
+          - 'null'
+          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.FeeLineItem.QuoteFeeLineItemDto.TaxCodeId is provided and FulcrumProduct.PublicApi.Dto.Quote.FeeLineItem.QuoteFeeLineItemDto.OverrideTaxRate = true, the provided FulcrumProduct.PublicApi.Dto.Quote.FeeLineItem.QuoteFeeLineItemDto.TaxRate will supercede the defined tax rate.
+          format: double
+        number:
+          type: integer
+          description: Line number
+          format: int32
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+        accountingCodeId:
           maxLength: 24
           minLength: 24
           type:
           - string
           - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
       additionalProperties: false
-      description: An object that contains all accounting details.
+      description: Represents a fee line item on a sales order.
+    CommonEnumLineItemUomEnum:
+      enum:
+      - notApplicable
+      - piece
+      - linearFeet
+      - hour
+      - yard
+      type: string
+      description: Line item unit of measure.
   securitySchemes:
     bearer:
       type: http

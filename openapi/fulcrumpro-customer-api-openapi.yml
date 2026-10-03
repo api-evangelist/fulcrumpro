@@ -227,25 +227,6 @@ paths:
       - Customer-Customers-View Customer
 components:
   schemas:
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
     CustomerDto:
       required:
       - hasCustomerPortal
@@ -353,15 +334,6 @@ components:
           description: Customer tier name.
       additionalProperties: false
       description: A customer
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
     CustomerCreateDto:
       required:
       - name
@@ -450,6 +422,77 @@ components:
           description: Indicates if this customer is set up to use the customer portal.
       additionalProperties: false
       description: Details of customer to be created
+    CustomerRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter to customers who's name contains the given string
+        customerCode:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for this customer.
+        email:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The email of the customer
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filter to customer records modified after the given datetime (in UTC)
+          format: date-time
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+      additionalProperties: false
+      description: Parameters used for searching/finding customers.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -504,11 +547,6 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
     CustomerUpdateDto:
       required:
       - name
@@ -608,44 +646,6 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CustomerRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to customers who's name contains the given string
-        customerCode:
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Unique identifier for this customer.
-        email:
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The email of the customer
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filter to customer records modified after the given datetime (in UTC)
-          format: date-time
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-      additionalProperties: false
-      description: Parameters used for searching/finding customers.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     CommonExternalReferenceFindDto:
       required:
       - key

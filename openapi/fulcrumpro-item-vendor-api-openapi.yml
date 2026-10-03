@@ -135,6 +135,48 @@ paths:
       - ItemsAndInventory-Items-Edit Item
 components:
   schemas:
+    ItemVendorUpdateDto:
+      type: object
+      properties:
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item number for this vendor.
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this vendor.
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The price of this item for this vendor.
+          format: double
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this item.
+        leadTimeInDays:
+          type:
+          - integer
+          - 'null'
+          description: Lead time for this vendor.
+          format: int32
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes on this association.
+      additionalProperties: false
+      description: Vendor with additional context for an item.
     ItemVendorDto:
       required:
       - id
@@ -272,56 +314,17 @@ components:
           $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
       additionalProperties: false
       description: Price break definition
-    ItemVendorUpdateDto:
+    CreatedResponseDto:
+      required:
+      - id
       type: object
       properties:
-        vendorItemNumber:
-          maxLength: 200
+        id:
           minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item number for this vendor.
-        vendorItemName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item name for this vendor.
-        price:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The price of this item for this vendor.
-          format: double
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this item.
-        leadTimeInDays:
-          type:
-          - integer
-          - 'null'
-          description: Lead time for this vendor.
-          format: int32
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Notes on this association.
+          type: string
+          description: The id of the created record
       additionalProperties: false
-      description: Vendor with additional context for an item.
-    DomainPriceBreaksPriceBreakTypeEnum:
-      enum:
-      - price
-      - margin
-      - cost
-      - operation
-      - shopRate
-      type: string
+      description: Response for a created record
     ItemVendorCreateDto:
       required:
       - vendorId
@@ -371,17 +374,14 @@ components:
           description: Notes on this association.
       additionalProperties: false
       description: Vendor with additional context for an item.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
+    DomainPriceBreaksPriceBreakTypeEnum:
+      enum:
+      - price
+      - margin
+      - cost
+      - operation
+      - shopRate
+      type: string
   securitySchemes:
     bearer:
       type: http

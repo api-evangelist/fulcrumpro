@@ -181,7 +181,26 @@ paths:
       - Scheduling-Schedule-View Schedule
 components:
   schemas:
-    WorkCenterCreateDto:
+    WorkCenterRequestFindParameters:
+      type: object
+      properties:
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter workcenters based on matching ids.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter workcenters based on their name.
+      additionalProperties: false
+      description: Parameters used for searching/finding workcenters.
+    WorkCenterUpdateDto:
       required:
       - name
       type: object
@@ -232,9 +251,19 @@ components:
           - 'null'
           items:
             type: string
-          description: Identifiers of the equipment associated with this work center. Please reference /api/equipment endpoint.
+          description: 'Identifiers of the equipment associated with this work center. Replaces the existing set.
+
+            Please reference /api/equipment endpoint.'
       additionalProperties: false
-      description: Details of a work center to be created.
+      description: 'Details of a work center to be updated. This is a full replacement: any field omitted
+
+        (department, rates, equipment) is treated as cleared.'
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     WorkCenterDto:
       required:
       - id
@@ -303,15 +332,7 @@ components:
           description: Equipment associated with this workcenter.
       additionalProperties: false
       description: Workcenter definition.
-    EquipmentStatus:
-      enum:
-      - good
-      - poor
-      - bad
-      - outOfService
-      type: string
-      description: Equipment status
-    WorkCenterUpdateDto:
+    WorkCenterCreateDto:
       required:
       - name
       type: object
@@ -362,32 +383,9 @@ components:
           - 'null'
           items:
             type: string
-          description: 'Identifiers of the equipment associated with this work center. Replaces the existing set.
-
-            Please reference /api/equipment endpoint.'
+          description: Identifiers of the equipment associated with this work center. Please reference /api/equipment endpoint.
       additionalProperties: false
-      description: 'Details of a work center to be updated. This is a full replacement: any field omitted
-
-        (department, rates, equipment) is treated as cleared.'
-    WorkCenterRequestFindParameters:
-      type: object
-      properties:
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter workcenters based on matching ids.
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter workcenters based on their name.
-      additionalProperties: false
-      description: Parameters used for searching/finding workcenters.
+      description: Details of a work center to be created.
     CreatedResponseDto:
       required:
       - id
@@ -399,12 +397,14 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CommonEnumSortDirectionEnum:
+    EquipmentStatus:
       enum:
-      - ascending
-      - descending
+      - good
+      - poor
+      - bad
+      - outOfService
       type: string
-      description: Specify sorting direction.
+      description: Equipment status
     EquipmentDto:
       required:
       - id

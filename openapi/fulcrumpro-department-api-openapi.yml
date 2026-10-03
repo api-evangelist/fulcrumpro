@@ -181,6 +181,61 @@ paths:
       - Scheduling-Schedule-View Schedule
 components:
   schemas:
+    DepartmentUpdateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Description of the department. Replaces the existing value.
+        workCenterIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: 'Identifiers of the work centers associated with this department. Replaces the existing set.
+
+            Please reference /api/work-centers endpoint.'
+      additionalProperties: false
+      description: 'Details of a department to be updated. This is a full replacement: any field omitted
+
+        (description, work centers) is treated as cleared.'
+    DepartmentRequestFindParameters:
+      type: object
+      properties:
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter departments based on matching ids.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter departments based on their name.
+      additionalProperties: false
+      description: Parameters used for searching/finding departments.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     WorkCenterDto:
       required:
       - id
@@ -249,6 +304,32 @@ components:
           description: Equipment associated with this workcenter.
       additionalProperties: false
       description: Workcenter definition.
+    DepartmentDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        deleted:
+          type: boolean
+          description: Indicates whether this department has been deleted
+        workCenters:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkCenterDto'
+          description: Workcenters associated with this department.
+      additionalProperties: false
+      description: Department definition.
     DepartmentCreateDto:
       required:
       - name
@@ -275,36 +356,17 @@ components:
           description: Identifiers of the work centers associated with this department. Please reference /api/work-centers endpoint.
       additionalProperties: false
       description: Details of a department to be created.
-    DepartmentUpdateDto:
+    CreatedResponseDto:
       required:
-      - name
+      - id
       type: object
       properties:
-        name:
-          maxLength: 200
+        id:
           minLength: 1
           type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Description of the department. Replaces the existing value.
-        workCenterIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: 'Identifiers of the work centers associated with this department. Replaces the existing set.
-
-            Please reference /api/work-centers endpoint.'
+          description: The id of the created record
       additionalProperties: false
-      description: 'Details of a department to be updated. This is a full replacement: any field omitted
-
-        (description, work centers) is treated as cleared.'
+      description: Response for a created record
     EquipmentStatus:
       enum:
       - good
@@ -390,68 +452,6 @@ components:
           description: Indicates whether this equipment has been deleted
       additionalProperties: false
       description: Equipment definition.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    DepartmentRequestFindParameters:
-      type: object
-      properties:
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter departments based on matching ids.
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter departments based on their name.
-      additionalProperties: false
-      description: Parameters used for searching/finding departments.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    DepartmentDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        deleted:
-          type: boolean
-          description: Indicates whether this department has been deleted
-        workCenters:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkCenterDto'
-          description: Workcenters associated with this department.
-      additionalProperties: false
-      description: Department definition.
   securitySchemes:
     bearer:
       type: http

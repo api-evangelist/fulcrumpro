@@ -130,31 +130,6 @@ paths:
                   $ref: '#/components/schemas/TagDto'
 components:
   schemas:
-    TagRequestFindParametersBase:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter tags based on their name.
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter tags based on matching ids.
-      additionalProperties: false
-      description: Parameters used for searching/finding accounting codes.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     CommonEnumStyleEnum:
       enum:
       - primary
@@ -185,17 +160,28 @@ components:
       - chartOfAccounts
       type: string
       description: What the tag is used for (can be many).
-    CreatedResponseDto:
+    TagCreateBaseDto:
       required:
-      - id
+      - name
+      - style
       type: object
       properties:
-        id:
+        name:
+          maxLength: 200
           minLength: 1
           type: string
-          description: The id of the created record
+          description: Descriptive name associated to the object
+        style:
+          $ref: '#/components/schemas/CommonEnumStyleEnum'
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: Response for a created record
+      description: Represents a tag for creation
     TagDto:
       required:
       - id
@@ -235,28 +221,42 @@ components:
           description: Indicate if this tag has been deleted.
       additionalProperties: false
       description: Represents a tag
-    TagCreateBaseDto:
-      required:
-      - name
-      - style
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    TagRequestFindParametersBase:
       type: object
       properties:
         name:
           maxLength: 200
           minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-        style:
-          $ref: '#/components/schemas/CommonEnumStyleEnum'
-        description:
-          maxLength: 200
-          minLength: 1
           type:
           - string
           - 'null'
-          description: Descriptive name associated to the object
+          description: Filter tags based on their name.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter tags based on matching ids.
       additionalProperties: false
-      description: Represents a tag for creation
+      description: Parameters used for searching/finding accounting codes.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
   securitySchemes:
     bearer:
       type: http
