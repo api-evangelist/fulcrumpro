@@ -74,6 +74,13 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
 components:
   schemas:
+    CommonEnumOwnerTypeCertificationEnum:
+      enum:
+      - item
+      - purchaseOrderReceivingLineItem
+      - salesOrderReceivingLineItem
+      type: string
+      description: Owner types that can be used for certification attachments
     CreatedResponseDto:
       required:
       - id
@@ -85,13 +92,6 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CommonEnumOwnerTypeCertificationEnum:
-      enum:
-      - item
-      - purchaseOrderReceivingLineItem
-      - salesOrderReceivingLineItem
-      type: string
-      description: Owner types that can be used for certification attachments
   securitySchemes:
     bearer:
       type: http

@@ -181,25 +181,83 @@ paths:
       - Scheduling-Schedule-View Schedule
 components:
   schemas:
-    WorkCenterRequestFindParameters:
+    EquipmentDto:
+      required:
+      - id
+      - name
       type: object
       properties:
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter workcenters based on matching ids.
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
         name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
           maxLength: 200
           minLength: 1
           type:
           - string
           - 'null'
-          description: Filter workcenters based on their name.
+          description: Description.
+        workCenterId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
+        manufacturer:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Manufacturer.
+        modelNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Model number.
+        serialNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Serial number.
+        canRunUnattended:
+          type:
+          - boolean
+          - 'null'
+          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
+
+            that utilizes this equipment to be scheduled outside of a shift.'
+        unlimitedCapacity:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if this equipment can support multiple operations simultaneously.
+        status:
+          $ref: '#/components/schemas/EquipmentStatus'
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes associated to the equipment.
+        deleted:
+          type: boolean
+          description: Indicates whether this equipment has been deleted
       additionalProperties: false
-      description: Parameters used for searching/finding workcenters.
+      description: Equipment definition.
     WorkCenterUpdateDto:
       required:
       - name
@@ -332,6 +390,25 @@ components:
           description: Equipment associated with this workcenter.
       additionalProperties: false
       description: Workcenter definition.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    EquipmentStatus:
+      enum:
+      - good
+      - poor
+      - bad
+      - outOfService
+      type: string
+      description: Equipment status
     WorkCenterCreateDto:
       required:
       - name
@@ -386,102 +463,25 @@ components:
           description: Identifiers of the equipment associated with this work center. Please reference /api/equipment endpoint.
       additionalProperties: false
       description: Details of a work center to be created.
-    CreatedResponseDto:
-      required:
-      - id
+    WorkCenterRequestFindParameters:
       type: object
       properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    EquipmentStatus:
-      enum:
-      - good
-      - poor
-      - bad
-      - outOfService
-      type: string
-      description: Equipment status
-    EquipmentDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter workcenters based on matching ids.
         name:
           maxLength: 200
           minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
           type:
           - string
           - 'null'
-          description: Description.
-        workCenterId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
-        manufacturer:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Manufacturer.
-        modelNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Model number.
-        serialNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Serial number.
-        canRunUnattended:
-          type:
-          - boolean
-          - 'null'
-          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
-
-            that utilizes this equipment to be scheduled outside of a shift.'
-        unlimitedCapacity:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates if this equipment can support multiple operations simultaneously.
-        status:
-          $ref: '#/components/schemas/EquipmentStatus'
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Notes associated to the equipment.
-        deleted:
-          type: boolean
-          description: Indicates whether this equipment has been deleted
+          description: Filter workcenters based on their name.
       additionalProperties: false
-      description: Equipment definition.
+      description: Parameters used for searching/finding workcenters.
   securitySchemes:
     bearer:
       type: http

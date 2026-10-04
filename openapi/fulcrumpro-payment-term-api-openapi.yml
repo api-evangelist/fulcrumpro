@@ -132,24 +132,6 @@ paths:
                   $ref: '#/components/schemas/CommonPaymentTermDto'
 components:
   schemas:
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    PaymentTermRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter payment terms based on their name.
-      additionalProperties: false
-      description: Parameters used for searching/finding payment terms.
     CommonPaymentTermDto:
       required:
       - deleted
@@ -177,17 +159,6 @@ components:
           description: Indicate if this payment term has been deleted.
       additionalProperties: false
       description: Payment terms definition.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     CommonPaymentTermCreateDto:
       required:
       - dueDays
@@ -206,6 +177,35 @@ components:
           format: int32
       additionalProperties: false
       description: Payment terms definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    PaymentTermRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter payment terms based on their name.
+      additionalProperties: false
+      description: Parameters used for searching/finding payment terms.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

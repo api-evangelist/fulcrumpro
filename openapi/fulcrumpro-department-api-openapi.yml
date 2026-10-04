@@ -181,6 +181,51 @@ paths:
       - Scheduling-Schedule-View Schedule
 components:
   schemas:
+    DepartmentDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        deleted:
+          type: boolean
+          description: Indicates whether this department has been deleted
+        workCenters:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkCenterDto'
+          description: Workcenters associated with this department.
+      additionalProperties: false
+      description: Department definition.
+    DepartmentRequestFindParameters:
+      type: object
+      properties:
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter departments based on matching ids.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter departments based on their name.
+      additionalProperties: false
+      description: Parameters used for searching/finding departments.
     DepartmentUpdateDto:
       required:
       - name
@@ -211,170 +256,6 @@ components:
       description: 'Details of a department to be updated. This is a full replacement: any field omitted
 
         (description, work centers) is treated as cleared.'
-    DepartmentRequestFindParameters:
-      type: object
-      properties:
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter departments based on matching ids.
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter departments based on their name.
-      additionalProperties: false
-      description: Parameters used for searching/finding departments.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    WorkCenterDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        departmentId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Department identifier. Please reference /api/departments endpoint.
-        setupRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Hourly cost rate for setup.
-          format: double
-        runRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Hourly cost rate for run.
-          format: double
-        laborRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Hourly cost rate for labor.
-          format: double
-        overheadRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Hourly cost rate for overhead.
-          format: double
-        machineRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Hourly cost rate for machine.
-          format: double
-        deleted:
-          type: boolean
-          description: Indicates whether this equipment has been deleted
-        equipment:
-          type: array
-          items:
-            $ref: '#/components/schemas/EquipmentDto'
-          description: Equipment associated with this workcenter.
-      additionalProperties: false
-      description: Workcenter definition.
-    DepartmentDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        deleted:
-          type: boolean
-          description: Indicates whether this department has been deleted
-        workCenters:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkCenterDto'
-          description: Workcenters associated with this department.
-      additionalProperties: false
-      description: Department definition.
-    DepartmentCreateDto:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Description of the department.
-        workCenterIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Identifiers of the work centers associated with this department. Please reference /api/work-centers endpoint.
-      additionalProperties: false
-      description: Details of a department to be created.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    EquipmentStatus:
-      enum:
-      - good
-      - poor
-      - bad
-      - outOfService
-      type: string
-      description: Equipment status
     EquipmentDto:
       required:
       - id
@@ -452,6 +333,125 @@ components:
           description: Indicates whether this equipment has been deleted
       additionalProperties: false
       description: Equipment definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    WorkCenterDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        departmentId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Department identifier. Please reference /api/departments endpoint.
+        setupRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for setup.
+          format: double
+        runRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for run.
+          format: double
+        laborRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for labor.
+          format: double
+        overheadRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for overhead.
+          format: double
+        machineRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate for machine.
+          format: double
+        deleted:
+          type: boolean
+          description: Indicates whether this equipment has been deleted
+        equipment:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquipmentDto'
+          description: Equipment associated with this workcenter.
+      additionalProperties: false
+      description: Workcenter definition.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    EquipmentStatus:
+      enum:
+      - good
+      - poor
+      - bad
+      - outOfService
+      type: string
+      description: Equipment status
+    DepartmentCreateDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Description of the department.
+        workCenterIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Identifiers of the work centers associated with this department. Please reference /api/work-centers endpoint.
+      additionalProperties: false
+      description: Details of a department to be created.
   securitySchemes:
     bearer:
       type: http

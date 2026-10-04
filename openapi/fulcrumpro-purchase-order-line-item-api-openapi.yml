@@ -111,170 +111,6 @@ paths:
       - Orders-PurchaseOrders-View Purchase Order
 components:
   schemas:
-    CommonAccountingDetailsDto:
-      type: object
-      properties:
-        classId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-      additionalProperties: false
-      description: An object that contains all accounting details.
-    PurchaseOrderAppliedTaxDto:
-      required:
-      - taxAmount
-      - taxLineItemId
-      type: object
-      properties:
-        taxLineItemId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: 'The id of the PO-level tax line item that generated this tax amount.
-
-            Reference /api/purchase-orders/{id}/tax-line-items for full details.'
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The tax code id. Please reference /api/tax-rates endpoint.
-        taxCodeCode:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The tax code identifier string (e.g., "CA State Tax").
-        taxRate:
-          minimum: 0
-          type: number
-          description: The tax rate applied (as a decimal, e.g., 0.0725 for 7.25%).
-          format: double
-        taxAmount:
-          type: number
-          description: The calculated tax amount allocated to this line item from this tax line.
-          format: double
-      additionalProperties: false
-      description: Represents a tax allocation from a PO-level tax line item to an individual line item.
-    PurchaseOrderLineItemTaxAllocationResponseDto:
-      type: object
-      properties:
-        appliedTaxes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
-          description: 'Tax amounts allocated to this line item from PO-level tax lines.
-
-            Null if the line item is not taxable or has no tax allocations.'
-        totalTax:
-          type:
-          - number
-          - 'null'
-          description: 'Total tax amount allocated to this line item across all applicable tax lines.
-
-            Null if the line item is not taxable.'
-          format: double
-      additionalProperties: false
-      description: Tax allocation data for a purchase order line item.
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    PurchaseOrderLineItemTypeEnum:
-      enum:
-      - part
-      - outsideProcessing
-      - tax
-      - discount
-      - fee
-      - vendorCredit
-      type: string
-      description: Purchase order line item type
     PurchaseOrderLineItemDto:
       required:
       - accountingDetails
@@ -389,6 +225,170 @@ components:
           $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Represents a generic line item on a purchase order.
+    PurchaseOrderLineItemTypeEnum:
+      enum:
+      - part
+      - outsideProcessing
+      - tax
+      - discount
+      - fee
+      - vendorCredit
+      type: string
+      description: Purchase order line item type
+    PurchaseOrderLineItemTaxAllocationResponseDto:
+      type: object
+      properties:
+        appliedTaxes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
+          description: 'Tax amounts allocated to this line item from PO-level tax lines.
+
+            Null if the line item is not taxable or has no tax allocations.'
+        totalTax:
+          type:
+          - number
+          - 'null'
+          description: 'Total tax amount allocated to this line item across all applicable tax lines.
+
+            Null if the line item is not taxable.'
+          format: double
+      additionalProperties: false
+      description: Tax allocation data for a purchase order line item.
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    PurchaseOrderAppliedTaxDto:
+      required:
+      - taxAmount
+      - taxLineItemId
+      type: object
+      properties:
+        taxLineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'The id of the PO-level tax line item that generated this tax amount.
+
+            Reference /api/purchase-orders/{id}/tax-line-items for full details.'
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The tax code id. Please reference /api/tax-rates endpoint.
+        taxCodeCode:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The tax code identifier string (e.g., "CA State Tax").
+        taxRate:
+          minimum: 0
+          type: number
+          description: The tax rate applied (as a decimal, e.g., 0.0725 for 7.25%).
+          format: double
+        taxAmount:
+          type: number
+          description: The calculated tax amount allocated to this line item from this tax line.
+          format: double
+      additionalProperties: false
+      description: Represents a tax allocation from a PO-level tax line item to an individual line item.
   securitySchemes:
     bearer:
       type: http

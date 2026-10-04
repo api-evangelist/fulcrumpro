@@ -278,55 +278,55 @@ paths:
       - Orders-PurchaseOrders-View Purchase Order
 components:
   schemas:
-    CommonAccountingDetailsDto:
+    PurchaseOrderOutsideProcessingLineItemCreateDto:
+      required:
+      - jobId
+      - operationId
       type: object
       properties:
-        classId:
+        jobId:
           maxLength: 24
           minLength: 24
+          type: string
+          description: Job id associated with this line item.
+        operationId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Operation id associated with this line item.
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The line item quantity.  If not provided, defaults to Job operation QuantityToMake
+          format: double
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The line item unit price.  If not provided, defaults to price data stored on Job operation.
+          format: double
+        expectedReceiveDate:
           type:
           - string
           - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
+          description: Expected receipt date for this line item.
+          format: date-time
+        promiseDate:
           type:
           - string
           - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          description: Promise date (UTC).
+          format: date-time
       additionalProperties: false
-      description: An object that contains all accounting details.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
+      description: Represents an outside processing line item on a purchase order.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     PurchaseOrderOutsideProcessingLineItemDto:
       required:
       - accountingDetails
@@ -427,44 +427,88 @@ components:
           format: date-time
       additionalProperties: false
       description: Represents an outside processing line item on a purchase order.
-    PurchaseOrderAppliedTaxDto:
-      required:
-      - taxAmount
-      - taxLineItemId
+    PurchaseOrderLineItemTaxAllocationResponseDto:
       type: object
       properties:
-        taxLineItemId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: 'The id of the PO-level tax line item that generated this tax amount.
+        appliedTaxes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
+          description: 'Tax amounts allocated to this line item from PO-level tax lines.
 
-            Reference /api/purchase-orders/{id}/tax-line-items for full details.'
-        taxCodeId:
+            Null if the line item is not taxable or has no tax allocations.'
+        totalTax:
+          type:
+          - number
+          - 'null'
+          description: 'Total tax amount allocated to this line item across all applicable tax lines.
+
+            Null if the line item is not taxable.'
+          format: double
+      additionalProperties: false
+      description: Tax allocation data for a purchase order line item.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
           maxLength: 24
           minLength: 24
           type:
           - string
           - 'null'
-          description: The tax code id. Please reference /api/tax-rates endpoint.
-        taxCodeCode:
-          maxLength: 200
-          minLength: 1
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: The tax code identifier string (e.g., "CA State Tax").
-        taxRate:
-          minimum: 0
-          type: number
-          description: The tax rate applied (as a decimal, e.g., 0.0725 for 7.25%).
-          format: double
-        taxAmount:
-          type: number
-          description: The calculated tax amount allocated to this line item from this tax line.
-          format: double
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
-      description: Represents a tax allocation from a PO-level tax line item to an individual line item.
+      description: An object that contains all accounting details.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     PurchaseOrderEnumLineItemReceiptStatusEnum:
       enum:
       - open
@@ -472,11 +516,6 @@ components:
       - received
       type: string
       description: Purchase order line item receipt status
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -531,83 +570,6 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    PurchaseOrderLineItemTaxAllocationResponseDto:
-      type: object
-      properties:
-        appliedTaxes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
-          description: 'Tax amounts allocated to this line item from PO-level tax lines.
-
-            Null if the line item is not taxable or has no tax allocations.'
-        totalTax:
-          type:
-          - number
-          - 'null'
-          description: 'Total tax amount allocated to this line item across all applicable tax lines.
-
-            Null if the line item is not taxable.'
-          format: double
-      additionalProperties: false
-      description: Tax allocation data for a purchase order line item.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    PurchaseOrderOutsideProcessingLineItemCreateDto:
-      required:
-      - jobId
-      - operationId
-      type: object
-      properties:
-        jobId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Job id associated with this line item.
-        operationId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Operation id associated with this line item.
-        quantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The line item quantity.  If not provided, defaults to Job operation QuantityToMake
-          format: double
-        price:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The line item unit price.  If not provided, defaults to price data stored on Job operation.
-          format: double
-        expectedReceiveDate:
-          type:
-          - string
-          - 'null'
-          description: Expected receipt date for this line item.
-          format: date-time
-        promiseDate:
-          type:
-          - string
-          - 'null'
-          description: Promise date (UTC).
-          format: date-time
-      additionalProperties: false
-      description: Represents an outside processing line item on a purchase order.
     PurchaseOrderOutsideProcessingLineItemUpdateDto:
       type: object
       properties:
@@ -646,6 +608,44 @@ components:
           format: date-time
       additionalProperties: false
       description: Represents an outside processing line item on a purchase order
+    PurchaseOrderAppliedTaxDto:
+      required:
+      - taxAmount
+      - taxLineItemId
+      type: object
+      properties:
+        taxLineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'The id of the PO-level tax line item that generated this tax amount.
+
+            Reference /api/purchase-orders/{id}/tax-line-items for full details.'
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The tax code id. Please reference /api/tax-rates endpoint.
+        taxCodeCode:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The tax code identifier string (e.g., "CA State Tax").
+        taxRate:
+          minimum: 0
+          type: number
+          description: The tax rate applied (as a decimal, e.g., 0.0725 for 7.25%).
+          format: double
+        taxAmount:
+          type: number
+          description: The calculated tax amount allocated to this line item from this tax line.
+          format: double
+      additionalProperties: false
+      description: Represents a tax allocation from a PO-level tax line item to an individual line item.
   securitySchemes:
     bearer:
       type: http

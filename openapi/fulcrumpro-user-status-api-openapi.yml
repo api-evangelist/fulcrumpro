@@ -75,39 +75,6 @@ paths:
       - System-Users-View Users
 components:
   schemas:
-    DtoUserJobOpTimer:
-      type: object
-      properties:
-        jobId:
-          type:
-          - string
-          - 'null'
-          description: The job id
-        jobName:
-          type:
-          - string
-          - 'null'
-          description: The job name
-        operationId:
-          type:
-          - string
-          - 'null'
-          description: The operation id
-        operationName:
-          type:
-          - string
-          - 'null'
-          description: The operation name
-        elapsedTimeInSeconds:
-          type: number
-          description: The time working on the operation in seconds
-          format: double
-        estimatedTimeToCompleteInSeconds:
-          type: number
-          description: The estimate time to complete this operation in seconds.
-          format: double
-      additionalProperties: false
-      description: A job timer
     UserStatusDto:
       type: object
       properties:
@@ -170,6 +137,39 @@ components:
           description: The user identifiers
       additionalProperties: false
       description: The user status list params
+    DtoUserJobOpTimer:
+      type: object
+      properties:
+        jobId:
+          type:
+          - string
+          - 'null'
+          description: The job id
+        jobName:
+          type:
+          - string
+          - 'null'
+          description: The job name
+        operationId:
+          type:
+          - string
+          - 'null'
+          description: The operation id
+        operationName:
+          type:
+          - string
+          - 'null'
+          description: The operation name
+        elapsedTimeInSeconds:
+          type: number
+          description: The time working on the operation in seconds
+          format: double
+        estimatedTimeToCompleteInSeconds:
+          type: number
+          description: The estimate time to complete this operation in seconds.
+          format: double
+      additionalProperties: false
+      description: A job timer
   securitySchemes:
     bearer:
       type: http

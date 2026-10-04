@@ -207,6 +207,34 @@ components:
           format: double
       additionalProperties: false
       description: Time attribution for a timer segment.
+    TimerSegmentDto:
+      required:
+      - id
+      - startedOnUtc
+      type: object
+      properties:
+        id:
+          type: string
+          description: The timer segment identifier.
+          format: uuid
+        startedOnUtc:
+          type: string
+          description: When this segment begins.
+          format: date-time
+        stoppedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: When this segment ends. If the timer is not stopped (still running), this value will be blank.
+          format: date-time
+        isRunning:
+          type: boolean
+          description: Whether the timer segment is running or not.
+          readOnly: true
+        details:
+          $ref: '#/components/schemas/DtoTimerSegmentAttributionDetails'
+      additionalProperties: false
+      description: Data transfer object for TimerSegments entity
     DomainTimeTrackingTimer_Type:
       enum:
       - setup
@@ -216,15 +244,105 @@ components:
       - labor
       - machine
       type: string
-    JsonPatchOperation:
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    DtoPagedResultDtoTimerDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
       type: object
       properties:
-        op:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimerDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    TimerCreateTimerDto:
+      required:
+      - itemToMakeId
+      - jobId
+      - operationId
+      - startedOnUtc
+      - stoppedOnUtc
+      - type
+      - userId
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
           type: string
-        value:
+          description: The user the timer block is attributed to.
+        jobId:
+          minLength: 1
           type: string
-        path:
+          description: The job identifier
+        itemToMakeId:
+          maxLength: 36
+          minLength: 36
           type: string
+          description: The item to make identifier
+        operationId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The operation identifier
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+        startedOnUtc:
+          type: string
+          description: When the block started, in UTC.
+          format: date-time
+        stoppedOnUtc:
+          type: string
+          description: When the block stopped, in UTC. Must be after StartedOnUtc.
+          format: date-time
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value data used to correlate this timer with external systems and search for it later.
+      additionalProperties: false
+      description: Model for creating a complete, closed timer block via the public API.
     CommonEnumSortDirectionEnum:
       enum:
       - ascending
@@ -243,11 +361,43 @@ components:
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
       description: Represents an update on a timer.
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
+    DtoTimerAttributionDetails:
+      required:
+      - timeInSeconds
+      - timeInSecondsWeighted
+      type: object
+      properties:
+        timeInSeconds:
+          type: number
+          description: Elapsed time.
+          format: double
+        timeInSecondsWeighted:
+          type: number
+          description: Time in seconds (after using the multiplier/weighted).
+          format: double
+        rateHourlyInPrimaryCurrency:
+          type:
+          - number
+          - 'null'
+          description: Rate in primary currency.
+          format: double
+        cost:
+          type:
+          - number
+          - 'null'
+          description: Cost. This value will always reflect the current calculated cost. What this means is that overriding start/stop times would affect this value.
+          format: double
+      additionalProperties: false
+      description: Cost and time attribution for a timer.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -302,156 +452,6 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    TimerCreateTimerDto:
-      required:
-      - itemToMakeId
-      - jobId
-      - operationId
-      - startedOnUtc
-      - stoppedOnUtc
-      - type
-      - userId
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The user the timer block is attributed to.
-        jobId:
-          minLength: 1
-          type: string
-          description: The job identifier
-        itemToMakeId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The item to make identifier
-        operationId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The operation identifier
-        type:
-          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
-        startedOnUtc:
-          type: string
-          description: When the block started, in UTC.
-          format: date-time
-        stoppedOnUtc:
-          type: string
-          description: When the block stopped, in UTC. Must be after StartedOnUtc.
-          format: date-time
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value data used to correlate this timer with external systems and search for it later.
-      additionalProperties: false
-      description: Model for creating a complete, closed timer block via the public API.
-    DtoPagedResultDtoTimerDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimerDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    TimerSegmentDto:
-      required:
-      - id
-      - startedOnUtc
-      type: object
-      properties:
-        id:
-          type: string
-          description: The timer segment identifier.
-          format: uuid
-        startedOnUtc:
-          type: string
-          description: When this segment begins.
-          format: date-time
-        stoppedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: When this segment ends. If the timer is not stopped (still running), this value will be blank.
-          format: date-time
-        isRunning:
-          type: boolean
-          description: Whether the timer segment is running or not.
-          readOnly: true
-        details:
-          $ref: '#/components/schemas/DtoTimerSegmentAttributionDetails'
-      additionalProperties: false
-      description: Data transfer object for TimerSegments entity
-    DtoTimerAttributionDetails:
-      required:
-      - timeInSeconds
-      - timeInSecondsWeighted
-      type: object
-      properties:
-        timeInSeconds:
-          type: number
-          description: Elapsed time.
-          format: double
-        timeInSecondsWeighted:
-          type: number
-          description: Time in seconds (after using the multiplier/weighted).
-          format: double
-        rateHourlyInPrimaryCurrency:
-          type:
-          - number
-          - 'null'
-          description: Rate in primary currency.
-          format: double
-        cost:
-          type:
-          - number
-          - 'null'
-          description: Cost. This value will always reflect the current calculated cost. What this means is that overriding start/stop times would affect this value.
-          format: double
-      additionalProperties: false
-      description: Cost and time attribution for a timer.
     JobTrackingTimerRequestListTimersParameters:
       type: object
       properties:

@@ -162,6 +162,14 @@ paths:
       - ItemsAndInventory-Items-View Item
 components:
   schemas:
+    DomainPriceBreaksPriceBreakTypeEnum:
+      enum:
+      - price
+      - margin
+      - cost
+      - operation
+      - shopRate
+      type: string
     ItemCustomerCreateDto:
       required:
       - customerId
@@ -188,25 +196,6 @@ components:
           description: The item name for this customer.
       additionalProperties: false
       description: Create a new item customer association.
-    ItemCustomerUpdateDto:
-      type: object
-      properties:
-        customerItemNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item number for this customer.
-        customerItemName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item name for this customer.
-      additionalProperties: false
-      description: Update an item customer association.
     ItemCustomerDto:
       required:
       - customerId
@@ -251,6 +240,17 @@ components:
           description: Price breaks.
       additionalProperties: false
       description: Customer with additional context for an item.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     CommonPriceBreakDto:
       required:
       - type
@@ -309,25 +309,25 @@ components:
           $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
       additionalProperties: false
       description: Price break definition
-    CreatedResponseDto:
-      required:
-      - id
+    ItemCustomerUpdateDto:
       type: object
       properties:
-        id:
+        customerItemNumber:
+          maxLength: 200
           minLength: 1
-          type: string
-          description: The id of the created record
+          type:
+          - string
+          - 'null'
+          description: The item number for this customer.
+        customerItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this customer.
       additionalProperties: false
-      description: Response for a created record
-    DomainPriceBreaksPriceBreakTypeEnum:
-      enum:
-      - price
-      - margin
-      - cost
-      - operation
-      - shopRate
-      type: string
+      description: Update an item customer association.
   securitySchemes:
     bearer:
       type: http

@@ -166,6 +166,20 @@ paths:
       - Invoicing-Invoicing-View Invoices
 components:
   schemas:
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -206,20 +220,6 @@ components:
           description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
       description: An object that contains all accounting details.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
     CommonExternalReferenceDto:
       required:
       - externalId

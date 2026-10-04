@@ -135,25 +135,6 @@ components:
           format: double
       additionalProperties: false
       description: Impact Dto.
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
     DtoPagedResultDtoNCRNcrDto:
       required:
       - data
@@ -199,6 +180,41 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
+    NCRRequestNcrListParameters:
+      type: object
+      properties:
+        status:
+          type:
+          - string
+          - 'null'
+          description: 'Filter NCRs by a specific status
+
+            Accepted Values:
+
+            Closed, Hold, New, Quality Review, Engineering Review'
+        type:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs by a specific type. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        cause:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs by a specific cause. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs by a specific reason. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        createdUtc:
+          type:
+          - string
+          - 'null'
+          description: Filter NCRs created after a certain date
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching NCRs
     NCRNcrDto:
       required:
       - cause
@@ -324,41 +340,25 @@ components:
           description: Impact information.
       additionalProperties: false
       description: Represents an NCR
-    NCRRequestNcrListParameters:
+    CommonReferenceDto:
       type: object
       properties:
-        status:
+        id:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: 'Filter NCRs by a specific status
-
-            Accepted Values:
-
-            Closed, Hold, New, Quality Review, Engineering Review'
-        type:
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
           type:
           - string
           - 'null'
-          description: Filter NCRs by a specific type. Available values are configured per tenant in Quality settings (NCR dropdowns).
-        cause:
-          type:
-          - string
-          - 'null'
-          description: Filter NCRs by a specific cause. Available values are configured per tenant in Quality settings (NCR dropdowns).
-        reason:
-          type:
-          - string
-          - 'null'
-          description: Filter NCRs by a specific reason. Available values are configured per tenant in Quality settings (NCR dropdowns).
-        createdUtc:
-          type:
-          - string
-          - 'null'
-          description: Filter NCRs created after a certain date
-          format: date-time
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: Parameters used for searching NCRs
+      description: Represents a reference to a document in a DB collection
   securitySchemes:
     bearer:
       type: http

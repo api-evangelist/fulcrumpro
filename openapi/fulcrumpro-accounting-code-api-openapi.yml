@@ -160,6 +160,25 @@ components:
       - chartOfAccounts
       type: string
       description: What the tag is used for (can be many).
+    TagRequestFindParametersBase:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter tags based on their name.
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter tags based on matching ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding accounting codes.
     TagCreateBaseDto:
       required:
       - name
@@ -182,6 +201,23 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a tag for creation
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     TagDto:
       required:
       - id
@@ -221,42 +257,6 @@ components:
           description: Indicate if this tag has been deleted.
       additionalProperties: false
       description: Represents a tag
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    TagRequestFindParametersBase:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter tags based on their name.
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter tags based on matching ids.
-      additionalProperties: false
-      description: Parameters used for searching/finding accounting codes.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
   securitySchemes:
     bearer:
       type: http

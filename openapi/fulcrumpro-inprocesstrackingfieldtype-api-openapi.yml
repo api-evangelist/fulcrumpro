@@ -96,20 +96,6 @@ paths:
                   $ref: '#/components/schemas/InProcessTrackingFieldTypeDto'
 components:
   schemas:
-    DomainInProcessTrackingFieldDataType:
-      enum:
-      - boolean
-      - number
-      - dropdown
-      - text
-      - checkbox
-      type: string
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     InProcessTrackingFieldTypeRequestFindParameters:
       type: object
       properties:
@@ -129,6 +115,14 @@ components:
           description: Filter in process tracking fields based on matching ids.
       additionalProperties: false
       description: Parameters used for searching/finding in process tracking fields.
+    DomainInProcessTrackingFieldDataType:
+      enum:
+      - boolean
+      - number
+      - dropdown
+      - text
+      - checkbox
+      type: string
     InProcessTrackingFieldTypeDto:
       required:
       - dataType
@@ -165,6 +159,12 @@ components:
           description: The type of quantity when the data type is number
       additionalProperties: false
       description: Describes the type of in process tracking field
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

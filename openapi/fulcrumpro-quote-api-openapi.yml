@@ -357,22 +357,53 @@ paths:
       - Orders-Quotes-Edit Quote
 components:
   schemas:
-    QuoteCreateDto:
+    CustomerContactCreateDto:
       required:
-      - customerId
+      - firstName
       type: object
       properties:
-        customerId:
-          maxLength: 24
-          minLength: 24
+        firstName:
+          maxLength: 200
+          minLength: 1
           type: string
-          description: The id of the customer to be created
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Position / Job Title
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        cellPhone:
+          type:
+          - string
+          - 'null'
+          description: Cellphone number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: A customer contact
+    QuoteUpdateDto:
+      type: object
+      properties:
         billingAddress:
           $ref: '#/components/schemas/CommonAddressCreateDto'
-        shippingAddress:
-          $ref: '#/components/schemas/CommonAddressCreateDto'
-        contact:
-          $ref: '#/components/schemas/CustomerContactCreateDto'
         externalReferences:
           type:
           - object
@@ -380,22 +411,18 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for the Quote
+        opportunity:
+          type:
+          - string
+          - 'null'
+          description: CRM Opportunity identifier.
         salesPersonId:
           maxLength: 24
           minLength: 24
           type:
           - string
           - 'null'
-          description: 'Sales Person identifier.  Please reference /api/users endpoint.
-
-            If not provided, the salesperson defined on the customer will be used.'
-        crmOpportunity:
-          $ref: '#/components/schemas/FulcrumProDomainReference'
-        opportunity:
-          type:
-          - string
-          - 'null'
-          description: CRM Opportunity identifier.
+          description: Sales Person identifier.  Please reference /api/users endpoint.
         notesToCustomer:
           maxLength: 2000
           minLength: 1
@@ -404,30 +431,38 @@ components:
           - 'null'
           description: A field for the seller to provide additional details or instructions for the customer relating to the order.
       additionalProperties: false
-      description: Details of sales order to be created
-    FulcrumProDomainReference:
+      description: Details of quote to be updated
+    DomainCurrenciesDocumentCurrencyInfo:
       type: object
       properties:
-        primaryKeyId:
-          type: integer
-          format: int32
         id:
-          maxLength: 36
-          minLength: 0
+          type: string
+          format: uuid
+        documentCurrencyCode:
           type:
           - string
           - 'null'
-        name:
-          maxLength: 500
-          minLength: 0
+        primaryCurrencyCode:
           type:
           - string
           - 'null'
-        createdUtc:
+        exchangeRate:
+          type: number
+          format: double
+        exchangeRateUpdatedOnUtc:
           type: string
           format: date-time
+        exchangeRateError:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
-    CommonAddressCreateDto:
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonAddressDto:
       required:
       - address1
       - city
@@ -484,42 +519,20 @@ components:
           - string
           - 'null'
           description: Country identifier.
-        shippingLeadTime:
-          minimum: 0
+        phone:
           type:
-          - integer
+          - string
           - 'null'
-          description: Lead time for shipping contents.
-          format: int32
-        primaryBilling:
-          type: boolean
-          description: Signifies if this is a primary billing address.
-        primaryShipping:
-          type: boolean
-          description: Signifies if this is a primary billing address.
+          description: Phone number.
+          format: tel
         email:
           type:
           - string
           - 'null'
           description: Email address
           format: email
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Associated phone number
-        fax:
-          type:
-          - string
-          - 'null'
-          description: Associated fax number
-        notes:
-          type:
-          - string
-          - 'null'
-          description: General notes associated to this customer address
       additionalProperties: false
-      description: Address with additional context
+      description: Address definition
     CommonReferenceDto:
       type: object
       properties:
@@ -539,67 +552,34 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a reference to a document in a DB collection
-    DtoQuotesStatus:
-      enum:
-      - open
-      - draft
-      - needsApproval
-      - approved
-      - sent
-      - won
-      - lost
-      type: string
-      description: Quotes status
-    QuoteRequestFindParameters:
+    FulcrumProDomainReference:
       type: object
       properties:
-        numbers:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-          description: Filter quotes to only given numbers
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-        status:
-          $ref: '#/components/schemas/DtoQuotesStatus'
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filter to quote records modified after the given datetime (in UTC)
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching/finding quotes.
-    DomainCurrenciesDocumentCurrencyInfo:
-      type: object
-      properties:
+        primaryKeyId:
+          type: integer
+          format: int32
         id:
-          type: string
-          format: uuid
-        documentCurrencyCode:
+          maxLength: 36
+          minLength: 0
           type:
           - string
           - 'null'
-        primaryCurrencyCode:
+        name:
+          maxLength: 500
+          minLength: 0
           type:
           - string
           - 'null'
-        exchangeRate:
-          type: number
-          format: double
-        exchangeRateUpdatedOnUtc:
+        createdUtc:
           type: string
           format: date-time
-        exchangeRateError:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     QuoteDto:
       required:
       - createdUtc
@@ -704,126 +684,7 @@ components:
           description: A field for the seller to provide additional details or instructions for the customer relating to the order.
       additionalProperties: false
       description: Represents a Quote
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    CommonExternalReferenceFindDto:
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Arbitrary sub-key that can be used to qualify the value
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The external identifier
-      additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
-    QuoteRequestUpdateQuoteStatusRequest:
-      required:
-      - status
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/DtoQuoteUpdateQuotesStatus'
-      additionalProperties: false
-      description: Update a Quote status.
-    DtoQuoteUpdateQuotesStatus:
-      enum:
-      - draft
-      - needsApproval
-      - approved
-      - sent
-      - won
-      - lost
-      type: string
-      description: Statuses you can update a quote too
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonAddressDto:
+    CommonAddressCreateDto:
       required:
       - address1
       - city
@@ -880,25 +741,114 @@ components:
           - string
           - 'null'
           description: Country identifier.
-        phone:
+        shippingLeadTime:
+          minimum: 0
           type:
-          - string
+          - integer
           - 'null'
-          description: Phone number.
-          format: tel
+          description: Lead time for shipping contents.
+          format: int32
+        primaryBilling:
+          type: boolean
+          description: Signifies if this is a primary billing address.
+        primaryShipping:
+          type: boolean
+          description: Signifies if this is a primary billing address.
         email:
           type:
           - string
           - 'null'
           description: Email address
           format: email
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Associated phone number
+        fax:
+          type:
+          - string
+          - 'null'
+          description: Associated fax number
+        notes:
+          type:
+          - string
+          - 'null'
+          description: General notes associated to this customer address
       additionalProperties: false
-      description: Address definition
-    QuoteUpdateDto:
+      description: Address with additional context
+    CommonExternalReferenceFindDto:
+      required:
+      - key
       type: object
       properties:
+        key:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Arbitrary sub-key that can be used to qualify the value
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external identifier
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    DtoQuoteUpdateQuotesStatus:
+      enum:
+      - draft
+      - needsApproval
+      - approved
+      - sent
+      - won
+      - lost
+      type: string
+      description: Statuses you can update a quote too
+    DtoQuotesStatus:
+      enum:
+      - open
+      - draft
+      - needsApproval
+      - approved
+      - sent
+      - won
+      - lost
+      type: string
+      description: Quotes status
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    QuoteCreateDto:
+      required:
+      - customerId
+      type: object
+      properties:
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The id of the customer to be created
         billingAddress:
           $ref: '#/components/schemas/CommonAddressCreateDto'
+        shippingAddress:
+          $ref: '#/components/schemas/CommonAddressCreateDto'
+        contact:
+          $ref: '#/components/schemas/CustomerContactCreateDto'
         externalReferences:
           type:
           - object
@@ -906,18 +856,22 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for the Quote
-        opportunity:
-          type:
-          - string
-          - 'null'
-          description: CRM Opportunity identifier.
         salesPersonId:
           maxLength: 24
           minLength: 24
           type:
           - string
           - 'null'
-          description: Sales Person identifier.  Please reference /api/users endpoint.
+          description: 'Sales Person identifier.  Please reference /api/users endpoint.
+
+            If not provided, the salesperson defined on the customer will be used.'
+        crmOpportunity:
+          $ref: '#/components/schemas/FulcrumProDomainReference'
+        opportunity:
+          type:
+          - string
+          - 'null'
+          description: CRM Opportunity identifier.
         notesToCustomer:
           maxLength: 2000
           minLength: 1
@@ -926,7 +880,7 @@ components:
           - 'null'
           description: A field for the seller to provide additional details or instructions for the customer relating to the order.
       additionalProperties: false
-      description: Details of quote to be updated
+      description: Details of sales order to be created
     CreatedResponseDto:
       required:
       - id
@@ -938,48 +892,94 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    CustomerContactCreateDto:
-      required:
-      - firstName
+    QuoteRequestFindParameters:
       type: object
       properties:
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Filter quotes to only given numbers
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+        status:
+          $ref: '#/components/schemas/DtoQuotesStatus'
+        modifiedAfterUtc:
           type:
           - string
           - 'null'
-          description: Last name
-        position:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Position / Job Title
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number
-        cellPhone:
-          type:
-          - string
-          - 'null'
-          description: Cellphone number
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
+          description: Filter to quote records modified after the given datetime (in UTC)
+          format: date-time
       additionalProperties: false
-      description: A customer contact
+      description: Parameters used for searching/finding quotes.
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    QuoteRequestUpdateQuoteStatusRequest:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/DtoQuoteUpdateQuotesStatus'
+      additionalProperties: false
+      description: Update a Quote status.
   securitySchemes:
     bearer:
       type: http
