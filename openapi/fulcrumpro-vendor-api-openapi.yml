@@ -210,11 +210,6 @@ paths:
       - Vendor-Vendors-View Vendor
 components:
   schemas:
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
     DtoVendorDtoWithDetails:
       required:
       - id
@@ -304,6 +299,39 @@ components:
           description: The addresses associated with the vendor
       additionalProperties: false
       description: A vendor
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
     VendorUpdateDto:
       required:
       - name
@@ -379,50 +407,6 @@ components:
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
       description: Definition for updating a vendor.
-    VendorCreateDto:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The name to give the entity. Must be unique to all active vendors.
-        paymentTermsId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
-        vendorCode:
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Unique identifier for this vendor.
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: General notes associated to this vendor
-        currencyCode:
-          type:
-          - string
-          - 'null'
-          description: The currency of the vendor
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for the vendor
-      additionalProperties: false
-      description: Definition for creating a vendor.
     VendorDto:
       required:
       - id
@@ -507,21 +491,63 @@ components:
           format: date-time
       additionalProperties: false
       description: A vendor
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    JsonPatchOperation:
+    CommonExternalReferenceFindDto:
+      required:
+      - key
       type: object
       properties:
-        op:
+        key:
+          maxLength: 50
+          minLength: 0
           type: string
-        value:
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Arbitrary sub-key that can be used to qualify the value
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external identifier
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
           type: string
-        path:
-          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    VendorRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter to vendors who's name contains the given string
+        vendorCode:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for this vendor.
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+      additionalProperties: false
+      description: Parameters used for searching/finding vendors.
     VendorAddressDto:
       required:
       - address1
@@ -621,56 +647,6 @@ components:
           description: General notes associated to this vendor address
       additionalProperties: false
       description: Address with additional context for a vendor
-    VendorRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to vendors who's name contains the given string
-        vendorCode:
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Unique identifier for this vendor.
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-      additionalProperties: false
-      description: Parameters used for searching/finding vendors.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -725,32 +701,56 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    CommonExternalReferenceFindDto:
+    VendorCreateDto:
       required:
-      - key
+      - name
       type: object
       properties:
-        key:
-          maxLength: 50
-          minLength: 0
+        name:
+          maxLength: 200
+          minLength: 1
           type: string
-          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
-        type:
-          maxLength: 50
-          minLength: 0
+          description: The name to give the entity. Must be unique to all active vendors.
+        paymentTermsId:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: Arbitrary sub-key that can be used to qualify the value
-        externalId:
-          maxLength: 500
-          minLength: 0
+          description: Payment terms key identifier. Please reference /api/payment-terms endpoint.
+        vendorCode:
+          minLength: 1
           type:
           - string
           - 'null'
-          description: The external identifier
+          description: Unique identifier for this vendor.
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: General notes associated to this vendor
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: The currency of the vendor
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for the vendor
       additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
+      description: Definition for creating a vendor.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

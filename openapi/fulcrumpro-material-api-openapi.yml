@@ -171,148 +171,6 @@ paths:
       - ItemsAndInventory-Items-View Item
 components:
   schemas:
-    FulcrumProductMaterialsFulcrumLengthUnits:
-      enum:
-      - inch
-      - foot
-      - yard
-      - millimeter
-      - centimeter
-      - meter
-      type: string
-    CommonEnumMaterialFormEnum:
-      enum:
-      - sheet
-      - plate
-      - roundBar
-      - flatBar
-      - channel
-      - squareTube
-      - angle
-      - treadPlate
-      - hexBar
-      - squareBar
-      - teeBar
-      - hBeam
-      - rectTube
-      - pipe
-      - wBeam
-      - sBeam
-      - roundTube
-      - rectBar
-      - wideBar
-      type: string
-      description: Specifies the form of the material.
-    MaterialShapeDto:
-      required:
-      - form
-      - id
-      - materialReferenceId
-      - materialReferenceName
-      - name
-      - vendors
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: Unique id associated to this entity.
-        active:
-          type: boolean
-          description: Indicates if this material is activated.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name.
-        form:
-          $ref: '#/components/schemas/CommonEnumMaterialFormEnum'
-        materialReferenceId:
-          minLength: 1
-          type: string
-          description: Material Id
-        materialReferenceName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Material name
-        specification:
-          type:
-          - string
-          - 'null'
-          description: Specification
-        subSpecification:
-          type:
-          - string
-          - 'null'
-          description: Sub-specification
-        finish:
-          type:
-          - string
-          - 'null'
-          description: Finish
-        grade:
-          type:
-          - string
-          - 'null'
-          description: Grade
-        dimension:
-          type:
-          - string
-          - 'null'
-          description: Dimension
-        type:
-          type:
-          - string
-          - 'null'
-          description: Material type
-        version:
-          type:
-          - string
-          - 'null'
-          description: Version
-        vendors:
-          type: array
-          items:
-            $ref: '#/components/schemas/MaterialShapeVendorDto'
-          description: Vendors that supply this material.
-      additionalProperties: false
-      description: Material definition.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    MaterialRequestActivateMaterials:
-      required:
-      - materialIds
-      type: object
-      properties:
-        materialIds:
-          type: array
-          items:
-            type: string
-          description: Material ids to activate.
-        unit:
-          $ref: '#/components/schemas/FulcrumProductMaterialsFulcrumLengthUnits'
-      additionalProperties: false
-      description: Parameters used for activating materials.
-    MaterialRequestGetMaterialRequestDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: Unique id of the material to retrieve.
-      additionalProperties: false
-      description: 'Request parameters for looking up a single material by id.
-
-        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
-
-        which cannot be round-tripped through URL path segments.'
     MaterialShapeVendorPriceBreakDto:
       required:
       - id
@@ -335,6 +193,15 @@ components:
           format: double
       additionalProperties: false
       description: Vendor prices breaks for a material shape.
+    FulcrumProductMaterialsFulcrumLengthUnits:
+      enum:
+      - inch
+      - foot
+      - yard
+      - millimeter
+      - centimeter
+      - meter
+      type: string
     MaterialRequestFindParameters:
       type: object
       properties:
@@ -428,6 +295,139 @@ components:
       - pound
       type: string
       description: Specifies how a routing input item quantity is measured.
+    CommonEnumMaterialFormEnum:
+      enum:
+      - sheet
+      - plate
+      - roundBar
+      - flatBar
+      - channel
+      - squareTube
+      - angle
+      - treadPlate
+      - hexBar
+      - squareBar
+      - teeBar
+      - hBeam
+      - rectTube
+      - pipe
+      - wBeam
+      - sBeam
+      - roundTube
+      - rectBar
+      - wideBar
+      type: string
+      description: Specifies the form of the material.
+    MaterialRequestActivateMaterials:
+      required:
+      - materialIds
+      type: object
+      properties:
+        materialIds:
+          type: array
+          items:
+            type: string
+          description: Material ids to activate.
+        unit:
+          $ref: '#/components/schemas/FulcrumProductMaterialsFulcrumLengthUnits'
+      additionalProperties: false
+      description: Parameters used for activating materials.
+    MaterialRequestGetMaterialRequestDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: Unique id of the material to retrieve.
+      additionalProperties: false
+      description: 'Request parameters for looking up a single material by id.
+
+        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
+
+        which cannot be round-tripped through URL path segments.'
+    MaterialShapeDto:
+      required:
+      - form
+      - id
+      - materialReferenceId
+      - materialReferenceName
+      - name
+      - vendors
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: Unique id associated to this entity.
+        active:
+          type: boolean
+          description: Indicates if this material is activated.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name.
+        form:
+          $ref: '#/components/schemas/CommonEnumMaterialFormEnum'
+        materialReferenceId:
+          minLength: 1
+          type: string
+          description: Material Id
+        materialReferenceName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Material name
+        specification:
+          type:
+          - string
+          - 'null'
+          description: Specification
+        subSpecification:
+          type:
+          - string
+          - 'null'
+          description: Sub-specification
+        finish:
+          type:
+          - string
+          - 'null'
+          description: Finish
+        grade:
+          type:
+          - string
+          - 'null'
+          description: Grade
+        dimension:
+          type:
+          - string
+          - 'null'
+          description: Dimension
+        type:
+          type:
+          - string
+          - 'null'
+          description: Material type
+        version:
+          type:
+          - string
+          - 'null'
+          description: Version
+        vendors:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorDto'
+          description: Vendors that supply this material.
+      additionalProperties: false
+      description: Material definition.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

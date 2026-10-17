@@ -75,6 +75,16 @@ paths:
       - System-Users-View Users
 components:
   schemas:
+    ControllerUsersListUserStatus_UserStatusListParams:
+      type: object
+      properties:
+        userIds:
+          type: array
+          items:
+            type: string
+          description: The user identifiers
+      additionalProperties: false
+      description: The user status list params
     UserStatusDto:
       type: object
       properties:
@@ -127,16 +137,6 @@ components:
           description: The jobs the user is working on.
       additionalProperties: false
       description: A user object that contains information about the jobs/operations the user is clocked into, as well as if the user is on break.
-    ControllerUsersListUserStatus_UserStatusListParams:
-      type: object
-      properties:
-        userIds:
-          type: array
-          items:
-            type: string
-          description: The user identifiers
-      additionalProperties: false
-      description: The user status list params
     DtoUserJobOpTimer:
       type: object
       properties:

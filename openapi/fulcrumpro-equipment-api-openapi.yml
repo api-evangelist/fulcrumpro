@@ -181,6 +181,88 @@ paths:
       - Scheduling-Schedule-View Schedule
 components:
   schemas:
+    EquipmentRequestFindParameters:
+      type: object
+      properties:
+        ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter equipment based on matching ids.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter equipment based on their name.
+      additionalProperties: false
+      description: Parameters used for searching/finding equipment.
+    EquipmentCreateDto:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Description. Required.
+        workCenterId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
+        manufacturer:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Manufacturer.
+        modelNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Model number.
+        serialNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Serial number.
+        canRunUnattended:
+          type: boolean
+          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
+
+            that utilizes this equipment to be scheduled outside of a shift.'
+        unlimitedCapacity:
+          type: boolean
+          description: Indicates if this equipment can support multiple operations simultaneously.
+        status:
+          $ref: '#/components/schemas/EquipmentStatus'
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes associated to the equipment.
+      additionalProperties: false
+      description: Details of a piece of equipment to be created.
     EquipmentDto:
       required:
       - id
@@ -258,12 +340,14 @@ components:
           description: Indicates whether this equipment has been deleted
       additionalProperties: false
       description: Equipment definition.
-    CommonEnumSortDirectionEnum:
+    EquipmentStatus:
       enum:
-      - ascending
-      - descending
+      - good
+      - poor
+      - bad
+      - outOfService
       type: string
-      description: Specify sorting direction.
+      description: Equipment status
     EquipmentUpdateDto:
       required:
       - description
@@ -329,69 +413,6 @@ components:
       description: 'Details of a piece of equipment to be updated. This is a full replacement: any field omitted
 
         is treated as cleared.'
-    EquipmentCreateDto:
-      required:
-      - description
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Description. Required.
-        workCenterId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: WorkCenter identifier. Please reference /api/work-centers endpoint.
-        manufacturer:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Manufacturer.
-        modelNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Model number.
-        serialNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Serial number.
-        canRunUnattended:
-          type: boolean
-          description: 'Indicates if this equipment can be run unattended. This allows the portion of an operation
-
-            that utilizes this equipment to be scheduled outside of a shift.'
-        unlimitedCapacity:
-          type: boolean
-          description: Indicates if this equipment can support multiple operations simultaneously.
-        status:
-          $ref: '#/components/schemas/EquipmentStatus'
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Notes associated to the equipment.
-      additionalProperties: false
-      description: Details of a piece of equipment to be created.
     CreatedResponseDto:
       required:
       - id
@@ -403,33 +424,12 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    EquipmentStatus:
+    CommonEnumSortDirectionEnum:
       enum:
-      - good
-      - poor
-      - bad
-      - outOfService
+      - ascending
+      - descending
       type: string
-      description: Equipment status
-    EquipmentRequestFindParameters:
-      type: object
-      properties:
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter equipment based on matching ids.
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter equipment based on their name.
-      additionalProperties: false
-      description: Parameters used for searching/finding equipment.
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

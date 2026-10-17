@@ -388,21 +388,42 @@ components:
           description: The current status of the operation
       additionalProperties: false
       description: Response after adding additional quantity completed to a job operation
-    DomainOperationsRouting_Step_SetupTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-    JobItemToMakeOpStatusEnum:
-      enum:
-      - pending
-      - ready
-      - running
-      - paused
-      - complete
-      - cancelled
-      type: string
-      description: Job Item to Make Operation status
+    ItemToMakeOperationItemRequiredDto:
+      required:
+      - itemId
+      - itemNumber
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the required item.
+
+            Please reference /api/items endpoint.'
+        itemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Item number of the required item
+        revision:
+          type:
+          - string
+          - 'null'
+          description: Revision of the required item
+      additionalProperties: false
+      description: Represents a required input item for a job operation
+    ItemToMakeOperationUpdateDto:
+      type: object
+      properties:
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: The custom fields to update on the operation object
+      additionalProperties: false
+      description: Represents an routing operation on a job item to make
     JobItemToMakeOperationPickInventoryDto:
       required:
       - itemId
@@ -441,6 +462,12 @@ components:
           description: The ID of the lot to pick from.
       additionalProperties: false
       description: Pick event for an input item
+    DomainOperationsRouting_Step_RunTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      - unitsPerHour
+      type: string
     ItemToMakeOperationDto:
       required:
       - id
@@ -597,48 +624,11 @@ components:
             Please reference api/work-orders endpoint.'
       additionalProperties: false
       description: Represents an routing operation on a job item to make
-    DomainOperationsRouting_Step_RunTimeOption:
+    DomainOperationsRouting_Step_SetupTimeOption:
       enum:
       - fixed
       - perUnit
-      - unitsPerHour
       type: string
-    ItemToMakeOperationItemRequiredDto:
-      required:
-      - itemId
-      - itemNumber
-      type: object
-      properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Identifier of the required item.
-
-            Please reference /api/items endpoint.'
-        itemNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Item number of the required item
-        revision:
-          type:
-          - string
-          - 'null'
-          description: Revision of the required item
-      additionalProperties: false
-      description: Represents a required input item for a job operation
-    ItemToMakeOperationUpdateDto:
-      type: object
-      properties:
-        customFields:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: The custom fields to update on the operation object
-      additionalProperties: false
-      description: Represents an routing operation on a job item to make
     ItemToMakeOperationMaterialRequiredDto:
       required:
       - id
@@ -657,6 +647,16 @@ components:
           description: Name of the material shape required
       additionalProperties: false
       description: Represents a required input material for a job operation
+    JobItemToMakeOpStatusEnum:
+      enum:
+      - pending
+      - ready
+      - running
+      - paused
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make Operation status
     ItemsToMakeOperationsAddQuantityCompletedRequest:
       required:
       - additionalQuantity

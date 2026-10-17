@@ -136,6 +136,41 @@ paths:
       - ItemsAndInventory-Items-View Inventory
 components:
   schemas:
+    InventoryLotRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter lots based on their name.
+        itemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Item ids to match. Please reference /api/items endpoint.
+        system:
+          type:
+          - boolean
+          - 'null'
+          description: Filter by whether the lot is considered a system-generated lot.
+      additionalProperties: false
+      description: Parameters used for searching/finding inventory lots.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     InventoryLotCreateDto:
       required:
       - itemId
@@ -209,41 +244,6 @@ components:
       - descending
       type: string
       description: Specify sorting direction.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    InventoryLotRequestFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter lots based on their name.
-        itemIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Item ids to match. Please reference /api/items endpoint.
-        system:
-          type:
-          - boolean
-          - 'null'
-          description: Filter by whether the lot is considered a system-generated lot.
-      additionalProperties: false
-      description: Parameters used for searching/finding inventory lots.
   securitySchemes:
     bearer:
       type: http

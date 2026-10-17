@@ -196,61 +196,6 @@ components:
           description: The item name for this customer.
       additionalProperties: false
       description: Create a new item customer association.
-    ItemCustomerDto:
-      required:
-      - customerId
-      - id
-      - priceBreaks
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The id of the item-customer association. Use this value for update and delete operations.
-        customerId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Customer id associated to this entity. Please reference /api/customers endpoint.
-        customerItemNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item number for this customer.
-        customerItemName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item name for this customer.
-        unitOfMeasureName:
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The unit of measure name. This can be standard unit measurement names (Piece, Square foot, etc) or a custom measurement name.
-        priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonPriceBreakDto'
-          description: Price breaks.
-      additionalProperties: false
-      description: Customer with additional context for an item.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     CommonPriceBreakDto:
       required:
       - type
@@ -309,6 +254,61 @@ components:
           $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
       additionalProperties: false
       description: Price break definition
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    ItemCustomerDto:
+      required:
+      - customerId
+      - id
+      - priceBreaks
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The id of the item-customer association. Use this value for update and delete operations.
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Customer id associated to this entity. Please reference /api/customers endpoint.
+        customerItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item number for this customer.
+        customerItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this customer.
+        unitOfMeasureName:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The unit of measure name. This can be standard unit measurement names (Piece, Square foot, etc) or a custom measurement name.
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonPriceBreakDto'
+          description: Price breaks.
+      additionalProperties: false
+      description: Customer with additional context for an item.
     ItemCustomerUpdateDto:
       type: object
       properties:

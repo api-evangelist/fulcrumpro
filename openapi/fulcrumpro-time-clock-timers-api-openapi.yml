@@ -123,6 +123,18 @@ paths:
       - Time-Time-View Time Management
 components:
   schemas:
+    TimeClockClockOutDto:
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
+      additionalProperties: false
+      description: Model for clocking a user out
     DomainTimeTrackingTimer_Type:
       enum:
       - setup
@@ -175,6 +187,23 @@ components:
           description: The tag identifier for the clock in code
       additionalProperties: false
       description: Data transfer object for Timer entity
+    DtoCommonDateRangeFilter:
+      type: object
+      properties:
+        start:
+          type:
+          - string
+          - 'null'
+          description: Inclusive start date to filter by
+          format: date-time
+        end:
+          type:
+          - string
+          - 'null'
+          description: Inclusive end date to filter by
+          format: date-time
+      additionalProperties: false
+      description: Date range used for filters
     TimeClockRequestListTimeClocksParameters:
       type: object
       properties:
@@ -194,53 +223,6 @@ components:
           description: Filter to only open timers
       additionalProperties: false
       description: Parameters used for searching time clocks
-    TimeClockClockInDto:
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the clock in to.  If not supplied, will use the user assigned to the api key used for authorization
-      additionalProperties: false
-      description: Model for clocking in via the public api
-    DtoCommonDateRangeFilter:
-      type: object
-      properties:
-        start:
-          type:
-          - string
-          - 'null'
-          description: Inclusive start date to filter by
-          format: date-time
-        end:
-          type:
-          - string
-          - 'null'
-          description: Inclusive end date to filter by
-          format: date-time
-      additionalProperties: false
-      description: Date range used for filters
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    TimeClockClockOutDto:
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
-      additionalProperties: false
-      description: Model for clocking a user out
     DtoPagedResultDtoTimeClockDto:
       required:
       - data
@@ -286,6 +268,24 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
+    TimeClockClockInDto:
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the clock in to.  If not supplied, will use the user assigned to the api key used for authorization
+      additionalProperties: false
+      description: Model for clocking in via the public api
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

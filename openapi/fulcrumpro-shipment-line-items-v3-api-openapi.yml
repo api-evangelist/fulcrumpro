@@ -69,101 +69,6 @@ paths:
       - Shipping-Shipping-View Shipments
 components:
   schemas:
-    DtoPagedResultDtoShipmentLineItemDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShipmentLineItemDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    ShipmentLineItemsListParameters:
-      type: object
-      properties:
-        packingStatus:
-          $ref: '#/components/schemas/ShippingDataPackingStatus'
-        itemId:
-          type:
-          - string
-          - 'null'
-          description: Filter shipment line items based on item identifier.
-        shipmentId:
-          type:
-          - string
-          - 'null'
-          description: Filter shipment line items based on shipment identifier.
-        salesOrderId:
-          type:
-          - string
-          - 'null'
-          description: Filter shipment line items based on sales order identifier.
-        purchaseOrderId:
-          type:
-          - string
-          - 'null'
-          description: Filter shipment line items based on purchase order identifier.
-        salesOrderLineItemIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter shipment line items based on sales order line item(s) identifier.
-        purchaseOrderLineItemIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter shipment line items based on purchase order line item identifier.
-        shipmentIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter shipment line items based on shipment identifiers.
-        shipmentType:
-          $ref: '#/components/schemas/ShippingDataShipmentType'
-      additionalProperties: false
-      description: Parameters used for searching V3 shipment line items
     ShipmentLineItemPackingDetailDto:
       type: object
       properties:
@@ -211,32 +116,51 @@ components:
           description: Box identifier this packing detail was packed into. Free-form (e.g., "1", "A1").
       additionalProperties: false
       description: Packing detail associated to a shipment line item.
-    ShippingDataShipmentStatus:
-      enum:
-      - pending
-      - open
-      - shipped
-      - cancelled
-      type: string
-    ShippingDataPackingStatus:
-      enum:
-      - notPacked
-      - partiallyPacked
-      - fullyPacked
-      - overPacked
-      type: string
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    ShippingDataShipmentType:
-      enum:
-      - unknown
-      - standard
-      - outsideProcessing
-      type: string
+    DtoPagedResultDtoShipmentLineItemDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentLineItemDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
     ShipmentLineItemDto:
       required:
       - id
@@ -355,6 +279,82 @@ components:
           description: Packing details indicating how quantities were split amongst lots/locations.
       additionalProperties: false
       description: Shipment line item data transfer object
+    ShippingDataPackingStatus:
+      enum:
+      - notPacked
+      - partiallyPacked
+      - fullyPacked
+      - overPacked
+      type: string
+    ShippingDataShipmentType:
+      enum:
+      - unknown
+      - standard
+      - outsideProcessing
+      type: string
+    ShippingDataShipmentStatus:
+      enum:
+      - pending
+      - open
+      - shipped
+      - cancelled
+      type: string
+    ShipmentLineItemsListParameters:
+      type: object
+      properties:
+        packingStatus:
+          $ref: '#/components/schemas/ShippingDataPackingStatus'
+        itemId:
+          type:
+          - string
+          - 'null'
+          description: Filter shipment line items based on item identifier.
+        shipmentId:
+          type:
+          - string
+          - 'null'
+          description: Filter shipment line items based on shipment identifier.
+        salesOrderId:
+          type:
+          - string
+          - 'null'
+          description: Filter shipment line items based on sales order identifier.
+        purchaseOrderId:
+          type:
+          - string
+          - 'null'
+          description: Filter shipment line items based on purchase order identifier.
+        salesOrderLineItemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter shipment line items based on sales order line item(s) identifier.
+        purchaseOrderLineItemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter shipment line items based on purchase order line item identifier.
+        shipmentIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter shipment line items based on shipment identifiers.
+        shipmentType:
+          $ref: '#/components/schemas/ShippingDataShipmentType'
+      additionalProperties: false
+      description: Parameters used for searching V3 shipment line items
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

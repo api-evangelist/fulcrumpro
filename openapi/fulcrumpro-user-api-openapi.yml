@@ -100,53 +100,25 @@ paths:
       - System-Users-View Users
 components:
   schemas:
-    UserListDto:
-      required:
-      - id
+    CommonReferenceDto:
       type: object
       properties:
         id:
           maxLength: 24
           minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        firstName:
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
           maxLength: 200
           minLength: 1
           type:
           - string
           - 'null'
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Last name
-        emailAddress:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-        phoneNumber:
-          type:
-          - string
-          - 'null'
-          description: Email address
-        roleIds:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonReferenceDto'
-          description: Roles associated to the user.
-        deleted:
-          type: boolean
-          description: Indicates whether this user has been deleted
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: User.
+      description: Represents a reference to a document in a DB collection
     UserDto:
       required:
       - id
@@ -201,31 +173,53 @@ components:
           description: Indicates whether this user has been deleted
       additionalProperties: false
       description: User.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonReferenceDto:
+    UserListDto:
+      required:
+      - id
       type: object
       properties:
         id:
           maxLength: 24
           minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
+          type: string
+          description: Unique id associated to this entity.
+        firstName:
           maxLength: 200
           minLength: 1
           type:
           - string
           - 'null'
-          description: Descriptive name associated to the object
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Last name
+        emailAddress:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          description: Email address
+        roleIds:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonReferenceDto'
+          description: Roles associated to the user.
+        deleted:
+          type: boolean
+          description: Indicates whether this user has been deleted
       additionalProperties: false
-      description: Represents a reference to a document in a DB collection
+      description: User.
     UserRequestFindParameters:
       type: object
       properties:
@@ -267,6 +261,12 @@ components:
           description: Search for users based on a string that should match any of the user's first name, last name, email address, phone number or roles.
       additionalProperties: false
       description: Parameters used for searching/finding users.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

@@ -96,90 +96,6 @@ paths:
       - Quality-NCR-View NCR
 components:
   schemas:
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    CommonImpactDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID for this object.
-          format: uuid
-        operation:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        workCenter:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        scheduledEquipment:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        job:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        salesOrder:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        quantityImpacted:
-          type:
-          - number
-          - 'null'
-          description: Quantity Impacted
-          format: double
-        incrementalCost:
-          type:
-          - number
-          - 'null'
-          description: Incremental Cost
-          format: double
-      additionalProperties: false
-      description: Impact Dto.
-    DtoPagedResultDtoNCRNcrDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/NCRNcrDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
     NCRRequestNcrListParameters:
       type: object
       properties:
@@ -340,6 +256,39 @@ components:
           description: Impact information.
       additionalProperties: false
       description: Represents an NCR
+    CommonImpactDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID for this object.
+          format: uuid
+        operation:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        workCenter:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        scheduledEquipment:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        job:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        salesOrder:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        quantityImpacted:
+          type:
+          - number
+          - 'null'
+          description: Quantity Impacted
+          format: double
+        incrementalCost:
+          type:
+          - number
+          - 'null'
+          description: Incremental Cost
+          format: double
+      additionalProperties: false
+      description: Impact Dto.
     CommonReferenceDto:
       type: object
       properties:
@@ -359,6 +308,57 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a reference to a document in a DB collection
+    DtoPagedResultDtoNCRNcrDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NCRNcrDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

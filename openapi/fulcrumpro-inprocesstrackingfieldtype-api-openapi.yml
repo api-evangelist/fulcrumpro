@@ -96,6 +96,12 @@ paths:
                   $ref: '#/components/schemas/InProcessTrackingFieldTypeDto'
 components:
   schemas:
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     InProcessTrackingFieldTypeRequestFindParameters:
       type: object
       properties:
@@ -159,12 +165,6 @@ components:
           description: The type of quantity when the data type is number
       additionalProperties: false
       description: Describes the type of in process tracking field
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

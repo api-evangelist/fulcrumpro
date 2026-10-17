@@ -103,6 +103,43 @@ paths:
                   $ref: '#/components/schemas/NoteDto'
 components:
   schemas:
+    NoteDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        parentId:
+          maxLength: 36
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Unique identifier of the object to which the note is attached
+
+            Can be 24 or 36 characters, depending on parent type'
+        parentType:
+          $ref: '#/components/schemas/NoteTypeEnum'
+        body:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Note text
+        mentions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: User Ids to tag in the note. Please reference /api/users endpoints.
+      additionalProperties: false
+      description: Represents a note on a document
     NoteTypeEnum:
       enum:
       - salesOrder
@@ -111,23 +148,6 @@ components:
       - invoice
       type: string
       description: Note parent document type
-    NoteRequestFindParameters:
-      required:
-      - parentId
-      - parentType
-      type: object
-      properties:
-        parentType:
-          $ref: '#/components/schemas/NoteTypeEnum'
-        parentId:
-          maxLength: 36
-          minLength: 24
-          type: string
-          description: 'Filter notes by parent Id.
-
-            Either 24 or 36 characters, depending on parent type'
-      additionalProperties: false
-      description: Parameters used for searching notes
     NoteCreateDto:
       required:
       - body
@@ -169,43 +189,23 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
-    NoteDto:
+    NoteRequestFindParameters:
       required:
-      - id
+      - parentId
+      - parentType
       type: object
       properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
+        parentType:
+          $ref: '#/components/schemas/NoteTypeEnum'
         parentId:
           maxLength: 36
           minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Unique identifier of the object to which the note is attached
+          type: string
+          description: 'Filter notes by parent Id.
 
-            Can be 24 or 36 characters, depending on parent type'
-        parentType:
-          $ref: '#/components/schemas/NoteTypeEnum'
-        body:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Note text
-        mentions:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: User Ids to tag in the note. Please reference /api/users endpoints.
+            Either 24 or 36 characters, depending on parent type'
       additionalProperties: false
-      description: Represents a note on a document
+      description: Parameters used for searching notes
   securitySchemes:
     bearer:
       type: http

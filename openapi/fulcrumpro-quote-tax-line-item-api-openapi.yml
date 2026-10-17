@@ -197,108 +197,6 @@ paths:
       - Orders-Quotes-View Quote
 components:
   schemas:
-    QuoteTaxLineItemUpdateDto:
-      type: object
-      properties:
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
-
-            If FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.TaxCodeId will be ignored.'
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.TaxRate will supercede the defined tax rate.
-          format: double
-        avalaraOptions:
-          $ref: '#/components/schemas/DtoCommonAvalaraOptions'
-      additionalProperties: false
-      description: Represents a tax line item on a quote.
-    QuoteTaxLineItemDto:
-      required:
-      - accountingDetails
-      - id
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxRate will supercede the defined tax rate.
-          format: double
-        avalaraOptions:
-          $ref: '#/components/schemas/DtoCommonAvalaraOptions'
-        number:
-          type: integer
-          description: Line number
-          format: int32
-        accountingDetails:
-          $ref: '#/components/schemas/CommonAccountingDetailsDto'
-      additionalProperties: false
-      description: Represents a tax line item on a Quote.
-    QuoteTaxLineItemCreateDto:
-      type: object
-      properties:
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
-
-            If FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId will be ignored.'
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxRate will supercede the defined tax rate.
-          format: double
-        avalaraOptions:
-          $ref: '#/components/schemas/DtoCommonAvalaraOptions'
-      additionalProperties: false
-      description: Represents a tax line item on a quote.
     CommonAddressDto:
       required:
       - address1
@@ -377,6 +275,48 @@ components:
           $ref: '#/components/schemas/CommonAddressDto'
       additionalProperties: false
       description: Options for use with Avalara (if enabled).
+    QuoteTaxLineItemDto:
+      required:
+      - accountingDetails
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemDto.TaxRate will supercede the defined tax rate.
+          format: double
+        avalaraOptions:
+          $ref: '#/components/schemas/DtoCommonAvalaraOptions'
+        number:
+          type: integer
+          description: Line number
+          format: int32
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+      additionalProperties: false
+      description: Represents a tax line item on a Quote.
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -428,6 +368,66 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    QuoteTaxLineItemCreateDto:
+      type: object
+      properties:
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
+
+            If FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId will be ignored.'
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemCreateDto.TaxRate will supercede the defined tax rate.
+          format: double
+        avalaraOptions:
+          $ref: '#/components/schemas/DtoCommonAvalaraOptions'
+      additionalProperties: false
+      description: Represents a tax line item on a quote.
+    QuoteTaxLineItemUpdateDto:
+      type: object
+      properties:
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
+
+            If FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.TaxCodeId will be ignored.'
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.TaxLineItem.QuoteTaxLineItemUpdateDto.TaxRate will supercede the defined tax rate.
+          format: double
+        avalaraOptions:
+          $ref: '#/components/schemas/DtoCommonAvalaraOptions'
+      additionalProperties: false
+      description: Represents a tax line item on a quote.
   securitySchemes:
     bearer:
       type: http

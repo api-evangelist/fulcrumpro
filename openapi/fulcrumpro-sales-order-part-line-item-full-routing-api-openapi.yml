@@ -1073,278 +1073,48 @@ paths:
       - Orders-SalesOrders-View Sales Order
 components:
   schemas:
-    ItemRoutingOperationUpdateDto:
+    RoutingRequestIptFindParameters:
       type: object
       properties:
-        order:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: The order of this operation.  Operations with the same order are expected to run in parallel
-          format: int32
-        outsideProcessingOperation:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
-        operation:
-          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
-        leadDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead days. Will default to zero if not provided.
-          format: int32
-        unattended:
-          type:
-          - boolean
-          - 'null'
-          description: 'If `true`, the run portion of this step is unattended by
-
-            an operator.'
-        instructions:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Instructions for this operation.
-      additionalProperties: false
-      description: A routing operation (step)
-    RoutingRequestItemFindParameters:
-      type: object
-      properties:
-        number:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to items who's number contains the given string
-      additionalProperties: false
-      description: Parameters used for searching/finding input items on an item's routing.
-    ItemRoutingIptCreateDto:
-      required:
-      - fieldTypeId
-      - label
-      type: object
-      properties:
-        label:
-          minLength: 1
-          type: string
-          description: Label describing the in process tracking field
-        description:
-          type:
-          - string
-          - 'null'
-          description: The description of the in process tracking field
-        units:
-          type:
-          - string
-          - 'null'
-          description: The units used when this in process tracking field represents a number
-        fieldTypeId:
-          minLength: 1
-          type: string
-          description: The id of the field type for this in process tracking field
-        targetValue:
-          type:
-          - number
-          - 'null'
-          description: The target or ideal value of an in process tracking field response
-          format: double
-        minimumValue:
-          type:
-          - number
-          - 'null'
-          description: The minimum acceptable value for a tracking field response
-          format: double
-        maximumValue:
-          type:
-          - number
-          - 'null'
-          description: The maximum acceptable value for a tracking field response
-          format: double
-        triggeringBooleanValue:
-          type:
-          - boolean
-          - 'null'
-          description: The target value for booleans. Typically Yes/No for proceeding with next checkpoint
-        triggeringDropdownValue:
-          type:
-          - string
-          - 'null'
-          description: The target value for multiple options
-        required:
-          type: boolean
-          description: Whether the in process tracking field requires a response
-        restricted:
-          type: boolean
-          description: If true, only users with the appropriate permission will be allowed to save a response.
-        firstArticle:
-          type: boolean
-          description: 'Only applies to the During phase.  If true (and Required), this field will prevent adding any
-
-            completed items to inventory if target is not met.'
-      additionalProperties: false
-      description: An in process tracking field for a routing step
-    CommonEnumInputItemValueTypeEnum:
-      enum:
-      - creates
-      - requires
-      type: string
-      description: Specifies how a routing input item quantity is measured.
-    ItemRoutingInputItemDto:
-      required:
-      - description
-      - id
-      - itemId
-      - number
-      - valueType
-      - valueTypeUnits
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Id of this input item in the item's routing
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item Id
-          readOnly: true
-        number:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The number to give the item.
-          readOnly: true
-        revision:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The revision of the item
-          readOnly: true
-        description:
-          maxLength: 2000
-          minLength: 0
-          type: string
-          description: The description to give the item.
-          readOnly: true
-        valueTypeUnits:
-          type: number
-          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemDto.ValueType
-          format: double
-        valueType:
-          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
-      additionalProperties: false
-      description: An item
-    CommonEnumMaterialRequirementCostingEnum:
-      enum:
-      - fullCost
-      - usageBased
-      type: string
-      description: Specifies the costing of the material.
-    ItemRoutingOperationTime:
-      type: object
-      properties:
-        time:
-          type: number
-          description: Time or units of this operation
-          format: double
-        option:
-          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
-      additionalProperties: false
-      description: Operation time and type
-    ItemRoutingOutsideProcessingCostOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-      description: The cost option for the outside processing operation
-    ItemRoutingDto:
-      type: object
-      properties:
-        allowContinuousFlow:
-          type:
-          - boolean
-          - 'null'
-          description: Allow an operation to start before previous operations in the routing end
-      additionalProperties: false
-      description: Represents an item's routing
-    ItemRoutingOutsideProcessingOperationDto:
-      type: object
-      properties:
-        outsideProcessingTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        outsideProcessingCost:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
-        selectedVendorId:
-          type:
-          - string
-          - 'null'
-          description: Outside processing vendor
-      additionalProperties: false
-      description: Defines outside processing fields
-    ItemRoutingOperationDto:
-      required:
-      - id
-      - name
-      - systemOperationId
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The Id of this operation specific to this item's routing
         name:
           maxLength: 200
           minLength: 1
-          type: string
-          description: Name of the system operation
-        systemOperationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Id of the system operation
-        order:
-          minimum: 0
-          type: integer
-          description: The order of this operation.  Operations with the same order are expected to run in parallel
-          format: int32
-        isOutsideProcessing:
-          type: boolean
-          description: Specifies whether this is an outside processing operation
-        outsideProcessingOperation:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
-        operation:
-          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
-        leadDays:
-          minimum: 0
-          type: integer
-          description: Lead days
-          format: int32
-        unattended:
-          type:
-          - boolean
-          - 'null'
-          description: 'If `true`, the run portion of this step is unattended by
-
-            an operator.'
-        machineTrackingEnabled:
-          type: boolean
-          description: Whether machine tracking is enabled.
-        instructions:
-          maxLength: 2000
-          minLength: 1
           type:
           - string
           - 'null'
-          description: Instructions for this operation.
+          description: Filter to in process tracking fields whose label contains the given string
       additionalProperties: false
-      description: A routing operation (step)
+      description: Parameters used for searching/finding operations on an item's routing.
+    RoutingDataFullRoutingMakeSummaryDto:
+      type: object
+      properties:
+        itemLevel:
+          type:
+          - string
+          - 'null'
+        itemId:
+          type:
+          - string
+          - 'null'
+        itemName:
+          type:
+          - string
+          - 'null'
+        routingId:
+          type:
+          - string
+          - 'null'
+        path:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CommonEnumMaterialVendorPriceUnitEnum:
+      enum:
+      - kilogram
+      - pound
+      type: string
+      description: Specifies how a routing input item quantity is measured.
     ItemRoutingInputMaterialDto:
       required:
       - costing
@@ -1388,155 +1158,23 @@ components:
             This value should be the Id from the response from items/{itemId}/routing/operations/list'
       additionalProperties: false
       description: An item input material
-    ItemRoutingIptDto:
-      required:
-      - fieldTypeId
-      - id
-      - label
-      type: object
-      properties:
-        id:
-          type: string
-          description: Id of the in process tracking field
-          format: uuid
-        label:
-          minLength: 1
-          type: string
-          description: Label describing the in process tracking field
-        units:
-          type:
-          - string
-          - 'null'
-          description: The units used when this in process tracking field represents a number
-        fieldTypeId:
-          minLength: 1
-          type: string
-          description: The id of the field type for this in process tracking field
-        targetValue:
-          type:
-          - number
-          - 'null'
-          description: The target or ideal value of an in process tracking field response
-          format: double
-        minimumValue:
-          type:
-          - number
-          - 'null'
-          description: The minimum acceptable value for a tracking field response
-          format: double
-        maximumValue:
-          type:
-          - number
-          - 'null'
-          description: The maximum acceptable value for a tracking field response
-          format: double
-        triggeringBooleanValue:
-          type:
-          - boolean
-          - 'null'
-          description: The target value for booleans. Typically Yes/No for proceeding with next checkpoint
-        triggeringDropdownValue:
-          type:
-          - string
-          - 'null'
-          description: The target value for multiple options
-        required:
-          type: boolean
-          description: Whether the in process tracking field requires a response
-        restricted:
-          type: boolean
-          description: If true, only users with the appropriate permission will be allowed to save a response.
-        firstArticle:
-          type: boolean
-          description: 'Only applies to the During phase.  If true (and Required), this field will prevent adding any
-
-            completed items to inventory if target is not met.'
-      additionalProperties: false
-      description: An in process tracking field for a routing step
-    MaterialShapeVendorPriceBreakDto:
-      required:
-      - id
-      - price
-      - quantity
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique id associated to this entity.
-          format: uuid
-        quantity:
-          minimum: 0
-          type: integer
-          description: The minimum quantity to associate this price break to.
-          format: int32
-        price:
-          type: number
-          description: The price per unit.
-          format: double
-      additionalProperties: false
-      description: Vendor prices breaks for a material shape.
-    DomainInProcessTrackingFieldCheckpointPhase:
+    ItemRoutingOutsideProcessingCostOption:
       enum:
-      - preOperation
-      - duringOperation
-      - postOperation
+      - fixed
+      - perUnit
       type: string
-    RoutingDataFullRoutingMakeSummaryDto:
-      type: object
-      properties:
-        itemLevel:
-          type:
-          - string
-          - 'null'
-        itemId:
-          type:
-          - string
-          - 'null'
-        itemName:
-          type:
-          - string
-          - 'null'
-        routingId:
-          type:
-          - string
-          - 'null'
-        path:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    RoutingRequestOperationFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to operations who's name contains the given string
-      additionalProperties: false
-      description: Parameters used for searching/finding operations on an item's routing.
-    ItemRoutingInputItemCreateDto:
+      description: The cost option for the outside processing operation
+    CreatedResponseDto:
       required:
-      - itemId
-      - valueType
-      - valueTypeUnits
+      - id
       type: object
       properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
+        id:
+          minLength: 1
           type: string
-          description: The item id to be added. Please reference /api/items endpoint.
-        valueTypeUnits:
-          type: number
-          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemCreateDto.ValueType
-          format: double
-        valueType:
-          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+          description: The id of the created record
       additionalProperties: false
-      description: An input item for routing
+      description: Response for a created record
     ItemRoutingInputMaterialNestingDto:
       required:
       - d2
@@ -1612,31 +1250,324 @@ components:
           description: Vendor price breaks
       additionalProperties: false
       description: Material vendor definition
-    CommonEnumMaterialVendorPriceUnitEnum:
-      enum:
-      - kilogram
-      - pound
-      type: string
-      description: Specifies how a routing input item quantity is measured.
-    ItemRoutingOutsideProcessingOperationCost:
+    RoutingRequestOperationFindParameters:
       type: object
       properties:
-        costOption:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
-        fixedCost:
+        name:
+          maxLength: 200
+          minLength: 1
           type:
-          - number
+          - string
           - 'null'
-          description: The fixed total cost for the operation
+          description: Filter to operations who's name contains the given string
+      additionalProperties: false
+      description: Parameters used for searching/finding operations on an item's routing.
+    ItemRoutingOperationDto:
+      required:
+      - id
+      - name
+      - systemOperationId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The Id of this operation specific to this item's routing
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the system operation
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of the system operation
+        order:
+          minimum: 0
+          type: integer
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days
+          format: int32
+        unattended:
+          type:
+          - boolean
+          - 'null'
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+        machineTrackingEnabled:
+          type: boolean
+          description: Whether machine tracking is enabled.
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Instructions for this operation.
+      additionalProperties: false
+      description: A routing operation (step)
+    ItemRoutingDto:
+      type: object
+      properties:
+        allowContinuousFlow:
+          type:
+          - boolean
+          - 'null'
+          description: Allow an operation to start before previous operations in the routing end
+      additionalProperties: false
+      description: Represents an item's routing
+    ItemRoutingOperationCreateDto:
+      required:
+      - systemOperationId
+      type: object
+      properties:
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: System Operation Id
+        order:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead days. Will default to zero if not provided.
+          format: int32
+        unattended:
+          type:
+          - boolean
+          - 'null'
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Operation instructions. Will default to the instructions defined on the operation when not provided.
+        inputMaterialIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: 'The ids on the input material to associate to this operation.
+
+            This value should be the Id from the response from items/{itemId}/routing/input-materials/list'
+      additionalProperties: false
+      description: A routing operation (step)
+    ItemRoutingNormalOperationDto:
+      type: object
+      properties:
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        anyEquipment:
+          type: boolean
+          description: Specifies that any equipment associated with this operation can be used
+        selectedEquipmentIds:
+          type: array
+          items:
+            type: string
+          description: List of equipment ids selected from equipment associated with this operation
+        isNestable:
+          type: boolean
+          description: Indicate if this operation is nestable.
+      additionalProperties: false
+      description: Defines non-outside-processing fields
+    DomainInProcessTrackingFieldCheckpointPhase:
+      enum:
+      - preOperation
+      - duringOperation
+      - postOperation
+      type: string
+    CommonEnumMaterialRequirementCostingEnum:
+      enum:
+      - fullCost
+      - usageBased
+      type: string
+      description: Specifies the costing of the material.
+    ItemRoutingOperationTime:
+      type: object
+      properties:
+        time:
+          type: number
+          description: Time or units of this operation
           format: double
-        perUnitCost:
-          type:
-          - number
-          - 'null'
-          description: The cost per unit for the operation
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
+      additionalProperties: false
+      description: Operation time and type
+    MaterialShapeVendorPriceBreakDto:
+      required:
+      - id
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          type: number
+          description: The price per unit.
           format: double
       additionalProperties: false
-      description: Outside processing operation cost
+      description: Vendor prices breaks for a material shape.
+    ItemRoutingInputItemDto:
+      required:
+      - description
+      - id
+      - itemId
+      - number
+      - valueType
+      - valueTypeUnits
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id of this input item in the item's routing
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item Id
+          readOnly: true
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The number to give the item.
+          readOnly: true
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The revision of the item
+          readOnly: true
+        description:
+          maxLength: 2000
+          minLength: 0
+          type: string
+          description: The description to give the item.
+          readOnly: true
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An item
+    CommonEnumInputItemValueTypeEnum:
+      enum:
+      - creates
+      - requires
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    ItemRoutingIptCreateDto:
+      required:
+      - fieldTypeId
+      - label
+      type: object
+      properties:
+        label:
+          minLength: 1
+          type: string
+          description: Label describing the in process tracking field
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of the in process tracking field
+        units:
+          type:
+          - string
+          - 'null'
+          description: The units used when this in process tracking field represents a number
+        fieldTypeId:
+          minLength: 1
+          type: string
+          description: The id of the field type for this in process tracking field
+        targetValue:
+          type:
+          - number
+          - 'null'
+          description: The target or ideal value of an in process tracking field response
+          format: double
+        minimumValue:
+          type:
+          - number
+          - 'null'
+          description: The minimum acceptable value for a tracking field response
+          format: double
+        maximumValue:
+          type:
+          - number
+          - 'null'
+          description: The maximum acceptable value for a tracking field response
+          format: double
+        triggeringBooleanValue:
+          type:
+          - boolean
+          - 'null'
+          description: The target value for booleans. Typically Yes/No for proceeding with next checkpoint
+        triggeringDropdownValue:
+          type:
+          - string
+          - 'null'
+          description: The target value for multiple options
+        required:
+          type: boolean
+          description: Whether the in process tracking field requires a response
+        restricted:
+          type: boolean
+          description: If true, only users with the appropriate permission will be allowed to save a response.
+        firstArticle:
+          type: boolean
+          description: 'Only applies to the During phase.  If true (and Required), this field will prevent adding any
+
+            completed items to inventory if target is not met.'
+      additionalProperties: false
+      description: An in process tracking field for a routing step
     CommonEnumMaterialFormEnum:
       enum:
       - sheet
@@ -1660,6 +1591,186 @@ components:
       - wideBar
       type: string
       description: Specifies the form of the material.
+    ItemRoutingInputItemCreateDto:
+      required:
+      - itemId
+      - valueType
+      - valueTypeUnits
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The item id to be added. Please reference /api/items endpoint.
+        valueTypeUnits:
+          type: number
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemCreateDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+      additionalProperties: false
+      description: An input item for routing
+    ItemRoutingOperationTimeOption:
+      enum:
+      - fixedSeconds
+      - fixedMinutes
+      - fixedHours
+      - fixedDays
+      - secondsPerUnit
+      - minutesPerUnit
+      - hoursPerUnit
+      - daysPerUnit
+      - unitsPerHour
+      type: string
+      description: The time unit or option used in operation times
+    ItemRoutingOperationUpdateDto:
+      type: object
+      properties:
+        order:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead days. Will default to zero if not provided.
+          format: int32
+        unattended:
+          type:
+          - boolean
+          - 'null'
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Instructions for this operation.
+      additionalProperties: false
+      description: A routing operation (step)
+    ItemRoutingIptDto:
+      required:
+      - fieldTypeId
+      - id
+      - label
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the in process tracking field
+          format: uuid
+        label:
+          minLength: 1
+          type: string
+          description: Label describing the in process tracking field
+        units:
+          type:
+          - string
+          - 'null'
+          description: The units used when this in process tracking field represents a number
+        fieldTypeId:
+          minLength: 1
+          type: string
+          description: The id of the field type for this in process tracking field
+        targetValue:
+          type:
+          - number
+          - 'null'
+          description: The target or ideal value of an in process tracking field response
+          format: double
+        minimumValue:
+          type:
+          - number
+          - 'null'
+          description: The minimum acceptable value for a tracking field response
+          format: double
+        maximumValue:
+          type:
+          - number
+          - 'null'
+          description: The maximum acceptable value for a tracking field response
+          format: double
+        triggeringBooleanValue:
+          type:
+          - boolean
+          - 'null'
+          description: The target value for booleans. Typically Yes/No for proceeding with next checkpoint
+        triggeringDropdownValue:
+          type:
+          - string
+          - 'null'
+          description: The target value for multiple options
+        required:
+          type: boolean
+          description: Whether the in process tracking field requires a response
+        restricted:
+          type: boolean
+          description: If true, only users with the appropriate permission will be allowed to save a response.
+        firstArticle:
+          type: boolean
+          description: 'Only applies to the During phase.  If true (and Required), this field will prevent adding any
+
+            completed items to inventory if target is not met.'
+      additionalProperties: false
+      description: An in process tracking field for a routing step
+    RoutingRequestItemFindParameters:
+      type: object
+      properties:
+        number:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter to items who's number contains the given string
+      additionalProperties: false
+      description: Parameters used for searching/finding input items on an item's routing.
+    ItemRoutingOutsideProcessingOperationDto:
+      type: object
+      properties:
+        outsideProcessingTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        selectedVendorId:
+          type:
+          - string
+          - 'null'
+          description: Outside processing vendor
+      additionalProperties: false
+      description: Defines outside processing fields
+    ItemRoutingOutsideProcessingOperationCost:
+      type: object
+      properties:
+        costOption:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
+        fixedCost:
+          type:
+          - number
+          - 'null'
+          description: The fixed total cost for the operation
+          format: double
+        perUnitCost:
+          type:
+          - number
+          - 'null'
+          description: The cost per unit for the operation
+          format: double
+      additionalProperties: false
+      description: Outside processing operation cost
     MaterialShapeDto:
       required:
       - form
@@ -1735,117 +1846,6 @@ components:
           description: Vendors that supply this material.
       additionalProperties: false
       description: Material definition.
-    ItemRoutingNormalOperationDto:
-      type: object
-      properties:
-        setupTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        laborTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        machineTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        anyEquipment:
-          type: boolean
-          description: Specifies that any equipment associated with this operation can be used
-        selectedEquipmentIds:
-          type: array
-          items:
-            type: string
-          description: List of equipment ids selected from equipment associated with this operation
-        isNestable:
-          type: boolean
-          description: Indicate if this operation is nestable.
-      additionalProperties: false
-      description: Defines non-outside-processing fields
-    ItemRoutingOperationTimeOption:
-      enum:
-      - fixedSeconds
-      - fixedMinutes
-      - fixedHours
-      - fixedDays
-      - secondsPerUnit
-      - minutesPerUnit
-      - hoursPerUnit
-      - daysPerUnit
-      - unitsPerHour
-      type: string
-      description: The time unit or option used in operation times
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    RoutingRequestIptFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to in process tracking fields whose label contains the given string
-      additionalProperties: false
-      description: Parameters used for searching/finding operations on an item's routing.
-    ItemRoutingOperationCreateDto:
-      required:
-      - systemOperationId
-      type: object
-      properties:
-        systemOperationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: System Operation Id
-        order:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: The order of this operation.  Operations with the same order are expected to run in parallel
-          format: int32
-        outsideProcessingOperation:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
-        operation:
-          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
-        leadDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead days. Will default to zero if not provided.
-          format: int32
-        unattended:
-          type:
-          - boolean
-          - 'null'
-          description: 'If `true`, the run portion of this step is unattended by
-
-            an operator.'
-        instructions:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Operation instructions. Will default to the instructions defined on the operation when not provided.
-        inputMaterialIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: 'The ids on the input material to associate to this operation.
-
-            This value should be the Id from the response from items/{itemId}/routing/input-materials/list'
-      additionalProperties: false
-      description: A routing operation (step)
   securitySchemes:
     bearer:
       type: http

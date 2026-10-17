@@ -103,6 +103,73 @@ components:
       - stockTake
       type: string
       description: Secondary, verbose description for an event.
+    DtoCommonDateRangeFilter:
+      type: object
+      properties:
+        start:
+          type:
+          - string
+          - 'null'
+          description: Inclusive start date to filter by
+          format: date-time
+        end:
+          type:
+          - string
+          - 'null'
+          description: Inclusive end date to filter by
+          format: date-time
+      additionalProperties: false
+      description: Date range used for filters
+    InventoryEventType:
+      enum:
+      - pick
+      - receive
+      - revert
+      - adjustment
+      - setItemValue
+      - eventOverride
+      type: string
+      description: Primary inventory event type.
+    InventoryTransactionsListParameters:
+      type: object
+      properties:
+        itemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter inventory transactions based on item identifiers.
+        dateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        sourceType:
+          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
+        relatedEntityType:
+          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
+        relatedEntityId:
+          type:
+          - string
+          - 'null'
+          description: The transaction's related entity identifier
+      additionalProperties: false
+      description: Parameters used for searching inventory transactions
+    V2InventoryDataEventSourceType:
+      enum:
+      - purchaseOrder
+      - job
+      - shipment
+      - shipmentLineItem
+      - shipping
+      - receiving
+      - item
+      - workOrder
+      - salesOrder
+      - jobOperation
+      - workOrderOperation
+      - fulfillment
+      - itemToMakeMaterialRemnant
+      - poRcvValueAdj
+      type: string
     InventoryTransactionDto:
       type: object
       properties:
@@ -157,23 +224,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: An inventory transaction
-    DtoCommonDateRangeFilter:
-      type: object
-      properties:
-        start:
-          type:
-          - string
-          - 'null'
-          description: Inclusive start date to filter by
-          format: date-time
-        end:
-          type:
-          - string
-          - 'null'
-          description: Inclusive end date to filter by
-          format: date-time
-      additionalProperties: false
-      description: Date range used for filters
     DtoPagedResultDtoInventoryTransactionDto:
       required:
       - data
@@ -219,35 +269,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    InventoryTransactionsListParameters:
-      type: object
-      properties:
-        itemIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter inventory transactions based on item identifiers.
-        dateRange:
-          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
-        sourceType:
-          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
-        relatedEntityType:
-          $ref: '#/components/schemas/V2InventoryDataEventSourceType'
-        relatedEntityId:
-          type:
-          - string
-          - 'null'
-          description: The transaction's related entity identifier
-      additionalProperties: false
-      description: Parameters used for searching inventory transactions
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     CommonReferenceDto:
       type: object
       properties:
@@ -267,33 +288,12 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a reference to a document in a DB collection
-    V2InventoryDataEventSourceType:
+    CommonEnumSortDirectionEnum:
       enum:
-      - purchaseOrder
-      - job
-      - shipment
-      - shipmentLineItem
-      - shipping
-      - receiving
-      - item
-      - workOrder
-      - salesOrder
-      - jobOperation
-      - workOrderOperation
-      - fulfillment
-      - itemToMakeMaterialRemnant
-      - poRcvValueAdj
+      - ascending
+      - descending
       type: string
-    InventoryEventType:
-      enum:
-      - pick
-      - receive
-      - revert
-      - adjustment
-      - setItemValue
-      - eventOverride
-      type: string
-      description: Primary inventory event type.
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

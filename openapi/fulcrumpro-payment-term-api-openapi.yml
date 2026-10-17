@@ -159,6 +159,17 @@ components:
           description: Indicate if this payment term has been deleted.
       additionalProperties: false
       description: Payment terms definition.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     CommonPaymentTermCreateDto:
       required:
       - dueDays
@@ -177,12 +188,6 @@ components:
           format: int32
       additionalProperties: false
       description: Payment terms definition.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     PaymentTermRequestFindParameters:
       type: object
       properties:
@@ -195,17 +200,12 @@ components:
           description: Filter payment terms based on their name.
       additionalProperties: false
       description: Parameters used for searching/finding payment terms.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http

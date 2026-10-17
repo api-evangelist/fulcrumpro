@@ -96,36 +96,6 @@ paths:
       - Quality-CAPA-View CAPA
 components:
   schemas:
-    CAPARequestCapaListParameters:
-      type: object
-      properties:
-        status:
-          type:
-          - string
-          - 'null'
-          description: 'Filter CAPAs by a specific status
-
-            Accepted Values:
-
-            Closed, Hold, New, Quality Review, Engineering Review'
-        type:
-          type:
-          - string
-          - 'null'
-          description: Filter CAPAs by a specific type. Available values are configured per tenant in Quality settings (NCR dropdowns).
-        ncrId:
-          type:
-          - string
-          - 'null'
-          description: Filter CAPAs by a NCR Id
-        createdUtc:
-          type:
-          - string
-          - 'null'
-          description: Filter CAPAs created after a certain date
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching CAPAs
     DtoPagedResultDtoCAPACapaDto:
       required:
       - data
@@ -242,6 +212,36 @@ components:
           format: date-time
       additionalProperties: false
       description: Represents an CAPA
+    CAPARequestCapaListParameters:
+      type: object
+      properties:
+        status:
+          type:
+          - string
+          - 'null'
+          description: 'Filter CAPAs by a specific status
+
+            Accepted Values:
+
+            Closed, Hold, New, Quality Review, Engineering Review'
+        type:
+          type:
+          - string
+          - 'null'
+          description: Filter CAPAs by a specific type. Available values are configured per tenant in Quality settings (NCR dropdowns).
+        ncrId:
+          type:
+          - string
+          - 'null'
+          description: Filter CAPAs by a NCR Id
+        createdUtc:
+          type:
+          - string
+          - 'null'
+          description: Filter CAPAs created after a certain date
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching CAPAs
     CommonEnumSortDirectionEnum:
       enum:
       - ascending

@@ -166,23 +166,6 @@ paths:
       - Orders-PurchaseOrders-View Purchase Order
 components:
   schemas:
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    PurchaseOrderVendorCreditLineItemUpdateDto:
-      type: object
-      properties:
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents a vendor credit line item on a purchase order.
     PurchaseOrderVendorCreditLineItemDto:
       required:
       - accountingDetails
@@ -269,6 +252,23 @@ components:
           type: string
         path:
           type: string
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    PurchaseOrderVendorCreditLineItemUpdateDto:
+      type: object
+      properties:
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Represents a vendor credit line item on a purchase order.
     CommonAccountingDetailsDto:
       type: object
       properties:

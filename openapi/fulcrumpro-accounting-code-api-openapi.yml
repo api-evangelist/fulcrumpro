@@ -130,19 +130,62 @@ paths:
                   $ref: '#/components/schemas/TagDto'
 components:
   schemas:
-    CommonEnumStyleEnum:
+    TagDto:
+      required:
+      - id
+      - name
+      - style
+      - types
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+        style:
+          $ref: '#/components/schemas/CommonEnumStyleEnum'
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
+          description: Represents where/how this tag is used.
+        deleted:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if this tag has been deleted.
+      additionalProperties: false
+      description: Represents a tag
+    CommonEnumSortDirectionEnum:
       enum:
-      - primary
-      - secondary
-      - success
-      - danger
-      - warning
-      - info
-      - light
-      - dark
-      - connected
+      - ascending
+      - descending
       type: string
-      description: Style enum (for tags).
+      description: Specify sorting direction.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     CommonEnumTagTypeEnum:
       enum:
       - item
@@ -201,62 +244,19 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a tag for creation
-    CommonEnumSortDirectionEnum:
+    CommonEnumStyleEnum:
       enum:
-      - ascending
-      - descending
+      - primary
+      - secondary
+      - success
+      - danger
+      - warning
+      - info
+      - light
+      - dark
+      - connected
       type: string
-      description: Specify sorting direction.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    TagDto:
-      required:
-      - id
-      - name
-      - style
-      - types
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-        style:
-          $ref: '#/components/schemas/CommonEnumStyleEnum'
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-        types:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
-          description: Represents where/how this tag is used.
-        deleted:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate if this tag has been deleted.
-      additionalProperties: false
-      description: Represents a tag
+      description: Style enum (for tags).
   securitySchemes:
     bearer:
       type: http

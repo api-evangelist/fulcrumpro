@@ -100,62 +100,6 @@ paths:
       - Jobs-Jobs-View Job
 components:
   schemas:
-    WorkOrderDto:
-      required:
-      - id
-      - name
-      - number
-      - status
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to this entity
-        number:
-          type: integer
-          description: Job number
-          format: int32
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Job name, defaults to number unless otherwise specified.
-        createdUtc:
-          type: string
-          description: The date the job was created
-          format: date-time
-        completedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: The job completion datetime.
-          format: date-time
-        cancelledOnUtc:
-          type:
-          - string
-          - 'null'
-          description: The job cancelled datetime.
-          format: date-time
-        scheduledStartUtc:
-          type:
-          - string
-          - 'null'
-          description: The current scheduled start time.
-          format: date-time
-        scheduledEndUtc:
-          type:
-          - string
-          - 'null'
-          description: The current scheduled end time.
-          format: date-time
-        status:
-          $ref: '#/components/schemas/WorkOrderStatusEnum'
-        priority:
-          $ref: '#/components/schemas/JobPriorityEnum'
-      additionalProperties: false
-      description: Represents a work order
     WorkOrderStatusEnum:
       enum:
       - needsReview
@@ -220,12 +164,6 @@ components:
           format: date-time
       additionalProperties: false
       description: Parameters used for searching/finding work orders.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
     JobPriorityEnum:
       enum:
       - low
@@ -233,6 +171,68 @@ components:
       - high
       type: string
       description: Job priority
+    WorkOrderDto:
+      required:
+      - id
+      - name
+      - number
+      - status
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to this entity
+        number:
+          type: integer
+          description: Job number
+          format: int32
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Job name, defaults to number unless otherwise specified.
+        createdUtc:
+          type: string
+          description: The date the job was created
+          format: date-time
+        completedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: The job completion datetime.
+          format: date-time
+        cancelledOnUtc:
+          type:
+          - string
+          - 'null'
+          description: The job cancelled datetime.
+          format: date-time
+        scheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: The current scheduled start time.
+          format: date-time
+        scheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: The current scheduled end time.
+          format: date-time
+        status:
+          $ref: '#/components/schemas/WorkOrderStatusEnum'
+        priority:
+          $ref: '#/components/schemas/JobPriorityEnum'
+      additionalProperties: false
+      description: Represents a work order
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http
