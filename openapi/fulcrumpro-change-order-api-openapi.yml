@@ -1,0 +1,960 @@
+openapi: 3.2.0
+info:
+  title: Fulcrum Public Change Order API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Change Order
+paths:
+  /api/change-orders:
+    post:
+      tags:
+      - Change Order
+      summary: Create a change order.
+      operationId: CreateChangeOrder
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrderSaveDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrderSaveDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrderSaveDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrderSaveDto'
+        required: true
+      responses:
+        '200':
+          description: The created change order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeOrderDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ChangeOrderDto'
+        '400':
+          description: Validation issues with input
+      x-c4-required-permissions:
+      - Orders-SalesOrders-Edit Sales Order
+  /api/change-orders/{id}:
+    delete:
+      tags:
+      - Change Order
+      summary: Delete a change order and the tasks filed under it, with their attachments.
+      operationId: DeleteChangeOrder
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Change order did not exist
+        '400':
+          description: The change order has already been applied
+      x-c4-required-permissions:
+      - Orders-SalesOrders-Edit Sales Order
+    get:
+      tags:
+      - Change Order
+      summary: Get a change order by id, including the sales orders, jobs and quotes it…
+      operationId: GetChangeOrder
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The change order for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeOrderDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ChangeOrderDto'
+        '404':
+          description: Change order did not exist
+      x-c4-required-permissions:
+      - Orders-SalesOrders-View Sales Order
+    put:
+      tags:
+      - Change Order
+      summary: Update a change order.
+      operationId: UpdateChangeOrder
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrderSaveDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrderSaveDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrderSaveDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrderSaveDto'
+        required: true
+      responses:
+        '200':
+          description: The updated change order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeOrderDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ChangeOrderDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Change order did not exist
+      x-c4-required-permissions:
+      - Orders-SalesOrders-Edit Sales Order
+  /api/change-orders/list:
+    post:
+      tags:
+      - Change Order
+      summary: Finds change orders based on search parameters.
+      operationId: ListChangeOrders
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrdersListParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrdersListParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrdersListParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ChangeOrdersListParameters'
+      responses:
+        '200':
+          description: The matching change orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoChangeOrderSummaryDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoChangeOrderSummaryDto'
+        '400':
+          description: Validation issues with input
+      x-c4-required-permissions:
+      - Orders-SalesOrders-View Sales Order
+components:
+  schemas:
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    DtoPagedResultDtoChangeOrderSummaryDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeOrderSummaryDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    ChangeOrderEnumImpactedRecordDocumentTypeEnum:
+      enum:
+      - salesOrder
+      - job
+      - quote
+      type: string
+      description: The kind of document a change order impacts.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ChangeOrderSummaryDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the change order
+        number:
+          type: integer
+          description: The change order's sequential number, unique within the tenant and assigned server-side
+          format: int32
+        customer:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        originalRevisionItem:
+          $ref: '#/components/schemas/ChangeOrderItemReferenceDto'
+        newRevisionItem:
+          $ref: '#/components/schemas/ChangeOrderItemReferenceDto'
+        requestedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change was requested (UTC). Defaults to the moment of creation when not supplied
+          format: date-time
+        dueDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order is due (UTC), or null when it carries no date
+          format: date-time
+        approvedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order was approved (UTC), or null when it has not been
+          format: date-time
+        completedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the change order was completed (UTC). Stamped server-side when status moves to Completed
+
+            without one supplied'
+          format: date-time
+        status:
+          $ref: '#/components/schemas/ChangeOrderStatusEnum'
+        detail:
+          type:
+          - string
+          - 'null'
+          description: What the change is
+        disposition:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        notificationsEnabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether completing a task on this change order tells the owners of the next step
+        createdBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        createdUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order was created (UTC). Read-only
+          format: date-time
+        modifiedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order was last modified (UTC); supports incremental sync. Read-only
+          format: date-time
+      additionalProperties: false
+      description: 'A change order row returned by the change order list: the header, without the impacted records.'
+    ChangeOrdersListParameters:
+      type: object
+      properties:
+        search:
+          type:
+          - string
+          - 'null'
+          description: 'Case-insensitive search over the customer name, the original and new revision items, and the
+
+            detail'
+        statuses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ChangeOrderStatusEnum'
+          description: Only change orders in these statuses
+        customerIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Only change orders raised for these customers
+        dispositionIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Only change orders carrying these dispositions
+        requestedFromUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound on requestedUtc
+          format: date-time
+        requestedToUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive upper bound on requestedUtc
+          format: date-time
+        dueFromUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound on dueDateUtc
+          format: date-time
+        dueToUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive upper bound on dueDateUtc
+          format: date-time
+        createdFromUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound on createdUtc
+          format: date-time
+        createdToUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive upper bound on createdUtc
+          format: date-time
+        completedFromUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound on completedUtc
+          format: date-time
+        completedToUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive upper bound on completedUtc
+          format: date-time
+        overdue:
+          type:
+          - boolean
+          - 'null'
+          description: 'True narrows to change orders whose due date has passed and that are not Completed. False and
+
+            omitted both apply no clause — this narrows, it does not select the complement'
+        impactedDocumentId:
+          type:
+          - string
+          - 'null'
+          description: Only change orders impacting this sales order, job or quote
+        revisionItemId:
+          type:
+          - string
+          - 'null'
+          description: Only change orders whose original or new revision item is this item
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Only change orders written strictly after this UTC instant. Poll with the largest
+
+            modifiedUtc you hold to pick up creates and edits; deletions do not advance modifiedUtc'
+          format: date-time
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Only change orders written at or before this UTC instant
+          format: date-time
+      additionalProperties: false
+      description: 'Filters for the change order list. All filters are optional and combine with AND semantics
+
+        (list-valued filters match any of their values).'
+    ChangeOrderItemReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The id of the item revision, as returned by Item List
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item's number and revision together, as the app displays it. Read-only
+        number:
+          type:
+          - string
+          - 'null'
+          description: The item's number. Read-only
+        revision:
+          type:
+          - string
+          - 'null'
+          description: The item's revision, or null when the item carries none. Read-only
+      additionalProperties: false
+      description: A reference to an item revision on a change order.
+    ChangeOrderSaveDto:
+      required:
+      - originalRevisionItem
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        originalRevisionItem:
+          $ref: '#/components/schemas/ChangeOrderItemReferenceDto'
+        newRevisionItem:
+          $ref: '#/components/schemas/ChangeOrderItemReferenceDto'
+        requestedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change was requested (UTC). Defaults to the moment of creation when not supplied
+          format: date-time
+        dueDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order is due (UTC)
+          format: date-time
+        approvedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order was approved (UTC)
+          format: date-time
+        completedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the change order was completed (UTC). Stamped server-side when status is Completed and
+
+            none is supplied'
+          format: date-time
+        status:
+          $ref: '#/components/schemas/ChangeOrderStatusEnum'
+        detail:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: What the change is
+        disposition:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        notificationsEnabled:
+          type:
+          - boolean
+          - 'null'
+          description: 'Whether completing a task on this change order tells the owners of the next step. Null on a
+
+            create takes the company default; null on an update keeps what the change order carries'
+      additionalProperties: false
+      description: 'The writable state of a change order. Create and update both take the whole object: update is a
+
+        full replacement, so an omitted field is cleared.'
+    ChangeOrderStatusEnum:
+      enum:
+      - new
+      - inProgress
+      - completed
+      type: string
+      description: Where a change order stands.
+    ChangeOrderImpactedRecordDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the impacted record
+        documentType:
+          $ref: '#/components/schemas/ChangeOrderEnumImpactedRecordDocumentTypeEnum'
+        documentId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The id of the impacted sales order, job or quote
+        originalRevDocumentLineId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'For a sales order or quote, the impacted line item at the original revision. For a job, the
+
+            sales order line item the job was created from'
+        newRevDocumentLineId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'For a sales order or quote, the replacement line created at the new revision when the change
+
+            order is applied; null until then'
+        disposition:
+          type:
+          - string
+          - 'null'
+          description: What happens to the original line when the change order is applied
+        rolledRev:
+          type: boolean
+          description: Whether the document now sits at the change order's new revision item
+      additionalProperties: false
+      description: 'One document a change order impacts. Read-only: the change order write endpoints ignore the
+
+        collection, which is maintained in the app.'
+    ChangeOrderDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the change order
+        number:
+          type: integer
+          description: The change order's sequential number, unique within the tenant and assigned server-side
+          format: int32
+        customer:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        originalRevisionItem:
+          $ref: '#/components/schemas/ChangeOrderItemReferenceDto'
+        newRevisionItem:
+          $ref: '#/components/schemas/ChangeOrderItemReferenceDto'
+        requestedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change was requested (UTC). Defaults to the moment of creation when not supplied
+          format: date-time
+        dueDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order is due (UTC), or null when it carries no date
+          format: date-time
+        approvedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order was approved (UTC), or null when it has not been
+          format: date-time
+        completedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the change order was completed (UTC). Stamped server-side when status moves to Completed
+
+            without one supplied'
+          format: date-time
+        status:
+          $ref: '#/components/schemas/ChangeOrderStatusEnum'
+        detail:
+          type:
+          - string
+          - 'null'
+          description: What the change is
+        disposition:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        notificationsEnabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether completing a task on this change order tells the owners of the next step
+        createdBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        createdUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order was created (UTC). Read-only
+          format: date-time
+        modifiedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the change order was last modified (UTC); supports incremental sync. Read-only
+          format: date-time
+        impactedRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeOrderImpactedRecordDto'
+          description: 'The sales orders, jobs and quotes the change order impacts; empty when it impacts none.
+
+            Read-only — create and update never write it, so a change made to it elsewhere while an update
+
+            is in flight stands'
+      additionalProperties: false
+      description: 'A change order: an item revision being replaced, and the sales orders, jobs and quotes it
+
+        touches. Its tasks are a separate resource.'
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Alert
+  tags:
+  - Alert
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Department Shift
+  tags:
+  - Department Shift
+- name: Equipment
+  tags:
+  - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Message
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Nesting
+  tags:
+  - Nesting
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Settings
+  tags:
+  - Settings
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Task
+  tags:
+  - Task
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

@@ -65,14 +65,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -103,6 +124,7 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/DtoPagedResultDtoTimerDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
       - Time-Time-View Time Management
@@ -135,8 +157,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/TimerDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: Timer did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Time-Time-Edit Time Managements
@@ -180,54 +205,12 @@ paths:
                 $ref: '#/components/schemas/TimerDto'
         '404':
           description: Timer did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Time-Time-Edit Time Managements
 components:
   schemas:
-    DomainTimeTrackingTimer_Type:
-      enum:
-      - setup
-      - run
-      - clockIn
-      - break
-      - labor
-      - machine
-      type: string
-    DtoTimerSegmentAttributionDetails:
-      required:
-      - timeInSeconds
-      - timeInSecondsWeighted
-      type: object
-      properties:
-        timeInSeconds:
-          type: number
-          description: Elapsed time. If the segment is not stopped, this value will be calculated as of now.
-          format: double
-        timeInSecondsWeighted:
-          type: number
-          description: Time in seconds (after using the multiplier/weighted).
-          format: double
-        multiplier:
-          type:
-          - number
-          - 'null'
-          description: With timers, because segments account for overlapping operations, we must account for the percentage to attribute to this segment.
-          format: double
-      additionalProperties: false
-      description: Time attribution for a timer segment.
-    TimerUpdateDto:
-      type: object
-      properties:
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents an update on a timer.
     DtoTimerAttributionDetails:
       required:
       - timeInSeconds
@@ -262,69 +245,88 @@ components:
       - descending
       type: string
       description: Specify sorting direction.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    TimerCreateTimerDto:
+    DomainTimeTrackingTimer_Type:
+      enum:
+      - setup
+      - run
+      - clockIn
+      - break
+      - labor
+      - machine
+      type: string
+    TimerSegmentDto:
       required:
-      - itemToMakeId
-      - jobId
-      - operationId
+      - id
       - startedOnUtc
-      - stoppedOnUtc
-      - type
-      - userId
       type: object
       properties:
-        userId:
-          maxLength: 24
-          minLength: 24
+        id:
           type: string
-          description: The user the timer block is attributed to.
-        jobId:
-          minLength: 1
-          type: string
-          description: The job identifier
-        itemToMakeId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The item to make identifier
-        operationId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The operation identifier
-        type:
-          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+          description: The timer segment identifier.
+          format: uuid
         startedOnUtc:
           type: string
-          description: When the block started, in UTC.
+          description: When this segment begins.
           format: date-time
         stoppedOnUtc:
-          type: string
-          description: When the block stopped, in UTC. Must be after StartedOnUtc.
-          format: date-time
-        externalReferences:
           type:
-          - object
+          - string
           - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value data used to correlate this timer with external systems and search for it later.
+          description: When this segment ends. If the timer is not stopped (still running), this value will be blank.
+          format: date-time
+        isRunning:
+          type: boolean
+          description: Whether the timer segment is running or not.
+          readOnly: true
+        details:
+          $ref: '#/components/schemas/DtoTimerSegmentAttributionDetails'
       additionalProperties: false
-      description: Model for creating a complete, closed timer block via the public API.
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
+      description: Data transfer object for TimerSegments entity
+    DtoPagedResultDtoTimerDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimerDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
     TimerDto:
       required:
       - createdUtc
@@ -385,6 +387,35 @@ components:
           - string
           - 'null'
           description: The job operation description.
+        jobOperationSystemOperationId:
+          type:
+          - string
+          - 'null'
+          description: 'The identifier of the system operation the job operation was created from. Populated only by the list endpoints:
+
+            null when the timer has no job operation or the job operation has no system operation, and always null in the
+
+            create, update and patch responses.'
+        workOrderId:
+          type:
+          - string
+          - 'null'
+          description: The work order identifier. Set when the timer is tracked against a work order rather than a job.
+        workOrderName:
+          type:
+          - string
+          - 'null'
+          description: The work order name (its number when unnamed).
+        workOrderOperationId:
+          type:
+          - string
+          - 'null'
+          description: The work order operation identifier.
+        workOrderOperationName:
+          type:
+          - string
+          - 'null'
+          description: The work order operation name.
         startedById:
           type:
           - string
@@ -472,34 +503,66 @@ components:
           $ref: '#/components/schemas/DtoTimerAttributionDetails'
       additionalProperties: false
       description: Data transfer object for Timer entity
-    TimerSegmentDto:
-      required:
-      - id
-      - startedOnUtc
+    JsonPatchOperation:
       type: object
       properties:
-        id:
+        op:
           type: string
-          description: The timer segment identifier.
-          format: uuid
+        value: {}
+        path:
+          type: string
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
+    TimerCreateTimerDto:
+      required:
+      - itemToMakeId
+      - jobId
+      - operationId
+      - startedOnUtc
+      - stoppedOnUtc
+      - type
+      - userId
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The user the timer block is attributed to.
+        jobId:
+          minLength: 1
+          type: string
+          description: The job identifier
+        itemToMakeId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The item to make identifier
+        operationId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The operation identifier
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
         startedOnUtc:
           type: string
-          description: When this segment begins.
+          description: When the block started, in UTC.
           format: date-time
         stoppedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: When this segment ends. If the timer is not stopped (still running), this value will be blank.
+          type: string
+          description: When the block stopped, in UTC. Must be after StartedOnUtc.
           format: date-time
-        isRunning:
-          type: boolean
-          description: Whether the timer segment is running or not.
-          readOnly: true
-        details:
-          $ref: '#/components/schemas/DtoTimerSegmentAttributionDetails'
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value data used to correlate this timer with external systems and search for it later.
       additionalProperties: false
-      description: Data transfer object for TimerSegments entity
+      description: Model for creating a complete, closed timer block via the public API.
     JobTrackingTimerRequestListTimersParameters:
       type: object
       properties:
@@ -513,6 +576,13 @@ components:
           - string
           - 'null'
           description: Filter timers based on job
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Filter to timers tracked against a job item-to-make that makes this item. Work-order timers never match.
         runningTimersOnly:
           type:
           - boolean
@@ -596,6 +666,11 @@ components:
           format: date-time
       additionalProperties: false
       description: Parameters used for searching job tracking timers
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -650,51 +725,40 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    DtoPagedResultDtoTimerDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
+    TimerUpdateDto:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimerDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
-      description: Paged result
+      description: Represents an update on a timer.
+    DtoTimerSegmentAttributionDetails:
+      required:
+      - timeInSeconds
+      - timeInSecondsWeighted
+      type: object
+      properties:
+        timeInSeconds:
+          type: number
+          description: Elapsed time. If the segment is not stopped, this value will be calculated as of now.
+          format: double
+        timeInSecondsWeighted:
+          type: number
+          description: Time in seconds (after using the multiplier/weighted).
+          format: double
+        multiplier:
+          type:
+          - number
+          - 'null'
+          description: With timers, because segments account for overlapping operations, we must account for the percentage to attribute to this segment.
+          format: double
+      additionalProperties: false
+      description: Time attribution for a timer segment.
   securitySchemes:
     bearer:
       type: http
@@ -705,6 +769,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -715,6 +782,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -735,9 +805,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -799,6 +875,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -816,6 +893,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -873,6 +953,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -891,6 +974,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -900,6 +986,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

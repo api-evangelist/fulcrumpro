@@ -37,6 +37,7 @@ paths:
                   $ref: '#/components/schemas/SalesOrderBlanketLineItemDto'
         '404':
           description: The sales order did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
   /api/sales-orders/{salesOrderId}/blanket-line-items/{lineItemId}:
@@ -75,8 +76,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/SalesOrderBlanketLineItemDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: Sales order or line item did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -127,6 +131,7 @@ paths:
                 $ref: '#/components/schemas/SalesOrderBlanketLineItemDto'
         '404':
           description: Sales order or blanket line items did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -162,380 +167,11 @@ paths:
                 $ref: '#/components/schemas/SalesOrderBlanketLineItemDto'
         '404':
           description: Sales order or blanket line item did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
 components:
   schemas:
-    SalesOrderPartLineItemDto:
-      required:
-      - accountingDetails
-      - discountedPrice
-      - id
-      - isTaxable
-      - itemId
-      - name
-      - preDiscountSubTotal
-      - price
-      - quantity
-      - subTotal
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The line item name.
-        quantity:
-          minimum: 0
-          type: number
-          description: The line item quantity
-          format: double
-        price:
-          minimum: 0
-          type: number
-          description: The line item price.
-          format: double
-        discountedPrice:
-          minimum: 0
-          type: number
-          description: The discounted line item price.
-          format: double
-        dueDate:
-          type:
-          - string
-          - 'null'
-          description: Customer delivery date
-          format: date-time
-        isTaxable:
-          type: boolean
-          description: Dictate if this line item is taxable.
-        overrideTaxRate:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if the tax rate is overridden.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.PartLineItem.PartLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.PartLineItem.PartLineItemDto.TaxRate will supercede the defined tax rate.
-          format: double
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Item id associated with this line item.
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The part line item description.  Defaults to the item's description if none specified.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-        internalNotes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The line item internal notes. Aka production notes.
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-        isPercentageDiscount:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether FulcrumProduct.PublicApi.Dto.SalesOrder.PartLineItem.PartLineItemDto.DiscountAmount discount is percentage based (else, it's an absolute amount).
-        discountAmount:
-          type:
-          - number
-          - 'null'
-          description: The amount of the discount.
-          format: double
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonUrlDto'
-          description: List of links associated with the line item
-        customFields:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: Custom fields that have been defined for the part line item;
-        parentLineId:
-          maxLength: 36
-          minLength: 36
-          type:
-          - string
-          - 'null'
-          description: Identifier pointing to the parent line item (if this part line was sourced from a blanket line item). Please reference /api/sales-order/{salesOrderId}/blanket-line-items/list endpoint.
-        subTotal:
-          minimum: 0
-          type: number
-          description: Total line item cost, including applicable discounts
-          format: double
-        preDiscountSubTotal:
-          minimum: 0
-          type: number
-          description: Total line item cost, before discounts
-          format: double
-        customerPartNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The customer's known part line item number.
-        customerPartDescription:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The customer's known part line item description.
-        number:
-          type: integer
-          description: Line number
-          format: int32
-        accountingDetails:
-          $ref: '#/components/schemas/CommonAccountingDetailsDto'
-        isFullyInvoiced:
-          type: boolean
-          description: Indicate if this item has been fully invoiced.
-        isInvoiced:
-          type: boolean
-          description: Indicate if this item has ANY invoices.
-        quantityInvoiced:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Indicate the total quantity that have been invoiced (issued/paid).
-          format: double
-        quantityOnInvoices:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Indicate the total quantity that exists on any invoice (including open).
-          format: double
-        costBreakdown:
-          $ref: '#/components/schemas/CommonCostBreakdownDto'
-      additionalProperties: false
-      description: Represents a part line item on a sales order.
-    CommonCostBreakdownDto:
-      required:
-      - calculatedOn
-      - componentLabor
-      - componentMachine
-      - componentMaterial
-      - componentOutsideProcessing
-      - cumulative
-      - cumulativeLabor
-      - cumulativeMachine
-      - cumulativeMaterial
-      - cumulativeOutsideProcessing
-      - id
-      - itemLabor
-      - itemMachine
-      - itemMaterial
-      - itemOutsideProcessing
-      - lines
-      - quantity
-      - shopRateMachine
-      - shopRateRun
-      - shopRateSetup
-      - time
-      - type
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 24
-          type: string
-          description: The id of the parent item.
-        type:
-          $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
-        quantity:
-          minimum: 0
-          type: integer
-          description: Number of units.
-          format: int32
-        quantityScrapped:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Number of units scrapped.
-          format: int32
-        calculatedOn:
-          type: string
-          description: When was this cost breakdown last calculated/aggregated.
-          format: date-time
-        time:
-          $ref: '#/components/schemas/CommonTimeDto'
-        cumulative:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeMaterial:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeLabor:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeOutsideProcessing:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemMaterial:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemLabor:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemOutsideProcessing:
-          $ref: '#/components/schemas/CommonCostDto'
-        shopRateSetup:
-          $ref: '#/components/schemas/CommonCostDto'
-        shopRateRun:
-          $ref: '#/components/schemas/CommonCostDto'
-        shopRateMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentMaterial:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentLabor:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentOutsideProcessing:
-          $ref: '#/components/schemas/CommonCostDto'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonCostBreakdownLineDto'
-          description: Cost breakdown line details.
-      additionalProperties: false
-      description: Cost breakdown
-    ItemsAndInventoryRoutingsCostBreakdownType:
-      enum:
-      - estimated
-      - inProgressJob
-      - completedJob
-      - cancelledJob
-      type: string
-    CommonCostDto:
-      required:
-      - perUnit
-      - total
-      type: object
-      properties:
-        total:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        perUnit:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Cost information
-    CommonEnumOperationTypeEnum:
-      enum:
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      type: string
-      description: Operation type
-    SalesOrderBlanketLineItemUpdateDto:
-      type: object
-      properties:
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents a blanket line item on a sales order.
-    CommonCostBreakdownLineDto:
-      required:
-      - cost
-      - costType
-      - name
-      type: object
-      properties:
-        costType:
-          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
-        operationType:
-          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
-        name:
-          minLength: 1
-          type: string
-          description: Decription of this line.
-        cost:
-          minimum: 0
-          type: number
-          description: Cost.
-          format: double
-        quantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Quantity (if applicable)
-          format: double
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Id of the item that was picked. Please reference /api/items endpoint.
-        itemName:
-          type:
-          - string
-          - 'null'
-          description: The name of the item that was picked.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
-        operationInformation:
-          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
-      additionalProperties: false
-      description: Cost breakdown line information.
     CommonCostBreakdownOperationDto:
       required:
       - operationId
@@ -583,6 +219,114 @@ components:
           format: double
       additionalProperties: false
       description: Operation information
+    ItemsAndInventoryRoutingsCostBreakdownType:
+      enum:
+      - estimated
+      - inProgressJob
+      - completedJob
+      - cancelledJob
+      type: string
+    CommonUrlDto:
+      required:
+      - uri
+      type: object
+      properties:
+        uri:
+          minLength: 1
+          type: string
+          description: The uri to save. e.g. https://fulcrumpro.com
+          format: uri
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: ''
+      additionalProperties: false
+      description: A URL along with a name description of the link
+    CommonCostDto:
+      required:
+      - perUnit
+      - total
+      type: object
+      properties:
+        total:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        perUnit:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Cost information
+    CommonTimeDto:
+      required:
+      - labor
+      - machine
+      - setup
+      type: object
+      properties:
+        labor:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        machine:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+        setup:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Time information
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
     SalesOrderBlanketLineItemDto:
       required:
       - accountingDetails
@@ -773,120 +517,367 @@ components:
           description: Underlying part line items associated to this blanket line.
       additionalProperties: false
       description: Represents a blanket line item on a sales order.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CommonTimeDto:
+    SalesOrderPartLineItemDto:
       required:
-      - labor
-      - machine
-      - setup
+      - accountingDetails
+      - discountedPrice
+      - id
+      - isTaxable
+      - itemId
+      - name
+      - preDiscountSubTotal
+      - price
+      - quantity
+      - subTotal
       type: object
       properties:
-        labor:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        machine:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-        setup:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Time information
-    CommonEnumCostBreakdownLineTypeEnum:
-      enum:
-      - material
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      - componentMaterial
-      - componentLabor
-      - componentMachine
-      - componentOutsideProcessing
-      - nestPartMaterialUsage
-      - nestPartMaterialScrap
-      - overhead
-      - unknown
-      type: string
-      description: Cost breakdown types
-    CommonUrlDto:
-      required:
-      - uri
-      type: object
-      properties:
-        uri:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
           minLength: 1
           type: string
-          description: The uri to save. e.g. https://fulcrumpro.com
-          format: uri
-        name:
+          description: The line item name.
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type: number
+          description: The line item price.
+          format: double
+        discountedPrice:
+          minimum: 0
+          type: number
+          description: The discounted line item price.
+          format: double
+        dueDate:
+          type:
+          - string
+          - 'null'
+          description: Customer delivery date
+          format: date-time
+        isTaxable:
+          type: boolean
+          description: Dictate if this line item is taxable.
+        overrideTaxRate:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if the tax rate is overridden.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.PartLineItem.PartLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.PartLineItem.PartLineItemDto.TaxRate will supercede the defined tax rate.
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Item id associated with this line item.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The part line item description.  Defaults to the item's description if none specified.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        internalNotes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The line item internal notes. Aka production notes.
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        isPercentageDiscount:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether FulcrumProduct.PublicApi.Dto.SalesOrder.PartLineItem.PartLineItemDto.DiscountAmount discount is percentage based (else, it's an absolute amount).
+        discountAmount:
+          type:
+          - number
+          - 'null'
+          description: The amount of the discount.
+          format: double
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonUrlDto'
+          description: List of links associated with the line item
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: Custom fields that have been defined for the part line item;
+        parentLineId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: Identifier pointing to the parent line item (if this part line was sourced from a blanket line item). Please reference /api/sales-order/{salesOrderId}/blanket-line-items/list endpoint.
+        subTotal:
+          minimum: 0
+          type: number
+          description: Total line item cost, including applicable discounts
+          format: double
+        preDiscountSubTotal:
+          minimum: 0
+          type: number
+          description: Total line item cost, before discounts
+          format: double
+        customerPartNumber:
           maxLength: 200
           minLength: 1
           type:
           - string
           - 'null'
-          description: ''
+          description: The customer's known part line item number.
+        customerPartDescription:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The customer's known part line item description.
+        number:
+          type: integer
+          description: Line number
+          format: int32
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+        isFullyInvoiced:
+          type: boolean
+          description: Indicate if this item has been fully invoiced.
+        isInvoiced:
+          type: boolean
+          description: Indicate if this item has ANY invoices.
+        quantityInvoiced:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Indicate the total quantity that have been invoiced (issued/paid).
+          format: double
+        quantityOnInvoices:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Indicate the total quantity that exists on any invoice (including open).
+          format: double
+        costBreakdown:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
       additionalProperties: false
-      description: A URL along with a name description of the link
-    CommonAccountingDetailsDto:
+      description: Represents a part line item on a sales order.
+    SalesOrderBlanketLineItemUpdateDto:
       type: object
       properties:
-        classId:
-          maxLength: 24
-          minLength: 24
+        externalReferences:
           type:
-          - string
+          - object
           - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
-      description: An object that contains all accounting details.
+      description: Represents a blanket line item on a sales order.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value: {}
+        path:
+          type: string
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
+    CommonCostBreakdownDto:
+      required:
+      - calculatedOn
+      - componentLabor
+      - componentMachine
+      - componentMaterial
+      - componentOutsideProcessing
+      - cumulative
+      - cumulativeLabor
+      - cumulativeMachine
+      - cumulativeMaterial
+      - cumulativeOutsideProcessing
+      - id
+      - itemLabor
+      - itemMachine
+      - itemMaterial
+      - itemOutsideProcessing
+      - lines
+      - quantity
+      - shopRateMachine
+      - shopRateRun
+      - shopRateSetup
+      - time
+      - type
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: The id of the parent item.
+        type:
+          $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
+        quantity:
+          minimum: 0
+          type: integer
+          description: Number of units.
+          format: int32
+        quantityScrapped:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Number of units scrapped.
+          format: int32
+        calculatedOn:
+          type: string
+          description: When was this cost breakdown last calculated/aggregated.
+          format: date-time
+        time:
+          $ref: '#/components/schemas/CommonTimeDto'
+        cumulative:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateSetup:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateRun:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonCostBreakdownLineDto'
+          description: Cost breakdown line details.
+      additionalProperties: false
+      description: Cost breakdown
+    CommonEnumOperationTypeEnum:
+      enum:
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      type: string
+      description: Operation type
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CommonCostBreakdownLineDto:
+      required:
+      - cost
+      - costType
+      - name
+      type: object
+      properties:
+        costType:
+          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
+        operationType:
+          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        name:
+          minLength: 1
+          type: string
+          description: Decription of this line.
+        cost:
+          minimum: 0
+          type: number
+          description: Cost.
+          format: double
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Quantity (if applicable)
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Id of the item that was picked. Please reference /api/items endpoint.
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: The name of the item that was picked.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
+        operationInformation:
+          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+      additionalProperties: false
+      description: Cost breakdown line information.
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -941,6 +932,23 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    CommonEnumCostBreakdownLineTypeEnum:
+      enum:
+      - material
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      - componentMaterial
+      - componentLabor
+      - componentMachine
+      - componentOutsideProcessing
+      - nestPartMaterialUsage
+      - nestPartMaterialScrap
+      - overhead
+      - unknown
+      type: string
+      description: Cost breakdown types
   securitySchemes:
     bearer:
       type: http
@@ -951,6 +959,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -961,6 +972,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -981,9 +995,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -1045,6 +1065,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -1062,6 +1083,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -1119,6 +1143,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -1137,6 +1164,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -1146,6 +1176,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

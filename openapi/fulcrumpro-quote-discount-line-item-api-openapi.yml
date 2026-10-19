@@ -55,6 +55,7 @@ paths:
           description: Discount line item does not exist
         '404':
           description: Quote did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-Quotes-View Quote
   /api/quote/{quoteId}/discount-line-item:
@@ -98,6 +99,7 @@ paths:
                 $ref: '#/components/schemas/QuoteDiscountLineItemDto'
         '404':
           description: Quote does not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-Quotes-Edit Quote
@@ -145,35 +147,6 @@ components:
           $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Represents a discount line item on a quote.
-    QuoteDiscountLineItemUpdateDto:
-      required:
-      - amount
-      - isPercentage
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The name of the discount line.
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The description of the discount line.
-        isPercentage:
-          type: boolean
-          description: Indicates whether "Amount" value is percentage based or an absolute amount.
-        amount:
-          minimum: 0
-          type: number
-          description: The amount of the discount.
-          format: double
-      additionalProperties: false
-      description: Represents a discount line item on a quote.
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -214,6 +187,35 @@ components:
           description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
       description: An object that contains all accounting details.
+    QuoteDiscountLineItemUpdateDto:
+      required:
+      - amount
+      - isPercentage
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of the discount line.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The description of the discount line.
+        isPercentage:
+          type: boolean
+          description: Indicates whether "Amount" value is percentage based or an absolute amount.
+        amount:
+          minimum: 0
+          type: number
+          description: The amount of the discount.
+          format: double
+      additionalProperties: false
+      description: Represents a discount line item on a quote.
   securitySchemes:
     bearer:
       type: http
@@ -224,6 +226,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -234,6 +239,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -254,9 +262,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -318,6 +332,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -335,6 +350,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -392,6 +410,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -410,6 +431,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -419,6 +443,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

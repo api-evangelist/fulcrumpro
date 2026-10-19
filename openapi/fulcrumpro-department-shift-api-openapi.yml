@@ -1,0 +1,960 @@
+openapi: 3.2.0
+info:
+  title: Fulcrum Public Department Shift API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Department Shift
+paths:
+  /api/department-shifts:
+    post:
+      tags:
+      - Department Shift
+      summary: Create a shift for a department.
+      operationId: CreateDepartmentShift
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Department shift created; the body holds its id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: "Validation issues with input, a department that does not exist or is deleted,\n            or an `availableEquipment` entry that is null, repeated or not in the department"
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - System-System Data-Manage System Data
+  /api/department-shifts/{id}:
+    delete:
+      tags:
+      - Department Shift
+      summary: Delete a department shift by id.
+      operationId: DeleteDepartmentShift
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: Department shift deleted
+        '204':
+          description: Department shift did not exist or was already deleted
+        '400':
+          description: Validation issues with the id
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - System-System Data-Manage System Data
+    get:
+      tags:
+      - Department Shift
+      summary: Get a department shift by id.
+      operationId: GetDepartmentShift
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The department shift for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentShiftDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DepartmentShiftDto'
+        '404':
+          description: Department shift did not exist
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Scheduling-Schedule-View Schedule
+    put:
+      tags:
+      - Department Shift
+      summary: Update a department shift by id.
+      operationId: UpdateDepartmentShift
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: The updated department shift
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentShiftDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DepartmentShiftDto'
+        '400':
+          description: "Validation issues with input, or an `availableEquipment` entry that is\n            null, repeated or not in the shift's department"
+        '404':
+          description: Department shift did not exist or is deleted
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - System-System Data-Manage System Data
+  /api/department-shifts/list:
+    post:
+      tags:
+      - Department Shift
+      summary: Find department shifts based on search parameters.
+      operationId: ListDepartmentShift
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DepartmentShiftRequestFindParameters'
+      responses:
+        '200':
+          description: List of department shifts matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentShiftDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentShiftDto'
+        '400':
+          description: The sort field, paging or filter parameters were invalid
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Scheduling-Schedule-View Schedule
+components:
+  schemas:
+    DepartmentShiftCreateDto:
+      required:
+      - departmentId
+      - endTime
+      - name
+      - startTime
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the shift.
+        startTime:
+          minLength: 1
+          type: string
+          description: 'Time the shift starts, as a four-digit 24-hour clock value in HHmm format, "0000" to "2359":
+
+            "0000" is midnight, "0800" is 8:00 AM and "1730" is 5:30 PM.'
+        endTime:
+          minLength: 1
+          type: string
+          description: 'Time the shift ends, in the same HHmm format as `startTime`. An end time earlier than the
+
+            start time means the shift runs overnight and ends on the next day. An end time equal to the start
+
+            time is allowed.'
+        days:
+          $ref: '#/components/schemas/DepartmentShiftDaysSaveDto'
+        simultaneousEquipment:
+          $ref: '#/components/schemas/DepartmentShiftDailyCountsSaveDto'
+        unlimitedCapacity:
+          type:
+          - boolean
+          - 'null'
+          description: 'When true, the shift has no limit on how many pieces of equipment can run at the same time, and
+
+            `simultaneousEquipment` is not applied on any day. Omitted or null is saved as false.'
+        maxDailyNewJobs:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Maximum number of new jobs to schedule per shift, 0 or more. Omitted or null means no maximum.
+          format: int32
+        availableEquipment:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DepartmentShiftEquipmentSaveDto'
+          description: 'The equipment available during the shift. Each `equipmentId` must be equipment in the
+
+            shift''s department and can be listed only once. The server fills each `equipmentName` from
+
+            the equipment. Omitted or null means no equipment, so an update clears the list.'
+        departmentId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Id of the department that works this shift. The department must exist and not be deleted. It
+
+            cannot be changed after the shift is created. Please reference the /api/departments endpoint.'
+      additionalProperties: false
+      description: Details of a department shift to create. An omitted or null optional field is saved as its default.
+    DepartmentShiftAvailableEquipmentDto:
+      type: object
+      properties:
+        equipmentId:
+          type:
+          - string
+          - 'null'
+          description: Id of the equipment. Null for an equipment row saved without an id.
+        equipmentName:
+          type:
+          - string
+          - 'null'
+          description: Name of the equipment when it was assigned to the shift.
+        monday:
+          type: boolean
+          description: Available on Monday.
+        tuesday:
+          type: boolean
+          description: Available on Tuesday.
+        wednesday:
+          type: boolean
+          description: Available on Wednesday.
+        thursday:
+          type: boolean
+          description: Available on Thursday.
+        friday:
+          type: boolean
+          description: Available on Friday.
+        saturday:
+          type: boolean
+          description: Available on Saturday.
+        sunday:
+          type: boolean
+          description: Available on Sunday.
+      additionalProperties: false
+      description: A piece of equipment available during a shift, and the days of the week it is available.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    DepartmentShiftDailyCountsDto:
+      type: object
+      properties:
+        monday:
+          type: integer
+          description: Count for Monday.
+          format: int32
+        tuesday:
+          type: integer
+          description: Count for Tuesday.
+          format: int32
+        wednesday:
+          type: integer
+          description: Count for Wednesday.
+          format: int32
+        thursday:
+          type: integer
+          description: Count for Thursday.
+          format: int32
+        friday:
+          type: integer
+          description: Count for Friday.
+          format: int32
+        saturday:
+          type: integer
+          description: Count for Saturday.
+          format: int32
+        sunday:
+          type: integer
+          description: Count for Sunday.
+          format: int32
+      additionalProperties: false
+      description: A whole-number count for each day of the week.
+    DepartmentShiftEquipmentSaveDto:
+      required:
+      - equipmentId
+      type: object
+      properties:
+        equipmentId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Id of the equipment. It must be equipment in one of the shift''s department''s work centers, and it
+
+            can be listed only once. Please reference the /api/equipment endpoint.'
+        monday:
+          type:
+          - boolean
+          - 'null'
+          description: Available on Monday. Omitted or null is saved as false.
+        tuesday:
+          type:
+          - boolean
+          - 'null'
+          description: Available on Tuesday. Omitted or null is saved as false.
+        wednesday:
+          type:
+          - boolean
+          - 'null'
+          description: Available on Wednesday. Omitted or null is saved as false.
+        thursday:
+          type:
+          - boolean
+          - 'null'
+          description: Available on Thursday. Omitted or null is saved as false.
+        friday:
+          type:
+          - boolean
+          - 'null'
+          description: Available on Friday. Omitted or null is saved as false.
+        saturday:
+          type:
+          - boolean
+          - 'null'
+          description: Available on Saturday. Omitted or null is saved as false.
+        sunday:
+          type:
+          - boolean
+          - 'null'
+          description: Available on Sunday. Omitted or null is saved as false.
+      additionalProperties: false
+      description: 'A piece of equipment to make available during a shift, and the days of the week it is available.
+
+        The equipment name is not sent; the server fills `equipmentName` from the equipment.'
+    DepartmentShiftDaysDto:
+      type: object
+      properties:
+        monday:
+          type: boolean
+          description: Monday.
+        tuesday:
+          type: boolean
+          description: Tuesday.
+        wednesday:
+          type: boolean
+          description: Wednesday.
+        thursday:
+          type: boolean
+          description: Thursday.
+        friday:
+          type: boolean
+          description: Friday.
+        saturday:
+          type: boolean
+          description: Saturday.
+        sunday:
+          type: boolean
+          description: Sunday.
+      additionalProperties: false
+      description: A true or false value for each day of the week.
+    DepartmentShiftDailyCountsSaveDto:
+      type: object
+      properties:
+        monday:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Count for Monday.
+          format: int32
+        tuesday:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Count for Tuesday.
+          format: int32
+        wednesday:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Count for Wednesday.
+          format: int32
+        thursday:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Count for Thursday.
+          format: int32
+        friday:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Count for Friday.
+          format: int32
+        saturday:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Count for Saturday.
+          format: int32
+        sunday:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Count for Sunday.
+          format: int32
+      additionalProperties: false
+      description: A whole-number count of 0 or more for each day of the week. An omitted or null day is saved as 0.
+    DepartmentShiftRequestFindParameters:
+      type: object
+      properties:
+        ids:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter shifts to those with one of these ids.
+        departmentIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter shifts to those belonging to one of these departments.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter shifts whose name contains this text, ignoring case.
+      additionalProperties: false
+      description: Parameters used for searching/finding department shifts. Filters combine with AND.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    DepartmentShiftDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id of the shift.
+        departmentId:
+          type:
+          - string
+          - 'null'
+          description: Id of the department that works this shift.
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the shift.
+        startTime:
+          type:
+          - string
+          - 'null'
+          description: 'Time the shift starts, as a four-digit 24-hour clock value in HHmm format: "0000" is midnight,
+
+            "0800" is 8:00 AM and "1730" is 5:30 PM. Returned exactly as stored.'
+        endTime:
+          type:
+          - string
+          - 'null'
+          description: 'Time the shift ends, in the same HHmm format as `startTime`. An end time earlier than the
+
+            start time means the shift runs overnight and ends on the next day. Returned exactly as stored.'
+        lengthOfShiftInMinutes:
+          type:
+          - integer
+          - 'null'
+          description: 'Length of the shift in minutes, from `startTime` to `endTime`. An overnight shift
+
+            wraps past midnight, so "2200" to "0600" is 480. Equal start and end times give 0. Null when
+
+            either time is not a valid HHmm value (four digits, hours 00 to 23, minutes 00 to 59).'
+          format: int32
+        days:
+          $ref: '#/components/schemas/DepartmentShiftDaysDto'
+        simultaneousEquipment:
+          $ref: '#/components/schemas/DepartmentShiftDailyCountsDto'
+        unlimitedCapacity:
+          type: boolean
+          description: 'When true, the shift has no limit on how many pieces of equipment can run at the same time, and
+
+            `simultaneousEquipment` is not applied on any day.'
+        maxDailyNewJobs:
+          type:
+          - integer
+          - 'null'
+          description: Maximum number of new jobs to schedule per shift. Null when no maximum is set.
+          format: int32
+        availableEquipment:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepartmentShiftAvailableEquipmentDto'
+          description: 'The equipment available during the shift and the days of the week each piece is available,
+
+            ordered by `equipmentId`. Empty when no equipment is assigned.'
+        deleted:
+          type: boolean
+          description: Indicates whether this shift has been deleted.
+      additionalProperties: false
+      description: A shift worked by a department. A department can have several department shifts.
+    DepartmentShiftUpdateDto:
+      required:
+      - endTime
+      - name
+      - startTime
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the shift.
+        startTime:
+          minLength: 1
+          type: string
+          description: 'Time the shift starts, as a four-digit 24-hour clock value in HHmm format, "0000" to "2359":
+
+            "0000" is midnight, "0800" is 8:00 AM and "1730" is 5:30 PM.'
+        endTime:
+          minLength: 1
+          type: string
+          description: 'Time the shift ends, in the same HHmm format as `startTime`. An end time earlier than the
+
+            start time means the shift runs overnight and ends on the next day. An end time equal to the start
+
+            time is allowed.'
+        days:
+          $ref: '#/components/schemas/DepartmentShiftDaysSaveDto'
+        simultaneousEquipment:
+          $ref: '#/components/schemas/DepartmentShiftDailyCountsSaveDto'
+        unlimitedCapacity:
+          type:
+          - boolean
+          - 'null'
+          description: 'When true, the shift has no limit on how many pieces of equipment can run at the same time, and
+
+            `simultaneousEquipment` is not applied on any day. Omitted or null is saved as false.'
+        maxDailyNewJobs:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Maximum number of new jobs to schedule per shift, 0 or more. Omitted or null means no maximum.
+          format: int32
+        availableEquipment:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DepartmentShiftEquipmentSaveDto'
+          description: 'The equipment available during the shift. Each `equipmentId` must be equipment in the
+
+            shift''s department and can be listed only once. The server fills each `equipmentName` from
+
+            the equipment. Omitted or null means no equipment, so an update clears the list.'
+      additionalProperties: false
+      description: 'Details of a department shift to save. An update replaces the whole shift: an omitted or null field
+
+        is saved as its default, not left as it was. The shift''s department cannot be changed.'
+    DepartmentShiftDaysSaveDto:
+      type: object
+      properties:
+        monday:
+          type:
+          - boolean
+          - 'null'
+          description: Monday.
+        tuesday:
+          type:
+          - boolean
+          - 'null'
+          description: Tuesday.
+        wednesday:
+          type:
+          - boolean
+          - 'null'
+          description: Wednesday.
+        thursday:
+          type:
+          - boolean
+          - 'null'
+          description: Thursday.
+        friday:
+          type:
+          - boolean
+          - 'null'
+          description: Friday.
+        saturday:
+          type:
+          - boolean
+          - 'null'
+          description: Saturday.
+        sunday:
+          type:
+          - boolean
+          - 'null'
+          description: Sunday.
+      additionalProperties: false
+      description: The days of the week a shift is worked. An omitted or null day is saved as false.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Alert
+  tags:
+  - Alert
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Department Shift
+  tags:
+  - Department Shift
+- name: Equipment
+  tags:
+  - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Message
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Nesting
+  tags:
+  - Nesting
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Settings
+  tags:
+  - Settings
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Task
+  tags:
+  - Task
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

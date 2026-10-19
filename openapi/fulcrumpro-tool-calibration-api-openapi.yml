@@ -1,0 +1,1312 @@
+openapi: 3.2.0
+info:
+  title: Fulcrum Public Tool Calibration API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Tool Calibration
+paths:
+  /api/tool-calibrations:
+    post:
+      tags:
+      - Tool Calibration
+      summary: 'Record a tool calibration: an external (vendor or customer) attestation, or an…'
+      operationId: CreateToolCalibration
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationCreateDto'
+        required: true
+      responses:
+        '200':
+          description: The created calibration record, with its derived results and concurrency token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationSavedDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationSavedDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Tool did not exist
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-Perform Calibration
+  /api/tool-calibrations/{id}:
+    get:
+      tags:
+      - Tool Calibration
+      summary: Get a tool calibration record by id, including its per-checkpoint measurements…
+      operationId: GetToolCalibration
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The calibration record for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationDto'
+        '404':
+          description: Calibration record did not exist
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-View Tool Calibration
+    put:
+      tags:
+      - Tool Calibration
+      summary: Edit an unsigned tool calibration record.
+      operationId: UpdateToolCalibration
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: The updated calibration record, with its derived results and refreshed concurrency token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationSavedDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationSavedDto'
+        '400':
+          description: Validation issues with input, or the record is signed
+        '404':
+          description: Calibration record did not exist
+        '409':
+          description: The record changed after the supplied version token was read
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-Perform Calibration
+  /api/tool-calibrations/{id}/certificate:
+    get:
+      tags:
+      - Tool Calibration
+      summary: Download the calibration certificate PDF for a record.
+      operationId: GetToolCalibrationCertificate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The certificate PDF
+        '404':
+          description: Calibration record did not exist
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-View Tool Calibration
+  /api/tool-calibrations/list:
+    post:
+      tags:
+      - Tool Calibration
+      summary: Finds tool calibration records based on search parameters.
+      operationId: ListToolCalibrations
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationsListParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationsListParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationsListParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ToolCalibrationsListParameters'
+      responses:
+        '200':
+          description: The matching calibration records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoToolCalibrationSummaryDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoToolCalibrationSummaryDto'
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-View Tool Calibration
+components:
+  schemas:
+    ToolCalibrationRequestCalibrationResponseSaveDto:
+      required:
+      - calibrationCheckpointId
+      - phase
+      - trial
+      type: object
+      properties:
+        calibrationCheckpointId:
+          type: string
+          description: 'The template checkpoint this measurement answers; must belong to the template version the
+
+            record is measured against'
+          format: uuid
+        phase:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationCheckpointPhase'
+        trial:
+          maximum: 2147483647
+          minimum: 1
+          type: integer
+          description: 1-based trial number within the phase for this checkpoint
+          format: int32
+        numericValue:
+          type:
+          - number
+          - 'null'
+          description: The measured numeric value
+          format: double
+        numericValuePrecision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the measured numeric value
+          format: int32
+        booleanValue:
+          type:
+          - boolean
+          - 'null'
+          description: The measured boolean value, for attribute (pass/fail) checkpoints
+        stringValue:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The measured free-text value
+        bonusToleranceValue:
+          type:
+          - number
+          - 'null'
+          description: The bonus tolerance applied to the measurement
+          format: double
+      additionalProperties: false
+      description: 'A single measured trial for one calibration checkpoint, in a single phase (As-Found or As-Left).
+
+        The measurer, measurement time, and master gauge expiry snapshot are stamped server-side.'
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    ToolCalibrationSummaryDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the calibration record
+        tool:
+          $ref: '#/components/schemas/ToolCalibrationToolReferenceDto'
+        calibrationSource:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationSource'
+        calibratedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        result:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        asFoundResult:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        calibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the calibration was performed (UTC)
+          format: date-time
+        masterGageNames:
+          type:
+          - string
+          - 'null'
+          description: 'Display labels of the master gauges used: the masters the record''s measurements were taken
+
+            against for in-house records, or the free-text value supplied with an external record'
+        certificateNumber:
+          type:
+          - string
+          - 'null'
+          description: The external certificate number supplied with the calibration
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes
+        asFoundNotes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes about the As-Found state
+        tempDegC:
+          type:
+          - number
+          - 'null'
+          description: Ambient temperature (deg C) captured during calibration
+          format: double
+        relHumidity:
+          type:
+          - number
+          - 'null'
+          description: Ambient relative humidity (%) captured during calibration
+          format: double
+        templateVersion:
+          type:
+          - integer
+          - 'null'
+          description: 'The template version the record was measured against, pinned at create time; null for
+
+            template-less and external records'
+          format: int32
+        signedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        signedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the record was signed (UTC); null until signed
+          format: date-time
+      additionalProperties: false
+      description: 'A tool calibration record as returned by the list endpoint. The by-id endpoint returns the
+
+        derived FulcrumProduct.PublicApi.Dto.ToolCalibration.ToolCalibrationDto, which adds the per-checkpoint measurements.'
+    ToolCalibrationEnumCalibrationResult:
+      enum:
+      - fail
+      - pass
+      - notApplicable
+      type: string
+      description: 'The outcome of a calibration. Mirrors
+
+        FulcrumProduct.Domain.ToolCalibrations.Data.CalibrationResult by underlying value.'
+    ToolCalibrationCalibrationResponseDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the measurement row
+          format: uuid
+        calibrationCheckpointId:
+          type: string
+          description: The template checkpoint this measurement answers
+          format: uuid
+        phase:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationCheckpointPhase'
+        trial:
+          type: integer
+          description: 1-based trial number within the phase for this checkpoint
+          format: int32
+        numericValue:
+          type:
+          - number
+          - 'null'
+          description: The measured numeric value
+          format: double
+        numericValuePrecision:
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the measured numeric value
+          format: int32
+        booleanValue:
+          type:
+          - boolean
+          - 'null'
+          description: The measured boolean value, for attribute (pass/fail) checkpoints
+        stringValue:
+          type:
+          - string
+          - 'null'
+          description: The measured free-text value
+        bonusToleranceValue:
+          type:
+          - number
+          - 'null'
+          description: The bonus tolerance applied to the measurement
+          format: double
+        createdOnUtc:
+          type:
+          - string
+          - 'null'
+          description: When the measurement was recorded (UTC)
+          format: date-time
+        createdBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        masterGageExpirationUtc:
+          type:
+          - string
+          - 'null'
+          description: 'The measurement''s master gauge calibration expiry (UTC) frozen when the row was saved;
+
+            null when no master gauge was configured'
+          format: date-time
+      additionalProperties: false
+      description: A single measured trial for one calibration checkpoint, in a single phase (As-Found or As-Left).
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ToolCalibrationEnumCalibrationCheckpointPhase:
+      enum:
+      - asFound
+      - asLeft
+      type: string
+      description: 'The measurement phase of a checkpoint response. Mirrors
+
+        FulcrumProduct.Domain.ToolCalibrations.Data.CalibrationCheckpointPhase by underlying value.'
+    ToolCalibrationCreateDto:
+      required:
+      - calibrationDateUtc
+      - calibrationSource
+      - result
+      - toolId
+      type: object
+      properties:
+        toolId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The id of the tool the calibration was performed on
+        calibrationSource:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationSource'
+        calibratedByUserId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user who performed an in-house calibration; required for (and only valid with) the user source
+        calibratedByVendorId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The vendor that performed an external calibration; required for (and only valid with) the vendor source
+        result:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        calibrationDateUtc:
+          type: string
+          description: When the calibration was performed (UTC)
+          format: date-time
+        masterGageNames:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Free-text master gauge names supplied with an external attestation; a measured in-house
+
+            calibration derives its masters from the template instead'
+        certificateNumber:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external certificate number supplied with the calibration
+        notes:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Free-text notes
+        asFoundNotes:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Free-text notes about the As-Found state
+        tempDegC:
+          type:
+          - number
+          - 'null'
+          description: Ambient temperature (deg C) captured during calibration
+          format: double
+        relHumidity:
+          type:
+          - number
+          - 'null'
+          description: Ambient relative humidity (%) captured during calibration
+          format: double
+        responses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolCalibrationRequestCalibrationResponseSaveDto'
+          description: 'The per-checkpoint trial measurements; only valid on in-house (user-source) calibrations
+
+            against the tool''s current calibration template'
+      additionalProperties: false
+      description: 'Request body for recording a tool calibration. Who performed the calibration is attributed per
+
+        FulcrumProduct.PublicApi.Dto.ToolCalibration.Request.ToolCalibrationCreateDto.CalibrationSource: an in-house (user) calibration names the measuring user, a vendor
+
+        calibration names the vendor, and a customer calibration is always attributed to the tool''s owning
+
+        customer server-side. The overall result must match the result the server derives from the
+
+        submitted measurements; the pinned template version, As-Found outcome, and sign state are always
+
+        derived server-side and cannot be supplied.'
+    ToolCalibrationsListParameters:
+      type: object
+      properties:
+        toolId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Only calibration records for this tool
+        calibratedByVendorId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Only calibration records performed by this vendor
+        search:
+          type:
+          - string
+          - 'null'
+          description: Search over tool name/serial number/type, master gauge names, certificate number, and notes
+        toolTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolType'
+          description: Only calibration records for tools of these types
+        results:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+          description: Only calibration records with these results
+        calibrationDateFromUtc:
+          type:
+          - string
+          - 'null'
+          description: Only calibration records performed on or after this UTC instant
+          format: date-time
+        calibrationDateToUtc:
+          type:
+          - string
+          - 'null'
+          description: Only calibration records performed on or before this UTC instant
+          format: date-time
+      additionalProperties: false
+      description: 'Filters for the tool calibration record list. All filters are optional and combine with AND
+
+        semantics (list-valued filters match any of their values).'
+    ToolType:
+      enum:
+      - bevelProtractor
+      - bendAngleGage
+      - boreGage
+      - caliper
+      - cmm
+      - coatingThicknessGage
+      - depthMicrometer
+      - gageBlocks
+      - hardnessTester
+      - heightGage
+      - micrometer
+      - opticalComparator
+      - pinGage
+      - plugGage
+      - radiusGage
+      - sineBar
+      - surfacePlate
+      - surfaceRoughnessTester
+      - thicknessGage
+      - threadPlugGage
+      - threadRingGage
+      - vmm
+      - attributeGage
+      - calibrationArtifact
+      - indicator
+      - calibrationStandard
+      - chamferGage
+      - lightMeter
+      - presetter
+      - digitalConductivityMeter
+      - ringGage
+      - profilometer
+      - splineGage
+      - tapeMeasure
+      - thermometer
+      - stopwatch
+      - torqueWrench
+      - instantMeasurementSystem
+      - protractor
+      - pressureGage
+      - tubeGage
+      - tubeMicrometer
+      - thermocouple
+      - ohmMeter
+      - multimeter
+      - weight
+      - fixture
+      - machine
+      - hygrothermometer
+      - concentricityGage
+      - cmmDatumSphere
+      - threadMicrometer
+      - insideMicrometer
+      - pinMicrometer
+      - setPlug
+      - nptRingGage
+      - nptPlugGage
+      - grooveMicrometer
+      - weldingEquipment
+      - surfaceTesterMaster
+      type: string
+      description: 'The type of tool in the calibration system. Member values mirror
+
+        FulcrumProduct.Domain.ToolCalibrations.Data.ToolType one-to-one (guarded by
+
+        ToolCalibrationEnumParityTests) so tools map by underlying value.'
+    ToolCalibrationNcrReferenceDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the NCR
+        number:
+          type: integer
+          description: The NCR's sequential number
+          format: int32
+      additionalProperties: false
+      description: A non-conformance report opened by a failing calibration save.
+    ToolCalibrationUpdateDto:
+      required:
+      - calibrationDateUtc
+      - calibrationSource
+      - result
+      - toolId
+      - version
+      type: object
+      properties:
+        toolId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The id of the tool the calibration was performed on
+        calibrationSource:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationSource'
+        calibratedByUserId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user who performed an in-house calibration; required for (and only valid with) the user source
+        calibratedByVendorId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The vendor that performed an external calibration; required for (and only valid with) the vendor source
+        result:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        calibrationDateUtc:
+          type: string
+          description: When the calibration was performed (UTC)
+          format: date-time
+        masterGageNames:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Free-text master gauge names supplied with an external attestation; a measured in-house
+
+            calibration derives its masters from the template instead'
+        certificateNumber:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external certificate number supplied with the calibration
+        notes:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Free-text notes
+        asFoundNotes:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Free-text notes about the As-Found state
+        tempDegC:
+          type:
+          - number
+          - 'null'
+          description: Ambient temperature (deg C) captured during calibration
+          format: double
+        relHumidity:
+          type:
+          - number
+          - 'null'
+          description: Ambient relative humidity (%) captured during calibration
+          format: double
+        responses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolCalibrationRequestCalibrationResponseSaveDto'
+          description: 'The per-checkpoint trial measurements; only valid on in-house (user-source) calibrations
+
+            against the tool''s current calibration template'
+        version:
+          maxLength: 256
+          minLength: 1
+          type: string
+          description: 'The record''s opaque concurrency token from a read of this record, round-tripped unchanged.
+
+            The edit is rejected with 409 Conflict when the record changed after that read'
+      additionalProperties: false
+      description: 'Request body for editing an unsigned tool calibration record. A full replacement: the submitted
+
+        measurements replace the record''s response set wholesale, and the result is re-derived against the
+
+        record''s pinned template version. Signed records are immutable and reject every edit.'
+    ToolCalibrationDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the calibration record
+        tool:
+          $ref: '#/components/schemas/ToolCalibrationToolReferenceDto'
+        calibrationSource:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationSource'
+        calibratedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        result:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        asFoundResult:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        calibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the calibration was performed (UTC)
+          format: date-time
+        masterGageNames:
+          type:
+          - string
+          - 'null'
+          description: 'Display labels of the master gauges used: the masters the record''s measurements were taken
+
+            against for in-house records, or the free-text value supplied with an external record'
+        certificateNumber:
+          type:
+          - string
+          - 'null'
+          description: The external certificate number supplied with the calibration
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes
+        asFoundNotes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes about the As-Found state
+        tempDegC:
+          type:
+          - number
+          - 'null'
+          description: Ambient temperature (deg C) captured during calibration
+          format: double
+        relHumidity:
+          type:
+          - number
+          - 'null'
+          description: Ambient relative humidity (%) captured during calibration
+          format: double
+        templateVersion:
+          type:
+          - integer
+          - 'null'
+          description: 'The template version the record was measured against, pinned at create time; null for
+
+            template-less and external records'
+          format: int32
+        signedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        signedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the record was signed (UTC); null until signed
+          format: date-time
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolCalibrationCalibrationResponseDto'
+          description: 'The per-checkpoint trial measurements; present only on in-house (user-source) calibrations
+
+            measured against a template'
+        version:
+          type:
+          - string
+          - 'null'
+          description: 'The record''s opaque concurrency token, refreshed by every write. Round-trip it unchanged on an
+
+            edit; the edit is rejected with 409 Conflict when the record changed after this read'
+      additionalProperties: false
+      description: A tool calibration record with its per-checkpoint trial measurements.
+    DtoPagedResultDtoToolCalibrationSummaryDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolCalibrationSummaryDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    ToolCalibrationToolReferenceDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the tool
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the tool
+        toolType:
+          $ref: '#/components/schemas/ToolType'
+        serialNumber:
+          type:
+          - string
+          - 'null'
+          description: The serial number of the tool
+      additionalProperties: false
+      description: The tool a calibration record belongs to.
+    ToolCalibrationEnumCalibrationSource:
+      enum:
+      - user
+      - vendor
+      - customer
+      type: string
+      description: 'Who performed the calibration. Mirrors
+
+        FulcrumProduct.Domain.ToolCalibrations.CalibrationSource by underlying value.'
+    ToolCalibrationSavedDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the calibration record
+        tool:
+          $ref: '#/components/schemas/ToolCalibrationToolReferenceDto'
+        calibrationSource:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationSource'
+        calibratedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        result:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        asFoundResult:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        calibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the calibration was performed (UTC)
+          format: date-time
+        masterGageNames:
+          type:
+          - string
+          - 'null'
+          description: 'Display labels of the master gauges used: the masters the record''s measurements were taken
+
+            against for in-house records, or the free-text value supplied with an external record'
+        certificateNumber:
+          type:
+          - string
+          - 'null'
+          description: The external certificate number supplied with the calibration
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes
+        asFoundNotes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes about the As-Found state
+        tempDegC:
+          type:
+          - number
+          - 'null'
+          description: Ambient temperature (deg C) captured during calibration
+          format: double
+        relHumidity:
+          type:
+          - number
+          - 'null'
+          description: Ambient relative humidity (%) captured during calibration
+          format: double
+        templateVersion:
+          type:
+          - integer
+          - 'null'
+          description: 'The template version the record was measured against, pinned at create time; null for
+
+            template-less and external records'
+          format: int32
+        signedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        signedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the record was signed (UTC); null until signed
+          format: date-time
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolCalibrationCalibrationResponseDto'
+          description: 'The per-checkpoint trial measurements; present only on in-house (user-source) calibrations
+
+            measured against a template'
+        version:
+          type:
+          - string
+          - 'null'
+          description: 'The record''s opaque concurrency token, refreshed by every write. Round-trip it unchanged on an
+
+            edit; the edit is rejected with 409 Conflict when the record changed after this read'
+        createdNcr:
+          $ref: '#/components/schemas/ToolCalibrationNcrReferenceDto'
+      additionalProperties: false
+      description: 'The result of recording or editing a tool calibration record: the persisted record plus, when the
+
+        save recorded a new failure, the non-conformance report it automatically opened.'
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Alert
+  tags:
+  - Alert
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Department Shift
+  tags:
+  - Department Shift
+- name: Equipment
+  tags:
+  - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Message
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Nesting
+  tags:
+  - Nesting
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Settings
+  tags:
+  - Settings
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Task
+  tags:
+  - Task
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

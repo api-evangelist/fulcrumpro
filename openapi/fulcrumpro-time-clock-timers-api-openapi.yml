@@ -31,6 +31,7 @@ paths:
       responses:
         '200':
           description: OK
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Time-Time-Edit Time Managements
@@ -58,6 +59,7 @@ paths:
       responses:
         '200':
           description: OK
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Time-Time-Edit Time Managements
@@ -81,14 +83,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -119,110 +142,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/DtoPagedResultDtoTimeClockDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Time-Time-View Time Management
 components:
   schemas:
-    TimeClockClockOutDto:
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
-      additionalProperties: false
-      description: Model for clocking a user out
-    DomainTimeTrackingTimer_Type:
-      enum:
-      - setup
-      - run
-      - clockIn
-      - break
-      - labor
-      - machine
-      type: string
-    TimeClockDto:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The timer identifier
-        startedById:
-          type:
-          - string
-          - 'null'
-          description: The user identifier who started the timer
-        startedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: When the timer was started in UTC time.
-          format: date-time
-        stoppedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: When the timer was stopped in UTC time.
-          format: date-time
-        type:
-          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
-        isRunning:
-          type: boolean
-          description: Whether the timer is running or not
-          readOnly: true
-        reasonCodeId:
-          type:
-          - string
-          - 'null'
-          description: The tag identifier for the reason code
-        clockInCodeId:
-          type:
-          - string
-          - 'null'
-          description: The tag identifier for the clock in code
-      additionalProperties: false
-      description: Data transfer object for Timer entity
-    DtoCommonDateRangeFilter:
-      type: object
-      properties:
-        start:
-          type:
-          - string
-          - 'null'
-          description: Inclusive start date to filter by
-          format: date-time
-        end:
-          type:
-          - string
-          - 'null'
-          description: Inclusive end date to filter by
-          format: date-time
-      additionalProperties: false
-      description: Date range used for filters
-    TimeClockRequestListTimeClocksParameters:
-      type: object
-      properties:
-        userId:
-          type:
-          - string
-          - 'null'
-          description: Filter timers based on who started it
-        startedDateRange:
-          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
-        stoppedDateRange:
-          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
-        runningTimersOnly:
-          type:
-          - boolean
-          - 'null'
-          description: Filter to only open timers
-      additionalProperties: false
-      description: Parameters used for searching time clocks
     DtoPagedResultDtoTimeClockDto:
       required:
       - data
@@ -268,6 +192,95 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
+    TimeClockRequestListTimeClocksParameters:
+      type: object
+      properties:
+        userId:
+          type:
+          - string
+          - 'null'
+          description: Filter timers based on who started it
+        startedDateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        stoppedDateRange:
+          $ref: '#/components/schemas/DtoCommonDateRangeFilter'
+        runningTimersOnly:
+          type:
+          - boolean
+          - 'null'
+          description: Filter to only open timers
+      additionalProperties: false
+      description: Parameters used for searching time clocks
+    TimeClockClockOutDto:
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
+      additionalProperties: false
+      description: Model for clocking a user out
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    TimeClockDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The timer identifier
+        startedById:
+          type:
+          - string
+          - 'null'
+          description: The user identifier who started the timer
+        startedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: When the timer was started in UTC time.
+          format: date-time
+        stoppedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: When the timer was stopped in UTC time.
+          format: date-time
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+        isRunning:
+          type: boolean
+          description: Whether the timer is running or not
+          readOnly: true
+        reasonCodeId:
+          type:
+          - string
+          - 'null'
+          description: The tag identifier for the reason code
+        clockInCodeId:
+          type:
+          - string
+          - 'null'
+          description: The tag identifier for the clock in code
+      additionalProperties: false
+      description: Data transfer object for Timer entity
+    DomainTimeTrackingTimer_Type:
+      enum:
+      - setup
+      - run
+      - clockIn
+      - break
+      - labor
+      - machine
+      type: string
     TimeClockClockInDto:
       type: object
       properties:
@@ -280,12 +293,23 @@ components:
           description: The user identifier to associate the clock in to.  If not supplied, will use the user assigned to the api key used for authorization
       additionalProperties: false
       description: Model for clocking in via the public api
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
+    DtoCommonDateRangeFilter:
+      type: object
+      properties:
+        start:
+          type:
+          - string
+          - 'null'
+          description: Inclusive start date to filter by
+          format: date-time
+        end:
+          type:
+          - string
+          - 'null'
+          description: Inclusive end date to filter by
+          format: date-time
+      additionalProperties: false
+      description: Date range used for filters
   securitySchemes:
     bearer:
       type: http
@@ -296,6 +320,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -306,6 +333,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -326,9 +356,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -390,6 +426,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -407,6 +444,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -464,6 +504,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -482,6 +525,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -491,6 +537,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

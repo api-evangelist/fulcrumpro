@@ -40,6 +40,7 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - System-System Data-Manage System Data
@@ -69,6 +70,7 @@ paths:
                 $ref: '#/components/schemas/OperationDto'
         '404':
           description: Operation did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Scheduling-Schedule-View Schedule
   /api/operations/list:
@@ -91,14 +93,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -132,6 +155,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/OperationDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Scheduling-Schedule-View Schedule
   /api/operation/{id}:
@@ -177,37 +201,50 @@ paths:
           description: Validation issues with input
         '404':
           description: Operation did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - System-System Data-Manage System Data
 components:
   schemas:
-    OperationRequestFindParameters:
+    CommonReferenceDto:
       type: object
       properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
         name:
           maxLength: 200
           minLength: 1
           type:
           - string
           - 'null'
-          description: Filter operations based on their name.
-        modifiedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters operations modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Filters operations modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-
-            Useful for polling incrementally instead of re-syncing every operation.'
-          format: date-time
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: Parameters used for searching/finding operations.
+      description: Represents a reference to a document in a DB collection
+    ItemRoutingOperationTimeOption:
+      enum:
+      - fixedSeconds
+      - fixedMinutes
+      - fixedHours
+      - fixedDays
+      - secondsPerUnit
+      - minutesPerUnit
+      - hoursPerUnit
+      - daysPerUnit
+      - unitsPerHour
+      type: string
+      description: The time unit or option used in operation times
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     OperationUpdateDto:
       required:
       - description
@@ -277,128 +314,68 @@ components:
       description: 'Details of an operation to be updated. This is a full replacement of the publicly-exposed fields.
 
         Internal-only fields not exposed here (in-process tracking, tolerances, shop rates) are preserved.'
-    OperationCreateDto:
-      required:
-      - description
-      - name
+    ItemRoutingOperationTime:
       type: object
       properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The name of operation.
-        description:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The description of the operation.
-        isOutsideProcessing:
-          type: boolean
-          description: Specifies whether this is an outside processing operation.
-        setupTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        laborTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        machineTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        machineTimeTrackingEnabled:
-          type: boolean
-          description: Specifies whether machine tracking is enabled.
-        outsideProcessingCost:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
-        defaultVendorId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
-        vendors:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Available vendors.
-        leadDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead days.
-          format: int32
-        instructions:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Instructions.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        time:
+          type: number
+          description: Time or units of this operation
+          format: double
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
       additionalProperties: false
-      description: Details of operation to be created
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    ItemRoutingOperationTimeOption:
-      enum:
-      - fixedSeconds
-      - fixedMinutes
-      - fixedHours
-      - fixedDays
-      - secondsPerUnit
-      - minutesPerUnit
-      - hoursPerUnit
-      - daysPerUnit
-      - unitsPerHour
-      type: string
-      description: The time unit or option used in operation times
-    CommonReferenceDto:
+      description: Operation time and type
+    DtoOperationRates:
       type: object
       properties:
-        id:
-          maxLength: 24
-          minLength: 24
+        hourlyRateForSetupInPrimaryCurrency:
           type:
-          - string
+          - number
           - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
+          description: Hourly cost rate applied to setup time.
+          format: double
+        hourlyRateForLaborInPrimaryCurrency:
           type:
-          - string
+          - number
           - 'null'
-          description: Descriptive name associated to the object
+          description: Hourly cost rate applied to labor time.
+          format: double
+        hourlyRateForOverheadInPrimaryCurrency:
+          type:
+          - number
+          - 'null'
+          description: Hourly overhead cost rate.
+          format: double
+        hourlyRateForMachineInPrimaryCurrency:
+          type:
+          - number
+          - 'null'
+          description: Hourly cost rate applied to machine time.
+          format: double
+        hourlyShopRateForSetupInPrimaryCurrency:
+          type:
+          - number
+          - 'null'
+          description: Hourly shop rate charged for setup time when pricing.
+          format: double
+        hourlyShopRateForRunInPrimaryCurrency:
+          type:
+          - number
+          - 'null'
+          description: Hourly shop rate charged for run time when pricing.
+          format: double
+        hourlyShopRateForMachineInPrimaryCurrency:
+          type:
+          - number
+          - 'null'
+          description: Hourly shop rate charged for machine time when pricing.
+          format: double
       additionalProperties: false
-      description: Represents a reference to a document in a DB collection
-    ItemRoutingOutsideProcessingCostOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-      description: The cost option for the outside processing operation
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
+      description: 'Hourly cost and shop rates for an operation, in the shop''s primary currency. Cost rates
+
+        override work-center rates when costing jobs; shop rates drive quoted pricing for the
+
+        operation. A null rate means no operation-level rate is set and the work-center rates apply.'
     OperationDto:
       required:
       - id
@@ -474,8 +451,42 @@ components:
           - string
           - 'null'
           description: Instructions.
+        rates:
+          $ref: '#/components/schemas/DtoOperationRates'
       additionalProperties: false
       description: Operation definition.
+    OperationRequestFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter operations based on their name.
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters operations modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filters operations modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Useful for polling incrementally instead of re-syncing every operation.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding operations.
+    ItemRoutingOutsideProcessingCostOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+      description: The cost option for the outside processing operation
     ItemRoutingOutsideProcessingOperationCost:
       type: object
       properties:
@@ -495,17 +506,84 @@ components:
           format: double
       additionalProperties: false
       description: Outside processing operation cost
-    ItemRoutingOperationTime:
+    CreatedResponseDto:
+      required:
+      - id
       type: object
       properties:
-        time:
-          type: number
-          description: Time or units of this operation
-          format: double
-        option:
-          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
       additionalProperties: false
-      description: Operation time and type
+      description: Response for a created record
+    OperationCreateDto:
+      required:
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of operation.
+        description:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The description of the operation.
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation.
+        setupTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        laborTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        machineTimeTrackingEnabled:
+          type: boolean
+          description: Specifies whether machine tracking is enabled.
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        defaultVendorId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Default vendor id that will be used for this operation. Please reference /api/vendors endpoint.
+        vendors:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Available vendors.
+        leadDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead days.
+          format: int32
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Instructions.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+      additionalProperties: false
+      description: Details of operation to be created
   securitySchemes:
     bearer:
       type: http
@@ -516,6 +594,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -526,6 +607,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -546,9 +630,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -610,6 +700,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -627,6 +718,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -684,6 +778,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -702,6 +799,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -711,6 +811,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

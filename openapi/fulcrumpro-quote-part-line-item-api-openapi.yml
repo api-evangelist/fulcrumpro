@@ -48,6 +48,7 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-Quotes-Edit Quote
@@ -92,6 +93,7 @@ paths:
                 $ref: '#/components/schemas/BatchCreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-Quotes-Edit Quote
@@ -160,6 +162,7 @@ paths:
                 $ref: '#/components/schemas/QuotePartLineItemDto'
         '404':
           description: Quote or line items did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-Quotes-View Quote
     put:
@@ -209,6 +212,7 @@ paths:
                 $ref: '#/components/schemas/QuotePartLineItemDto'
         '404':
           description: Quote or line items did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-Quotes-Edit Quote
@@ -247,6 +251,7 @@ paths:
                   $ref: '#/components/schemas/QuotePartLineItemDto'
         '404':
           description: The quote did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-Quotes-View Quote
   /api/quotes/{quoteId}/part-line-items/{lineItemId}/cost-breakdown:
@@ -282,11 +287,98 @@ paths:
                 $ref: '#/components/schemas/CommonCostBreakdownDto'
         '404':
           description: Quote or line items did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-Quotes-View Quote
       - Pricing-Margins-View Margins
 components:
   schemas:
+    CommonPartLinePriceBreakInputDto:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: The quantity this tier starts at, at least 1. The lowest tier must be 1; it is the line's base price.
+          format: int32
+        price:
+          type:
+          - number
+          - 'null'
+          description: 'The unit price at this tier, 0 or more. Required when `pricingScheme` is `price`; not allowed when it
+
+            is `margin`.'
+          format: double
+        margin:
+          type:
+          - number
+          - 'null'
+          description: 'The margin percentage at this tier, below 100; the price is derived from it and the cost at the tier''s quantity.
+
+            Required when `pricingScheme` is `margin`; not allowed when it is `price`.'
+          format: double
+        showOnPdf:
+          type: boolean
+          description: 'Whether this tier is printed on the PDF. Defaults to true. A list of one tier is the base price alone, which is
+
+            always printed, so the value is ignored there.'
+      additionalProperties: false
+      description: 'One quantity price-break tier on a part line item. The tier applies from its quantity up to the next tier''s
+
+        quantity.'
+    CommonCostBreakdownOperationDto:
+      required:
+      - operationId
+      type: object
+      properties:
+        operationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Operation id. Please reference /api/operations
+        name:
+          type:
+          - string
+          - 'null'
+          description: Operation name.
+        timeInSeconds:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in seconds.
+          format: double
+          readOnly: true
+        timeInHours:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in hours
+          format: double
+        ratePerSecond:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per second
+          format: double
+          readOnly: true
+        ratePerHour:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per hour
+          format: double
+      additionalProperties: false
+      description: Operation information
+    ItemsAndInventoryRoutingsCostBreakdownType:
+      enum:
+      - estimated
+      - inProgressJob
+      - completedJob
+      - cancelledJob
+      type: string
     BatchCreatedResponseDto:
       required:
       - ids
@@ -299,179 +391,6 @@ components:
           description: The ids of the created records
       additionalProperties: false
       description: Response for a batch created record
-    CommonCostBreakdownDto:
-      required:
-      - calculatedOn
-      - componentLabor
-      - componentMachine
-      - componentMaterial
-      - componentOutsideProcessing
-      - cumulative
-      - cumulativeLabor
-      - cumulativeMachine
-      - cumulativeMaterial
-      - cumulativeOutsideProcessing
-      - id
-      - itemLabor
-      - itemMachine
-      - itemMaterial
-      - itemOutsideProcessing
-      - lines
-      - quantity
-      - shopRateMachine
-      - shopRateRun
-      - shopRateSetup
-      - time
-      - type
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 24
-          type: string
-          description: The id of the parent item.
-        type:
-          $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
-        quantity:
-          minimum: 0
-          type: integer
-          description: Number of units.
-          format: int32
-        quantityScrapped:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Number of units scrapped.
-          format: int32
-        calculatedOn:
-          type: string
-          description: When was this cost breakdown last calculated/aggregated.
-          format: date-time
-        time:
-          $ref: '#/components/schemas/CommonTimeDto'
-        cumulative:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeMaterial:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeLabor:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        cumulativeOutsideProcessing:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemMaterial:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemLabor:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        itemOutsideProcessing:
-          $ref: '#/components/schemas/CommonCostDto'
-        shopRateSetup:
-          $ref: '#/components/schemas/CommonCostDto'
-        shopRateRun:
-          $ref: '#/components/schemas/CommonCostDto'
-        shopRateMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentMaterial:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentLabor:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentMachine:
-          $ref: '#/components/schemas/CommonCostDto'
-        componentOutsideProcessing:
-          $ref: '#/components/schemas/CommonCostDto'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonCostBreakdownLineDto'
-          description: Cost breakdown line details.
-      additionalProperties: false
-      description: Cost breakdown
-    ItemsAndInventoryRoutingsCostBreakdownType:
-      enum:
-      - estimated
-      - inProgressJob
-      - completedJob
-      - cancelledJob
-      type: string
-    CommonCostDto:
-      required:
-      - perUnit
-      - total
-      type: object
-      properties:
-        total:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        perUnit:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-      additionalProperties: false
-      description: Cost information
-    CommonEnumOperationTypeEnum:
-      enum:
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      type: string
-      description: Operation type
-    CommonCostBreakdownLineDto:
-      required:
-      - cost
-      - costType
-      - name
-      type: object
-      properties:
-        costType:
-          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
-        operationType:
-          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
-        name:
-          minLength: 1
-          type: string
-          description: Decription of this line.
-        cost:
-          minimum: 0
-          type: number
-          description: Cost.
-          format: double
-        quantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Quantity (if applicable)
-          format: double
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Id of the item that was picked. Please reference /api/items endpoint.
-        itemName:
-          type:
-          - string
-          - 'null'
-          description: The name of the item that was picked.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
-        operationInformation:
-          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
-      additionalProperties: false
-      description: Cost breakdown line information.
     QuotePartLineItemDto:
       required:
       - accountingDetails
@@ -590,138 +509,40 @@ components:
           $ref: '#/components/schemas/CommonCostBreakdownDto'
       additionalProperties: false
       description: Represents a part line item on a quote.
-    QuotePartLineItemUpdateDto:
-      type: object
-      properties:
-        quantity:
-          minimum: 0
-          type: number
-          description: The line item quantity
-          format: double
-        price:
-          minimum: 0
-          type: number
-          description: The line item price.
-          format: double
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The part line item description.  Defaults to the item's description if none specified.
-        internalNotes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The line item internal notes
-        itemNotes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The line item notes.
-        isTaxable:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if this line item is taxable.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemUpdateDto.TaxRate will supercede the defined tax rate.
-          format: double
-        overrideTaxRate:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate if the tax supplied is intended to be an override.
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-        isPercentageDiscount:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemUpdateDto.DiscountAmount discount is percentage based (else, it's an absolute amount).
-        discountAmount:
-          type:
-          - number
-          - 'null'
-          description: The amount of the discount.
-          format: double
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-      additionalProperties: false
-      description: Represents a part line item on a quote.
-    CommonCostBreakdownOperationDto:
+    CommonCostDto:
       required:
-      - operationId
+      - perUnit
+      - total
       type: object
       properties:
-        operationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Operation id. Please reference /api/operations
-        name:
-          type:
-          - string
-          - 'null'
-          description: Operation name.
-        timeInSeconds:
+        total:
           minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Time in seconds.
+          type: number
+          description: Total
           format: double
-          readOnly: true
-        timeInHours:
+        perUnit:
           minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Time in hours
-          format: double
-        ratePerSecond:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Rate per second
-          format: double
-          readOnly: true
-        ratePerHour:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Rate per hour
+          type: number
+          description: Cost per unit
           format: double
       additionalProperties: false
-      description: Operation information
+      description: Cost information
+    CommonEnumPricingSchemeInputEnum:
+      enum:
+      - price
+      - margin
+      type: string
+      description: 'How a part line item is priced; omit to keep the line''s current scheme.
+
+        `price`: the line keeps the price sent and its margin is derived from cost. On a line with quantity price
+
+        breaks, the price replaces that of the break applying at the line''s quantity (the highest break at or below it,
+
+        else the lowest); the other breaks are kept.
+
+        `margin`: the price is derived from the line''s margin and cost. A non-zero price other than the line''s current
+
+        price (on create, any non-zero price) is rejected with a 400.'
     QuotePartLineItemCreateDto:
       required:
       - itemId
@@ -739,9 +560,53 @@ components:
           format: double
         price:
           minimum: 0
-          type: number
-          description: The line item price.
+          type:
+          - number
+          - 'null'
+          description: 'The line item price.
+
+            With `pricingScheme` set to `price`, the line takes this price, and keeps its current price when it is omitted
+
+            (on create, the price the item gives the line).
+
+            With `pricingScheme` set to `margin`, the price is derived from the line''s margin and cost, and a non-zero price
+
+            that differs from the line''s current price (on create, any non-zero price) is rejected with a 400.
+
+            Without `pricingScheme`, the line is priced under its current scheme: a margin-priced line derives its price
+
+            from its margin, a line with quantity price breaks takes the price of the break that applies at its quantity, and
+
+            any other line takes this price, or 0 when it is omitted.'
           format: double
+        pricingScheme:
+          $ref: '#/components/schemas/CommonEnumPricingSchemeInputEnum'
+        priceBreaks:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonPartLinePriceBreakInputDto'
+          description: 'The line''s quantity price-break tiers, including the base tier at quantity 1; at most 20, with no null entries
+
+            and no quantity twice. Omit it, or send null, to keep the tiers its item gives the line.
+
+            Any list, empty included, requires `pricingScheme`.
+
+
+            A list of tiers replaces the line''s tiers, and the line takes the price of the tier that applies at
+
+            `quantity`: the highest tier at or below it, else the base. With `price`, every tier needs a price of
+
+            0 or more, and a sent `price` must equal the price of the tier that applies at the line''s quantity. With
+
+            `margin`, every tier needs a margin below 100.
+
+            An empty list removes every tier, so the line has a single price. With `price`, `price` is required
+
+            and is that price. With `margin`, the price comes from the margin of the item''s base tier.
+
+            Any rule broken is a 400.'
         description:
           maxLength: 2000
           minLength: 0
@@ -838,35 +703,6 @@ components:
           format: double
       additionalProperties: false
       description: Time information
-    CommonEnumCostBreakdownLineTypeEnum:
-      enum:
-      - material
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      - componentMaterial
-      - componentLabor
-      - componentMachine
-      - componentOutsideProcessing
-      - nestPartMaterialUsage
-      - nestPartMaterialScrap
-      - overhead
-      - unknown
-      type: string
-      description: Cost breakdown types
-    QuotePartLineItemCreateBatchDto:
-      required:
-      - lineItems
-      type: object
-      properties:
-        lineItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuotePartLineItemCreateDto'
-          description: The line items to add to a sales order.
-      additionalProperties: false
-      description: Represents a batch of part line items to add to a quote.
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -907,6 +743,233 @@ components:
           description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
       description: An object that contains all accounting details.
+    CommonCostBreakdownDto:
+      required:
+      - calculatedOn
+      - componentLabor
+      - componentMachine
+      - componentMaterial
+      - componentOutsideProcessing
+      - cumulative
+      - cumulativeLabor
+      - cumulativeMachine
+      - cumulativeMaterial
+      - cumulativeOutsideProcessing
+      - id
+      - itemLabor
+      - itemMachine
+      - itemMaterial
+      - itemOutsideProcessing
+      - lines
+      - quantity
+      - shopRateMachine
+      - shopRateRun
+      - shopRateSetup
+      - time
+      - type
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: The id of the parent item.
+        type:
+          $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
+        quantity:
+          minimum: 0
+          type: integer
+          description: Number of units.
+          format: int32
+        quantityScrapped:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Number of units scrapped.
+          format: int32
+        calculatedOn:
+          type: string
+          description: When was this cost breakdown last calculated/aggregated.
+          format: date-time
+        time:
+          $ref: '#/components/schemas/CommonTimeDto'
+        cumulative:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateSetup:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateRun:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonCostBreakdownLineDto'
+          description: Cost breakdown line details.
+      additionalProperties: false
+      description: Cost breakdown
+    CommonEnumOperationTypeEnum:
+      enum:
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      type: string
+      description: Operation type
+    QuotePartLineItemUpdateDto:
+      type: object
+      properties:
+        quantity:
+          minimum: 0
+          type: number
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: 'The line item price.
+
+            With `pricingScheme` set to `price`, the line takes this price, and keeps its current price when it is omitted
+
+            (on create, the price the item gives the line).
+
+            With `pricingScheme` set to `margin`, the price is derived from the line''s margin and cost, and a non-zero price
+
+            that differs from the line''s current price (on create, any non-zero price) is rejected with a 400.
+
+            Without `pricingScheme`, the line is priced under its current scheme: a margin-priced line derives its price
+
+            from its margin, a line with quantity price breaks takes the price of the break that applies at its quantity, and
+
+            any other line takes this price, or 0 when it is omitted.'
+          format: double
+        pricingScheme:
+          $ref: '#/components/schemas/CommonEnumPricingSchemeInputEnum'
+        priceBreaks:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonPartLinePriceBreakInputDto'
+          description: 'The line''s quantity price-break tiers, including the base tier at quantity 1; at most 20, with no null entries
+
+            and no quantity twice. Omit it, or send null, to keep the line''s tiers.
+
+            Any list, empty included, requires `pricingScheme`.
+
+
+            A list of tiers replaces the line''s tiers, and the line takes the price of the tier that applies at
+
+            `quantity`: the highest tier at or below it, else the base. With `price`, every tier needs a price of
+
+            0 or more, and a sent `price` must equal the price of the tier that applies at the line''s quantity. With
+
+            `margin`, every tier needs a margin below 100.
+
+            An empty list removes every tier, so the line has a single price. With `price`, `price` is required
+
+            and is that price. With `margin`, the price comes from the margin of the line''s base tier.
+
+            Any rule broken is a 400.'
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The part line item description.  Defaults to the item's description if none specified.
+        internalNotes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The line item internal notes
+        itemNotes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The line item notes.
+        isTaxable:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if this line item is taxable.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemUpdateDto.TaxRate will supercede the defined tax rate.
+          format: double
+        overrideTaxRate:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if the tax supplied is intended to be an override.
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        isPercentageDiscount:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether FulcrumProduct.PublicApi.Dto.Quote.PartLineItem.QuotePartLineItemUpdateDto.DiscountAmount discount is percentage based (else, it's an absolute amount).
+        discountAmount:
+          type:
+          - number
+          - 'null'
+          description: The amount of the discount.
+          format: double
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+      additionalProperties: false
+      description: Represents a part line item on a quote.
     CreatedResponseDto:
       required:
       - id
@@ -918,6 +981,69 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    CommonCostBreakdownLineDto:
+      required:
+      - cost
+      - costType
+      - name
+      type: object
+      properties:
+        costType:
+          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
+        operationType:
+          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        name:
+          minLength: 1
+          type: string
+          description: Decription of this line.
+        cost:
+          minimum: 0
+          type: number
+          description: Cost.
+          format: double
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Quantity (if applicable)
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Id of the item that was picked. Please reference /api/items endpoint.
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: The name of the item that was picked.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
+        operationInformation:
+          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+      additionalProperties: false
+      description: Cost breakdown line information.
+    QuotePartLineItemCreateBatchDto:
+      required:
+      - lineItems
+      type: object
+      properties:
+        lineItems:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/QuotePartLineItemCreateDto'
+          description: The line items to add to a sales order.
+      additionalProperties: false
+      description: Represents a batch of part line items to add to a quote.
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -972,6 +1098,23 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    CommonEnumCostBreakdownLineTypeEnum:
+      enum:
+      - material
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      - componentMaterial
+      - componentLabor
+      - componentMachine
+      - componentOutsideProcessing
+      - nestPartMaterialUsage
+      - nestPartMaterialScrap
+      - overhead
+      - unknown
+      type: string
+      description: Cost breakdown types
   securitySchemes:
     bearer:
       type: http
@@ -982,6 +1125,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -992,6 +1138,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -1012,9 +1161,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -1076,6 +1231,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -1093,6 +1249,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -1150,6 +1309,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -1168,6 +1330,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -1177,6 +1342,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

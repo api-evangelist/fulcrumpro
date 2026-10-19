@@ -7,6 +7,43 @@ servers:
 tags:
 - name: CAPAs
 paths:
+  /api/capas:
+    post:
+      tags:
+      - CAPAs
+      summary: Create a new CAPA in the New status
+      operationId: CreateCapa
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/CAPACapaCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CAPACapaCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CAPACapaCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CAPACapaCreateDto'
+        required: true
+      responses:
+        '200':
+          description: CAPA created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Quality-CAPA-Edit CAPA
   /api/capas/{capaId}:
     get:
       tags:
@@ -33,6 +70,7 @@ paths:
                 $ref: '#/components/schemas/CAPACapaDto'
         '404':
           description: A CAPA with that id does not exist.
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Quality-CAPA-View CAPA
   /api/capas/list:
@@ -55,14 +93,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -92,6 +151,7 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/DtoPagedResultDtoCAPACapaDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Quality-CAPA-View CAPA
 components:
@@ -141,6 +201,50 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CAPACapaCreateDto:
+      required:
+      - capaType
+      - problemStatement
+      type: object
+      properties:
+        capaType:
+          $ref: '#/components/schemas/CAPACapaTypeDto'
+        problemStatement:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: What went wrong, or what could go wrong.
+        rootCauseAnalysis:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Root cause analysis text, when it is already known.
+        dueDate:
+          type:
+          - string
+          - 'null'
+          description: When the CAPA is due. Defaults to one month after creation.
+          format: date-time
+      additionalProperties: false
+      description: 'Definition for creating a CAPA. The CAPA is created in the New status; the linked NCR,
+
+        owner and tasks are set in the app after creation.'
+    CAPACapaTypeDto:
+      enum:
+      - correctiveAction
+      - preventiveAction
+      - supplierIssue
+      - safetyIssue
+      type: string
+      description: The kind of corrective and preventive action a CAPA tracks.
     CAPACapaDto:
       required:
       - capaType
@@ -238,16 +342,39 @@ components:
           type:
           - string
           - 'null'
-          description: Filter CAPAs created after a certain date
+          description: 'Filter CAPAs created on or after this instant, time of day included. Combines with
+
+            FulcrumProduct.PublicApi.Controllers.CAPAs.Request.CapaListParameters.CreatedFrom when both are sent.'
+          format: date-time
+        createdFrom:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to CAPAs created on or after this date, as a whole day in the shop''s timezone. Any time
+
+            component is ignored.'
+          format: date-time
+        createdTo:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to CAPAs created on or before this date, as a whole day in the shop''s timezone, so
+
+            a CAPA created later that same shop day still matches.'
           format: date-time
       additionalProperties: false
       description: Parameters used for searching CAPAs
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
   securitySchemes:
     bearer:
       type: http
@@ -258,6 +385,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -268,6 +398,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -288,9 +421,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -352,6 +491,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -369,6 +509,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -426,6 +569,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -444,6 +590,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -453,6 +602,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

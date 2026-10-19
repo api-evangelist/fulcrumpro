@@ -27,14 +27,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -65,6 +86,7 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/DtoPagedResultDtoTimerDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
       - Time-Time-View Time Management
@@ -72,7 +94,7 @@ paths:
     post:
       tags:
       - Job Tracking Timers
-      summary: Starts a job tracking timer
+      summary: Starts a job tracking timer.
       operationId: StartTimer
       requestBody:
         description: ''
@@ -92,6 +114,7 @@ paths:
       responses:
         '200':
           description: OK
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Time-Time-Edit Time Managements
@@ -99,7 +122,7 @@ paths:
     post:
       tags:
       - Job Tracking Timers
-      summary: Stops a job tracking timer
+      summary: Stops a job tracking timer.
       operationId: StopTimer
       requestBody:
         description: ''
@@ -119,11 +142,18 @@ paths:
       responses:
         '200':
           description: OK
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Time-Time-Edit Time Managements
 components:
   schemas:
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     DomainTimeTrackingTimer_Type:
       enum:
       - setup
@@ -133,261 +163,6 @@ components:
       - labor
       - machine
       type: string
-    DtoTimerSegmentAttributionDetails:
-      required:
-      - timeInSeconds
-      - timeInSecondsWeighted
-      type: object
-      properties:
-        timeInSeconds:
-          type: number
-          description: Elapsed time. If the segment is not stopped, this value will be calculated as of now.
-          format: double
-        timeInSecondsWeighted:
-          type: number
-          description: Time in seconds (after using the multiplier/weighted).
-          format: double
-        multiplier:
-          type:
-          - number
-          - 'null'
-          description: With timers, because segments account for overlapping operations, we must account for the percentage to attribute to this segment.
-          format: double
-      additionalProperties: false
-      description: Time attribution for a timer segment.
-    DtoTimerAttributionDetails:
-      required:
-      - timeInSeconds
-      - timeInSecondsWeighted
-      type: object
-      properties:
-        timeInSeconds:
-          type: number
-          description: Elapsed time.
-          format: double
-        timeInSecondsWeighted:
-          type: number
-          description: Time in seconds (after using the multiplier/weighted).
-          format: double
-        rateHourlyInPrimaryCurrency:
-          type:
-          - number
-          - 'null'
-          description: Rate in primary currency.
-          format: double
-        cost:
-          type:
-          - number
-          - 'null'
-          description: Cost. This value will always reflect the current calculated cost. What this means is that overriding start/stop times would affect this value.
-          format: double
-      additionalProperties: false
-      description: Cost and time attribution for a timer.
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
-    JobTrackingTimerStartTimerDto:
-      required:
-      - itemToMakeId
-      - jobId
-      - operationId
-      - type
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
-        jobId:
-          minLength: 1
-          type: string
-          description: The job identifier
-        itemToMakeId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The item to make identifier
-        operationId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The operation identifier
-        type:
-          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
-      additionalProperties: false
-      description: Model for starting a job tracking timer via the public api
-    JobTrackingTimerStopTimerDto:
-      required:
-      - timerId
-      type: object
-      properties:
-        userId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
-        timerId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The timer identifier
-      additionalProperties: false
-      description: Model for stopping a timer
-    TimerDto:
-      required:
-      - createdUtc
-      - id
-      - segments
-      - startedOnUtc
-      - startedOnUtcOriginal
-      - type
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The timer identifier
-        jobId:
-          type:
-          - string
-          - 'null'
-          description: The job identifier
-        jobName:
-          type:
-          - string
-          - 'null'
-          description: The job name.
-        itemToMakeId:
-          type:
-          - string
-          - 'null'
-          description: The item to make identifier
-        itemToMakeItemId:
-          type:
-          - string
-          - 'null'
-          description: The item to make's original item id.
-        itemToMakeName:
-          type:
-          - string
-          - 'null'
-          description: The item to make name.
-        itemToMakeDescription:
-          type:
-          - string
-          - 'null'
-          description: The item to make description.
-        jobOperationId:
-          type:
-          - string
-          - 'null'
-          description: The job operation identifier
-        jobOperationName:
-          type:
-          - string
-          - 'null'
-          description: The job operation name.
-        jobOperationDescription:
-          type:
-          - string
-          - 'null'
-          description: The job operation description.
-        startedById:
-          type:
-          - string
-          - 'null'
-          description: The user identifier who started the timer
-        startedOnUtc:
-          type: string
-          description: When the timer was started in UTC time.
-          format: date-time
-        startedOnUtcOriginal:
-          type: string
-          description: When the timer was ORIGINALLY started in UTC time.
-          format: date-time
-        stoppedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: When the timer was stopped in UTC time.
-          format: date-time
-        stoppedOnUtcOriginal:
-          type:
-          - string
-          - 'null'
-          description: When the timer was ORIGINALLY stopped in UTC time.
-          format: date-time
-        type:
-          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
-        isRunning:
-          type: boolean
-          description: Whether the timer is running or not
-          readOnly: true
-        createdUtc:
-          type: string
-          description: When the timer was created in UTC time.
-          format: date-time
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: When the timer was modified in UTC time.
-          format: date-time
-        elapsedTimeInSeconds:
-          type:
-          - number
-          - 'null'
-          description: Elapsed time this timer was running.  Can be greater than the labor time if the operator has multiple concurrent timers.
-          format: double
-        operationTimeInSeconds:
-          type:
-          - number
-          - 'null'
-          description: 'Total Operation run time
-
-            If this timer was overridden, the operation time will be adjusted by the multiple of the adjustment'
-          format: double
-        laborTimeInSeconds:
-          type:
-          - number
-          - 'null'
-          description: 'Labor time for use in costing calculations
-
-            Can be less than elapsed time if an operator''s time was split between jobs'
-          format: double
-        machineTimeInSeconds:
-          type:
-          - number
-          - 'null'
-          description: 'Machine time for use in costing and time displays which is just the elapsed time of the segments
-
-            If the start/stop time has been overridden directly, use that value'
-          format: double
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimerSegmentDto'
-          description: The segments of time that this overall timer represents.
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: External references associated with this entity.
-        details:
-          $ref: '#/components/schemas/DtoTimerAttributionDetails'
-      additionalProperties: false
-      description: Data transfer object for Timer entity
     TimerSegmentDto:
       required:
       - id
@@ -416,102 +191,6 @@ components:
           $ref: '#/components/schemas/DtoTimerSegmentAttributionDetails'
       additionalProperties: false
       description: Data transfer object for TimerSegments entity
-    JobTrackingTimerRequestListTimersParameters:
-      type: object
-      properties:
-        userId:
-          type:
-          - string
-          - 'null'
-          description: Filter timers based on who started it
-        jobId:
-          type:
-          - string
-          - 'null'
-          description: Filter timers based on job
-        runningTimersOnly:
-          type:
-          - boolean
-          - 'null'
-          description: Filter to only running timers
-        types:
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
-          description: Filter to specific timer types
-        createdBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        createdAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        startedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers started before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        startedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers started after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        stoppedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers stopped before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        stoppedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters timers stopped after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        stoppedBeforeUtcOriginal:
-          type:
-          - string
-          - 'null'
-          description: 'Filters timers stopped before (exclusive) this parameter in UTC time.
-
-            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
-
-            If no time component is passed, midnight UTC will be used.'
-          format: date-time
-        stoppedAfterUtcOriginal:
-          type:
-          - string
-          - 'null'
-          description: 'Filters timers stopped after (exclusive) this parameter in UTC time.
-
-            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
-
-            If no time component is passed, midnight UTC will be used.'
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching job tracking timers
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -611,6 +290,387 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
+    TimerDto:
+      required:
+      - createdUtc
+      - id
+      - segments
+      - startedOnUtc
+      - startedOnUtcOriginal
+      - type
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The timer identifier
+        jobId:
+          type:
+          - string
+          - 'null'
+          description: The job identifier
+        jobName:
+          type:
+          - string
+          - 'null'
+          description: The job name.
+        itemToMakeId:
+          type:
+          - string
+          - 'null'
+          description: The item to make identifier
+        itemToMakeItemId:
+          type:
+          - string
+          - 'null'
+          description: The item to make's original item id.
+        itemToMakeName:
+          type:
+          - string
+          - 'null'
+          description: The item to make name.
+        itemToMakeDescription:
+          type:
+          - string
+          - 'null'
+          description: The item to make description.
+        jobOperationId:
+          type:
+          - string
+          - 'null'
+          description: The job operation identifier
+        jobOperationName:
+          type:
+          - string
+          - 'null'
+          description: The job operation name.
+        jobOperationDescription:
+          type:
+          - string
+          - 'null'
+          description: The job operation description.
+        jobOperationSystemOperationId:
+          type:
+          - string
+          - 'null'
+          description: 'The identifier of the system operation the job operation was created from. Populated only by the list endpoints:
+
+            null when the timer has no job operation or the job operation has no system operation, and always null in the
+
+            create, update and patch responses.'
+        workOrderId:
+          type:
+          - string
+          - 'null'
+          description: The work order identifier. Set when the timer is tracked against a work order rather than a job.
+        workOrderName:
+          type:
+          - string
+          - 'null'
+          description: The work order name (its number when unnamed).
+        workOrderOperationId:
+          type:
+          - string
+          - 'null'
+          description: The work order operation identifier.
+        workOrderOperationName:
+          type:
+          - string
+          - 'null'
+          description: The work order operation name.
+        startedById:
+          type:
+          - string
+          - 'null'
+          description: The user identifier who started the timer
+        startedOnUtc:
+          type: string
+          description: When the timer was started in UTC time.
+          format: date-time
+        startedOnUtcOriginal:
+          type: string
+          description: When the timer was ORIGINALLY started in UTC time.
+          format: date-time
+        stoppedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: When the timer was stopped in UTC time.
+          format: date-time
+        stoppedOnUtcOriginal:
+          type:
+          - string
+          - 'null'
+          description: When the timer was ORIGINALLY stopped in UTC time.
+          format: date-time
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+        isRunning:
+          type: boolean
+          description: Whether the timer is running or not
+          readOnly: true
+        createdUtc:
+          type: string
+          description: When the timer was created in UTC time.
+          format: date-time
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the timer was modified in UTC time.
+          format: date-time
+        elapsedTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: Elapsed time this timer was running.  Can be greater than the labor time if the operator has multiple concurrent timers.
+          format: double
+        operationTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: 'Total Operation run time
+
+            If this timer was overridden, the operation time will be adjusted by the multiple of the adjustment'
+          format: double
+        laborTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: 'Labor time for use in costing calculations
+
+            Can be less than elapsed time if an operator''s time was split between jobs'
+          format: double
+        machineTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: 'Machine time for use in costing and time displays which is just the elapsed time of the segments
+
+            If the start/stop time has been overridden directly, use that value'
+          format: double
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimerSegmentDto'
+          description: The segments of time that this overall timer represents.
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: External references associated with this entity.
+        details:
+          $ref: '#/components/schemas/DtoTimerAttributionDetails'
+      additionalProperties: false
+      description: Data transfer object for Timer entity
+    JobTrackingTimerStopTimerDto:
+      required:
+      - timerId
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
+        timerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The timer identifier. A work order timer, or a job operation timer held by one, stops the whole work order timer
+      additionalProperties: false
+      description: Model for stopping a timer
+    JobTrackingTimerRequestListTimersParameters:
+      type: object
+      properties:
+        userId:
+          type:
+          - string
+          - 'null'
+          description: Filter timers based on who started it
+        jobId:
+          type:
+          - string
+          - 'null'
+          description: Filter timers based on job
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Filter to timers tracked against a job item-to-make that makes this item. Work-order timers never match.
+        runningTimersOnly:
+          type:
+          - boolean
+          - 'null'
+          description: Filter to only running timers
+        types:
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+          description: Filter to specific timer types
+        createdBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        createdAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        startedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers started before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        startedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers started after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        stoppedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers stopped before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        stoppedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters timers stopped after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        stoppedBeforeUtcOriginal:
+          type:
+          - string
+          - 'null'
+          description: 'Filters timers stopped before (exclusive) this parameter in UTC time.
+
+            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
+
+            If no time component is passed, midnight UTC will be used.'
+          format: date-time
+        stoppedAfterUtcOriginal:
+          type:
+          - string
+          - 'null'
+          description: 'Filters timers stopped after (exclusive) this parameter in UTC time.
+
+            This explicitly looks at the ORIGINAL stopped date which means this would be primarily for filtering mechanics that necessitate scope limiting.
+
+            If no time component is passed, midnight UTC will be used.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching job tracking timers
+    DtoTimerAttributionDetails:
+      required:
+      - timeInSeconds
+      - timeInSecondsWeighted
+      type: object
+      properties:
+        timeInSeconds:
+          type: number
+          description: Elapsed time.
+          format: double
+        timeInSecondsWeighted:
+          type: number
+          description: Time in seconds (after using the multiplier/weighted).
+          format: double
+        rateHourlyInPrimaryCurrency:
+          type:
+          - number
+          - 'null'
+          description: Rate in primary currency.
+          format: double
+        cost:
+          type:
+          - number
+          - 'null'
+          description: Cost. This value will always reflect the current calculated cost. What this means is that overriding start/stop times would affect this value.
+          format: double
+      additionalProperties: false
+      description: Cost and time attribution for a timer.
+    JobTrackingTimerStartTimerDto:
+      required:
+      - itemToMakeId
+      - jobId
+      - operationId
+      - type
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user identifier to associate the timer to.  If not supplied, will use the user assigned to the api key used for authorization
+        jobId:
+          minLength: 1
+          type: string
+          description: The job identifier
+        itemToMakeId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The item to make identifier
+        operationId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The operation identifier. When the operation is grouped under a work order, the work order operation's timer is started instead and covers every job operation grouped under it
+        type:
+          $ref: '#/components/schemas/DomainTimeTrackingTimer_Type'
+      additionalProperties: false
+      description: Model for starting a job tracking timer via the public api
+    DtoTimerSegmentAttributionDetails:
+      required:
+      - timeInSeconds
+      - timeInSecondsWeighted
+      type: object
+      properties:
+        timeInSeconds:
+          type: number
+          description: Elapsed time. If the segment is not stopped, this value will be calculated as of now.
+          format: double
+        timeInSecondsWeighted:
+          type: number
+          description: Time in seconds (after using the multiplier/weighted).
+          format: double
+        multiplier:
+          type:
+          - number
+          - 'null'
+          description: With timers, because segments account for overlapping operations, we must account for the percentage to attribute to this segment.
+          format: double
+      additionalProperties: false
+      description: Time attribution for a timer segment.
   securitySchemes:
     bearer:
       type: http
@@ -621,6 +681,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -631,6 +694,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -651,9 +717,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -715,6 +787,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -732,6 +805,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -789,6 +865,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -807,6 +886,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -816,6 +898,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

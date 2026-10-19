@@ -42,6 +42,7 @@ paths:
                 $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemDto'
         '404':
           description: Receipt or line item did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Receiving-Receiving-View Receiving
     patch:
@@ -79,8 +80,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: Receipt did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Receiving-Receiving-Edit Receiving
@@ -158,6 +162,7 @@ paths:
                 $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemDto'
         '404':
           description: Receipt did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Receiving-Receiving-Edit Receiving
@@ -191,10 +196,34 @@ paths:
                   $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemDto'
         '404':
           description: Receipt did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Receiving-Receiving-View Receiving
 components:
   schemas:
+    ReceivingLineItemReceiptLineItemUpdateDto:
+      type: object
+      properties:
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt line item object.
+      additionalProperties: false
+      description: Represents a receiving line item on a purchase order or sales order receiving record
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value: {}
+        path:
+          type: string
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
     ReceivingLineItemReceiptLineItemDto:
       required:
       - fullyReceived
@@ -243,34 +272,96 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        unitPrice:
+          type:
+          - number
+          - 'null'
+          description: 'Price of the purchase order line received against, per Fulcrum''s unit of measure, so it
+
+            multiplies directly with `convertedQuantityReceived`. Null means there is no price,
+
+            not a price of zero. Supplied only by the receipts list endpoint.'
+          format: double
+        lineItemType:
+          $ref: '#/components/schemas/PurchaseOrderLineItemTypeEnum'
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Id of the item on the purchase order line received against: the part for a part line, the item
+
+            being processed for an outside processing line. Null on a fee line, on an outside processing line
+
+            with no item, on a sales order receipt and on a line that no longer resolves. Supplied only by the receipts list endpoint.'
+        unitCost:
+          type:
+          - number
+          - 'null'
+          description: 'Cost per unit in Fulcrum''s unit of measure, in the primary currency, excluding tax and landed cost: the
+
+            billed unit price when a billed subtotal is entered, otherwise the line''s price after its own discount, at
+
+            the PO''s exchange rate.
+
+            Together with `unitTax` and `landedCost`, the tax and landed cost Fulcrum applies when it
+
+            revalues a receipt, the line is valued at
+
+            `convertedQuantityReceived × (unitCost + unitTax) + landedCost`, or
+
+            `convertedQuantityReceived × unitCost + landedCost` excluding tax.
+
+            On an outside processing line this is the value job cost uses. On a part line the inventory transaction
+
+            can differ: a receipt entered after the bill is valued at the purchase order price, a bill changed after
+
+            the inventory adjustment cutoff does not revalue older receipts, on a discounted line with no billed
+
+            subtotal inventory holds the price before the discount, and on a line that is not taxable but has an
+
+            overridden tax rate receiving adds that tax until the receipt is revalued. Rolled-back lines are populated
+
+            as well; skip them. Null on a fee line, on a sales order receipt and on a line that no longer resolves.
+
+            Supplied only by the receipts list endpoint.'
+          format: double
+        unitTax:
+          type:
+          - number
+          - 'null'
+          description: 'Tax per unit in Fulcrum''s unit of measure, in the primary currency, that Fulcrum applies to this line
+
+            when it revalues a receipt; zero when the line is not taxed. See `unitCost` for how the three
+
+            values combine. Null where `unitCost` is null. Supplied only by the receipts list endpoint.'
+          format: double
+        landedCost:
+          type:
+          - number
+          - 'null'
+          description: 'Total landed cost allocated to this receipt line (not per unit), in the primary currency; zero when none
+
+            is allocated. Null where `unitCost` is null. Supplied only by the receipts list endpoint.'
+          format: double
       additionalProperties: false
       description: Represents a line item on a receipt for a purchase or sales order
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
+    PurchaseOrderLineItemTypeEnum:
+      enum:
+      - part
+      - outsideProcessing
+      - tax
+      - discount
+      - fee
+      - vendorCredit
+      type: string
+      description: Purchase order line item type
     JsonPatchDocument:
       type: array
       items:
         $ref: '#/components/schemas/JsonPatchOperation'
       description: Array of operations to perform
-    ReceivingLineItemReceiptLineItemUpdateDto:
-      type: object
-      properties:
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt line item object.
-      additionalProperties: false
-      description: Represents a receiving line item on a purchase order or sales order receiving record
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -335,6 +426,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -345,6 +439,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -365,9 +462,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -429,6 +532,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -446,6 +550,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -503,6 +610,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -521,6 +631,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -530,6 +643,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

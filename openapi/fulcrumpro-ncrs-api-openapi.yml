@@ -7,6 +7,45 @@ servers:
 tags:
 - name: NCRs
 paths:
+  /api/ncrs:
+    post:
+      tags:
+      - NCRs
+      summary: Open a new NCR in status New.
+      operationId: CreateNcr
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/NCRRequestNcrCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NCRRequestNcrCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/NCRRequestNcrCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/NCRRequestNcrCreateDto'
+        required: true
+      responses:
+        '200':
+          description: The created NCR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NCRNcrDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NCRNcrDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: The job or item does not exist
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Quality-NCR-Create NCR
   /api/ncrs/{ncrId}:
     get:
       tags:
@@ -33,6 +72,7 @@ paths:
                 $ref: '#/components/schemas/NCRNcrDto'
         '404':
           description: An NCR with that id does not exist.
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Quality-NCR-View NCR
   /api/ncrs/list:
@@ -55,14 +95,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -92,10 +153,114 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/DtoPagedResultDtoNCRNcrDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Quality-NCR-View NCR
 components:
   schemas:
+    CommonImpactDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID for this object.
+          format: uuid
+        operation:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        workCenter:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        scheduledEquipment:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        job:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        salesOrder:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        quantityImpacted:
+          type:
+          - number
+          - 'null'
+          description: Quantity Impacted
+          format: double
+        incrementalCost:
+          type:
+          - number
+          - 'null'
+          description: Incremental Cost
+          format: double
+      additionalProperties: false
+      description: Impact Dto.
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    DtoPagedResultDtoNCRNcrDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NCRNcrDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
     NCRRequestNcrListParameters:
       type: object
       properties:
@@ -127,10 +292,106 @@ components:
           type:
           - string
           - 'null'
-          description: Filter NCRs created after a certain date
+          description: 'Filter NCRs created on or after this instant, time of day included. Combines with
+
+            FulcrumProduct.PublicApi.Controllers.NCRs.Request.NcrListParameters.CreatedFrom when both are sent.'
+          format: date-time
+        createdFrom:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to NCRs created on or after this date, as a whole day in the shop''s timezone. Any time
+
+            component is ignored.'
+          format: date-time
+        createdTo:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to NCRs created on or before this date, as a whole day in the shop''s timezone, so
+
+            an NCR created later that same shop day still matches.'
           format: date-time
       additionalProperties: false
       description: Parameters used for searching NCRs
+    NCRRequestNcrCreateDto:
+      required:
+      - detail
+      - type
+      type: object
+      properties:
+        title:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Short title for the NCR
+        type:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The NCR type, one of the shop's configured NCR types (for example Quality, Quantity, Customer Complaint, Return, Warranty)
+        detail:
+          maxLength: 2000
+          minLength: 1
+          type: string
+          description: 'What was found: the required description of the non-conformance'
+        cause:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The cause, one of the shop's configured NCR causes
+        reason:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The reason, one of the shop's configured NCR reasons
+        disposition:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Disposition, when already decided. One of: Acceptable - Customer, Acceptable - Engineer, Conforming,
+
+            Hold, Return To Customer, Return To Vendor, Return To Fulcrum, Rework, Remake/Replace, Scrap - Customer'
+        jobId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The affected job's id. The job's customer and sales order are recorded on the impact from the job
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The affected item's id. Defaults to the job's parent item when only a job is given
+        quantityImpacted:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: How many units are affected. Requires jobId or itemId. Zero or greater
+          format: double
+        quantityImpactedDisposition:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Whether the impacted quantity is All, Partial, or Unknown. Defaults to Partial
+      additionalProperties: false
+      description: 'Request body for opening an NCR. The NCR is created in status New; the quality team classifies
+
+        and works it in the app. An affected job and/or item become the NCR''s single impact.'
     NCRNcrDto:
       required:
       - cause
@@ -256,109 +517,6 @@ components:
           description: Impact information.
       additionalProperties: false
       description: Represents an NCR
-    CommonImpactDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID for this object.
-          format: uuid
-        operation:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        workCenter:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        scheduledEquipment:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        job:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        salesOrder:
-          $ref: '#/components/schemas/CommonReferenceDto'
-        quantityImpacted:
-          type:
-          - number
-          - 'null'
-          description: Quantity Impacted
-          format: double
-        incrementalCost:
-          type:
-          - number
-          - 'null'
-          description: Incremental Cost
-          format: double
-      additionalProperties: false
-      description: Impact Dto.
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
-    DtoPagedResultDtoNCRNcrDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/NCRNcrDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http
@@ -369,6 +527,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -379,6 +540,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -399,9 +563,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -463,6 +633,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -480,6 +651,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -537,6 +711,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -555,6 +732,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -564,6 +744,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

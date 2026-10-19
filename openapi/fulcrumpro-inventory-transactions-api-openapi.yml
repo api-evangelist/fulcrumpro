@@ -27,14 +27,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -64,6 +85,7 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/DtoPagedResultDtoInventoryTransactionDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Inventory
 components:
@@ -103,33 +125,25 @@ components:
       - stockTake
       type: string
       description: Secondary, verbose description for an event.
-    DtoCommonDateRangeFilter:
+    CommonReferenceDto:
       type: object
       properties:
-        start:
+        id:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: Inclusive start date to filter by
-          format: date-time
-        end:
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
           type:
           - string
           - 'null'
-          description: Inclusive end date to filter by
-          format: date-time
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: Date range used for filters
-    InventoryEventType:
-      enum:
-      - pick
-      - receive
-      - revert
-      - adjustment
-      - setItemValue
-      - eventOverride
-      type: string
-      description: Primary inventory event type.
+      description: Represents a reference to a document in a DB collection
     InventoryTransactionsListParameters:
       type: object
       properties:
@@ -153,7 +167,90 @@ components:
           description: The transaction's related entity identifier
       additionalProperties: false
       description: Parameters used for searching inventory transactions
-    V2InventoryDataEventSourceType:
+    InventoryTransactionSourceDto:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/InventoryEnumEventSourceType'
+        name:
+          type:
+          - string
+          - 'null'
+          description: Display name of the source, such as the job or order number
+        jobId:
+          type:
+          - string
+          - 'null'
+          description: Id of the job the transaction belongs to, including a job's picks recorded against a work order operation. Null when the transaction is not tied to a single job, such as material picked for a work order nest.
+        itemToMakeId:
+          type:
+          - string
+          - 'null'
+          description: Id of the job's item to make, set when a job put a made item into inventory
+      additionalProperties: false
+      description: The action that created an inventory transaction
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    InventoryEventType:
+      enum:
+      - pick
+      - receive
+      - revert
+      - adjustment
+      - setItemValue
+      - eventOverride
+      type: string
+      description: Primary inventory event type.
+    DtoPagedResultDtoInventoryTransactionDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryTransactionDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    InventoryEnumEventSourceType:
       enum:
       - purchaseOrder
       - job
@@ -170,6 +267,24 @@ components:
       - itemToMakeMaterialRemnant
       - poRcvValueAdj
       type: string
+      description: Indicator for the initial source of the event.
+    DtoCommonDateRangeFilter:
+      type: object
+      properties:
+        start:
+          type:
+          - string
+          - 'null'
+          description: Inclusive start date to filter by
+          format: date-time
+        end:
+          type:
+          - string
+          - 'null'
+          description: Inclusive end date to filter by
+          format: date-time
+      additionalProperties: false
+      description: Date range used for filters
     InventoryTransactionDto:
       type: object
       properties:
@@ -222,78 +337,27 @@ components:
           description: The total value of the transaction
           format: double
           readOnly: true
+        source:
+          $ref: '#/components/schemas/InventoryTransactionSourceDto'
       additionalProperties: false
       description: An inventory transaction
-    DtoPagedResultDtoInventoryTransactionDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/InventoryTransactionDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
-    CommonEnumSortDirectionEnum:
+    V2InventoryDataEventSourceType:
       enum:
-      - ascending
-      - descending
+      - purchaseOrder
+      - job
+      - shipment
+      - shipmentLineItem
+      - shipping
+      - receiving
+      - item
+      - workOrder
+      - salesOrder
+      - jobOperation
+      - workOrderOperation
+      - fulfillment
+      - itemToMakeMaterialRemnant
+      - poRcvValueAdj
       type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http
@@ -304,6 +368,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -314,6 +381,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -334,9 +404,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -398,6 +474,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -415,6 +492,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -472,6 +552,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -490,6 +573,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -499,6 +585,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

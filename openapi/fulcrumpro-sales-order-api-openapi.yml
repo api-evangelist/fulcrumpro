@@ -40,6 +40,7 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -87,6 +88,7 @@ paths:
                 $ref: '#/components/schemas/SalesOrderDto'
         '404':
           description: Sales order did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
     patch:
@@ -117,8 +119,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/SalesOrderDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: SalesOrder did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -162,6 +167,40 @@ paths:
                 $ref: '#/components/schemas/SalesOrderDto'
         '404':
           description: Sales order did not exist
+  /api/sales-orders/{salesOrderId}/pdf:
+    get:
+      tags:
+      - Sales Order
+      summary: Download the PDF for a sales order
+      description: 'The document is rendered when you call this, from the
+
+        order''s current state and the tenant''s PDFs & Emails settings, so it is the same document
+
+        the product''s Download button produces rather than a stored copy of one sent earlier.'
+      operationId: GetSalesOrderPdf
+      parameters:
+      - name: salesOrderId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The sales order PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: No sales order with that id, or the order is deleted
+        '500':
+          description: The renderer did not produce a usable document
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Orders-SalesOrders-View Sales Order
   /api/sales-orders/list:
     post:
       tags:
@@ -182,14 +221,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -223,6 +283,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SalesOrderDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
   /api/sales-orders/{salesOrderId}/status:
@@ -259,56 +320,37 @@ paths:
           description: Success
         '404':
           description: Sales order did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
 components:
   schemas:
-    SalesOrderUpdateDto:
+    CommonReferenceDto:
       type: object
       properties:
-        externalReferences:
+        id:
+          maxLength: 24
+          minLength: 24
           type:
-          - object
+          - string
           - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-        customerPoNumber:
+          description: Unique Id associated to the referenced object
+        name:
           maxLength: 200
           minLength: 1
           type:
           - string
           - 'null'
-          description: CustomerPoNumber
-        priority:
-          $ref: '#/components/schemas/SalesOrderPriority'
-        deliveryDueDate:
-          type:
-          - string
-          - 'null'
-          description: 'The date the SO needs to be delivered to the customer.  Note: this does not affect individual line update delivery dates.
-
-            Only the calendar date is used, exactly as written; any time or UTC offset is ignored.'
-          format: date-time
-        publicNote:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Note to customer. This will appear on PDFs.
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: Represents an update on an SalesOrder.
-    SalesOrderRequestUpdateStatus:
-      required:
-      - status
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/SalesOrderStatus'
-      additionalProperties: false
-      description: Update a sales order status.
+      description: Represents a reference to a document in a DB collection
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     SalesOrderCreateDto:
       required:
       - customerId
@@ -413,80 +455,20 @@ components:
           description: Shipping method identifier. Please reference /api/shipping-methods endpoint.
         deposit:
           $ref: '#/components/schemas/CommonDepositCreateDto'
+        dropship:
+          type: boolean
+          description: 'Marks the order as dropshipped: fulfilled by shipping directly to the end customer.
+
+            Defaults to false if omitted.'
+        dropshipCustomerPoNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The end customer's purchase order number for a dropshipped order.
       additionalProperties: false
       description: Details of sales order to be created
-    CustomerContactCreateDto:
-      required:
-      - firstName
-      type: object
-      properties:
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Last name
-        position:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Position / Job Title
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number
-        cellPhone:
-          type:
-          - string
-          - 'null'
-          description: Cellphone number
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-      additionalProperties: false
-      description: A customer contact
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     SalesOrderDto:
       required:
       - createdUtc
@@ -553,6 +535,16 @@ components:
           - 'null'
           description: The datetime in UTC that the SO status was updated to Send to Production
           format: date-time
+        dropship:
+          type: boolean
+          description: 'Indicates the order is dropshipped: fulfilled by shipping directly to the end customer.'
+        dropshipCustomerPoNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The end customer's purchase order number for a dropshipped order.
         billingAddress:
           $ref: '#/components/schemas/CommonAddressDto'
         paymentTermsId:
@@ -572,7 +564,9 @@ components:
           format: double
         subtotal:
           type: number
-          description: Subtotal for the SO
+          description: 'The sum of the line items this sales order bills, before tax, the discount and any refund are
+
+            applied. Child lines of a blanket-order line are excluded; the parent line carries the amount.'
           format: double
         salesPersonId:
           maxLength: 24
@@ -604,6 +598,8 @@ components:
           type: string
           description: Date this record was created (UTC).
           format: date-time
+        createdBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
         modifiedUtc:
           type:
           - string
@@ -646,6 +642,369 @@ components:
           $ref: '#/components/schemas/CustomerContactDto'
       additionalProperties: false
       description: Represents a sales order
+    SalesOrderStatus:
+      enum:
+      - draft
+      - needsApproval
+      - approved
+      - inProgress
+      - complete
+      type: string
+      description: Sales order status
+    CustomerContactCreateDto:
+      required:
+      - firstName
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Position / Job Title
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        cellPhone:
+          type:
+          - string
+          - 'null'
+          description: Cellphone number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: A customer contact
+    CustomerContactDto:
+      required:
+      - firstName
+      - id
+      - lastName
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Position / Job Title
+        cellPhone:
+          type:
+          - string
+          - 'null'
+          description: Cellphone number
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: A customer contact
+    SalesOrderPriority:
+      enum:
+      - low
+      - moderate
+      - high
+      type: string
+      description: Priority of the sales order
+    CommonAddressDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Second address line.
+        address3:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Third address line.
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Address state/province.
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Country identifier.
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          format: tel
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: Address definition
+    CommonDepositDto:
+      required:
+      - depositType
+      type: object
+      properties:
+        depositType:
+          $ref: '#/components/schemas/CommonEnumSalesOrderDepositRequirementEnum'
+        amount:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: This represents the literal amount of the deposit if FulcrumProduct.PublicApi.Dto.Common.DepositDto.DepositType == FulcrumProduct.PublicApi.Dto.Common.Enum.SalesOrderDepositRequirementEnum.Fixed or the percentage (0 - 100) when see cref="DepositType"/> == FulcrumProduct.PublicApi.Dto.Common.Enum.SalesOrderDepositRequirementEnum.Percentage
+          format: double
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        amountInvoiced:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The amount that has already been invoiced.
+          format: double
+      additionalProperties: false
+      description: Deposit information
+    SalesOrderRequestFindParameters:
+      type: object
+      properties:
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Filter sales orders to only given numbers
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+        status:
+          $ref: '#/components/schemas/SalesOrderStatus'
+        externalQuoteUrls:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter sales orders to those matching an external quote URL.
+        createdFromQuoteId:
+          type:
+          - string
+          - 'null'
+          description: Filter sales orders created from the specific quote
+        customerPoNumber:
+          type:
+          - string
+          - 'null'
+          description: 'Filter sales orders to those whose customer purchase-order number matches this one. Matched
+
+            case-insensitively against the value as given (trimmed) and against its normalized form, which drops a
+
+            leading label such as "PO#" or "P.O. Number:" and collapses whitespace — so "PO# 4500123456" finds an
+
+            order stored as either "PO# 4500123456" or "4500123456". An order whose stored number is longer than 100
+
+            characters is never found, and a value with no form of 100 characters or fewer matches no orders, as does
+
+            a value longer than 1000 characters once trimmed. Whitespace-only is treated as absent, as it is for every
+
+            string filter.'
+        customerId:
+          type:
+          - string
+          - 'null'
+          description: Filter sales orders to those placed by exactly this customer.
+        createdBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        createdAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding sales orders.
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    CommonExternalReferenceFindDto:
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Arbitrary sub-key that can be used to qualify the value
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external identifier
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
     CommonEnumSalesOrderDepositRequirementEnum:
       enum:
       - fixed
@@ -653,6 +1012,85 @@ components:
       - none
       type: string
       description: Deposit type.
+    SalesOrderUpdateDto:
+      type: object
+      properties:
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        customerPoNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: CustomerPoNumber
+        priority:
+          $ref: '#/components/schemas/SalesOrderPriority'
+        deliveryDueDate:
+          type:
+          - string
+          - 'null'
+          description: 'The date the SO needs to be delivered to the customer.  Note: this does not affect individual line update delivery dates.
+
+            Only the calendar date is used, exactly as written; any time or UTC offset is ignored.'
+          format: date-time
+        publicNote:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Note to customer. This will appear on PDFs.
+        dropship:
+          type:
+          - boolean
+          - 'null'
+          description: 'Indicates the order is dropshipped: fulfilled by shipping directly to the end customer.
+
+            Omit (or send null) to leave both dropship fields untouched.'
+        dropshipCustomerPoNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: 'The end customer''s purchase order number for a dropshipped order.
+
+            Written only when FulcrumProduct.PublicApi.Dto.SalesOrder.SalesOrderUpdateDto.Dropship is supplied: send a dropship value with no PO
+
+            number to clear the stored one. Omitting the dropship flag leaves this field as it is.'
+      additionalProperties: false
+      description: Represents an update on an SalesOrder.
+    SalesOrderRequestUpdateStatus:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/SalesOrderStatus'
+      additionalProperties: false
+      description: Update a sales order status.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     CommonAddressCreateDto:
       required:
       - address1
@@ -751,19 +1189,12 @@ components:
       properties:
         op:
           type: string
-        value:
-          type: string
+        value: {}
         path:
           type: string
-    SalesOrderStatus:
-      enum:
-      - draft
-      - needsApproval
-      - approved
-      - inProgress
-      - complete
-      type: string
-      description: Sales order status
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
     CommonDepositCreateDto:
       required:
       - depositType
@@ -787,307 +1218,6 @@ components:
           description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
       additionalProperties: false
       description: Deposit creation.
-    SalesOrderPriority:
-      enum:
-      - low
-      - moderate
-      - high
-      type: string
-      description: Priority of the sales order
-    CustomerContactDto:
-      required:
-      - firstName
-      - id
-      - lastName
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Id
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Last name
-        position:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Position / Job Title
-        cellPhone:
-          type:
-          - string
-          - 'null'
-          description: Cellphone number
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-      additionalProperties: false
-      description: A customer contact
-    CommonAddressDto:
-      required:
-      - address1
-      - city
-      - postalCode
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-        address1:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary address line.
-        address2:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Second address line.
-        address3:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Third address line.
-        city:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address city
-        stateProvince:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Address state/province.
-        postalCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Postal/zip code.
-        country:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Country identifier.
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number.
-          format: tel
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-      additionalProperties: false
-      description: Address definition
-    SalesOrderRequestFindParameters:
-      type: object
-      properties:
-        numbers:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-          description: Filter sales orders to only given numbers
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-        status:
-          $ref: '#/components/schemas/SalesOrderStatus'
-        externalQuoteUrls:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter sales orders to those matching an external quote URL.
-        createdFromQuoteId:
-          type:
-          - string
-          - 'null'
-          description: Filter sales orders created from the specific quote
-        createdBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        createdAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching/finding sales orders.
-    CommonDepositDto:
-      required:
-      - depositType
-      type: object
-      properties:
-        depositType:
-          $ref: '#/components/schemas/CommonEnumSalesOrderDepositRequirementEnum'
-        amount:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: This represents the literal amount of the deposit if FulcrumProduct.PublicApi.Dto.Common.DepositDto.DepositType == FulcrumProduct.PublicApi.Dto.Common.Enum.SalesOrderDepositRequirementEnum.Fixed or the percentage (0 - 100) when see cref="DepositType"/> == FulcrumProduct.PublicApi.Dto.Common.Enum.SalesOrderDepositRequirementEnum.Percentage
-          format: double
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-        amountInvoiced:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The amount that has already been invoiced.
-          format: double
-      additionalProperties: false
-      description: Deposit information
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CommonExternalReferenceFindDto:
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Arbitrary sub-key that can be used to qualify the value
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The external identifier
-      additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http
@@ -1098,6 +1228,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -1108,6 +1241,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -1128,9 +1264,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -1192,6 +1334,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -1209,6 +1352,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -1266,6 +1412,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -1284,6 +1433,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -1293,6 +1445,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

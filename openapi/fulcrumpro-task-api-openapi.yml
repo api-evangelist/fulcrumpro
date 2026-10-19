@@ -1,0 +1,782 @@
+openapi: 3.2.0
+info:
+  title: Fulcrum Public Task API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Task
+paths:
+  /api/tasks:
+    post:
+      tags:
+      - Task
+      summary: Add a task to a record.
+      operationId: CreateTask
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TaskSaveDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskSaveDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TaskSaveDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TaskSaveDto'
+        required: true
+      responses:
+        '200':
+          description: The created task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        '400':
+          description: Validation issues with input
+      x-c4-required-permissions:
+      - Orders-SalesOrders-Edit Sales Order
+  /api/tasks/{id}:
+    delete:
+      tags:
+      - Task
+      summary: Delete a task, with the attachments filed under it.
+      operationId: DeleteTask
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Task did not exist
+      x-c4-required-permissions:
+      - Orders-SalesOrders-Edit Sales Order
+    get:
+      tags:
+      - Task
+      summary: Get a task by id, with the record it hangs off.
+      operationId: GetTask
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The task for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        '404':
+          description: Task did not exist
+      x-c4-required-permissions:
+      - Orders-SalesOrders-View Sales Order
+    put:
+      tags:
+      - Task
+      summary: 'Update a task. A full replacement: omitted fields are cleared.'
+      operationId: UpdateTask
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TaskSaveDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskSaveDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TaskSaveDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TaskSaveDto'
+        required: true
+      responses:
+        '200':
+          description: The updated task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Task did not exist
+      x-c4-required-permissions:
+      - Orders-SalesOrders-Edit Sales Order
+  /api/tasks/list:
+    post:
+      tags:
+      - Task
+      summary: Finds tasks across every record they hang off; every task currently hangs off a…
+      operationId: ListTasks
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TasksListParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TasksListParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TasksListParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TasksListParameters'
+      responses:
+        '200':
+          description: The matching tasks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoTaskDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoTaskDto'
+        '400':
+          description: Validation issues with input
+      x-c4-required-permissions:
+      - Orders-SalesOrders-View Sales Order
+components:
+  schemas:
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    TasksListParameters:
+      type: object
+      properties:
+        relatedRecordIds:
+          maxItems: 1000
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Only tasks hanging off these records. At most 1000 may be supplied
+        assignedToUserId:
+          type:
+          - string
+          - 'null'
+          description: Only tasks assigned to this user
+        complete:
+          type:
+          - boolean
+          - 'null'
+          description: True returns only complete tasks, false only incomplete ones; omitted returns both
+        customerId:
+          type:
+          - string
+          - 'null'
+          description: Only tasks whose record is raised for this customer
+        taskGroupId:
+          type:
+          - string
+          - 'null'
+          description: Only tasks filed under this group
+        dueFromUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound on dueDateUtc
+          format: date-time
+        dueToUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive upper bound on dueDateUtc
+          format: date-time
+        completedFromUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive lower bound on completedUtc
+          format: date-time
+        completedToUtc:
+          type:
+          - string
+          - 'null'
+          description: Inclusive upper bound on completedUtc
+          format: date-time
+        overdue:
+          type:
+          - boolean
+          - 'null'
+          description: 'True narrows to incomplete tasks whose due date has passed. False and omitted both apply no
+
+            clause — this narrows, it does not select the complement'
+        search:
+          type:
+          - string
+          - 'null'
+          description: 'Case-insensitive search over the title, description, notes and the record''s customer name,
+
+            and an exact match on the record''s number when the term reads as one'
+      additionalProperties: false
+      description: 'Filters for the task list. All filters are optional and combine with AND semantics (list-valued
+
+        filters match any of their values).'
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    TaskNotificationChannelEnum:
+      enum:
+      - none
+      - email
+      - slack
+      - teams
+      - gChat
+      type: string
+      description: How a task notification was delivered.
+    TaskDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the task
+        relatedRecord:
+          $ref: '#/components/schemas/TaskRelatedRecordDto'
+        title:
+          type:
+          - string
+          - 'null'
+          description: What the task is
+        description:
+          type:
+          - string
+          - 'null'
+          description: A longer description of the task
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes on the task
+        sequence:
+          type: integer
+          description: 'The step the task sits at within its record''s task list. Tasks sharing a step are parallel
+
+            work, so a step is not unique within a record'
+          format: int32
+        taskGroup:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        assignedTo:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        dueDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the task is due (UTC), or null when it carries no date
+          format: date-time
+        complete:
+          type: boolean
+          description: Whether the task is complete
+        completedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the task was completed (UTC). Server-stamped when the task is first marked complete and
+
+            cleared when it is re-opened. Read-only'
+          format: date-time
+        completedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        attachmentCount:
+          type: integer
+          description: How many attachments the task carries
+          format: int32
+        lastNotification:
+          $ref: '#/components/schemas/TaskNotificationDto'
+      additionalProperties: false
+      description: One task, with enough of the record it hangs off to identify it.
+    TaskNotificationDto:
+      type: object
+      properties:
+        userId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The id of the user who was told
+        userName:
+          type:
+          - string
+          - 'null'
+          description: The name of the user who was told
+        channel:
+          $ref: '#/components/schemas/TaskNotificationChannelEnum'
+        sentUtc:
+          type: string
+          description: When the message was handed to the sender (UTC). Delivery itself is not tracked
+          format: date-time
+      additionalProperties: false
+      description: 'The message that went out for a task step: who was told, over which channel, and when.'
+    TaskSaveDto:
+      required:
+      - title
+      type: object
+      properties:
+        relatedRecord:
+          $ref: '#/components/schemas/TaskRelatedRecordDto'
+        title:
+          maxLength: 500
+          minLength: 1
+          type: string
+          description: What the task is. Required
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: A longer description of the task
+        notes:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Free-text notes on the task
+        dueDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the task is due (UTC)
+          format: date-time
+        assignedToUserId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The user to assign the task to. Must resolve to a user
+        taskGroupId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The group to file the task under. Must resolve to an active change order task group
+        complete:
+          type: boolean
+          description: 'Whether the task is complete. Setting it true completes the task and stamps completedUtc and
+
+            completedBy; setting it false re-opens the task and clears both'
+        sequence:
+          type:
+          - integer
+          - 'null'
+          description: 'The step the task should sit at. A value of 1 or more places it at that step, alongside any task
+
+            already there. Null or a value below 1 appends it after the last step on a create and leaves it
+
+            where it is on an update'
+          format: int32
+      additionalProperties: false
+      description: 'The writable state of a task. Create and update both take the whole object: update is a full
+
+        replacement, so an omitted field is cleared.'
+    DtoPagedResultDtoTaskDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    TaskRelatedRecordDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the record, as returned by Change Order List
+        number:
+          type:
+          - integer
+          - 'null'
+          description: The record's sequential number. Read-only
+          format: int32
+        customer:
+          $ref: '#/components/schemas/CommonReferenceDto'
+      additionalProperties: false
+      description: The record a task hangs off. Every task currently hangs off a change order.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Alert
+  tags:
+  - Alert
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Department Shift
+  tags:
+  - Department Shift
+- name: Equipment
+  tags:
+  - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Message
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Nesting
+  tags:
+  - Nesting
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Settings
+  tags:
+  - Settings
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Task
+  tags:
+  - Task
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

@@ -27,14 +27,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -65,102 +86,74 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/DtoPagedResultDtoShipmentLineItemDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Shipping-Shipping-View Shipments
 components:
   schemas:
-    ShipmentLineItemPackingDetailDto:
+    ShippingDataPackingStatus:
+      enum:
+      - notPacked
+      - partiallyPacked
+      - fullyPacked
+      - overPacked
+      type: string
+    ShipmentLineItemsListParameters:
       type: object
       properties:
-        lotId:
-          maxLength: 24
-          minLength: 24
+        packingStatus:
+          $ref: '#/components/schemas/ShippingDataPackingStatus'
+        itemId:
           type:
           - string
           - 'null'
-          description: Lot identifier. Please reference /api/inventory-lots endpoint.
-        lotName:
-          maxLength: 200
-          minLength: 1
+          description: Filter shipment line items based on item identifier.
+        shipmentId:
           type:
           - string
           - 'null'
-          description: Lot name.
-        locationId:
-          maxLength: 24
-          minLength: 24
+          description: Filter shipment line items based on shipment identifier.
+        salesOrderId:
           type:
           - string
           - 'null'
-          description: Location identifier. Please reference /api/locations endpoint.
-        locationName:
-          maxLength: 200
-          minLength: 1
+          description: Filter shipment line items based on sales order identifier.
+        purchaseOrderId:
           type:
           - string
           - 'null'
-          description: Location name.
-        quantityPacked:
-          minimum: 0
+          description: Filter shipment line items based on purchase order identifier.
+        salesOrderLineItemIds:
           type:
-          - number
+          - array
           - 'null'
-          description: Quantity packed for this shipment line item that are associated to this lot.
-          format: double
-        box:
-          maxLength: 36
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Box identifier this packing detail was packed into. Free-form (e.g., "1", "A1").
-      additionalProperties: false
-      description: Packing detail associated to a shipment line item.
-    DtoPagedResultDtoShipmentLineItemDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
           items:
-            $ref: '#/components/schemas/ShipmentLineItemDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
+            type: string
+          description: Filter shipment line items based on sales order line item(s) identifier.
+        purchaseOrderLineItemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter shipment line items based on purchase order line item identifier.
+        shipmentIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter shipment line items based on shipment identifiers.
+        shipmentType:
+          $ref: '#/components/schemas/ShippingDataShipmentType'
       additionalProperties: false
-      description: Paged result
+      description: Parameters used for searching V3 shipment line items
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     ShipmentLineItemDto:
       required:
       - id
@@ -259,7 +252,7 @@ components:
           description: The purchase order line item identifier
         quantityShipped:
           type: number
-          description: The quantity shipped
+          description: 'The quantity shipped: what this line had packed, once its shipment has shipped. Zero until then.'
           format: double
           readOnly: true
         shippedFromLocations:
@@ -279,19 +272,51 @@ components:
           description: Packing details indicating how quantities were split amongst lots/locations.
       additionalProperties: false
       description: Shipment line item data transfer object
-    ShippingDataPackingStatus:
-      enum:
-      - notPacked
-      - partiallyPacked
-      - fullyPacked
-      - overPacked
-      type: string
-    ShippingDataShipmentType:
-      enum:
-      - unknown
-      - standard
-      - outsideProcessing
-      type: string
+    DtoPagedResultDtoShipmentLineItemDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentLineItemDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
     ShippingDataShipmentStatus:
       enum:
       - pending
@@ -299,62 +324,59 @@ components:
       - shipped
       - cancelled
       type: string
-    ShipmentLineItemsListParameters:
+    ShipmentLineItemPackingDetailDto:
       type: object
       properties:
-        packingStatus:
-          $ref: '#/components/schemas/ShippingDataPackingStatus'
-        itemId:
+        lotId:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: Filter shipment line items based on item identifier.
-        shipmentId:
+          description: Lot identifier. Please reference /api/inventory-lots endpoint.
+        lotName:
+          maxLength: 200
+          minLength: 1
           type:
           - string
           - 'null'
-          description: Filter shipment line items based on shipment identifier.
-        salesOrderId:
+          description: Lot name.
+        locationId:
+          maxLength: 24
+          minLength: 24
           type:
           - string
           - 'null'
-          description: Filter shipment line items based on sales order identifier.
-        purchaseOrderId:
+          description: Location identifier. Please reference /api/locations endpoint.
+        locationName:
+          maxLength: 200
+          minLength: 1
           type:
           - string
           - 'null'
-          description: Filter shipment line items based on purchase order identifier.
-        salesOrderLineItemIds:
+          description: Location name.
+        quantityPacked:
+          minimum: 0
           type:
-          - array
+          - number
           - 'null'
-          items:
-            type: string
-          description: Filter shipment line items based on sales order line item(s) identifier.
-        purchaseOrderLineItemIds:
+          description: Quantity packed for this shipment line item that are associated to this lot.
+          format: double
+        box:
+          maxLength: 36
+          minLength: 0
           type:
-          - array
+          - string
           - 'null'
-          items:
-            type: string
-          description: Filter shipment line items based on purchase order line item identifier.
-        shipmentIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter shipment line items based on shipment identifiers.
-        shipmentType:
-          $ref: '#/components/schemas/ShippingDataShipmentType'
+          description: Box identifier this packing detail was packed into. Free-form (e.g., "1", "A1").
       additionalProperties: false
-      description: Parameters used for searching V3 shipment line items
-    CommonEnumSortDirectionEnum:
+      description: Packing detail associated to a shipment line item.
+    ShippingDataShipmentType:
       enum:
-      - ascending
-      - descending
+      - unknown
+      - standard
+      - outsideProcessing
       type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http
@@ -365,6 +387,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -375,6 +400,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -395,9 +423,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -459,6 +493,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -476,6 +511,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -533,6 +571,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -551,6 +592,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -560,6 +604,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

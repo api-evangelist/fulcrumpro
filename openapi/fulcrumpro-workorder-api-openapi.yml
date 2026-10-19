@@ -7,6 +7,46 @@ servers:
 tags:
 - name: workorder
 paths:
+  /api/work-orders:
+    post:
+      tags:
+      - workorder
+      summary: Create a work order from job operations.
+      operationId: CreateWorkOrder
+      requestBody:
+        description: The work order to create.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderCreateDto'
+        required: true
+      responses:
+        '200':
+          description: The id of the created work order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: The body was missing or malformed, a status other than needsReview or approved was sent, a job operation was listed twice, a job is not approved, scheduled or in progress, or the operations cannot be grouped as requested.
+        '404':
+          description: A job operation in the request does not exist.
+        '409':
+          description: A job operation in the request is already on another work order.
+      x-c4-required-permissions:
+      - Jobs-Jobs-Edit Job
   /api/work-orders/{workOrderId}:
     get:
       tags:
@@ -33,8 +73,103 @@ paths:
                 $ref: '#/components/schemas/WorkOrderDto'
         '404':
           description: Work order did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
+  /api/work-orders/{workOrderId}/operations/{workOrderOperationId}/nesting-setup:
+    get:
+      tags:
+      - workorder
+      summary: Get the nest planned onto a work-order operation — the parts it cuts, the…
+      operationId: GetWorkOrderOperationNestingSetup
+      parameters:
+      - name: workOrderId
+        in: path
+        description: Id of the work order the operation belongs to.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: workOrderOperationId
+        in: path
+        description: Id of the work-order operation to read the nest from.
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The operation's nest. An operation with no nest answers 200 with `isNested` false and empty lists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkOrderOperationNestingSetupDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/WorkOrderOperationNestingSetupDto'
+        '404':
+          description: The work order did not exist or was deleted, or it has no operation with that id.
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+    put:
+      tags:
+      - workorder
+      summary: Replace the nest planned onto a work-order operation with the parts, sheets and…
+      operationId: UpdateWorkOrderOperationNestingSetup
+      parameters:
+      - name: workOrderId
+        in: path
+        description: Id of the work order the operation belongs to.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: workOrderOperationId
+        in: path
+        description: Id of the work-order operation to store the nest on.
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 24
+          type: string
+      requestBody:
+        description: The nest to store.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderOperationNestingSetupSaveDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderOperationNestingSetupSaveDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderOperationNestingSetupSaveDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WorkOrderOperationNestingSetupSaveDto'
+        required: true
+      responses:
+        '200':
+          description: The stored nest, with the validation issues found on it. Issues never refuse the write.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkOrderOperationNestingSetupSaveResultDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/WorkOrderOperationNestingSetupSaveResultDto'
+        '400':
+          description: The body was missing or malformed, a list held a null entry, two parts named the same part number, a part named the same job operation twice, `nestingSoftware` named no member, more than 20000 placements were sent across all sheets, or the sheet runtimes summed past what one machine time can hold.
+        '404':
+          description: The work order did not exist or was deleted, or it has no operation with that id.
+        '409':
+          description: The stored nest has a sheet with a completed repetition, posted inventory events, or recorded scrap, so it cannot be replaced.
+      x-c4-required-permissions:
+      - Jobs-Jobs-Edit Job
   /api/work-orders/list:
     post:
       tags:
@@ -55,14 +190,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -96,20 +252,338 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/WorkOrderDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
 components:
   schemas:
-    WorkOrderStatusEnum:
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    WorkOrderNestingSetupPlateDto:
+      required:
+      - completedCount
+      - count
+      - dimensionX
+      - dimensionY
+      - id
+      - isComplete
+      - pageNumber
+      - parts
+      - runtimeSeconds
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: Identifier of the sheet within the nest.
+        dimensionX:
+          type: number
+          description: First sheet dimension as the nesting software reported it.
+          format: double
+        dimensionY:
+          type: number
+          description: Second sheet dimension as the nesting software reported it.
+          format: double
+        runtimeSeconds:
+          type: number
+          description: Machine runtime for one repetition of this sheet, in seconds.
+          format: double
+        count:
+          type: integer
+          description: How many repetitions of this sheet the nest requires.
+          format: int32
+        completedCount:
+          type: integer
+          description: How many of those repetitions are finished. A sheet completed before repetitions were tracked reports every repetition finished.
+          format: int32
+        isComplete:
+          type: boolean
+          description: True once every repetition of the sheet is finished.
+        pageNumber:
+          type: integer
+          description: Page the sheet appeared on in the nest report.
+          format: int32
+        item:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        sheetName:
+          type:
+          - string
+          - 'null'
+          description: Program name some nesting software records against the sheet.
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupPlatePartDto'
+          description: The parts laid out on one repetition of the sheet.
+      additionalProperties: false
+      description: One sheet the nest requires, and the parts laid out on it.
+    WorkOrderNestingSetupUnplacedPartDto:
+      required:
+      - quantity
+      type: object
+      properties:
+        fileId:
+          type:
+          - string
+          - 'null'
+          description: Id of the source file the part came from.
+        fileName:
+          type:
+          - string
+          - 'null'
+          description: Name of the source file the part came from.
+        quantity:
+          type: integer
+          description: How many instances of the part the nest is short.
+          format: int32
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Why the nesting software could not place them.
+      additionalProperties: false
+      description: One part the nest could not place in full.
+    CommonEnumSortDirectionEnum:
       enum:
-      - needsReview
-      - approved
-      - scheduled
-      - inProgress
-      - complete
-      - cancelled
+      - ascending
+      - descending
       type: string
-      description: Work order status
+      description: Specify sorting direction.
+    WorkOrderCreateOperationDto:
+      required:
+      - jobOperations
+      type: object
+      properties:
+        additionalInstructions:
+          type:
+          - string
+          - 'null'
+          description: Instructions shown on the work-order operation.
+        estimatedSetupTimeSeconds:
+          maximum: 1000000000000000
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Estimated setup time in seconds. When omitted, it is aggregated from the job operations.
+          format: double
+        estimatedRunTimeSeconds:
+          maximum: 1000000000000000
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Estimated run time in seconds. When omitted, it is aggregated from the job operations.
+          format: double
+        jobOperations:
+          maxItems: 500
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderCreateJobOperationDto'
+          description: 'The job operations this work-order operation owns, 1 to 500. All must be on the same system
+
+            operation, and no job operation may appear more than once on the work order. At most 500 job
+
+            operations may be listed across all operations.'
+      additionalProperties: false
+      description: One work-order operation and the job operations it will own.
+    WorkOrderNestingSetupValidationIssueTypeEnum:
+      enum:
+      - part
+      - plate
+      type: string
+      description: What a nest validation issue is about.
+    WorkOrderNestingSetupItemLinkSaveDto:
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Id of the linked item.
+      additionalProperties: false
+      description: An item link, by id. The item's name is resolved by the server.
+    WorkOrderCreateJobOperationDto:
+      required:
+      - jobId
+      - jobOperationId
+      type: object
+      properties:
+        jobId:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: Id of the job the operation belongs to.
+        jobOperationId:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: Id of the job operation, as returned by the nestable-jobs list and the work-package manifest.
+      additionalProperties: false
+      description: One job operation, named by its job and its job-operation id.
+    WorkOrderNestingSetupUnplacedPartSaveDto:
+      type: object
+      properties:
+        fileId:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Id of the source file the part came from.
+        fileName:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Name of the source file the part came from.
+        quantity:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          description: How many instances of the part the nest is short.
+          format: int32
+        reason:
+          maxLength: 1000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Why the nesting software could not place them.
+      additionalProperties: false
+      description: One part the nest could not place in full.
+    WorkOrderNestingSetupPartSaveDto:
+      required:
+      - jobOperationQuantities
+      - partNumber
+      type: object
+      properties:
+        partNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Part number as the nesting software reported it. Links the part to its sheet placements.
+        quantity:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          description: How many of this part the nest cuts. Stored as sent; not recomputed from the sheets.
+          format: int32
+        partTimeSeconds:
+          maximum: 1000000000
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Cut time for one instance of the part, in seconds.
+          format: double
+        surfaceArea:
+          maximum: 1000000000000
+          minimum: 0
+          type: number
+          description: Surface area of one instance of the part.
+          format: double
+        contoursLength:
+          maximum: 1000000000000
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Total contour length cut for one instance of the part.
+          format: double
+        itemId:
+          maxLength: 36
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Id of the catalog item this part represents. An id that names no item is stored as sent and
+
+            reported in `validationIssues`.'
+        item:
+          $ref: '#/components/schemas/WorkOrderNestingSetupItemLinkSaveDto'
+        jobOperationQuantities:
+          maxItems: 500
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupJobOperationQuantitySaveDto'
+          description: 'How the part''s quantity is split across the job operations the nest serves, up to 500. A job
+
+            operation may appear once. Empty is stored and reported as an `error`-severity issue.'
+      additionalProperties: false
+      description: One distinct part the nest cuts, across every sheet.
+    WorkOrderNestingSetupJobOperationQuantitySaveDto:
+      required:
+      - jobOperationId
+      type: object
+      properties:
+        jobOperationId:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: Id of the job operation the parts are cut for.
+        quantity:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          description: How many of the part are cut for that job operation.
+          format: int32
+      additionalProperties: false
+      description: How many of a part are cut for one job operation.
+    WorkOrderNestingSetupNestingSoftwareEnum:
+      enum:
+      - unknown
+      - proNest
+      - nestingCenter
+      - radan
+      - lantek
+      - drAbe
+      - boost
+      - sigmaNest
+      - cadman
+      - fulcrum
+      type: string
+      description: The nesting software a nest came from.
+    CommonGuidOrMongoReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: A reference to an object whose id is either a GUID or a Mongo id, such as a routing operation.
     WorkOrderRequestFindParameters:
       type: object
       properties:
@@ -162,6 +636,22 @@ components:
           - 'null'
           description: Filters jobs created after (exclusive) this parameter in UTC time. If not time component is passed, midnight UTC will be used.
           format: date-time
+        completedOnFrom:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to work orders completed on or after this date, as a whole day in the shop''s timezone.
+
+            Any time component is ignored.'
+          format: date-time
+        completedOnTo:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to work orders completed on or before this date, as a whole day in the shop''s timezone,
+
+            so a work order completed later that same shop day still matches.'
+          format: date-time
       additionalProperties: false
       description: Parameters used for searching/finding work orders.
     JobPriorityEnum:
@@ -171,6 +661,35 @@ components:
       - high
       type: string
       description: Job priority
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    WorkOrderNestingSetupPlatePartSaveDto:
+      required:
+      - partNumber
+      type: object
+      properties:
+        partNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Part number as the nesting software reported it. Links the placement to its part.
+        quantity:
+          maximum: 1000000
+          minimum: 0
+          type: integer
+          description: How many of the part are placed on one repetition of the sheet.
+          format: int32
+      additionalProperties: false
+      description: One part laid out on a sheet.
     WorkOrderDto:
       required:
       - id
@@ -227,12 +746,363 @@ components:
           $ref: '#/components/schemas/JobPriorityEnum'
       additionalProperties: false
       description: Represents a work order
-    CommonEnumSortDirectionEnum:
+    WorkOrderNestingSetupPlateSaveDto:
+      required:
+      - count
+      - parts
+      type: object
+      properties:
+        dimensionX:
+          maximum: 1000000000
+          minimum: 0
+          type: number
+          description: First sheet dimension as the nesting software reported it.
+          format: double
+        dimensionY:
+          maximum: 1000000000
+          minimum: 0
+          type: number
+          description: Second sheet dimension as the nesting software reported it.
+          format: double
+        runtimeSeconds:
+          maximum: 1000000000
+          minimum: 0
+          type: number
+          description: Machine runtime for one repetition of this sheet, in seconds.
+          format: double
+        count:
+          maximum: 100000
+          minimum: 1
+          type: integer
+          description: How many repetitions of this sheet the nest requires, at least 1.
+          format: int32
+        pageNumber:
+          maximum: 100000
+          minimum: 0
+          type: integer
+          description: Page the sheet appeared on in the nest report.
+          format: int32
+        itemId:
+          maxLength: 36
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Id of the material item the sheet is cut from. Drives the operation''s required materials. Null
+
+            is stored and reported as an `error`-severity issue.'
+        item:
+          $ref: '#/components/schemas/WorkOrderNestingSetupItemLinkSaveDto'
+        sheetName:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Program name some nesting software records against the sheet.
+        parts:
+          maxItems: 2000
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupPlatePartSaveDto'
+          description: The parts laid out on one repetition of the sheet, up to 2000.
+      additionalProperties: false
+      description: One sheet the nest requires, and the parts laid out on it.
+    WorkOrderNestingSetupPartDto:
+      required:
+      - id
+      - jobOperationQuantities
+      - quantity
+      - surfaceArea
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: Identifier of the part within the nest.
+        partNumber:
+          type:
+          - string
+          - 'null'
+          description: Part number as the nesting software reported it.
+        quantity:
+          type: integer
+          description: How many of this part the nest cuts.
+          format: int32
+        partTimeSeconds:
+          type:
+          - number
+          - 'null'
+          description: Cut time for one instance of the part, in seconds.
+          format: double
+        surfaceArea:
+          type: number
+          description: Surface area of one instance of the part.
+          format: double
+        contoursLength:
+          type:
+          - number
+          - 'null'
+          description: Total contour length cut for one instance of the part.
+          format: double
+        item:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        jobOperationQuantities:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupJobOperationQuantityDto'
+          description: How the part's quantity is split across the job operations the nest serves, ordered by job operation id.
+      additionalProperties: false
+      description: One distinct part the nest cuts, across every sheet.
+    WorkOrderNestingSetupValidationIssueDto:
+      required:
+      - index
+      - message
+      - severity
+      - type
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/WorkOrderNestingSetupValidationIssueTypeEnum'
+        severity:
+          $ref: '#/components/schemas/WorkOrderNestingSetupValidationIssueSeverityEnum'
+        index:
+          type: integer
+          description: Position of the part in `parts`, or of the sheet in `plates`, on the stored nest.
+          format: int32
+        message:
+          minLength: 1
+          type: string
+          description: What is wrong.
+      additionalProperties: false
+      description: One problem validation found on a stored nest.
+    WorkOrderOperationNestingSetupDto:
+      required:
+      - isNested
+      - machineTimeSeconds
+      - parts
+      - plates
+      - unplacedParts
+      - workOrderId
+      - workOrderOperationId
+      type: object
+      properties:
+        workOrderId:
+          minLength: 1
+          type: string
+          description: Id of the work order the operation belongs to.
+        workOrderOperationId:
+          minLength: 1
+          type: string
+          description: Id of the work-order operation.
+        operation:
+          $ref: '#/components/schemas/CommonGuidOrMongoReferenceDto'
+        isNested:
+          type: boolean
+          description: True when the nest places at least one part or requires at least one sheet. False means `parts` and `plates` are empty and `machineTimeSeconds` is 0; `unplacedParts` may still list what the nest could not place.
+        nestingSoftware:
+          $ref: '#/components/schemas/WorkOrderNestingSetupNestingSoftwareEnum'
+        machineName:
+          type:
+          - string
+          - 'null'
+          description: Machine the nest was programmed for, as named by the nesting software.
+        nestingFile:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        machineTimeSeconds:
+          type: number
+          description: The sum of each sheet's recorded runtime, in seconds, counting one repetition per sheet — `plates[].count` is not applied. Zero when the operation has no nest.
+          format: double
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupPartDto'
+          description: The distinct parts the nest cuts.
+        plates:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupPlateDto'
+          description: The sheets the nest requires.
+        unplacedParts:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupUnplacedPartDto'
+          description: Parts the nest could not place in full, with the shortfall and the reason.
+      additionalProperties: false
+      description: 'The nest planned onto one work-order operation: the parts it cuts, the sheets it cuts them from,
+
+        and the parts it could not place.'
+    WorkOrderNestingSetupPlatePartDto:
+      required:
+      - id
+      - quantity
+      - scrap
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: Identifier of the placement within the nest.
+        partNumber:
+          type:
+          - string
+          - 'null'
+          description: Part number as the nesting software reported it.
+        quantity:
+          type: integer
+          description: How many of the part are placed on one repetition of the sheet.
+          format: int32
+        scrap:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupScrapDto'
+          description: Scrap recorded against the part on this sheet.
+      additionalProperties: false
+      description: One part laid out on a sheet.
+    WorkOrderNestingSetupScrapDto:
+      required:
+      - quantity
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: How many instances of the part were scrapped.
+          format: int32
+        reworkReasonId:
+          type:
+          - string
+          - 'null'
+          description: Id of the rework reason the scrap was recorded under.
+      additionalProperties: false
+      description: Scrap recorded against a part on a sheet.
+    WorkOrderCreateDto:
+      required:
+      - operations
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the work order. When omitted, the work order is named by its number.
+        status:
+          $ref: '#/components/schemas/WorkOrderStatusEnum'
+        priority:
+          $ref: '#/components/schemas/JobPriorityEnum'
+        productionDueDateUtc:
+          type:
+          - string
+          - 'null'
+          description: Production due date. When omitted, the earliest production due date among the jobs is used.
+          format: date-time
+        operations:
+          maxItems: 50
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderCreateOperationDto'
+          description: The work-order operations to create, 1 to 50.
+      additionalProperties: false
+      description: 'A work order to create from job operations: each entry in `operations` becomes one work-order
+
+        operation owning the job operations it lists.'
+    WorkOrderStatusEnum:
       enum:
-      - ascending
-      - descending
+      - needsReview
+      - approved
+      - scheduled
+      - inProgress
+      - complete
+      - cancelled
       type: string
-      description: Specify sorting direction.
+      description: Work order status
+    WorkOrderOperationNestingSetupSaveResultDto:
+      required:
+      - nestingSetup
+      - validationIssues
+      type: object
+      properties:
+        nestingSetup:
+          $ref: '#/components/schemas/WorkOrderOperationNestingSetupDto'
+        validationIssues:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupValidationIssueDto'
+          description: 'Issues found on the stored nest. The write has already happened; an `error` means the nest
+
+            cannot be tracked or costed as it stands.'
+      additionalProperties: false
+      description: 'The outcome of replacing the nest on a work-order operation: the nest as stored, and what
+
+        validation found on it.'
+    WorkOrderNestingSetupValidationIssueSeverityEnum:
+      enum:
+      - error
+      - warning
+      type: string
+      description: How serious a nest validation issue is.
+    WorkOrderOperationNestingSetupSaveDto:
+      type: object
+      properties:
+        nestingSoftware:
+          $ref: '#/components/schemas/WorkOrderNestingSetupNestingSoftwareEnum'
+        machineName:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Machine the nest was programmed for, as named by the nesting software.
+        parts:
+          maxItems: 2000
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupPartSaveDto'
+          description: 'The distinct parts the nest cuts, up to 2000. The stored list is derived from the sheets: a part
+
+            on no sheet is dropped, and a sheet part number with no entry here is added at quantity 0. Empty
+
+            together with `plates` clears the nest.'
+        plates:
+          maxItems: 1000
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupPlateSaveDto'
+          description: The sheets the nest requires, up to 1000, carrying at most 20000 placements between them.
+        unplacedParts:
+          maxItems: 2000
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderNestingSetupUnplacedPartSaveDto'
+          description: Parts the nest could not place in full, up to 2000.
+      additionalProperties: false
+      description: 'A nest to store on one work-order operation, replacing whatever nest it carries. Parts and sheet
+
+        placements link by `partNumber`; every nest-internal id is assigned by the server, so none is
+
+        sent. The server owns the nest''s `id`, `isNested`, `machineTimeSeconds` and each
+
+        sheet''s completion and inventory, so the body carries none of them, and it keeps
+
+        `nestingFile` — the nest report the stored nest was read from — across the replace.'
+    WorkOrderNestingSetupJobOperationQuantityDto:
+      required:
+      - jobOperationId
+      - quantity
+      type: object
+      properties:
+        jobOperationId:
+          minLength: 1
+          type: string
+          description: Id of the job operation the parts are cut for.
+        quantity:
+          type: integer
+          description: How many of the part are cut for that job operation.
+          format: int32
+      additionalProperties: false
+      description: How many of a part are cut for one job operation.
   securitySchemes:
     bearer:
       type: http
@@ -243,6 +1113,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -253,6 +1126,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -273,9 +1149,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -337,6 +1219,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -354,6 +1237,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -411,6 +1297,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -429,6 +1318,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -438,6 +1330,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

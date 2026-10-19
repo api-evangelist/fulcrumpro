@@ -1,0 +1,963 @@
+openapi: 3.2.0
+info:
+  title: Fulcrum Public Nesting API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Nesting
+paths:
+  /api/nesting/work-package-manifest:
+    post:
+      tags:
+      - Nesting
+      summary: 'Get the cut list for a set of job operations: each part''s quantity, dates…'
+      operationId: GetNestingWorkPackageManifest
+      requestBody:
+        description: The job operations to cut, each named by its job id and job-operation id.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/NestingWorkPackageManifestParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NestingWorkPackageManifestParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/NestingWorkPackageManifestParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/NestingWorkPackageManifestParameters'
+        required: true
+      responses:
+        '200':
+          description: The manifest. Every requested pair appears once, in `parts` or in `skipped`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NestingWorkPackageManifestDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NestingWorkPackageManifestDto'
+        '400':
+          description: The body was missing or malformed, listed no entry or more than 500, or listed the same entry twice.
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/nesting/nestable-jobs/list:
+    post:
+      tags:
+      - Nesting
+      summary: List nestable groups — each a material shape paired with the operation it is…
+      operationId: ListNestableJobs
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        description: Optional filter. Every field is optional and filters combine with AND.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/NestingRequestNestableJobsListParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NestingRequestNestableJobsListParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/NestingRequestNestableJobsListParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/NestingRequestNestableJobsListParameters'
+      responses:
+        '200':
+          description: The page of matching groups.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoNestingNestableJobGroupDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoNestingNestableJobGroupDto'
+        '400':
+          description: An unsupported sort field was requested, or Take was 0.
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+components:
+  schemas:
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    NestingWorkPackageSkippedDto:
+      required:
+      - jobId
+      - jobOperationId
+      - reason
+      type: object
+      properties:
+        jobId:
+          minLength: 1
+          type: string
+          description: Id of the job, as sent. Together with FulcrumProduct.PublicApi.Dto.Nesting.NestingWorkPackageSkippedDto.JobOperationId this identifies the request entry.
+        jobOperationId:
+          minLength: 1
+          type: string
+          description: Id of the job operation, as sent.
+        reason:
+          $ref: '#/components/schemas/NestingWorkPackageSkipReasonEnum'
+      additionalProperties: false
+      description: A requested job operation that produced no part.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    NestingWorkPackageJobOperationParameters:
+      required:
+      - jobId
+      - jobOperationId
+      type: object
+      properties:
+        jobId:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: Id of the job the operation belongs to.
+        jobOperationId:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: Id of the job operation, as returned by the nestable-jobs list.
+        itemToMakeId:
+          maxLength: 36
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Id of the job''s item-to-make line the operation belongs to. Optional; needed only when the job
+
+            carries the same job-operation id on more than one item to make, which the manifest reports as
+
+            `ambiguousJobOperation`.'
+      additionalProperties: false
+      description: One job operation, named by its job and its job-operation id.
+    NestingEnumNestableMaterialFormEnum:
+      enum:
+      - sheet
+      - plate
+      - roundBar
+      - flatBar
+      - channel
+      - squareTube
+      - angle
+      - treadPlate
+      - hexBar
+      - squareBar
+      - teeBar
+      - hBeam
+      - rectTube
+      - pipe
+      - wBeam
+      - sBeam
+      - roundTube
+      - rectBar
+      - wideBar
+      - reinforcingBar
+      - halfRoundBar
+      - halfOvalBar
+      type: string
+      description: Stock form of a material shape. Mirrors the shop's material-form list member for member.
+    NestingRequestNestableJobsListParameters:
+      type: object
+      properties:
+        needNesting:
+          type:
+          - boolean
+          - 'null'
+          description: When true, keeps only groups that still have job operations waiting to be nested.
+        existingNests:
+          type:
+          - boolean
+          - 'null'
+          description: When true, keeps only groups that already have a work-order operation.
+        materialForms:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NestingEnumNestableMaterialFormEnum'
+          description: Keeps only groups whose material shape has one of these stock forms.
+        operationIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Keeps only groups on one of these routing operations.
+        materialShapeIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Keeps only groups on one of these material shapes.
+        earliestStartOnOrBefore:
+          type:
+          - string
+          - 'null'
+          description: 'Keeps only groups whose earliest scheduled-start job operation falls on or before this
+
+            calendar date. Only the calendar date is used, exactly as written; any time or UTC offset is
+
+            ignored. A group with no dated job operation is dropped as well, which means
+
+            existing-nest-only groups never survive this filter.'
+          format: date-time
+        search:
+          type:
+          - string
+          - 'null'
+          description: 'Single search token, matched case-insensitively as a substring against the job name and
+
+            number, the customer name, the sales order number and name, the item name, the work order
+
+            name, the material shape name, and the operation name. Not split on whitespace.'
+      additionalProperties: false
+      description: 'Filter for the nestable-jobs query. Every field is optional; omitting all of them returns every
+
+        group. Filters combine with AND.'
+    NestingWorkPackagePartDto:
+      required:
+      - drawings
+      - hasMultipleMaterials
+      - isRework
+      - itemToMakeId
+      - job
+      - jobOperationId
+      - operation
+      - quantityToMake
+      type: object
+      properties:
+        jobOperationId:
+          minLength: 1
+          type: string
+          description: Id of the job operation, as sent.
+        job:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        customerName:
+          type:
+          - string
+          - 'null'
+          description: Name of the job's customer.
+        productionDueDateUtc:
+          type:
+          - string
+          - 'null'
+          description: The job's production due date.
+          format: date-time
+        scheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: Scheduled start of this operation.
+          format: date-time
+        scheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: Scheduled end of this operation.
+          format: date-time
+        item:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        itemNumber:
+          type:
+          - string
+          - 'null'
+          description: The item's number.
+        itemRevision:
+          type:
+          - string
+          - 'null'
+          description: The item's revision.
+        itemToMakeId:
+          minLength: 1
+          type: string
+          description: Id of the job's item-to-make line the operation belongs to.
+        quantityToMake:
+          type: number
+          description: Quantity the operation is to make, as stored — not rounded to whole parts.
+          format: double
+        operation:
+          $ref: '#/components/schemas/CommonGuidOrMongoReferenceDto'
+        workOrderOperationId:
+          type:
+          - string
+          - 'null'
+          description: Id of the work-order operation this job operation is already nested on. Null when it has not been nested yet.
+        isRework:
+          type: boolean
+          description: True when the operation is a rework of an earlier one. Its material is the source operation's.
+        hasMultipleMaterials:
+          type: boolean
+          description: True when the operation requires more than one material, so FulcrumProduct.PublicApi.Dto.Nesting.NestingWorkPackagePartDto.Material is only the first of them.
+        material:
+          $ref: '#/components/schemas/NestingWorkPackageMaterialDto'
+        drawings:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestingWorkPackageDrawingDto'
+          description: The DXF drawings to cut this part from, ordered by `attachmentId`. Empty when none resolve.
+      additionalProperties: false
+      description: One job operation to cut.
+    NestingNestableJobGroupDto:
+      required:
+      - jobOperations
+      - material
+      - operation
+      - workOrderOperations
+      type: object
+      properties:
+        material:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        operation:
+          $ref: '#/components/schemas/CommonGuidOrMongoReferenceDto'
+        earliestScheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Earliest scheduled start across the group''s job operations. Null when no job operation in
+
+            the group carries a scheduled start — including a group made up only of existing nests.'
+          format: date-time
+        jobOperations:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestingNestableJobOperationDto'
+          description: Job operations in the group that are still waiting to be nested.
+        workOrderOperations:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestingNestableWorkOrderOperationDto'
+          description: Work-order operations already created for the group's material shape and operation.
+      additionalProperties: false
+      description: 'One nestable group: everything waiting on, or already nested onto, a single
+
+        (material shape, operation) pair. The pair `material.id` and `operation.id` identifies
+
+        the group, and no two groups in a response share it.'
+    CommonGuidOrMongoReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: A reference to an object whose id is either a GUID or a Mongo id, such as a routing operation.
+    NestingWorkPackageManifestParameters:
+      required:
+      - jobOperations
+      type: object
+      properties:
+        jobOperations:
+          maxItems: 500
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/NestingWorkPackageJobOperationParameters'
+          description: The job operations to cut, 1 to 500. The same entry may not appear twice.
+      additionalProperties: false
+      description: 'The job operations to build a work package for. Each is named by its job and its job-operation
+
+        id — the `job.id` and `jobOperationId` values the nestable-jobs list returns — because a
+
+        job-operation id alone is not unique across jobs.'
+    NestingWorkPackageManifestDto:
+      required:
+      - parts
+      - skipped
+      type: object
+      properties:
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestingWorkPackagePartDto'
+          description: One part per requested job operation that exists, in request order.
+        skipped:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestingWorkPackageSkippedDto'
+          description: Requested job operations that produced no part, in request order.
+      additionalProperties: false
+      description: 'The cut list for a set of job operations: what to cut, how many, from what, by when, and the
+
+        drawing attachments to download for each part.'
+    NestingDrawingOwnerEnum:
+      enum:
+      - item
+      - job
+      type: string
+      description: 'Which entity owns a drawing on the work-package manifest. Downloading an `Item`-owned
+
+        drawing needs View Item on a user-bound token; a `Job`-owned one needs View Job.'
+    JobPriorityEnum:
+      enum:
+      - low
+      - moderate
+      - high
+      type: string
+      description: Job priority
+    NestingWorkPackageDrawingDto:
+      required:
+      - attachmentId
+      - fileName
+      - isOperationSpecific
+      - ownerType
+      type: object
+      properties:
+        attachmentId:
+          minLength: 1
+          type: string
+          description: Id of the attachment. Download it through `GET /attachments/{attachmentId}/download`.
+        fileName:
+          minLength: 1
+          type: string
+          description: File name of the drawing.
+        ownerType:
+          $ref: '#/components/schemas/NestingDrawingOwnerEnum'
+        isOperationSpecific:
+          type: boolean
+          description: True when the drawing is tagged for this operation specifically rather than for the item as a whole.
+      additionalProperties: false
+      description: A drawing attachment to download for a part.
+    DtoPagedResultDtoNestingNestableJobGroupDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NestingNestableJobGroupDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    NestingNestableWorkOrderOperationDto:
+      required:
+      - isNested
+      - machineTimeSeconds
+      - partCount
+      - sheetCount
+      - workOrder
+      - workOrderOperationId
+      type: object
+      properties:
+        workOrderOperationId:
+          minLength: 1
+          type: string
+          description: Id of the work-order operation.
+        workOrder:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        status:
+          $ref: '#/components/schemas/WorkOrderStatusEnum'
+        operationStatus:
+          type:
+          - string
+          - 'null'
+          description: 'Status of the work-order operation itself: `Pending`, `Ready`, `Running`, `Paused`, `Complete` or `Cancelled`.'
+        priority:
+          $ref: '#/components/schemas/JobPriorityEnum'
+        sheetCount:
+          type: integer
+          description: Number of sheets the operation's nest requires, counting repetitions.
+          format: int32
+        partCount:
+          type: integer
+          description: Number of parts the operation's nest places.
+          format: int32
+        machineTimeSeconds:
+          type: number
+          description: The sum of each sheet's recorded runtime in the operation's nest, in seconds, counting one repetition per sheet.
+          format: double
+        isNested:
+          type: boolean
+          description: True when the operation carries a nest with parts or plates present. Read the nest itself from the work-order operation nesting-setup endpoint.
+      additionalProperties: false
+      description: One work-order operation already created for the group's material shape and operation.
+    WorkOrderStatusEnum:
+      enum:
+      - needsReview
+      - approved
+      - scheduled
+      - inProgress
+      - complete
+      - cancelled
+      type: string
+      description: Work order status
+    NestingWorkPackageMaterialDto:
+      required:
+      - materialShapeId
+      - name
+      type: object
+      properties:
+        materialShapeId:
+          minLength: 1
+          type: string
+          description: Id of the material shape.
+        name:
+          minLength: 1
+          type: string
+          description: Name of the material shape as recorded on the job. Always present; the label to display.
+        form:
+          $ref: '#/components/schemas/NestingEnumNestableMaterialFormEnum'
+        materialName:
+          type:
+          - string
+          - 'null'
+          description: Display name of the shape's material, composed from the material master. Null when the master carries no name for it.
+        grade:
+          type:
+          - string
+          - 'null'
+          description: Grade of the shape's material. Null when the material master carries none.
+        thickness:
+          type:
+          - number
+          - 'null'
+          description: Thickness of the shape, falling back to its primary dimension when no thickness is recorded.
+          format: double
+        thicknessDescription:
+          type:
+          - string
+          - 'null'
+          description: Thickness as described on the shape, such as a gauge.
+        dimensionUnits:
+          type:
+          - string
+          - 'null'
+          description: 'Unit the shape''s dimensions are in: `Inch`, `Foot`, `Yard`, `Millimeter`, `Centimeter` or `Meter`.'
+      additionalProperties: false
+      description: A required material and the shape it is cut from.
+    NestingWorkPackageSkipReasonEnum:
+      enum:
+      - notFound
+      - ambiguousJobOperation
+      - noSystemOperation
+      type: string
+      description: Why a requested job operation produced no part on the work-package manifest.
+    NestingNestableJobOperationDto:
+      required:
+      - hasMultipleMaterials
+      - isRework
+      - job
+      - jobOperationId
+      - quantityToMake
+      type: object
+      properties:
+        jobOperationId:
+          minLength: 1
+          type: string
+          description: Id of the job operation. This is the id a work order is created from.
+        job:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        item:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        itemToMakeId:
+          type:
+          - string
+          - 'null'
+          description: Id of the job's item-to-make line the operation belongs to.
+        quantityToMake:
+          type: number
+          description: Quantity the operation is to make.
+          format: double
+        customerName:
+          type:
+          - string
+          - 'null'
+          description: Name of the job's customer.
+        salesOrder:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        productionDueDateUtc:
+          type:
+          - string
+          - 'null'
+          description: The job's production due date.
+          format: date-time
+        scheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: Scheduled start of this operation.
+          format: date-time
+        scheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: Scheduled end of this operation.
+          format: date-time
+        isRework:
+          type: boolean
+          description: True when the operation is a rework of an earlier one. Its materials are inherited from the source operation.
+        hasMultipleMaterials:
+          type: boolean
+          description: True when the operation has more than one material required, so the group it lands in is ambiguous.
+      additionalProperties: false
+      description: One job operation waiting to be nested onto the group's material shape and operation.
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Alert
+  tags:
+  - Alert
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Department Shift
+  tags:
+  - Department Shift
+- name: Equipment
+  tags:
+  - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Message
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Nesting
+  tags:
+  - Nesting
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Settings
+  tags:
+  - Settings
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Task
+  tags:
+  - Task
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

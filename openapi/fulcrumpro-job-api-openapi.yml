@@ -26,6 +26,7 @@ paths:
           description: Success
         '204':
           description: Job did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Jobs-Jobs-Edit Job
@@ -62,6 +63,7 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Jobs-Jobs-Edit Job
@@ -91,6 +93,7 @@ paths:
                 $ref: '#/components/schemas/JobDto'
         '404':
           description: Job did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
     patch:
@@ -121,8 +124,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/JobDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: Job did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Jobs-Jobs-Edit Job
@@ -192,6 +198,65 @@ paths:
                 $ref: '#/components/schemas/JobTrackingDto'
         '404':
           description: Job did not exist
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+  /api/jobs/{jobId}/in-process-tracking/list:
+    post:
+      tags:
+      - Job
+      summary: Lists a job's in process tracking checkpoints together with every recorded…
+      description: 'The result is intentionally single-job-bounded to the job identified by jobId and is
+
+        not paginated: it returns every checkpoint on the job (across its items to make and operations) with all
+
+        recorded readings, and the readings axis is not independently bounded. Consumers should expect the
+
+        response to scale with the job''s routing size and production volume. Checkpoints are ordered by operation
+
+        order then checkpoint order; each checkpoint''s readings are ordered by sampling interval, then reading
+
+        ordinal within the interval, then recorded time.'
+      operationId: JobInProcessTrackingResponseList
+      parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/InProcessTrackingResponseFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InProcessTrackingResponseFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/InProcessTrackingResponseFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/InProcessTrackingResponseFindParameters'
+      responses:
+        '200':
+          description: The job's in process tracking checkpoints and readings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobInProcessTrackingCheckpointDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JobInProcessTrackingCheckpointDto'
+        '404':
+          description: Job did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
   /api/jobs/list:
@@ -214,14 +279,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -255,6 +341,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/JobDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
   /api/jobs/{jobId}/status:
@@ -293,46 +380,63 @@ paths:
           description: Job cannot be moved to requested status
         '404':
           description: Job did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Jobs-Jobs-Edit Job
 components:
   schemas:
-    JobUpdateDto:
+    JobItemToMakeStatusEnum:
+      enum:
+      - new
+      - working
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make status
+    CommonReferenceDto:
       type: object
       properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
         name:
+          maxLength: 200
+          minLength: 1
           type:
           - string
           - 'null'
-          description: The name of the job
-        priority:
-          $ref: '#/components/schemas/JobPriorityEnum'
-        quantityToMake:
-          type:
-          - number
-          - 'null'
-          description: The quantity the job should make
-          format: double
-        productionDueDate:
-          type:
-          - string
-          - 'null'
-          description: The production due date
-          format: date-time
-        earliestStartDate:
-          type:
-          - string
-          - 'null'
-          description: If set, this is the earliest date that the job should be scheduled to begin.
-          format: date-time
-        notes:
-          type:
-          - string
-          - 'null'
-          description: The internal notes
+          description: Descriptive name associated to the object
       additionalProperties: false
-      description: Represents an update on an Job.
+      description: Represents a reference to a document in a DB collection
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    GdtEnumModifierType:
+      enum:
+      - none
+      - mmc
+      - lmc
+      - rfs
+      - unequallyDisposedProfile
+      - independency
+      - continuousFeature
+      - projectedToleranceZone
+      - freeState
+      - tangentPlane
+      type: string
+      description: 'Public mirror of FulcrumProduct.Domain.Gdt.Data.ModifierType. Members mirror the domain enum
+
+        one-to-one by underlying value (guarded by JobInProcessTrackingEnumParityTests) so it maps by a plain cast,
+
+        decoupling the published contract from renames of the internal enum.'
     JobTrackingItemToMakeDto:
       required:
       - depth
@@ -393,507 +497,6 @@ components:
           $ref: '#/components/schemas/ItemReferenceDto'
       additionalProperties: false
       description: Represents an item to make on a job (for tracking purposes)
-    CommonCostBreakdownOperationDto:
-      required:
-      - operationId
-      type: object
-      properties:
-        operationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Operation id. Please reference /api/operations
-        name:
-          type:
-          - string
-          - 'null'
-          description: Operation name.
-        timeInSeconds:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Time in seconds.
-          format: double
-          readOnly: true
-        timeInHours:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Time in hours
-          format: double
-        ratePerSecond:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Rate per second
-          format: double
-          readOnly: true
-        ratePerHour:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Rate per hour
-          format: double
-      additionalProperties: false
-      description: Operation information
-    JobTrackingOperationDto:
-      required:
-      - id
-      - isOutsideProcessing
-      - order
-      - status
-      - systemOperationId
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique Id associated to this entity
-        status:
-          $ref: '#/components/schemas/JobItemToMakeOpStatusEnum'
-        order:
-          minimum: 0
-          type: integer
-          description: Routing order of the operation
-          format: int32
-        systemOperationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Identifier of the system operation associated to this entity
-
-            Please reference api/operations.'
-        isOutsideProcessing:
-          type: boolean
-          description: Denotes whether this is an outside processing operation
-        originalScheduledStartUtc:
-          type:
-          - string
-          - 'null'
-          description: The first scheduled start time.
-          format: date-time
-        originalScheduledEndUtc:
-          type:
-          - string
-          - 'null'
-          description: The first scheduled end time.
-          format: date-time
-        scheduledStartUtc:
-          type:
-          - string
-          - 'null'
-          description: Scheduled start datetime of the operation
-          format: date-time
-        scheduledEndUtc:
-          type:
-          - string
-          - 'null'
-          description: Scheduled end datetime of the operation
-          format: date-time
-        completedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: The operation completion datetime.
-          format: date-time
-        completedById:
-          type:
-          - string
-          - 'null'
-          description: Operation completed user identifier. Please reference /api/users endpoint.
-        scheduledEquipmentId:
-          type:
-          - string
-          - 'null'
-          description: Identifier of the equipment that this operation is scheduled to run on
-        scheduledEquipmentName:
-          type:
-          - string
-          - 'null'
-          description: The name of the equipment that this operation is scheduled to run on.
-        customFields:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: The custom field data on the object
-        instructions:
-          type:
-          - string
-          - 'null'
-          description: Instructions specific to the item to make operation.
-        name:
-          type:
-          - string
-          - 'null'
-          description: System operation name.
-        leadTimeInDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Number of days required between order and receipt. Only applicable for outside processing operations.
-          format: int32
-        associatedPurchaseOrderIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Associated purchase order IDs.
-        estimatedSetupTimeInSeconds:
-          type:
-          - number
-          - 'null'
-          description: The estimated setup time in seconds for the operation.
-          format: double
-        estimatedSetupTimeBasis:
-          $ref: '#/components/schemas/DomainOperationsRouting_Step_SetupTimeOption'
-        estimatedRunTimeInSeconds:
-          type:
-          - number
-          - 'null'
-          description: 'The estimated run time in seconds for the operation.
-
-            Note: This is an obsolete field from when operation could not separate between machine (unattended) and labor (attended) time.'
-          format: double
-        estimatedRunTimeBasis:
-          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
-        estimatedMachineTimeInSeconds:
-          type:
-          - number
-          - 'null'
-          description: The estimated machine time in seconds for the operation.
-          format: double
-        estimatedMachineTimeBasis:
-          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
-        estimatedLaborTimeInSeconds:
-          type:
-          - number
-          - 'null'
-          description: The estimated labor time in seconds for the operation.
-          format: double
-        estimatedLaborTimeBasis:
-          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
-        isMachineTimeOnly:
-          type: boolean
-          description: 'Whether this operation can be run without an employee present.  If true, use the machineTime properties.  If false,
-
-            use the laborTime properties.'
-        workOrderId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Identifier of work order that this operation is associated to, if applicable.
-
-            Please reference api/work-orders endpoint.'
-        isRework:
-          type: boolean
-          description: Whether this operation is a rework operation (a redo created from a prior operation).
-        hasAssociatedRework:
-          type: boolean
-          description: Whether this operation was sent for rework (one or more rework operations were created from it).
-        rework:
-          $ref: '#/components/schemas/JobTrackingOperationReworkDto'
-      additionalProperties: false
-      description: Represents a job operation (for tracking purposes).
-    JobDto:
-      required:
-      - id
-      - name
-      - number
-      - parentItemId
-      - priority
-      - quantityToMake
-      - status
-      - workOrderIds
-      - workOrders
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to this entity
-        number:
-          minimum: 0
-          type: integer
-          description: Job number
-          format: int32
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Job name, defaults to number unless otherwise specified.
-        parentItemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Unique identifier of the parent item produced by this job.
-
-            Please reference api/items endpoint.'
-        quantityToMake:
-          minimum: 0
-          type: number
-          description: Quantity of parent item produced by this job
-          format: double
-        productionDueDate:
-          type:
-          - string
-          - 'null'
-          description: Due date
-          format: date-time
-        earliestStartDate:
-          type:
-          - string
-          - 'null'
-          description: If set, this is the earliest date that the job should be scheduled to begin.
-          format: date-time
-        salesOrderId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Identifier of sales order fulfilled by this job, if applicable.
-
-            Please reference api/sales-orders endpoint.'
-        salesOrderLineItemId:
-          maxLength: 36
-          minLength: 36
-          type:
-          - string
-          - 'null'
-          description: 'Identifier of sales order line item fulfilled by this job, if applicable.
-
-            Please reference endpoints nested under api/sales-orders.'
-        createdUtc:
-          type: string
-          description: The date the job was created
-          format: date-time
-        originalScheduledStartUtc:
-          type:
-          - string
-          - 'null'
-          description: The first scheduled start time.
-          format: date-time
-        originalScheduledEndUtc:
-          type:
-          - string
-          - 'null'
-          description: The first scheduled end time.
-          format: date-time
-        scheduledStartUtc:
-          type:
-          - string
-          - 'null'
-          description: The current scheduled start time.
-          format: date-time
-        scheduledEndUtc:
-          type:
-          - string
-          - 'null'
-          description: The current scheduled end time.
-          format: date-time
-        completedOnUtc:
-          type:
-          - string
-          - 'null'
-          description: The job completion datetime.
-          format: date-time
-        cancelledOnUtc:
-          type:
-          - string
-          - 'null'
-          description: The job cancelled datetime.
-          format: date-time
-        revenue:
-          type:
-          - number
-          - 'null'
-          description: Revenue
-          format: double
-        notes:
-          type:
-          - string
-          - 'null'
-          description: Job level internal notes
-        workOrderIds:
-          type: array
-          items:
-            type: string
-          description: 'Identifier of work order(s) that this job is associated to, if applicable.
-
-            Please reference api/work-orders endpoint.'
-        workOrders:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkOrderReferenceDto'
-          description: Work order information, if applicable.
-        status:
-          $ref: '#/components/schemas/JobStatusEnum'
-        priority:
-          $ref: '#/components/schemas/JobPriorityEnum'
-        customFields:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: Custom fields that have been defined on this entity.
-      additionalProperties: false
-      description: Represents a job
-    CommonEnumCostBreakdownLineTypeEnum:
-      enum:
-      - material
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      - componentMaterial
-      - componentLabor
-      - componentMachine
-      - componentOutsideProcessing
-      - nestPartMaterialUsage
-      - nestPartMaterialScrap
-      - overhead
-      - unknown
-      type: string
-      description: Cost breakdown types
-    JobStatusEnum:
-      enum:
-      - draft
-      - needsReview
-      - approved
-      - engineering
-      - scheduled
-      - inProgress
-      - complete
-      - cancelled
-      - hold
-      type: string
-      description: Job status
-    JobRequestFindParameters:
-      type: object
-      properties:
-        jobIds:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter to jobs whose ids are in the list
-        numbers:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-          description: Filter jobs to only given numbers
-        jobNames:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter jobs to only given names
-        status:
-          $ref: '#/components/schemas/JobStatusEnum'
-        statuses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/JobStatusEnum'
-          description: Filter jobs to match the given statuses
-        parentItemId:
-          type:
-          - string
-          - 'null'
-          description: Filter jobs based on the id of the parent item they produce
-        hasIncompleteOperations:
-          type:
-          - boolean
-          - 'null'
-          description: "Filters jobs to have those that have at least 1 incomplete operation.\nNote that this will filter out jobs that haven't been approved yet because they technically have \nno operations on them until approved."
-        salesOrderId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Filters for jobs that are for this sales order id.
-
-            Please reference /api/sales-orders endpoint.'
-        createdBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters jobs created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        createdAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters jobs created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedBeforeUtc:
-          type:
-          - string
-          - 'null'
-          description: Filters jobs modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-          format: date-time
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Filters jobs modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
-
-            Useful for polling incrementally instead of re-syncing every job.'
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching/finding jobs.
-    DomainOperationsRouting_Step_SetupTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-    JobTrackingOperationDetailsDto:
-      required:
-      - itemToMake
-      - operation
-      type: object
-      properties:
-        itemToMake:
-          $ref: '#/components/schemas/JobTrackingItemToMakeDto'
-        operation:
-          $ref: '#/components/schemas/JobTrackingOperationDto'
-      additionalProperties: false
-      description: Represents a job operation and the item affected (for tracking purposes).
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
     CommonCostDto:
       required:
       - perUnit
@@ -912,82 +515,69 @@ components:
           format: double
       additionalProperties: false
       description: Cost information
-    CommonCostBreakdownLineDto:
-      required:
-      - cost
-      - costType
-      - name
+    JobUpdateDto:
       type: object
       properties:
-        costType:
-          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
-        operationType:
-          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
         name:
-          minLength: 1
-          type: string
-          description: Decription of this line.
-        cost:
-          minimum: 0
-          type: number
-          description: Cost.
-          format: double
-        quantity:
-          minimum: 0
+          type:
+          - string
+          - 'null'
+          description: The name of the job
+        priority:
+          $ref: '#/components/schemas/JobPriorityEnum'
+        quantityToMake:
           type:
           - number
           - 'null'
-          description: Quantity (if applicable)
+          description: The quantity the job should make
           format: double
-        itemId:
-          maxLength: 24
-          minLength: 24
+        productionDueDate:
           type:
           - string
           - 'null'
-          description: Id of the item that was picked. Please reference /api/items endpoint.
-        itemName:
+          description: The production due date
+          format: date-time
+        earliestStartDate:
           type:
           - string
           - 'null'
-          description: The name of the item that was picked.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
+          description: If set, this is the earliest date that the job should be scheduled to begin.
+          format: date-time
+        notes:
           type:
           - string
           - 'null'
-          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
-        operationInformation:
-          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+          description: The internal notes
       additionalProperties: false
-      description: Cost breakdown line information.
-    WorkOrderReferenceDto:
-      required:
-      - id
-      - name
-      - number
+      description: Represents an update on an Job.
+    InProcessTrackingResponseFindParameters:
       type: object
       properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Identifier of work order.
-
-            Please reference api/work-orders endpoint for additional information.'
-        number:
-          minimum: 0
-          type: integer
-          description: Number
-          format: int32
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Work order name, defaults to number unless otherwise specified.
+        phase:
+          $ref: '#/components/schemas/InProcessTrackingFieldCheckpointPhase'
       additionalProperties: false
-      description: Work order reference information
+      description: Optional filters for listing a job's in process tracking responses.
+    JobStatusEnum:
+      enum:
+      - draft
+      - needsReview
+      - approved
+      - engineering
+      - scheduled
+      - inProgress
+      - complete
+      - cancelled
+      - hold
+      type: string
+      description: Job status
+    CommonEnumOperationTypeEnum:
+      enum:
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      type: string
+      description: Operation type
     JobTrackingOperationReworkDto:
       type: object
       properties:
@@ -1028,6 +618,86 @@ components:
           format: date-time
       additionalProperties: false
       description: Rework details associated with a job operation.
+    GdtEnumControlType:
+      enum:
+      - none
+      - straightness
+      - flatness
+      - circularity
+      - cylindricity
+      - profileOfLine
+      - profileOfSurface
+      - perpendicularity
+      - angularity
+      - parallelism
+      - position
+      - concentricity
+      - symmetry
+      - runout
+      - totalRunout
+      - counterbore
+      - spotface
+      - countersink
+      - radius
+      - square
+      - sphericalRadius
+      - controlledRadius
+      - diameter
+      - sphericalDiameter
+      - depth
+      - arcLength
+      - distance
+      - angle
+      - note
+      - thread
+      - surfaceFinish
+      - surfaceFinishRemovalByMachining
+      - surfaceFinishRemovalProhibited
+      type: string
+      description: 'Public mirror of FulcrumProduct.Domain.Gdt.Data.ControlType. Members mirror the domain enum
+
+        one-to-one by underlying value (guarded by JobInProcessTrackingEnumParityTests) so it maps by a plain cast,
+
+        decoupling the published contract from renames of the internal enum.'
+    CommonEnumCostBreakdownLineTypeEnum:
+      enum:
+      - material
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      - componentMaterial
+      - componentLabor
+      - componentMachine
+      - componentOutsideProcessing
+      - nestPartMaterialUsage
+      - nestPartMaterialScrap
+      - overhead
+      - unknown
+      type: string
+      description: Cost breakdown types
+    ItemsAndInventoryRoutingsCostBreakdownType:
+      enum:
+      - estimated
+      - inProgressJob
+      - completedJob
+      - cancelledJob
+      type: string
+    InProcessTrackingEnumQualityUnitOfMeasure:
+      enum:
+      - millimeter
+      - centimeter
+      - meter
+      - inch
+      - foot
+      - micrometer
+      - microinch
+      type: string
+      description: 'Public mirror of FulcrumProduct.Domain.Quality.Enums.QualityUnitOfMeasure. Members mirror the
+
+        domain enum one-to-one by underlying value (guarded by JobInProcessTrackingEnumParityTests) so it maps by a
+
+        plain cast, decoupling the published contract from renames of the internal enum.'
     JobTrackingDto:
       required:
       - id
@@ -1255,113 +925,30 @@ components:
           description: The customer that this job is associated with
       additionalProperties: false
       description: Represents a job (for tracking purposes). This is essentially a summary of the job's current state.
-    ItemsAndInventoryRoutingsCostBreakdownType:
-      enum:
-      - estimated
-      - inProgressJob
-      - completedJob
-      - cancelledJob
-      type: string
-    CommonEnumOperationTypeEnum:
-      enum:
+    CommonTimeDto:
+      required:
       - labor
-      - setup
       - machine
-      - outsideProcessing
-      type: string
-      description: Operation type
-    JobRequestUpdateStatus:
-      required:
-      - status
+      - setup
       type: object
       properties:
-        status:
-          $ref: '#/components/schemas/JobStatusEnum'
-        createPOs:
-          type:
-          - boolean
-          - 'null'
-          description: 'Create Purchase Orders for the Job. Required for the following statuses: Engineering, Approved'
-        isInitialDataImport:
-          type:
-          - boolean
-          - 'null'
-          description: 'The job will be created as Complete. No inventory transactions. This is should mostly be used when importing jobs from legacy systems.
-
-            Required for the following statuses: Complete'
+        labor:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        machine:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+        setup:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
       additionalProperties: false
-      description: Update a job status.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    DomainOperationsRouting_Step_RunTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      - unitsPerHour
-      type: string
-    JobItemToMakeStatusEnum:
-      enum:
-      - new
-      - working
-      - complete
-      - cancelled
-      type: string
-      description: Job Item to Make status
-    ItemReferenceDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to this entity
-        number:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Item number.
-        revision:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Revision name.
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Item name.
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Item description.
-      additionalProperties: false
-      description: Item reference
-    JobItemToMakeOpStatusEnum:
-      enum:
-      - pending
-      - ready
-      - running
-      - paused
-      - complete
-      - cancelled
-      type: string
-      description: Job Item to Make Operation status
+      description: Time information
     CommonCostBreakdownDto:
       required:
       - calculatedOn
@@ -1452,35 +1039,243 @@ components:
           description: Cost breakdown line details.
       additionalProperties: false
       description: Cost breakdown
-    CommonTimeDto:
+    JobTrackingOperationDetailsDto:
       required:
-      - labor
-      - machine
-      - setup
+      - itemToMake
+      - operation
       type: object
       properties:
-        labor:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        machine:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
-        setup:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
+        itemToMake:
+          $ref: '#/components/schemas/JobTrackingItemToMakeDto'
+        operation:
+          $ref: '#/components/schemas/JobTrackingOperationDto'
       additionalProperties: false
-      description: Time information
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
+      description: Represents a job operation and the item affected (for tracking purposes).
+    JobTrackingOperationDto:
+      required:
+      - id
+      - isOutsideProcessing
+      - order
+      - status
+      - systemOperationId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique Id associated to this entity
+        status:
+          $ref: '#/components/schemas/JobItemToMakeOpStatusEnum'
+        order:
+          minimum: 0
+          type: integer
+          description: Routing order of the operation
+          format: int32
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the system operation associated to this entity
+
+            Please reference api/operations.'
+        isOutsideProcessing:
+          type: boolean
+          description: Denotes whether this is an outside processing operation
+        originalScheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: The first scheduled start time.
+          format: date-time
+        originalScheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: The first scheduled end time.
+          format: date-time
+        scheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: Scheduled start datetime of the operation
+          format: date-time
+        scheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: Scheduled end datetime of the operation
+          format: date-time
+        completedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: The operation completion datetime.
+          format: date-time
+        completedById:
+          type:
+          - string
+          - 'null'
+          description: Operation completed user identifier. Please reference /api/users endpoint.
+        scheduledEquipmentId:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the equipment that this operation is scheduled to run on
+        scheduledEquipmentName:
+          type:
+          - string
+          - 'null'
+          description: The name of the equipment that this operation is scheduled to run on.
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: The custom field data on the object
+        instructions:
+          type:
+          - string
+          - 'null'
+          description: Instructions specific to the item to make operation.
+        name:
+          type:
+          - string
+          - 'null'
+          description: System operation name.
+        leadTimeInDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Number of days required between order and receipt. Only applicable for outside processing operations.
+          format: int32
+        associatedPurchaseOrderIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Associated purchase order IDs.
+        estimatedSetupTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: The estimated setup time in seconds for the operation.
+          format: double
+        estimatedSetupTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_SetupTimeOption'
+        estimatedRunTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: 'The estimated run time in seconds for the operation.
+
+            Note: This is an obsolete field from when operation could not separate between machine (unattended) and labor (attended) time.'
+          format: double
+        estimatedRunTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
+        estimatedMachineTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: The estimated machine time in seconds for the operation.
+          format: double
+        estimatedMachineTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
+        estimatedLaborTimeInSeconds:
+          type:
+          - number
+          - 'null'
+          description: The estimated labor time in seconds for the operation.
+          format: double
+        estimatedLaborTimeBasis:
+          $ref: '#/components/schemas/DomainOperationsRouting_Step_RunTimeOption'
+        isMachineTimeOnly:
+          type: boolean
+          description: 'Whether this operation can be run without an employee present.  If true, use the machineTime properties.  If false,
+
+            use the laborTime properties.'
+        workOrderId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of work order that this operation is associated to, if applicable.
+
+            Please reference api/work-orders endpoint.'
+        quantityToMake:
+          type: number
+          description: 'Quantity this operation is expected to produce.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          format: double
+          readOnly: true
+        quantityCompleted:
+          type: number
+          description: 'Quantity already completed on this operation, if the job is in progress.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          format: double
+          readOnly: true
+        quantityMade:
+          type: number
+          description: 'Quantity recorded as made on this operation: stamped when the operation completes, and banked through
+
+            receiving on an outside-processing operation. Unlike FulcrumProduct.PublicApi.Dto.Job.ItemToMake.Operation.OperationDto.QuantityCompleted, it does not include
+
+            the running count banked while the operation is in progress.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          format: double
+          readOnly: true
+        excludeSetupTimeFromAudit:
+          type: boolean
+          description: 'Whether this operation''s setup time is left out of the routing audit''s job-history averages.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          readOnly: true
+        excludeLaborTimeFromAudit:
+          type: boolean
+          description: 'Whether this operation''s labor time is left out of the routing audit''s job-history averages.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          readOnly: true
+        excludeMachineTimeFromAudit:
+          type: boolean
+          description: 'Whether this operation''s machine time is left out of the routing audit''s job-history averages.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          readOnly: true
+        isRework:
+          type: boolean
+          description: Whether this operation is a rework operation (a redo created from a prior operation).
+        hasAssociatedRework:
+          type: boolean
+          description: Whether this operation was sent for rework (one or more rework operations were created from it).
+        rework:
+          $ref: '#/components/schemas/JobTrackingOperationReworkDto'
+      additionalProperties: false
+      description: Represents a job operation (for tracking purposes).
+    DomainOperationsRouting_Step_SetupTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+    InProcessTrackingFieldDataType:
+      enum:
+      - boolean
+      - number
+      - dropdown
+      - text
+      - checkbox
+      type: string
+      description: 'Public mirror of FulcrumProduct.Domain.InProcessTracking.InProcessTrackingFieldDataType.
+
+        Members mirror the domain enum one-to-one by underlying value (guarded by JobInProcessTrackingEnumParityTests)
+
+        so it maps by a plain cast, decoupling the published contract from renames of the internal enum.'
     JobPriorityEnum:
       enum:
       - low
@@ -1488,6 +1283,260 @@ components:
       - high
       type: string
       description: Job priority
+    ItemReferenceDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to this entity
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Item number.
+        revision:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Revision name.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Item name.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Item description.
+      additionalProperties: false
+      description: Item reference
+    GdtEnumToleranceType:
+      enum:
+      - none
+      - diameter
+      type: string
+      description: 'Public mirror of FulcrumProduct.Domain.Gdt.Data.ToleranceType. Members mirror the domain enum
+
+        one-to-one by underlying value (guarded by JobInProcessTrackingEnumParityTests) so it maps by a plain cast,
+
+        decoupling the published contract from renames of the internal enum.'
+    WorkOrderReferenceDto:
+      required:
+      - id
+      - name
+      - number
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of work order.
+
+            Please reference api/work-orders endpoint for additional information.'
+        number:
+          minimum: 0
+          type: integer
+          description: Number
+          format: int32
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Work order name, defaults to number unless otherwise specified.
+      additionalProperties: false
+      description: Work order reference information
+    DomainOperationsRouting_Step_RunTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      - unitsPerHour
+      type: string
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    JobRequestUpdateStatus:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/JobStatusEnum'
+        createPOs:
+          type:
+          - boolean
+          - 'null'
+          description: 'Create Purchase Orders for the Job. Required for the following statuses: Engineering, Approved'
+        isInitialDataImport:
+          type:
+          - boolean
+          - 'null'
+          description: 'The job will be created as Complete. No inventory transactions. This is should mostly be used when importing jobs from legacy systems.
+
+            Required for the following statuses: Complete'
+      additionalProperties: false
+      description: Update a job status.
+    CommonCostBreakdownOperationDto:
+      required:
+      - operationId
+      type: object
+      properties:
+        operationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Operation id. Please reference /api/operations
+        name:
+          type:
+          - string
+          - 'null'
+          description: Operation name.
+        timeInSeconds:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in seconds.
+          format: double
+          readOnly: true
+        timeInHours:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in hours
+          format: double
+        ratePerSecond:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per second
+          format: double
+          readOnly: true
+        ratePerHour:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per hour
+          format: double
+      additionalProperties: false
+      description: Operation information
+    JobInProcessTrackingResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Stable identifier of the reading, unique within the job.
+          format: uuid
+        operator:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        recordedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        updatedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        numericValue:
+          type:
+          - number
+          - 'null'
+          description: 'The recorded value when the checkpoint is numeric, expressed in the checkpoint''s recording units
+
+            (`RecordingUnitOfMeasure`).'
+          format: double
+        numericValuePrecision:
+          type:
+          - integer
+          - 'null'
+          description: The number of decimal places captured for FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.InProcessTrackingResponseDto.NumericValue.
+          format: int32
+        booleanValue:
+          type:
+          - boolean
+          - 'null'
+          description: The recorded value when the checkpoint is a boolean.
+        stringValue:
+          type:
+          - string
+          - 'null'
+          description: The recorded value when the checkpoint is text or a dropdown selection.
+        intervalMarker:
+          type:
+          - integer
+          - 'null'
+          description: Sampling interval this reading belongs to, when the checkpoint uses interval sampling.
+          format: int32
+        multiplicityMarker:
+          type:
+          - integer
+          - 'null'
+          description: The reading's ordinal within its interval, when multiple readings are recorded per interval.
+          format: int32
+        measurementToolId:
+          type:
+          - string
+          - 'null'
+          description: Id of the measurement tool used to take the reading, if any.
+        measurementToolName:
+          type:
+          - string
+          - 'null'
+          description: Name of the measurement tool used to take the reading.
+        measurementToolSerialNumber:
+          type:
+          - string
+          - 'null'
+          description: Serial number of the measurement tool used to take the reading.
+        measurementToolType:
+          $ref: '#/components/schemas/ToolType'
+        measurementToolNextCalibrationUtc:
+          type:
+          - string
+          - 'null'
+          description: The measurement tool's current next-calibration date (live, not snapshotted at reading time).
+          format: date-time
+        createdOnUtc:
+          type: string
+          description: When the reading was first recorded.
+          format: date-time
+        updatedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: When the reading was last edited, if ever.
+          format: date-time
+        bonusToleranceValue:
+          type:
+          - number
+          - 'null'
+          description: Bonus tolerance applied to a GDT reading, when the checkpoint allows it.
+          format: double
+      additionalProperties: false
+      description: A single recorded operator reading against an in process tracking checkpoint.
     JobCreateDto:
       required:
       - quantityToMake
@@ -1563,12 +1612,615 @@ components:
           description: Id of the item to make. If SalesOrderId/SalesOrderLineItemId is set then ItemToMakeId will be ignored
       additionalProperties: false
       description: Details of job to be created
-    CommonEnumSortDirectionEnum:
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value: {}
+        path:
+          type: string
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
+    ToolType:
       enum:
-      - ascending
-      - descending
+      - bevelProtractor
+      - bendAngleGage
+      - boreGage
+      - caliper
+      - cmm
+      - coatingThicknessGage
+      - depthMicrometer
+      - gageBlocks
+      - hardnessTester
+      - heightGage
+      - micrometer
+      - opticalComparator
+      - pinGage
+      - plugGage
+      - radiusGage
+      - sineBar
+      - surfacePlate
+      - surfaceRoughnessTester
+      - thicknessGage
+      - threadPlugGage
+      - threadRingGage
+      - vmm
+      - attributeGage
+      - calibrationArtifact
+      - indicator
+      - calibrationStandard
+      - chamferGage
+      - lightMeter
+      - presetter
+      - digitalConductivityMeter
+      - ringGage
+      - profilometer
+      - splineGage
+      - tapeMeasure
+      - thermometer
+      - stopwatch
+      - torqueWrench
+      - instantMeasurementSystem
+      - protractor
+      - pressureGage
+      - tubeGage
+      - tubeMicrometer
+      - thermocouple
+      - ohmMeter
+      - multimeter
+      - weight
+      - fixture
+      - machine
+      - hygrothermometer
+      - concentricityGage
+      - cmmDatumSphere
+      - threadMicrometer
+      - insideMicrometer
+      - pinMicrometer
+      - setPlug
+      - nptRingGage
+      - nptPlugGage
+      - grooveMicrometer
+      - weldingEquipment
+      - surfaceTesterMaster
       type: string
-      description: Specify sorting direction.
+      description: 'The type of tool in the calibration system. Member values mirror
+
+        FulcrumProduct.Domain.ToolCalibrations.Data.ToolType one-to-one (guarded by
+
+        ToolCalibrationEnumParityTests) so tools map by underlying value.'
+    JobRequestFindParameters:
+      type: object
+      properties:
+        jobIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter to jobs whose ids are in the list
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Filter jobs to only given numbers
+        jobNames:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter jobs to only given names
+        status:
+          $ref: '#/components/schemas/JobStatusEnum'
+        statuses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/JobStatusEnum'
+          description: Filter jobs to match the given statuses
+        parentItemId:
+          type:
+          - string
+          - 'null'
+          description: Filter jobs based on the id of the parent item they produce
+        hasIncompleteOperations:
+          type:
+          - boolean
+          - 'null'
+          description: "Filters jobs to have those that have at least 1 incomplete operation.\nNote that this will filter out jobs that haven't been approved yet because they technically have \nno operations on them until approved."
+        salesOrderId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Filters for jobs that are for this sales order id.
+
+            Please reference /api/sales-orders endpoint.'
+        createdBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs created before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        createdAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs created after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: Filters jobs modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+          format: date-time
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filters jobs modified after (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Useful for polling incrementally instead of re-syncing every job.'
+          format: date-time
+        productionDueDateFrom:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to jobs whose production due date falls on or after this date. The whole day is included,
+
+            so any time component is ignored.'
+          format: date-time
+        productionDueDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to jobs whose production due date falls on or before this date. The whole day is included,
+
+            so a job due later that same day still matches.'
+          format: date-time
+        completedOnFrom:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to jobs completed on or after this date, as a whole day in the shop''s timezone. Any time
+
+            component is ignored.'
+          format: date-time
+        completedOnTo:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to jobs completed on or before this date, as a whole day in the shop''s timezone, so a job
+
+            completed later that same shop day still matches.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding jobs.
+    CommonCostBreakdownLineDto:
+      required:
+      - cost
+      - costType
+      - name
+      type: object
+      properties:
+        costType:
+          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
+        operationType:
+          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        name:
+          minLength: 1
+          type: string
+          description: Decription of this line.
+        cost:
+          minimum: 0
+          type: number
+          description: Cost.
+          format: double
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Quantity (if applicable)
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Id of the item that was picked. Please reference /api/items endpoint.
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: The name of the item that was picked.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
+        operationInformation:
+          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+      additionalProperties: false
+      description: Cost breakdown line information.
+    InProcessTrackingFieldCheckpointPhase:
+      enum:
+      - preOperation
+      - duringOperation
+      - postOperation
+      type: string
+      description: 'Public mirror of FulcrumProduct.Domain.InProcessTracking.InProcessTrackingFieldCheckpointPhase.
+
+        Members mirror the domain enum one-to-one by underlying value (guarded by JobInProcessTrackingEnumParityTests)
+
+        so it maps by a plain cast, decoupling the published contract from renames of the internal enum.'
+    JobDto:
+      required:
+      - id
+      - name
+      - number
+      - parentItemId
+      - priority
+      - quantityToMake
+      - status
+      - workOrderIds
+      - workOrders
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to this entity
+        number:
+          minimum: 0
+          type: integer
+          description: Job number
+          format: int32
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Job name, defaults to number unless otherwise specified.
+        parentItemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Unique identifier of the parent item produced by this job.
+
+            Please reference api/items endpoint.'
+        quantityToMake:
+          minimum: 0
+          type: number
+          description: Quantity of parent item produced by this job
+          format: double
+        productionDueDate:
+          type:
+          - string
+          - 'null'
+          description: Due date
+          format: date-time
+        earliestStartDate:
+          type:
+          - string
+          - 'null'
+          description: If set, this is the earliest date that the job should be scheduled to begin.
+          format: date-time
+        salesOrderId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of sales order fulfilled by this job, if applicable.
+
+            Please reference api/sales-orders endpoint.'
+        salesOrderLineItemId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: 'Identifier of sales order line item fulfilled by this job, if applicable.
+
+            Please reference endpoints nested under api/sales-orders.'
+        createdUtc:
+          type: string
+          description: The date the job was created
+          format: date-time
+        originalScheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: The first scheduled start time.
+          format: date-time
+        originalScheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: The first scheduled end time.
+          format: date-time
+        scheduledStartUtc:
+          type:
+          - string
+          - 'null'
+          description: The current scheduled start time.
+          format: date-time
+        scheduledEndUtc:
+          type:
+          - string
+          - 'null'
+          description: The current scheduled end time.
+          format: date-time
+        completedOnUtc:
+          type:
+          - string
+          - 'null'
+          description: The job completion datetime.
+          format: date-time
+        cancelledOnUtc:
+          type:
+          - string
+          - 'null'
+          description: The job cancelled datetime.
+          format: date-time
+        revenue:
+          type:
+          - number
+          - 'null'
+          description: Revenue
+          format: double
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Job level internal notes
+        workOrderIds:
+          type: array
+          items:
+            type: string
+          description: 'Identifier of work order(s) that this job is associated to, if applicable.
+
+            Please reference api/work-orders endpoint.'
+        workOrders:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkOrderReferenceDto'
+          description: Work order information, if applicable.
+        status:
+          $ref: '#/components/schemas/JobStatusEnum'
+        priority:
+          $ref: '#/components/schemas/JobPriorityEnum'
+        customFields:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: Custom fields that have been defined on this entity.
+      additionalProperties: false
+      description: Represents a job
+    JobInProcessTrackingCheckpointDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the checkpoint (the in process tracking field instance on the job's operation).
+        itemId:
+          type:
+          - string
+          - 'null'
+          description: Id of the item being made that this checkpoint belongs to.
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: Name of the item being made.
+        itemDescription:
+          type:
+          - string
+          - 'null'
+          description: Description of the item being made.
+        equipmentName:
+          type:
+          - string
+          - 'null'
+          description: Name of the equipment scheduled for the operation.
+        operationName:
+          type:
+          - string
+          - 'null'
+          description: Name of the operation the checkpoint is recorded against.
+        operationOrder:
+          type: integer
+          description: Order of the operation within the job's routing.
+          format: int32
+        label:
+          type:
+          - string
+          - 'null'
+          description: Label describing the checkpoint.
+        units:
+          type:
+          - string
+          - 'null'
+          description: Units the numeric target and readings are expressed in.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Free text describing the checkpoint.
+        type:
+          $ref: '#/components/schemas/InProcessTrackingFieldDataType'
+        targetValue:
+          type:
+          - number
+          - 'null'
+          description: 'The target or ideal numeric value, expressed in the checkpoint''s drawing units
+
+            (FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.DrawingUnitOfMeasure).'
+          format: double
+        targetValuePrecision:
+          type:
+          - integer
+          - 'null'
+          description: Number of decimal places the target is specified to.
+          format: int32
+        minimumValue:
+          type:
+          - number
+          - 'null'
+          description: 'The minimum acceptable numeric value, expressed in the checkpoint''s drawing units
+
+            (FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.DrawingUnitOfMeasure).'
+          format: double
+        maximumValue:
+          type:
+          - number
+          - 'null'
+          description: 'The maximum acceptable numeric value, expressed in the checkpoint''s drawing units
+
+            (FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.DrawingUnitOfMeasure).'
+          format: double
+        triggeringBooleanValue:
+          type:
+          - boolean
+          - 'null'
+          description: The passing value for a boolean checkpoint.
+        triggeringDropdownValue:
+          type:
+          - string
+          - 'null'
+          description: The passing value for a dropdown checkpoint.
+        checkpointOrder:
+          type: integer
+          description: The order of the checkpoint within the operation.
+          format: int32
+        phase:
+          $ref: '#/components/schemas/InProcessTrackingFieldCheckpointPhase'
+        firstArticle:
+          type: boolean
+          description: 'Only applies to the During phase. If true (and required), this checkpoint blocks adding
+
+            completed items to inventory until its target is met.'
+        isGdt:
+          type: boolean
+          description: Whether the checkpoint is a GDT (geometric dimensioning and tolerancing) requirement.
+        toleranceType:
+          $ref: '#/components/schemas/GdtEnumToleranceType'
+        controlType:
+          $ref: '#/components/schemas/GdtEnumControlType'
+        modifier:
+          $ref: '#/components/schemas/GdtEnumModifierType'
+        datums:
+          type:
+          - string
+          - 'null'
+          description: The datum references for a GDT checkpoint.
+        gdtCritical:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the GDT checkpoint is marked critical.
+        bubbleNumber:
+          type:
+          - integer
+          - 'null'
+          description: Bubble (balloon) number annotating the checkpoint on the drawing.
+          format: int32
+        subBubbleNumber:
+          type:
+          - integer
+          - 'null'
+          description: Sub-bubble number annotating the checkpoint on the drawing.
+          format: int32
+        drawingPage:
+          type:
+          - integer
+          - 'null'
+          description: Page of the drawing the annotation is on.
+          format: int32
+        drawingName:
+          type:
+          - string
+          - 'null'
+          description: Name of the drawing the checkpoint is annotated on.
+        drawingLocation:
+          type:
+          - string
+          - 'null'
+          description: Location of the annotation on the drawing.
+        drawingUnitOfMeasure:
+          $ref: '#/components/schemas/InProcessTrackingEnumQualityUnitOfMeasure'
+        recordingUnitOfMeasure:
+          $ref: '#/components/schemas/InProcessTrackingEnumQualityUnitOfMeasure'
+        recordingTargetValue:
+          type:
+          - number
+          - 'null'
+          description: 'The target value converted into recording units (FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.RecordingUnitOfMeasure), rounded to
+
+            FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.RecordingPrecision. Equal to FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.TargetValue when drawing and recording units
+
+            match; null for non-participating (angular/non-dimensional) checkpoints.'
+          format: double
+        recordingMinimumValue:
+          type:
+          - number
+          - 'null'
+          description: 'The minimum acceptable value in recording units (FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.RecordingUnitOfMeasure). Same
+
+            population rule as FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.RecordingTargetValue.'
+          format: double
+        recordingMaximumValue:
+          type:
+          - number
+          - 'null'
+          description: 'The maximum acceptable value in recording units (FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.RecordingUnitOfMeasure). Same
+
+            population rule as FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.RecordingTargetValue.'
+          format: double
+        recordingPrecision:
+          type:
+          - integer
+          - 'null'
+          description: 'The number of decimal places the recording-unit requirement is expressed to. Same population rule as
+
+            FulcrumProduct.PublicApi.Dto.Job.InProcessTracking.JobInProcessTrackingCheckpointDto.RecordingTargetValue.'
+          format: int32
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobInProcessTrackingResponseDto'
+          description: Every recorded reading for this checkpoint.
+      additionalProperties: false
+      description: An in process tracking checkpoint on a job, together with every recorded operator reading for it.
+    JobItemToMakeOpStatusEnum:
+      enum:
+      - pending
+      - ready
+      - running
+      - paused
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make Operation status
   securitySchemes:
     bearer:
       type: http
@@ -1579,6 +2231,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -1589,6 +2244,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -1609,9 +2267,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -1673,6 +2337,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -1690,6 +2355,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -1747,6 +2415,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -1765,6 +2436,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -1774,6 +2448,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

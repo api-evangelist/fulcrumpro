@@ -1,0 +1,1835 @@
+openapi: 3.2.0
+info:
+  title: Fulcrum Public Tool API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Tool
+paths:
+  /api/tools:
+    post:
+      tags:
+      - Tool
+      summary: Create a tool.
+      operationId: CreateTool
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ToolCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ToolCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ToolCreateDto'
+        required: true
+      responses:
+        '200':
+          description: The created tool, with its assigned number and computed calibration schedule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ToolDto'
+        '400':
+          description: Validation issues with input
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-Edit Tool Template
+  /api/tools/{toolId}/calibration-template:
+    post:
+      tags:
+      - Tool
+      summary: Publish a new calibration template version for a tool.
+      operationId: CreateToolCalibrationTemplate
+      parameters:
+      - name: toolId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ToolRequestCalibrationTemplateCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolRequestCalibrationTemplateCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ToolRequestCalibrationTemplateCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ToolRequestCalibrationTemplateCreateDto'
+        required: true
+      responses:
+        '200':
+          description: The published template version, with its assigned version number and checkpoint ids
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationTemplateDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationTemplateDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Tool did not exist
+        '409':
+          description: Another caller published a version for this tool at the same time
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-Edit Tool Template
+  /api/tools/{id}:
+    get:
+      tags:
+      - Tool
+      summary: Get a tool by id, including its calibration schedule and latest calibration…
+      operationId: GetTool
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The tool for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ToolDto'
+        '404':
+          description: Tool did not exist
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-View Tool Calibration
+    put:
+      tags:
+      - Tool
+      summary: 'Update a tool. A full replacement: omitted fields are cleared.'
+      operationId: UpdateTool
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ToolUpdateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ToolUpdateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ToolUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: The updated tool
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ToolDto'
+        '400':
+          description: Validation issues with input
+        '404':
+          description: Tool did not exist
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-Edit Tool Template
+  /api/tools/{toolId}/calibration-template/latest:
+    get:
+      tags:
+      - Tool
+      summary: Get the latest calibration template version for a tool — the checkpoints…
+      operationId: GetToolCalibrationTemplateLatest
+      parameters:
+      - name: toolId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The tool's latest calibration template version
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationTemplateDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationTemplateDto'
+        '404':
+          description: Tool did not exist, or the tool has no calibration template
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-View Tool Calibration
+  /api/tools/{toolId}/calibration-template/versions/{version}:
+    get:
+      tags:
+      - Tool
+      summary: Get one calibration template version for a tool — for example the version a…
+      operationId: GetToolCalibrationTemplateVersion
+      parameters:
+      - name: toolId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The requested calibration template version
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationTemplateDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ToolCalibrationTemplateDto'
+        '404':
+          description: Tool did not exist, or the tool has no template version with that number
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-View Tool Calibration
+  /api/tools/{toolId}/calibration-template/versions:
+    get:
+      tags:
+      - Tool
+      summary: List a tool's calibration template versions, newest first, with each version's…
+      operationId: ListToolCalibrationTemplateVersions
+      parameters:
+      - name: toolId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The tool's calibration template versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoToolCalibrationTemplateVersionDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoToolCalibrationTemplateVersionDto'
+        '404':
+          description: Tool did not exist
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-View Tool Calibration
+  /api/tools/list:
+    post:
+      tags:
+      - Tool
+      summary: Finds tools based on search parameters, including calibration due-date windows…
+      operationId: ListTools
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ToolsListParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToolsListParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ToolsListParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ToolsListParameters'
+      responses:
+        '200':
+          description: The matching tools
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoToolSummaryDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoToolSummaryDto'
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Quality-Tool Calibration-View Tool Calibration
+components:
+  schemas:
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    ToolCalibrationEnumCalibrationResult:
+      enum:
+      - fail
+      - pass
+      - notApplicable
+      type: string
+      description: 'The outcome of a calibration. Mirrors
+
+        FulcrumProduct.Domain.ToolCalibrations.Data.CalibrationResult by underlying value.'
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ToolUpdateDto:
+      required:
+      - calibrationFrequency
+      - name
+      - toolType
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of the tool
+        serialNumber:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The serial number of the tool
+        toolType:
+          $ref: '#/components/schemas/ToolType'
+        toolStatus:
+          $ref: '#/components/schemas/ToolStatus'
+        toolInactiveReason:
+          $ref: '#/components/schemas/ToolInactiveReason'
+        calibrationFrequency:
+          $ref: '#/components/schemas/ToolEnumCalibrationFrequency'
+        calibrationInterval:
+          type:
+          - integer
+          - 'null'
+          description: 'The interval count paired with a recurring calibration frequency (days or months); must be
+
+            null for a reference gage'
+          format: int32
+        lastCalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the tool was last calibrated (UTC); required unless the tool is a reference gage
+          format: date-time
+        outForRecalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the tool left the shop for recalibration (UTC). Required when the inactive reason is
+
+            outForCalibration, and must be null for every other reason (tandem validation)'
+          format: date-time
+        notes:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Free-text notes
+        defaultUnitOfMeasureName:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The unit of measure the tool measures in; must be a standard unit of measure
+        measurementRangeMin:
+          type:
+          - number
+          - 'null'
+          description: The lower bound of the tool's measurement range
+          format: double
+        measurementRangeMinPrecision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the measurement range lower bound
+          format: int32
+        measurementRangeMax:
+          type:
+          - number
+          - 'null'
+          description: The upper bound of the tool's measurement range
+          format: double
+        measurementRangeMaxPrecision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the measurement range upper bound
+          format: int32
+        accuracy:
+          type:
+          - number
+          - 'null'
+          description: The tool's rated accuracy
+          format: double
+        accuracyPrecision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the rated accuracy
+          format: int32
+        size:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The one size a fixed-size gage checks, as stamped on it ("1/4-20", ".2500"). Only thread and
+
+            go/no-go gage types keep it; on any other tool type it is cleared, and on those types the
+
+            measurement range is cleared instead.'
+        designation:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'A fixed-size gage''s thread form, class, and GO/NO-GO member ("UNC-2B GO/NOGO"). Kept and cleared
+
+            under the same rule as Size.'
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'The customer that owns the tool; null for shop-owned tools. A customer-owned tool only takes
+
+            customer-source calibration records'
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The location of the tool
+      additionalProperties: false
+      description: 'Request body for updating a tool. A full replacement: omitted fields are cleared.'
+    ToolDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the tool
+        number:
+          type:
+          - integer
+          - 'null'
+          description: The tool's sequential number, unique within the tenant (displayed as T-{number})
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the tool
+        serialNumber:
+          type:
+          - string
+          - 'null'
+          description: The serial number of the tool
+        toolType:
+          $ref: '#/components/schemas/ToolType'
+        toolStatus:
+          $ref: '#/components/schemas/ToolStatus'
+        toolInactiveReason:
+          $ref: '#/components/schemas/ToolInactiveReason'
+        calibrationFrequency:
+          $ref: '#/components/schemas/ToolEnumCalibrationFrequency'
+        calibrationInterval:
+          type:
+          - integer
+          - 'null'
+          description: The interval count paired with a recurring calibration frequency (days or months)
+          format: int32
+        lastCalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the tool was last calibrated (UTC)
+          format: date-time
+        nextCalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the tool''s next calibration is due (UTC, computed); null for reference gages, never-calibrated
+
+            tools, and tools inactive as Retired or Lost (permanently out of service — nothing is ever due
+
+            against them; clearing the reason restores the date)'
+          format: date-time
+        lastCalibrationResult:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        lastCalibratedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        customer:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        location:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes
+        defaultUnitOfMeasureName:
+          type:
+          - string
+          - 'null'
+          description: The unit of measure the tool measures in
+        measurementRangeMin:
+          type:
+          - number
+          - 'null'
+          description: The lower bound of the tool's measurement range
+          format: double
+        measurementRangeMinPrecision:
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the measurement range lower bound
+          format: int32
+        measurementRangeMax:
+          type:
+          - number
+          - 'null'
+          description: The upper bound of the tool's measurement range
+          format: double
+        measurementRangeMaxPrecision:
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the measurement range upper bound
+          format: int32
+        accuracy:
+          type:
+          - number
+          - 'null'
+          description: The tool's rated accuracy
+          format: double
+        accuracyPrecision:
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the rated accuracy
+          format: int32
+        size:
+          type:
+          - string
+          - 'null'
+          description: 'The one size a fixed-size gage checks, as stamped on it ("1/4-20", ".2500"). Only carried by
+
+            thread and go/no-go gage types; cleared for every other tool type.'
+        designation:
+          type:
+          - string
+          - 'null'
+          description: 'A fixed-size gage''s thread form, class, and GO/NO-GO member ("UNC-2B GO/NOGO", "Class ZZ GO").
+
+            Only carried by thread and go/no-go gage types; cleared for every other tool type.'
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the tool was last modified (UTC); supports incremental sync
+          format: date-time
+        outForRecalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the tool left the shop for recalibration (UTC). Null means the tool is on site;
+
+            a value means it has been out since that date, and requires the outForCalibration
+
+            inactive reason'
+          format: date-time
+      additionalProperties: false
+      description: A tool (measurement instrument or gage) tracked by the calibration system.
+    ToolInactiveReason:
+      enum:
+      - lost
+      - damaged
+      - requiresRepair
+      - retired
+      - outForCalibration
+      type: string
+      description: 'Why an inactive tool is out of service. Mirrors
+
+        FulcrumProduct.Domain.Tools.Data.ToolInactiveReason by underlying value.'
+    ToolStatus:
+      enum:
+      - active
+      - inactive
+      type: string
+      description: 'Whether the tool is in service. Mirrors
+
+        FulcrumProduct.Domain.Tools.Data.ToolStatus by underlying value.'
+    ToolMasterGageReferenceDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the master gauge tool
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the master gauge tool
+        toolType:
+          $ref: '#/components/schemas/ToolType'
+        serialNumber:
+          type:
+          - string
+          - 'null'
+          description: The serial number of the master gauge tool
+        nextCalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the master gauge's own calibration expires (UTC); null when it has never been calibrated
+          format: date-time
+        calibrationFrequency:
+          $ref: '#/components/schemas/ToolEnumCalibrationFrequency'
+      additionalProperties: false
+      description: A master gauge (itself a tool) referenced by a calibration template or checkpoint.
+    DtoPagedResultDtoToolCalibrationTemplateVersionDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolCalibrationTemplateVersionDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    ToolCalibrationTemplateVersionDto:
+      type: object
+      properties:
+        version:
+          type: integer
+          description: The template version number
+          format: int32
+        createdUtc:
+          type: string
+          description: When this version was created (UTC) — the start of its effective range
+          format: date-time
+        createdByName:
+          type:
+          - string
+          - 'null'
+          description: Who created this version
+        effectiveUntilUtc:
+          type:
+          - string
+          - 'null'
+          description: When the next version superseded this one (UTC); null means this is the current version
+          format: date-time
+      additionalProperties: false
+      description: One row of a tool's calibration template version history.
+    ToolCalibrationCheckpointDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the checkpoint; measurement responses reference it
+          format: uuid
+        order:
+          type: integer
+          description: Relative position of the checkpoint within the template
+          format: int32
+        attribute:
+          type:
+          - string
+          - 'null'
+          description: The characteristic being measured (e.g. "Diameter")
+        nominal:
+          type:
+          - number
+          - 'null'
+          description: The target/nominal value for the measurement
+          format: double
+        minimumValue:
+          type:
+          - number
+          - 'null'
+          description: The minimum acceptable measured value (inclusive)
+          format: double
+        maximumValue:
+          type:
+          - number
+          - 'null'
+          description: The maximum acceptable measured value (inclusive)
+          format: double
+        precision:
+          type:
+          - number
+          - 'null'
+          description: The decimal precision applied to the nominal value
+          format: double
+        units:
+          type:
+          - string
+          - 'null'
+          description: The unit of measure of the measurement
+        masterGage:
+          $ref: '#/components/schemas/ToolMasterGageReferenceDto'
+        masterGageId:
+          type:
+          - string
+          - 'null'
+          description: 'The checkpoint''s raw master gauge id. Set while masterGage is null means the configured
+
+            master no longer resolves ("master unavailable"), never "no master configured"'
+      additionalProperties: false
+      description: A single measurement checkpoint belonging to a calibration template.
+    ToolRequestCalibrationTemplateCreateDto:
+      type: object
+      properties:
+        procedureName:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The name of the calibration procedure
+        defaultMasterGageId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The id of the master gauge tool applied to checkpoints that don't specify their own
+        lowerTolerance:
+          type:
+          - number
+          - 'null'
+          description: The default lower tolerance applied to checkpoints
+          format: double
+        lowerTolPrecision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the lower tolerance
+          format: int32
+        upperTolerance:
+          type:
+          - number
+          - 'null'
+          description: The default upper tolerance applied to checkpoints
+          format: double
+        upperTolPrecision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the upper tolerance
+          format: int32
+        trialsPerCheckpoint:
+          maximum: 100
+          minimum: 1
+          type:
+          - integer
+          - 'null'
+          description: How many trials each checkpoint requires per phase; between 1 and 100 when specified
+          format: int32
+        minTempDegC:
+          type:
+          - number
+          - 'null'
+          description: The minimum acceptable ambient temperature (deg C) during calibration
+          format: double
+        maxTempDegC:
+          type:
+          - number
+          - 'null'
+          description: The maximum acceptable ambient temperature (deg C) during calibration
+          format: double
+        maxRelHumidity:
+          type:
+          - number
+          - 'null'
+          description: The maximum acceptable ambient relative humidity (%) during calibration
+          format: double
+        instructions:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Free-text calibration instructions
+        checkpoints:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolRequestCalibrationCheckpointCreateDto'
+          description: The measurement checkpoints, in display order (array position defines the order)
+      additionalProperties: false
+      description: 'Request body for publishing a new calibration template version for a tool. Template versions are
+
+        append-only and immutable: each publish becomes the tool''s new latest version, existing versions
+
+        remain readable history, and existing calibration records stay pinned to the version they were
+
+        measured against. The version number and effective range are assigned server-side.'
+    ToolCalibrationTemplateDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the template version
+          format: uuid
+        toolId:
+          type:
+          - string
+          - 'null'
+          description: The id of the tool this template belongs to
+        version:
+          type: integer
+          description: The template version number; calibration records pin the version they were measured against
+          format: int32
+        createdUtc:
+          type: string
+          description: When this version was created (UTC)
+          format: date-time
+        source:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationSource'
+        procedureName:
+          type:
+          - string
+          - 'null'
+          description: The name of the calibration procedure
+        defaultMasterGage:
+          $ref: '#/components/schemas/ToolMasterGageReferenceDto'
+        defaultMasterGageId:
+          type:
+          - string
+          - 'null'
+          description: 'The raw default-master id. Set while defaultMasterGage is null means the configured master
+
+            no longer resolves ("master unavailable"), never "no master configured"'
+        lowerTolerance:
+          type:
+          - number
+          - 'null'
+          description: The default lower tolerance applied to checkpoints
+          format: double
+        lowerTolPrecision:
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the lower tolerance
+          format: int32
+        upperTolerance:
+          type:
+          - number
+          - 'null'
+          description: The default upper tolerance applied to checkpoints
+          format: double
+        upperTolPrecision:
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the upper tolerance
+          format: int32
+        trialsPerCheckpoint:
+          type:
+          - integer
+          - 'null'
+          description: How many trials each checkpoint requires per phase
+          format: int32
+        minTempDegC:
+          type:
+          - number
+          - 'null'
+          description: The minimum acceptable ambient temperature (deg C) during calibration
+          format: double
+        maxTempDegC:
+          type:
+          - number
+          - 'null'
+          description: The maximum acceptable ambient temperature (deg C) during calibration
+          format: double
+        maxRelHumidity:
+          type:
+          - number
+          - 'null'
+          description: The maximum acceptable ambient relative humidity (%) during calibration
+          format: double
+        instructions:
+          type:
+          - string
+          - 'null'
+          description: Free-text calibration instructions
+        checkpoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolCalibrationCheckpointDto'
+          description: The measurement checkpoints, in display order
+      additionalProperties: false
+      description: 'A calibration template version for a tool, with the measurement checkpoints an in-house
+
+        calibration is measured against.'
+    ToolSummaryDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the tool
+        number:
+          type:
+          - integer
+          - 'null'
+          description: The tool's sequential number, unique within the tenant (displayed as T-{number})
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the tool
+        toolType:
+          $ref: '#/components/schemas/ToolType'
+        serialNumber:
+          type:
+          - string
+          - 'null'
+          description: The serial number of the tool
+        toolStatus:
+          $ref: '#/components/schemas/ToolStatus'
+        toolInactiveReason:
+          $ref: '#/components/schemas/ToolInactiveReason'
+        calibrationStatus:
+          $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+        lastCalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the tool was last calibrated (UTC)
+          format: date-time
+        lastCalibratedBy:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        nextCalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the tool''s next calibration is due (UTC, computed); null for reference gages, never-calibrated
+
+            tools, and tools inactive as Retired or Lost (permanently out of service — nothing is ever due
+
+            against them; clearing the reason restores the date)'
+          format: date-time
+        daysUntilDue:
+          type:
+          - integer
+          - 'null'
+          description: Whole days until the next calibration is due; negative when overdue, null when there is no due date
+          format: int32
+        calibrationFrequency:
+          $ref: '#/components/schemas/ToolEnumCalibrationFrequency'
+        calibrationInterval:
+          type:
+          - integer
+          - 'null'
+          description: The interval count paired with a recurring calibration frequency (days or months)
+          format: int32
+        hasOpenNcr:
+          type: boolean
+          description: True when the tool has an open NCR
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: When the tool was last modified (UTC); supports incremental sync
+          format: date-time
+      additionalProperties: false
+      description: A tool row returned by the tools list, including its derived calibration status.
+    ToolRequestCalibrationCheckpointCreateDto:
+      type: object
+      properties:
+        attribute:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The characteristic being measured (e.g. "Diameter")
+        nominal:
+          type:
+          - number
+          - 'null'
+          description: The target/nominal value for the measurement
+          format: double
+        minimumValue:
+          type:
+          - number
+          - 'null'
+          description: The minimum acceptable measured value (inclusive)
+          format: double
+        maximumValue:
+          type:
+          - number
+          - 'null'
+          description: The maximum acceptable measured value (inclusive)
+          format: double
+        precision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The decimal precision applied to the nominal value
+          format: double
+        units:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The unit of measure of the measurement
+        masterGageId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'The id of the master gauge tool used to measure this checkpoint; when null the template''s
+
+            default master applies'
+      additionalProperties: false
+      description: 'A measurement checkpoint of a new calibration template version. The checkpoint id is assigned
+
+        server-side.'
+    DtoPagedResultDtoToolSummaryDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolSummaryDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    ToolCreateDto:
+      required:
+      - calibrationFrequency
+      - name
+      - toolType
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The name of the tool
+        serialNumber:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The serial number of the tool
+        toolType:
+          $ref: '#/components/schemas/ToolType'
+        toolStatus:
+          $ref: '#/components/schemas/ToolStatus'
+        toolInactiveReason:
+          $ref: '#/components/schemas/ToolInactiveReason'
+        calibrationFrequency:
+          $ref: '#/components/schemas/ToolEnumCalibrationFrequency'
+        calibrationInterval:
+          type:
+          - integer
+          - 'null'
+          description: 'The interval count paired with a recurring calibration frequency (days or months); must be
+
+            null for a reference gage'
+          format: int32
+        lastCalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the tool was last calibrated (UTC); required unless the tool is a reference gage
+          format: date-time
+        outForRecalibrationDateUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the tool left the shop for recalibration (UTC). Required when the inactive reason is
+
+            outForCalibration, and must be null for every other reason (tandem validation)'
+          format: date-time
+        notes:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Free-text notes
+        defaultUnitOfMeasureName:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The unit of measure the tool measures in; must be a standard unit of measure
+        measurementRangeMin:
+          type:
+          - number
+          - 'null'
+          description: The lower bound of the tool's measurement range
+          format: double
+        measurementRangeMinPrecision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the measurement range lower bound
+          format: int32
+        measurementRangeMax:
+          type:
+          - number
+          - 'null'
+          description: The upper bound of the tool's measurement range
+          format: double
+        measurementRangeMaxPrecision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the measurement range upper bound
+          format: int32
+        accuracy:
+          type:
+          - number
+          - 'null'
+          description: The tool's rated accuracy
+          format: double
+        accuracyPrecision:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The decimal precision of the rated accuracy
+          format: int32
+        size:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The one size a fixed-size gage checks, as stamped on it ("1/4-20", ".2500"). Only thread and
+
+            go/no-go gage types keep it; on any other tool type it is cleared, and on those types the
+
+            measurement range is cleared instead.'
+        designation:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'A fixed-size gage''s thread form, class, and GO/NO-GO member ("UNC-2B GO/NOGO"). Kept and cleared
+
+            under the same rule as Size.'
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'The customer that owns the tool; null for shop-owned tools. A customer-owned tool only takes
+
+            customer-source calibration records'
+        locationId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: The location of the tool
+      additionalProperties: false
+      description: 'Request body for creating a tool. The tool''s sequential number, computed next calibration due
+
+        date, and latest-calibration outcome are always derived server-side.'
+    ToolCalibrationEnumCalibrationSource:
+      enum:
+      - user
+      - vendor
+      - customer
+      type: string
+      description: 'Who performed the calibration. Mirrors
+
+        FulcrumProduct.Domain.ToolCalibrations.CalibrationSource by underlying value.'
+    ToolEnumCalibrationFrequency:
+      enum:
+      - recurringDays
+      - recurringMonths
+      - endOfMonth
+      - endOfQuarter
+      - endOfYear
+      - none
+      type: string
+      description: 'How often the tool requires calibration. Mirrors
+
+        FulcrumProduct.Domain.Tools.Data.CalibrationFrequency by underlying value.'
+    ToolsListParameters:
+      type: object
+      properties:
+        search:
+          type:
+          - string
+          - 'null'
+          description: 'Whitespace-insensitive search over tool name, serial number, tool type, size and designation.
+
+            A value that reads as a plain number (0.75) or a span (0-6) also matches tools whose measurement range covers it,
+
+            on tool types that keep a range (not thread and go/no-go gages, fixtures, machines or welding equipment).'
+        toolTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolType'
+          description: Only tools of these types
+        toolStatuses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolStatus'
+          description: Only tools with these statuses
+        calibrationStatuses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolCalibrationEnumCalibrationResult'
+          description: 'Only tools whose derived status matches one of these values. Every tool is judged on its
+
+            active track: a scheduled tool on its latest calibration, a reference gage on its latest
+
+            in-house verification (a gage with no verifications derives NotApplicable).'
+        reference:
+          type: boolean
+          description: 'Only reference gages (tools with calibration frequency None). AND-combined with
+
+            FulcrumProduct.PublicApi.Dto.Tool.Request.ToolsListParameters.CalibrationStatuses and the other filters.'
+        isOverdue:
+          type: boolean
+          description: 'Only tools whose next calibration is past due. Never matches an out-of-service tool —
+
+            any inactive tool, unless its reason is OutForCalibration — because such a tool no
+
+            longer needs calibration'
+        dueWithin7Days:
+          type: boolean
+          description: 'Only tools due for calibration within the next 7 days (includes overdue tools; never
+
+            matches out-of-service tools — see FulcrumProduct.PublicApi.Dto.Tool.Request.ToolsListParameters.IsOverdue)'
+        dueWithin30Days:
+          type: boolean
+          description: 'Only tools due for calibration within the next 30 days (includes overdue tools; never
+
+            matches out-of-service tools — see FulcrumProduct.PublicApi.Dto.Tool.Request.ToolsListParameters.IsOverdue)'
+        requiresAction:
+          type: boolean
+          description: 'Only tools needing action: inactive with reason RequiresRepair'
+        calibrated:
+          type: boolean
+          description: 'Only tools in good standing: active, not overdue, and passed their latest calibration'
+        nextCalibrationDateFrom:
+          type:
+          - string
+          - 'null'
+          description: 'Only tools whose next calibration is due on or after this date, the whole day included. A tool
+
+            with no due date never matches.'
+          format: date-time
+        nextCalibrationDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Only tools whose next calibration is due on or before this date, the whole day included. A tool
+
+            with no due date never matches.'
+          format: date-time
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Only tools whose record was written strictly after this UTC instant. Poll with the
+
+            last-seen modifiedUtc to pick up creates and edits; time-derived transitions (a tool
+
+            becoming due or overdue) and deletions do not advance modifiedUtc — use the due-window
+
+            filters for schedule tracking'
+          format: date-time
+      additionalProperties: false
+      description: 'Filters for the tools list. All filters are optional and combine with AND semantics
+
+        (list-valued filters match any of their values).'
+    ToolType:
+      enum:
+      - bevelProtractor
+      - bendAngleGage
+      - boreGage
+      - caliper
+      - cmm
+      - coatingThicknessGage
+      - depthMicrometer
+      - gageBlocks
+      - hardnessTester
+      - heightGage
+      - micrometer
+      - opticalComparator
+      - pinGage
+      - plugGage
+      - radiusGage
+      - sineBar
+      - surfacePlate
+      - surfaceRoughnessTester
+      - thicknessGage
+      - threadPlugGage
+      - threadRingGage
+      - vmm
+      - attributeGage
+      - calibrationArtifact
+      - indicator
+      - calibrationStandard
+      - chamferGage
+      - lightMeter
+      - presetter
+      - digitalConductivityMeter
+      - ringGage
+      - profilometer
+      - splineGage
+      - tapeMeasure
+      - thermometer
+      - stopwatch
+      - torqueWrench
+      - instantMeasurementSystem
+      - protractor
+      - pressureGage
+      - tubeGage
+      - tubeMicrometer
+      - thermocouple
+      - ohmMeter
+      - multimeter
+      - weight
+      - fixture
+      - machine
+      - hygrothermometer
+      - concentricityGage
+      - cmmDatumSphere
+      - threadMicrometer
+      - insideMicrometer
+      - pinMicrometer
+      - setPlug
+      - nptRingGage
+      - nptPlugGage
+      - grooveMicrometer
+      - weldingEquipment
+      - surfaceTesterMaster
+      type: string
+      description: 'The type of tool in the calibration system. Member values mirror
+
+        FulcrumProduct.Domain.ToolCalibrations.Data.ToolType one-to-one (guarded by
+
+        ToolCalibrationEnumParityTests) so tools map by underlying value.'
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Alert
+  tags:
+  - Alert
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Department Shift
+  tags:
+  - Department Shift
+- name: Equipment
+  tags:
+  - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Message
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Nesting
+  tags:
+  - Nesting
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Settings
+  tags:
+  - Settings
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Task
+  tags:
+  - Task
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

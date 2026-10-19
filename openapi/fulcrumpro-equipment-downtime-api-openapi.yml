@@ -1,0 +1,686 @@
+openapi: 3.2.0
+info:
+  title: Fulcrum Public Equipment Downtime API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Equipment Downtime
+paths:
+  /api/equipment-downtimes:
+    post:
+      tags:
+      - Equipment Downtime
+      summary: Create an equipment downtime.
+      operationId: CreateEquipmentDowntime
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeSaveDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeSaveDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeSaveDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeSaveDto'
+        required: true
+      responses:
+        '200':
+          description: Equipment downtime created; the body holds its id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: "Validation issues with input, an end earlier than the start, or a\n            `departments` or `equipment` entry that is null, repeated, not found or not in its\n            department"
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Scheduling-Settings-Edit Schedule Settings
+  /api/equipment-downtimes/{id}:
+    delete:
+      tags:
+      - Equipment Downtime
+      summary: Delete an equipment downtime by id.
+      operationId: DeleteEquipmentDowntime
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: Equipment downtime deleted
+        '204':
+          description: Equipment downtime did not exist or was already deleted
+        '400':
+          description: Validation issues with the id
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Scheduling-Settings-Edit Schedule Settings
+    get:
+      tags:
+      - Equipment Downtime
+      summary: Get an equipment downtime by id.
+      operationId: GetEquipmentDowntime
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The equipment downtime for the given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentDowntimeDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/EquipmentDowntimeDto'
+        '404':
+          description: Equipment downtime did not exist
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Scheduling-Schedule-View Schedule
+    put:
+      tags:
+      - Equipment Downtime
+      summary: Update an equipment downtime by id.
+      operationId: UpdateEquipmentDowntime
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeSaveDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeSaveDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeSaveDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeSaveDto'
+        required: true
+      responses:
+        '200':
+          description: The updated equipment downtime
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentDowntimeDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/EquipmentDowntimeDto'
+        '400':
+          description: "Validation issues with input, an end earlier than the start, or a\n            `departments` or `equipment` entry that is null, repeated, not found or not in its\n            department"
+        '404':
+          description: Equipment downtime did not exist or is deleted
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Scheduling-Settings-Edit Schedule Settings
+  /api/equipment-downtimes/list:
+    post:
+      tags:
+      - Equipment Downtime
+      summary: Find equipment downtimes based on search parameters.
+      operationId: ListEquipmentDowntime
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/EquipmentDowntimeRequestFindParameters'
+      responses:
+        '200':
+          description: List of equipment downtimes matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EquipmentDowntimeDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EquipmentDowntimeDto'
+        '400':
+          description: The sort field, paging or filter parameters were invalid
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Scheduling-Schedule-View Schedule
+components:
+  schemas:
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    EquipmentDowntimeDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id of the downtime.
+        startDateTime:
+          type: string
+          description: When the downtime starts, in UTC.
+          format: date-time
+        endDateTime:
+          type: string
+          description: When the downtime ends, in UTC.
+          format: date-time
+        departments:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquipmentDowntimeDepartmentDto'
+          description: The departments that are down, in the order they were added. Empty when no department is assigned.
+        deleted:
+          type: boolean
+          description: Indicates whether this downtime has been deleted.
+      additionalProperties: false
+      description: A window of time when departments, or chosen equipment within them, are unavailable for scheduling.
+    EquipmentDowntimeRequestFindParameters:
+      type: object
+      properties:
+        ids:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter downtimes to those with one of these ids.
+        departmentIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter downtimes to those covering at least one of these departments.
+        startsBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filter downtimes that start before (exclusive) this time in UTC. If no time component is passed,
+
+            midnight UTC will be used.'
+          format: date-time
+        endsAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filter downtimes that end after (exclusive) this time in UTC. If no time component is passed,
+
+            midnight UTC will be used. Combine with `startsBeforeUtc` to find downtimes overlapping a window.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding equipment downtimes. Filters combine with AND.
+    EquipmentDowntimeDepartmentSaveDto:
+      required:
+      - departmentId
+      type: object
+      properties:
+        departmentId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Id of the department. It must be a department that exists and is not deleted, and it can be listed
+
+            only once in the downtime. Please reference the /api/departments endpoint.'
+        equipment:
+          maxItems: 500
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EquipmentDowntimeEquipmentSaveDto'
+          description: 'The pieces of the department''s equipment that are down, saved in request order, at most 500. Each
+
+            `equipmentId` must be equipment in one of the department''s work centers, and it can be listed
+
+            only once for the department. Omitted, null or empty means the whole department is down.'
+      additionalProperties: false
+      description: 'A department covered by a downtime, and which of its equipment is down. The department name is not
+
+        sent; the server fills `departmentName` from the department.'
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    EquipmentDowntimeDepartmentDto:
+      type: object
+      properties:
+        departmentId:
+          type:
+          - string
+          - 'null'
+          description: Id of the department.
+        departmentName:
+          type:
+          - string
+          - 'null'
+          description: Name of the department when it was added to the downtime.
+        allEquipment:
+          type: boolean
+          description: True when the whole department is down, which is when `equipment` is empty.
+        equipment:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquipmentDowntimeEquipmentDto'
+          description: 'The pieces of the department''s equipment that are down, in the order they were added. Empty when
+
+            the whole department is down.'
+      additionalProperties: false
+      description: A department covered by a downtime, and which of its equipment is down.
+    EquipmentDowntimeSaveDto:
+      required:
+      - endDateTime
+      - startDateTime
+      type: object
+      properties:
+        startDateTime:
+          type: string
+          description: 'When the downtime starts, in UTC. A value with an offset is converted to UTC; a value without an
+
+            offset is read as UTC.'
+          format: date-time
+        endDateTime:
+          type: string
+          description: 'When the downtime ends, in UTC, read the same way as `startDateTime`. It cannot be earlier than
+
+            `startDateTime`; an end equal to the start is allowed.'
+          format: date-time
+        departments:
+          maxItems: 500
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EquipmentDowntimeDepartmentSaveDto'
+          description: 'The departments that are down, saved in request order, at most 500. Each `departmentId` must be a department
+
+            that exists and is not deleted, and it can be listed only once. Omitted, null or empty means no
+
+            departments, so an update clears them.'
+      additionalProperties: false
+      description: 'Details of an equipment downtime to save. An update replaces the whole downtime: its window and its
+
+        whole set of departments and equipment are saved from the request, so omitted `departments` are
+
+        cleared. The shape matches what `GET /equipment-downtimes/{id}` returns, so a fetched downtime can be
+
+        sent back; the read-only members `id`, `deleted`, `departmentName`, `allEquipment` and
+
+        `equipmentName` are ignored, and the server fills the names from the department and equipment.'
+    EquipmentDowntimeEquipmentDto:
+      type: object
+      properties:
+        equipmentId:
+          type:
+          - string
+          - 'null'
+          description: Id of the equipment.
+        equipmentName:
+          type:
+          - string
+          - 'null'
+          description: Name of the equipment when it was added to the downtime.
+      additionalProperties: false
+      description: A piece of equipment that is down.
+    EquipmentDowntimeEquipmentSaveDto:
+      required:
+      - equipmentId
+      type: object
+      properties:
+        equipmentId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Id of the equipment. It must be equipment in one of the department''s work centers that is not
+
+            deleted. Please reference the /api/equipment endpoint.'
+      additionalProperties: false
+      description: 'A piece of equipment that is down. The equipment name is not sent; the server fills
+
+        `equipmentName` from the equipment.'
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Alert
+  tags:
+  - Alert
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Department Shift
+  tags:
+  - Department Shift
+- name: Equipment
+  tags:
+  - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Message
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Nesting
+  tags:
+  - Nesting
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Settings
+  tags:
+  - Settings
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Task
+  tags:
+  - Task
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

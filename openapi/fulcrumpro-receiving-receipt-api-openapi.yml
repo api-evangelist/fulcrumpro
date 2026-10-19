@@ -40,6 +40,7 @@ paths:
                 $ref: '#/components/schemas/ReceivingReceiptDto'
         '404':
           description: Receipt was not created
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Receiving-Receiving-Edit Receiving
@@ -69,6 +70,7 @@ paths:
                 $ref: '#/components/schemas/ReceivingReceiptDto'
         '404':
           description: Receipt did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Receiving-Receiving-View Receiving
     patch:
@@ -99,8 +101,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ReceivingReceiptDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: Receipt did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Receiving-Receiving-Edit Receiving
@@ -164,14 +169,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -205,31 +231,125 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReceivingReceiptDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Receiving-Receiving-View Receiving
 components:
   schemas:
-    ReceivingReceiptCreateDto:
+    CommonEnumOrderType:
+      enum:
+      - purchaseOrder
+      - salesOrder
+      type: string
+      description: Order type enum
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    CommonExternalReferenceFindDto:
       required:
-      - lines
-      - orderId
-      - orderType
+      - key
       type: object
       properties:
-        orderType:
-          $ref: '#/components/schemas/CommonEnumOrderType'
-        orderId:
+        key:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Arbitrary sub-key that can be used to qualify the value
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external identifier
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    ReceivingReceiptUpdateDto:
+      required:
+      - receivedBy
+      type: object
+      properties:
+        receivedBy:
           maxLength: 24
           minLength: 24
           type: string
-          description: Id of parent order to which this receipt belongs
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemCreateDto'
-          description: Line items
+          description: Id of the user who received the item(s)
+        date:
+          type:
+          - string
+          - 'null'
+          description: 'Received date override.  If not provided,
+
+            receipt date will default to the date the object was initially created.'
+          format: date-time
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt object.
       additionalProperties: false
-      description: Represents creating a receiving object on an entity
+      description: Represents a receiving object on a purchase order
+    ReceivingRequestListFindParameters:
+      type: object
+      properties:
+        salesOrderIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Include receipts for specific sales order ids
+        purchaseOrderIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Include receipts for specific purchase order ids
+        receiptIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Include receipts with specific ids
+        includeReceiptLines:
+          type: boolean
+          description: If set to true, receipt line items will be included in the results
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+        receivedDateFrom:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive lower bound on the receipt''s effective received date, which is its received-date
+
+            override when one is set and its recorded received date otherwise. A whole day in the shop''s
+
+            timezone; any time of day supplied is ignored.'
+          format: date-time
+        receivedDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Inclusive upper bound on that same effective received date. A whole day in the shop''s
+
+            timezone; any time of day supplied is ignored.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding receipts.
     ReceivingReceiptDto:
       required:
       - id
@@ -272,6 +392,18 @@ components:
           - 'null'
           description: Override received date
           format: date-time
+        accountingHeldUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Set while the receipt''s accounting events are withheld because it contains material held
+
+            for incoming inspection (tenant invoice timing = after-inspection). Held receipts are
+
+            excluded from the receipt list until their inspections resolve; cleared when the deferred
+
+            events fire.'
+          format: date-time
         orderType:
           $ref: '#/components/schemas/CommonEnumOrderType'
         orderId:
@@ -308,37 +440,17 @@ components:
           description: The vendor invoice invoice number associated to the receipt.
       additionalProperties: false
       description: Represents a receiving object
-    ReceivingRequestListFindParameters:
+    JsonPatchOperation:
       type: object
       properties:
-        salesOrderIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Include receipts for specific sales order ids
-        purchaseOrderIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Include receipts for specific purchase order ids
-        receiptIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Include receipts with specific ids
-        includeReceiptLines:
-          type: boolean
-          description: If set to true, receipt line items will be included in the results
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-      additionalProperties: false
-      description: Parameters used for searching/finding receipts.
+        op:
+          type: string
+        value: {}
+        path:
+          type: string
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
     ReceivingLineItemReceiptLineItemDto:
       required:
       - fullyReceived
@@ -387,8 +499,96 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        unitPrice:
+          type:
+          - number
+          - 'null'
+          description: 'Price of the purchase order line received against, per Fulcrum''s unit of measure, so it
+
+            multiplies directly with `convertedQuantityReceived`. Null means there is no price,
+
+            not a price of zero. Supplied only by the receipts list endpoint.'
+          format: double
+        lineItemType:
+          $ref: '#/components/schemas/PurchaseOrderLineItemTypeEnum'
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Id of the item on the purchase order line received against: the part for a part line, the item
+
+            being processed for an outside processing line. Null on a fee line, on an outside processing line
+
+            with no item, on a sales order receipt and on a line that no longer resolves. Supplied only by the receipts list endpoint.'
+        unitCost:
+          type:
+          - number
+          - 'null'
+          description: 'Cost per unit in Fulcrum''s unit of measure, in the primary currency, excluding tax and landed cost: the
+
+            billed unit price when a billed subtotal is entered, otherwise the line''s price after its own discount, at
+
+            the PO''s exchange rate.
+
+            Together with `unitTax` and `landedCost`, the tax and landed cost Fulcrum applies when it
+
+            revalues a receipt, the line is valued at
+
+            `convertedQuantityReceived × (unitCost + unitTax) + landedCost`, or
+
+            `convertedQuantityReceived × unitCost + landedCost` excluding tax.
+
+            On an outside processing line this is the value job cost uses. On a part line the inventory transaction
+
+            can differ: a receipt entered after the bill is valued at the purchase order price, a bill changed after
+
+            the inventory adjustment cutoff does not revalue older receipts, on a discounted line with no billed
+
+            subtotal inventory holds the price before the discount, and on a line that is not taxable but has an
+
+            overridden tax rate receiving adds that tax until the receipt is revalued. Rolled-back lines are populated
+
+            as well; skip them. Null on a fee line, on a sales order receipt and on a line that no longer resolves.
+
+            Supplied only by the receipts list endpoint.'
+          format: double
+        unitTax:
+          type:
+          - number
+          - 'null'
+          description: 'Tax per unit in Fulcrum''s unit of measure, in the primary currency, that Fulcrum applies to this line
+
+            when it revalues a receipt; zero when the line is not taxed. See `unitCost` for how the three
+
+            values combine. Null where `unitCost` is null. Supplied only by the receipts list endpoint.'
+          format: double
+        landedCost:
+          type:
+          - number
+          - 'null'
+          description: 'Total landed cost allocated to this receipt line (not per unit), in the primary currency; zero when none
+
+            is allocated. Null where `unitCost` is null. Supplied only by the receipts list endpoint.'
+          format: double
       additionalProperties: false
       description: Represents a line item on a receipt for a purchase or sales order
+    PurchaseOrderLineItemTypeEnum:
+      enum:
+      - part
+      - outsideProcessing
+      - tax
+      - discount
+      - fee
+      - vendorCredit
+      type: string
+      description: Purchase order line item type
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     ReceivingLineItemReceiptLineItemCreateDto:
       required:
       - lineItemId
@@ -427,79 +627,6 @@ components:
           description: Indicate if this is fully received.
       additionalProperties: false
       description: Represents creating a receiving object on a purchase order
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    CommonEnumOrderType:
-      enum:
-      - purchaseOrder
-      - salesOrder
-      type: string
-      description: Order type enum
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CommonExternalReferenceFindDto:
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Arbitrary sub-key that can be used to qualify the value
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The external identifier
-      additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
-    ReceivingReceiptUpdateDto:
-      required:
-      - receivedBy
-      type: object
-      properties:
-        receivedBy:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Id of the user who received the item(s)
-        date:
-          type:
-          - string
-          - 'null'
-          description: 'Received date override.  If not provided,
-
-            receipt date will default to the date the object was initially created.'
-          format: date-time
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this receipt object.
-      additionalProperties: false
-      description: Represents a receiving object on a purchase order
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -554,12 +681,28 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
+    ReceivingReceiptCreateDto:
+      required:
+      - lines
+      - orderId
+      - orderType
+      type: object
+      properties:
+        orderType:
+          $ref: '#/components/schemas/CommonEnumOrderType'
+        orderId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of parent order to which this receipt belongs
+        lines:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/ReceivingLineItemReceiptLineItemCreateDto'
+          description: Line items
+      additionalProperties: false
+      description: Represents creating a receiving object on an entity
   securitySchemes:
     bearer:
       type: http
@@ -570,6 +713,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -580,6 +726,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -600,9 +749,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -664,6 +819,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -681,6 +837,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -738,6 +897,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -756,6 +918,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -765,6 +930,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

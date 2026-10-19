@@ -34,6 +34,7 @@ paths:
                 $ref: '#/components/schemas/UserStatusDto'
         '404':
           description: User did not exists
+      x-c4-exposed: true
       x-c4-required-permissions:
       - System-Users-View Users
   /api/users/status:
@@ -71,6 +72,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserStatusDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - System-Users-View Users
 components:
@@ -85,6 +87,39 @@ components:
           description: The user identifiers
       additionalProperties: false
       description: The user status list params
+    DtoUserJobOpTimer:
+      type: object
+      properties:
+        jobId:
+          type:
+          - string
+          - 'null'
+          description: The job id
+        jobName:
+          type:
+          - string
+          - 'null'
+          description: The job name
+        operationId:
+          type:
+          - string
+          - 'null'
+          description: The operation id
+        operationName:
+          type:
+          - string
+          - 'null'
+          description: The operation name
+        elapsedTimeInSeconds:
+          type: number
+          description: The time working on the operation in seconds
+          format: double
+        estimatedTimeToCompleteInSeconds:
+          type: number
+          description: The estimate time to complete this operation in seconds.
+          format: double
+      additionalProperties: false
+      description: A job timer
     UserStatusDto:
       type: object
       properties:
@@ -137,39 +172,6 @@ components:
           description: The jobs the user is working on.
       additionalProperties: false
       description: A user object that contains information about the jobs/operations the user is clocked into, as well as if the user is on break.
-    DtoUserJobOpTimer:
-      type: object
-      properties:
-        jobId:
-          type:
-          - string
-          - 'null'
-          description: The job id
-        jobName:
-          type:
-          - string
-          - 'null'
-          description: The job name
-        operationId:
-          type:
-          - string
-          - 'null'
-          description: The operation id
-        operationName:
-          type:
-          - string
-          - 'null'
-          description: The operation name
-        elapsedTimeInSeconds:
-          type: number
-          description: The time working on the operation in seconds
-          format: double
-        estimatedTimeToCompleteInSeconds:
-          type: number
-          description: The estimate time to complete this operation in seconds.
-          format: double
-      additionalProperties: false
-      description: A job timer
   securitySchemes:
     bearer:
       type: http
@@ -180,6 +182,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -190,6 +195,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -210,9 +218,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -274,6 +288,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -291,6 +306,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -348,6 +366,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -366,6 +387,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -375,6 +399,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

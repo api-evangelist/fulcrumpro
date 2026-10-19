@@ -67,6 +67,7 @@ paths:
                 $ref: '#/components/schemas/SalesOrderFeeLineItemDto'
         '404':
           description: Sales order or fee line items did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
     patch:
@@ -104,8 +105,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/SalesOrderFeeLineItemDto'
+        '400':
+          description: The patch could not be applied — the patch document is malformed (an unknown path, an unsupported operation, or a value the target field cannot hold), or the patched result failed validation
         '404':
           description: Sales order or line item did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -156,6 +160,7 @@ paths:
                 $ref: '#/components/schemas/SalesOrderFeeLineItemDto'
         '404':
           description: Sales order or fee line items did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -200,6 +205,7 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -233,6 +239,7 @@ paths:
                   $ref: '#/components/schemas/SalesOrderFeeLineItemDto'
         '404':
           description: The sales order did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
 components:
@@ -316,91 +323,15 @@ components:
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
       description: Represents a fee line item on a sales order.
-    SalesOrderFeeLineItemUpdateDto:
-      required:
-      - price
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Verbose name for this entity.
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        quantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The line item quantity
-          format: double
-        price:
-          minimum: 0
-          type: number
-          description: The line item price.
-          format: double
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-        isTaxable:
-          type:
-          - boolean
-          - 'null'
-          description: Dictate if this fee is taxable.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Tax code key identifier.
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.FeeLineItem.FeeLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.FeeLineItem.FeeLineItemUpdateDto.TaxRate will supercede the defined tax rate.
-          format: double
-        overrideTaxRate:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate if the tax supplied is intended to be an override.
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents a fee line item on a sales order.
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
+    CommonEnumLineItemUomEnum:
+      enum:
+      - notApplicable
+      - piece
+      - linearFeet
+      - hour
+      - yard
+      type: string
+      description: Line item unit of measure.
     SalesOrderFeeLineItemDto:
       required:
       - accountingDetails
@@ -526,15 +457,17 @@ components:
           description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
       description: An object that contains all accounting details.
-    CommonEnumLineItemUomEnum:
-      enum:
-      - notApplicable
-      - piece
-      - linearFeet
-      - hour
-      - yard
-      type: string
-      description: Line item unit of measure.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value: {}
+        path:
+          type: string
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
     CreatedResponseDto:
       required:
       - id
@@ -546,6 +479,11 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -600,6 +538,77 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    SalesOrderFeeLineItemUpdateDto:
+      required:
+      - price
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Verbose name for this entity.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The line item quantity
+          format: double
+        price:
+          minimum: 0
+          type: number
+          description: The line item price.
+          format: double
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        isTaxable:
+          type:
+          - boolean
+          - 'null'
+          description: Dictate if this fee is taxable.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Tax code key identifier.
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.FeeLineItem.FeeLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.FeeLineItem.FeeLineItemUpdateDto.TaxRate will supercede the defined tax rate.
+          format: double
+        overrideTaxRate:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if the tax supplied is intended to be an override.
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Represents a fee line item on a sales order.
   securitySchemes:
     bearer:
       type: http
@@ -610,6 +619,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -620,6 +632,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -640,9 +655,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -704,6 +725,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -721,6 +743,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -778,6 +803,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -796,6 +824,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -805,6 +836,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

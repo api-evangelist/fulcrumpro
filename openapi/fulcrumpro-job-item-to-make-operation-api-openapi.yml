@@ -62,6 +62,82 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ItemsToMakeOperationsAddQuantityCompletedResponse'
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - Jobs-Jobs-Edit In Progress Job
+  /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/{operationId}/complete:
+    post:
+      tags:
+      - Job Item To Make Operation
+      summary: Completes a job operation, optionally recording a final completed quantity and…
+      description: 'Closes any open timers on the operation, marks setup and run complete, readies downstream
+
+        operations, and — when this is the item''s final operation, or a split operation that
+
+        produces finished goods — receives finished goods into inventory (unless
+
+        addItemsToInventory is false), completing the item on its final operation and the job once
+
+        every item is done. Quantity made is added on top of quantity recorded earlier, so a
+
+        caller that already reported production via add-quantity-completed should pass zero here.'
+      operationId: CompleteJobOperation
+      parameters:
+      - name: jobId
+        in: path
+        description: The ID of the job
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: itemToMakeId
+        in: path
+        description: The ID of the item to make
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      - name: operationId
+        in: path
+        description: The ID of the operation
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+      requestBody:
+        description: 'Completion details: final quantity, scrap, and inventory options'
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemsToMakeOperationsCompleteJobOperationRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemsToMakeOperationsCompleteJobOperationRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemsToMakeOperationsCompleteJobOperationRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemsToMakeOperationsCompleteJobOperationRequest'
+      responses:
+        '200':
+          description: Operation completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsToMakeOperationsCompleteJobOperationResponse'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemsToMakeOperationsCompleteJobOperationResponse'
+        '400':
+          description: Validation issues with input, or the operation cannot be completed
+        '404':
+          description: Job, item to make, or operation did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Jobs-Jobs-Edit In Progress Job
@@ -105,6 +181,7 @@ paths:
                 $ref: '#/components/schemas/ItemToMakeOperationDto'
         '404':
           description: Job, item to make, or operation did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
     post:
@@ -151,8 +228,13 @@ paths:
       responses:
         '200':
           description: The operation for the given id
+        '400':
+          description: Invalid input, or the job's routing cannot take the lead-days change
+        '403':
+          description: Lead days were sent by a caller without Edit Jobs
         '404':
           description: Job, item to make, or operation did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Jobs-Jobs-Edit In Progress Job
@@ -193,6 +275,7 @@ paths:
                   $ref: '#/components/schemas/ItemToMakeOperationDto'
         '404':
           description: Job or item to make did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
   /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/{operationId}/items-required/list:
@@ -239,6 +322,7 @@ paths:
                   $ref: '#/components/schemas/ItemToMakeOperationItemRequiredDto'
         '404':
           description: Job, item to make, or operation did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
   /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/{operationId}/materials-required/list:
@@ -285,6 +369,7 @@ paths:
                   $ref: '#/components/schemas/ItemToMakeOperationMaterialRequiredDto'
         '404':
           description: Job, item to make, or operation did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
   /api/jobs/{jobId}/items-to-make/{itemToMakeId}/operations/{operationId}/pick:
@@ -337,11 +422,25 @@ paths:
           description: Validation issues with input
         '404':
           description: The job, item to make, or operation did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Jobs-Jobs-Edit In Progress Job
 components:
   schemas:
+    ItemsToMakeOperationsAddQuantityCompletedRequest:
+      required:
+      - additionalQuantity
+      type: object
+      properties:
+        additionalQuantity:
+          type: number
+          description: 'The additional quantity to add to the operation''s completed quantity.
+
+            Must be greater than zero.'
+          format: double
+      additionalProperties: false
+      description: Request to add additional quantity completed to a job operation
     ItemsToMakeOperationsAddQuantityCompletedResponse:
       required:
       - additionalQuantityAdded
@@ -388,31 +487,6 @@ components:
           description: The current status of the operation
       additionalProperties: false
       description: Response after adding additional quantity completed to a job operation
-    ItemToMakeOperationItemRequiredDto:
-      required:
-      - itemId
-      - itemNumber
-      type: object
-      properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Identifier of the required item.
-
-            Please reference /api/items endpoint.'
-        itemNumber:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Item number of the required item
-        revision:
-          type:
-          - string
-          - 'null'
-          description: Revision of the required item
-      additionalProperties: false
-      description: Represents a required input item for a job operation
     ItemToMakeOperationUpdateDto:
       type: object
       properties:
@@ -422,46 +496,69 @@ components:
           - 'null'
           additionalProperties: {}
           description: The custom fields to update on the operation object
+        leadTimeInDays:
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+          description: 'Outside-processing lead time in days, written to the operation and to the routing step it was built
+
+            from. Only valid on an outside-processing operation, and must be 0 or greater. Omit to leave lead days
+
+            unchanged; null is rejected.'
+          format: int32
       additionalProperties: false
       description: Represents an routing operation on a job item to make
-    JobItemToMakeOperationPickInventoryDto:
-      required:
-      - itemId
-      - quantity
+    ItemsToMakeOperationsCompleteJobOperationRequest:
       type: object
       properties:
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The identifier of the item to be picked. Please reference api/items endpoint
-        quantity:
+        quantityMade:
+          minimum: 0
           type: number
-          description: Quantity of the item to pick.
+          description: 'Additional quantity completed as part of this completion, added on top of any quantity
+
+            already recorded on the operation. May be zero when all quantity was recorded earlier
+
+            (for example via add-quantity-completed).'
           format: double
+        quantityScrapped:
+          minimum: 0
+          type: number
+          description: Quantity scrapped on this operation.
+          format: double
+        scrapReasonId:
+          type:
+          - string
+          - 'null'
+          description: Id of the scrap reason to record with the scrapped quantity. Optional.
         locationId:
           type:
           - string
           - 'null'
-          description: 'ID of the location to pick from. If not set or set to an empty string, will
+          description: 'Id of the inventory location to receive finished goods into when this completion finishes
 
-            pick from inventory not assigned to a location. Cannot be set if FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.UseDefaultLocation
-
-            is set to ```true```.'
-        useDefaultLocation:
-          type: boolean
-          description: 'If set to true, inventory will be picked from the default location for the item. If set to true,
-
-            FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.LocationId cannot be set.  If the item does not have a default location set and this
-
-            is set to true, will pick from inventory not assigned to a location.'
-        lotId:
+            the item (last operation). Optional; when omitted the shop''s default location is used.'
+        lotNumber:
           type:
           - string
           - 'null'
-          description: The ID of the lot to pick from.
+          description: 'Lot number for finished goods when the item is lot tracked. Required when this completion
+
+            finishes a lot-tracked item and inventory will be created; when omitted in that case for a
+
+            completion that adds quantity, a lot number is generated.'
+        expirationDate:
+          type:
+          - string
+          - 'null'
+          description: Expiration date for the finished-goods lot. Optional.
+          format: date-time
+        addItemsToInventory:
+          type: boolean
+          description: 'Whether finished goods are added to inventory when this completion finishes the item.
+
+            Defaults to true.'
       additionalProperties: false
-      description: Pick event for an input item
+      description: Request to complete a job operation
     DomainOperationsRouting_Step_RunTimeOption:
       enum:
       - fixed
@@ -622,13 +719,51 @@ components:
           description: 'Identifier of work order that this operation is associated to, if applicable.
 
             Please reference api/work-orders endpoint.'
+        quantityToMake:
+          type: number
+          description: 'Quantity this operation is expected to produce.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          format: double
+          readOnly: true
+        quantityCompleted:
+          type: number
+          description: 'Quantity already completed on this operation, if the job is in progress.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          format: double
+          readOnly: true
+        quantityMade:
+          type: number
+          description: 'Quantity recorded as made on this operation: stamped when the operation completes, and banked through
+
+            receiving on an outside-processing operation. Unlike FulcrumProduct.PublicApi.Dto.Job.ItemToMake.Operation.OperationDto.QuantityCompleted, it does not include
+
+            the running count banked while the operation is in progress.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          format: double
+          readOnly: true
+        excludeSetupTimeFromAudit:
+          type: boolean
+          description: 'Whether this operation''s setup time is left out of the routing audit''s job-history averages.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          readOnly: true
+        excludeLaborTimeFromAudit:
+          type: boolean
+          description: 'Whether this operation''s labor time is left out of the routing audit''s job-history averages.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          readOnly: true
+        excludeMachineTimeFromAudit:
+          type: boolean
+          description: 'Whether this operation''s machine time is left out of the routing audit''s job-history averages.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          readOnly: true
       additionalProperties: false
       description: Represents an routing operation on a job item to make
-    DomainOperationsRouting_Step_SetupTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
     ItemToMakeOperationMaterialRequiredDto:
       required:
       - id
@@ -647,6 +782,124 @@ components:
           description: Name of the material shape required
       additionalProperties: false
       description: Represents a required input material for a job operation
+    ItemsToMakeOperationsCompleteJobOperationResponse:
+      required:
+      - inventoryUpdated
+      - itemToMakeId
+      - jobId
+      - operationId
+      - operationStatus
+      - quantityMadeThisCompletion
+      - quantityScrapped
+      - totalQuantityCompleted
+      type: object
+      properties:
+        jobId:
+          minLength: 1
+          type: string
+          description: The ID of the job
+        itemToMakeId:
+          minLength: 1
+          type: string
+          description: The ID of the item to make
+        operationId:
+          minLength: 1
+          type: string
+          description: The ID of the completed operation
+        quantityMadeThisCompletion:
+          type: number
+          description: The quantity added by this completion
+          format: double
+        totalQuantityCompleted:
+          type: number
+          description: The operation's total completed quantity after this completion
+          format: double
+        quantityScrapped:
+          type: number
+          description: The quantity scrapped recorded by this completion
+          format: double
+        operationStatus:
+          minLength: 1
+          type: string
+          description: The operation's status after this action
+        inventoryUpdated:
+          type: boolean
+          description: Whether finished goods were added to inventory by this completion
+        createdInventoryTransactionId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the inventory transaction created by this completion, when inventory was updated
+      additionalProperties: false
+      description: Response after completing a job operation
+    DomainOperationsRouting_Step_SetupTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+    JobItemToMakeOperationPickInventoryDto:
+      required:
+      - itemId
+      - quantity
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The identifier of the item to be picked. Please reference api/items endpoint
+        quantity:
+          type: number
+          description: Quantity of the item to pick.
+          format: double
+        locationId:
+          type:
+          - string
+          - 'null'
+          description: 'ID of the location to pick from. If not set or set to an empty string, will
+
+            pick from inventory not assigned to a location. Cannot be set if FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.UseDefaultLocation
+
+            is set to ```true```.'
+        useDefaultLocation:
+          type: boolean
+          description: 'If set to true, inventory will be picked from the default location for the item. If set to true,
+
+            FulcrumProduct.PublicApi.Dto.Job.ItemToMake.OperationPickInventoryDto.LocationId cannot be set.  If the item does not have a default location set and this
+
+            is set to true, will pick from inventory not assigned to a location.'
+        lotId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the lot to pick from.
+      additionalProperties: false
+      description: Pick event for an input item
+    ItemToMakeOperationItemRequiredDto:
+      required:
+      - itemId
+      - itemNumber
+      type: object
+      properties:
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Identifier of the required item.
+
+            Please reference /api/items endpoint.'
+        itemNumber:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Item number of the required item
+        revision:
+          type:
+          - string
+          - 'null'
+          description: Revision of the required item
+      additionalProperties: false
+      description: Represents a required input item for a job operation
     JobItemToMakeOpStatusEnum:
       enum:
       - pending
@@ -657,19 +910,6 @@ components:
       - cancelled
       type: string
       description: Job Item to Make Operation status
-    ItemsToMakeOperationsAddQuantityCompletedRequest:
-      required:
-      - additionalQuantity
-      type: object
-      properties:
-        additionalQuantity:
-          type: number
-          description: 'The additional quantity to add to the operation''s completed quantity.
-
-            Must be greater than zero.'
-          format: double
-      additionalProperties: false
-      description: Request to add additional quantity completed to a job operation
   securitySchemes:
     bearer:
       type: http
@@ -680,6 +920,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -690,6 +933,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -710,9 +956,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -774,6 +1026,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -791,6 +1044,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -848,6 +1104,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -866,6 +1125,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -875,6 +1137,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

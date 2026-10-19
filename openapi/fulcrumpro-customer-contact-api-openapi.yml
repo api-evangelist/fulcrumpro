@@ -50,6 +50,7 @@ paths:
           description: Validation issues with input
         '404':
           description: Customer with the given id did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Customer-Customers-Edit Customer
@@ -117,6 +118,7 @@ paths:
                 $ref: '#/components/schemas/CustomerContactDto'
         '404':
           description: Customer or contact did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Customer-Customers-View Customer
     put:
@@ -162,6 +164,7 @@ paths:
           description: The customer for the given id
         '404':
           description: Customer did not exist or no contact existed at the specified index
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Customer-Customers-Edit Customer
@@ -196,10 +199,53 @@ paths:
                   $ref: '#/components/schemas/CustomerContactDto'
         '404':
           description: The customer did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Customer-Customers-View Customer
 components:
   schemas:
+    CustomerContactUpdateDto:
+      required:
+      - firstName
+      type: object
+      properties:
+        firstName:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: First name
+        lastName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Last name
+        position:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Position / Job Title
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number
+        cellPhone:
+          type:
+          - string
+          - 'null'
+          description: Cellphone number
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: A customer contact
     CreatedResponseDto:
       required:
       - id
@@ -300,48 +346,6 @@ components:
           format: email
       additionalProperties: false
       description: A customer contact
-    CustomerContactUpdateDto:
-      required:
-      - firstName
-      type: object
-      properties:
-        firstName:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: First name
-        lastName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Last name
-        position:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Position / Job Title
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number
-        cellPhone:
-          type:
-          - string
-          - 'null'
-          description: Cellphone number
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-      additionalProperties: false
-      description: A customer contact
   securitySchemes:
     bearer:
       type: http
@@ -352,6 +356,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -362,6 +369,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -382,9 +392,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -446,6 +462,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -463,6 +480,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -520,6 +540,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -538,6 +561,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -547,6 +573,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

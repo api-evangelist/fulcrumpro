@@ -33,6 +33,7 @@ paths:
                 $ref: '#/components/schemas/TagDto'
         '404':
           description: Item tag did not exist
+      x-c4-exposed: true
   /api/item-tags/list:
     post:
       tags:
@@ -53,14 +54,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -91,6 +113,7 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/DtoPagedResultDtoTagDto'
+      x-c4-exposed: true
   /api/items/{itemId}/tags/{tagId}:
     post:
       tags:
@@ -132,6 +155,7 @@ paths:
           description: The tag with that id does not exist or is not valid for items.
         '404':
           description: The item with that id did not exist.
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-Edit Item
@@ -173,6 +197,7 @@ paths:
                   $ref: '#/components/schemas/TagDto'
         '404':
           description: The item with that id did not exist.
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-Edit Item
@@ -225,6 +250,7 @@ paths:
           description: One or more tag ids did not exist or are not valid for items.
         '404':
           description: The item with that id did not exist.
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-Edit Item
@@ -269,6 +295,82 @@ components:
           description: Indicate if this tag has been deleted.
       additionalProperties: false
       description: Represents a tag
+    CommonEnumStyleEnum:
+      enum:
+      - primary
+      - secondary
+      - success
+      - danger
+      - warning
+      - info
+      - light
+      - dark
+      - connected
+      type: string
+      description: Style enum (for tags).
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    TagRequestFindParametersBase:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter tags based on their name.
+        ids:
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter tags based on matching ids.
+      additionalProperties: false
+      description: Parameters used for searching/finding accounting codes.
+    ItemTagReplaceItemTagsDto:
+      required:
+      - tagIds
+      type: object
+      properties:
+        tagIds:
+          type: array
+          items:
+            maxLength: 24
+            minLength: 24
+            type: string
+          description: 'The complete desired set of tag identifiers for the item. Please reference the /api/item-tags/list endpoint.
+
+            Duplicate ids are ignored. An empty set clears all tags from the item. At most
+
+            FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDtoValidator.MAX_TAG_COUNT ids may be provided.'
+      additionalProperties: false
+      description: 'The full set of tags that should be associated to an item. Any tag currently on the item that is
+
+        not present in FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDto.TagIds will be removed; any new id will be added.'
+    CommonEnumTagTypeEnum:
+      enum:
+      - item
+      - accountingCode
+      - itemCategory
+      - itemShape
+      - itemMaterial
+      - itemGrade
+      - itemGauge
+      - itemShippingContainer
+      - itemClass
+      - breakReasonCode
+      - refundReasonCode
+      - vendorOrderIssueCode
+      - chartOfAccounts
+      type: string
+      description: What the tag is used for (can be many).
     DtoPagedResultDtoTagDto:
       required:
       - data
@@ -314,81 +416,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: Paged result
-    ItemTagReplaceItemTagsDto:
-      required:
-      - tagIds
-      type: object
-      properties:
-        tagIds:
-          type: array
-          items:
-            maxLength: 24
-            minLength: 24
-            type: string
-          description: 'The complete desired set of tag identifiers for the item. Please reference the /api/item-tags/list endpoint.
-
-            Duplicate ids are ignored. An empty set clears all tags from the item. At most
-
-            FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDtoValidator.MAX_TAG_COUNT ids may be provided.'
-      additionalProperties: false
-      description: 'The full set of tags that should be associated to an item. Any tag currently on the item that is
-
-        not present in FulcrumProduct.PublicApi.Dto.Item.Tag.ReplaceItemTagsDto.TagIds will be removed; any new id will be added.'
-    CommonEnumTagTypeEnum:
-      enum:
-      - item
-      - accountingCode
-      - itemCategory
-      - itemShape
-      - itemMaterial
-      - itemGrade
-      - itemGauge
-      - itemShippingContainer
-      - itemClass
-      - breakReasonCode
-      - refundReasonCode
-      - vendorOrderIssueCode
-      - chartOfAccounts
-      type: string
-      description: What the tag is used for (can be many).
-    TagRequestFindParametersBase:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter tags based on their name.
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter tags based on matching ids.
-      additionalProperties: false
-      description: Parameters used for searching/finding accounting codes.
-    CommonEnumStyleEnum:
-      enum:
-      - primary
-      - secondary
-      - success
-      - danger
-      - warning
-      - info
-      - light
-      - dark
-      - connected
-      type: string
-      description: Style enum (for tags).
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http
@@ -399,6 +426,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -409,6 +439,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -429,9 +462,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -493,6 +532,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -510,6 +550,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -567,6 +610,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -585,6 +631,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -594,6 +643,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

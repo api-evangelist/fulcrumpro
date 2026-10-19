@@ -39,14 +39,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/SalesOrderLineItemDto'
         '404':
-          description: Sales order or line item did not exist
+          description: Sales order or line item did not exist, or the line item is a blanket line
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
   /api/sales-orders/{salesOrderId}/line-items/list:
     post:
       tags:
       - Sales Order Line Item
-      summary: Get a list of lines items for a sales order, regardless of type
+      summary: Get a list of the line items for a sales order of every type except blanket…
       operationId: ListSalesOrderLineItem
       parameters:
       - name: salesOrderId
@@ -58,7 +59,7 @@ paths:
           type: string
       responses:
         '200':
-          description: List of all line items for the given sales order id
+          description: Line items for the given sales order id, without blanket lines
           content:
             application/json:
               schema:
@@ -72,20 +73,11 @@ paths:
                   $ref: '#/components/schemas/SalesOrderLineItemDto'
         '404':
           description: The sales order did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
 components:
   schemas:
-    SalesOrderLineItemTypeEnum:
-      enum:
-      - part
-      - shipping
-      - tax
-      - discount
-      - fee
-      - refund
-      type: string
-      description: Sales order line item type
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -180,6 +172,16 @@ components:
           format: date-time
       additionalProperties: false
       description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    SalesOrderLineItemTypeEnum:
+      enum:
+      - part
+      - shipping
+      - tax
+      - discount
+      - fee
+      - refund
+      type: string
+      description: Sales order line item type
     SalesOrderLineItemDto:
       required:
       - accountingDetails
@@ -296,6 +298,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -306,6 +311,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -326,9 +334,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -390,6 +404,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -407,6 +422,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -464,6 +482,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -482,6 +503,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -491,6 +515,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

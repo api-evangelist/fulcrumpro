@@ -40,6 +40,7 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - System-System Data-Manage System Data
@@ -69,6 +70,7 @@ paths:
                 $ref: '#/components/schemas/TaxRateDto'
         '404':
           description: Tax rate did not exist
+      x-c4-exposed: true
     put:
       tags:
       - Tax Rate
@@ -109,6 +111,7 @@ paths:
                 $ref: '#/components/schemas/TaxRateDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - System-System Data-Manage System Data
@@ -132,14 +135,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -173,48 +197,9 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TaxRateDto'
+      x-c4-exposed: true
 components:
   schemas:
-    TaxRateRequestFindParameters:
-      type: object
-      properties:
-        code:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter tax rates based on their code.
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter tax rates based on matching ids.
-      additionalProperties: false
-      description: Parameters used for searching/finding tax rates.
-    TaxRateCreateDto:
-      required:
-      - code
-      - rate
-      type: object
-      properties:
-        code:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The code for the tax rate. Must be unique to all active tax rates.
-        rate:
-          minimum: 0
-          type: number
-          description: Tax rate. This is the ratio (0.17 = 17%)
-          format: double
-        applyToLandedCosts:
-          type: boolean
-          description: Indicate if this tax rate applies to landed costs.
-      additionalProperties: false
-      description: Details of tax rate to be created
     TaxRateUpdateDto:
       required:
       - code
@@ -236,22 +221,32 @@ components:
           description: Indicate if this tax rate applies to landed costs.
       additionalProperties: false
       description: Details of tax rate to be update
-    DomainSystemDataTaxCodeProvider:
-      enum:
-      - avalaraOrder
-      - avalaraInvoice
-      type: string
-    CreatedResponseDto:
-      required:
-      - id
+    TaxRateRequestFindParameters:
       type: object
       properties:
-        id:
+        code:
+          maxLength: 200
           minLength: 1
-          type: string
-          description: The id of the created record
+          type:
+          - string
+          - 'null'
+          description: Filter tax rates based on their code.
+        ids:
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter tax rates based on matching ids.
       additionalProperties: false
-      description: Response for a created record
+      description: Parameters used for searching/finding tax rates.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     TaxRateDto:
       required:
       - code
@@ -283,12 +278,43 @@ components:
           description: Indicate if this record is deleted.
       additionalProperties: false
       description: Tax rate definition.
-    CommonEnumSortDirectionEnum:
+    TaxRateCreateDto:
+      required:
+      - code
+      - rate
+      type: object
+      properties:
+        code:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The code for the tax rate. Must be unique to all active tax rates.
+        rate:
+          minimum: 0
+          type: number
+          description: Tax rate. This is the ratio (0.17 = 17%)
+          format: double
+        applyToLandedCosts:
+          type: boolean
+          description: Indicate if this tax rate applies to landed costs.
+      additionalProperties: false
+      description: Details of tax rate to be created
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    DomainSystemDataTaxCodeProvider:
       enum:
-      - ascending
-      - descending
+      - avalaraOrder
+      - avalaraInvoice
       type: string
-      description: Specify sorting direction.
   securitySchemes:
     bearer:
       type: http
@@ -299,6 +325,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -309,6 +338,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -329,9 +361,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -393,6 +431,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -410,6 +449,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -467,6 +509,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -485,6 +530,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -494,6 +542,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

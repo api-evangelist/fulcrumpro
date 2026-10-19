@@ -46,10 +46,13 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Item cannot be revised
         '404':
           description: Item did not exist
         '409':
           description: Item revision already exists
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-Edit Item
@@ -86,6 +89,46 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
+  /api/items/material:
+    post:
+      tags:
+      - Item
+      summary: Create a new item cut from an activated material shape.
+      operationId: CreateMaterialItem
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemMaterialCreateDto'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemMaterialCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemMaterialCreateDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemMaterialCreateDto'
+        required: true
+      responses:
+        '200':
+          description: Material item created, or an existing material item with the same generated number returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponseDto'
+        '400':
+          description: Validation issues with input, including a width supplied for a linear shape or omitted for a planar one
+        '404':
+          description: No activated material shape exists with the given id
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-Edit Item
@@ -115,6 +158,7 @@ paths:
                 $ref: '#/components/schemas/ItemDto'
         '404':
           description: Item did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
     patch:
@@ -145,8 +189,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ItemDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: Item did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-Edit Item
@@ -190,6 +237,8 @@ paths:
                 $ref: '#/components/schemas/ItemDto'
         '404':
           description: Item did not exist
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
   /api/items/{itemId}/can-make:
     get:
       tags:
@@ -218,8 +267,86 @@ paths:
           description: Item id provided was not found
         '400':
           description: Item is not a make item
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
+  /api/items/{itemId}/costing/unit-cost:
+    get:
+      tags:
+      - Item
+      summary: Get the unit cost Fulcrum's BOM costing assigns to an item consumed as a…
+      operationId: GetItemInputUnitCost
+      parameters:
+      - name: itemId
+        in: path
+        description: Id of the item to cost.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: quantity
+        in: query
+        description: Total quantity of the item consumed, in its inventory unit of measure. Must be greater than zero and at most 2147483647.
+        required: true
+        schema:
+          type: number
+          format: double
+      responses:
+        '200':
+          description: The item's unit cost at the given quantity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemInputUnitCostDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemInputUnitCostDto'
+        '400':
+          description: 'A missing or non-numeric quantity: a validation problem details body, message under `errors.quantity`. A quantity not greater than zero or above 2147483647, a make or make-or-buy item, or a vendor unit of measure conversion too large to cost: an `ErrorMessage` body.'
+        '404':
+          description: The item does not exist or is archived.
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+      - Pricing-Margins-View Margins
+  /api/items/{itemId}/purchase-history:
+    get:
+      tags:
+      - Item
+      summary: Get an item's purchase history — every time it was bought, from whom, at what…
+      operationId: GetItemPurchaseHistory
+      parameters:
+      - name: itemId
+        in: path
+        description: Id of the item to report on.
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: months
+        in: query
+        description: How many months back to include. Defaults to 12; values outside 1–60 are clamped.
+        schema:
+          type: integer
+          format: int32
+          default: 12
+      responses:
+        '200':
+          description: The item's purchase history over the requested window.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPurchaseHistoryDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ItemPurchaseHistoryDto'
+        '404':
+          description: Item did not exist
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+      - Orders-PurchaseOrders-View Purchase Order
   /api/items/list:
     post:
       tags:
@@ -241,14 +368,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -283,6 +431,104 @@ paths:
                 items:
                   $ref: '#/components/schemas/ItemDto'
       deprecated: true
+  /api/items/{itemId}/cost-breakdowns/list:
+    post:
+      tags:
+      - Item
+      summary: List the cost breakdowns recorded for an item by the quote lines, sales order…
+      operationId: ListItemCostBreakdowns
+      parameters:
+      - name: itemId
+        in: path
+        description: The item
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        description: Which breakdown types to list
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestListItemCostBreakdownsParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestListItemCostBreakdownsParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestListItemCostBreakdownsParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ItemRequestListItemCostBreakdownsParameters'
+      responses:
+        '200':
+          description: The page of cost breakdowns; an empty page when the item has never been costed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoCommonCostBreakdownDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoPagedResultDtoCommonCostBreakdownDto'
+        '400':
+          description: Take was 0, or a sort was requested
+        '404':
+          description: Item did not exist
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-View Item
+      - Pricing-Margins-View Margins
+      - Orders-Quotes-View Quote
+      - Orders-SalesOrders-View Sales Order
+      - Jobs-Jobs-View Job
   /api/items/list/v2:
     post:
       tags:
@@ -303,14 +549,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -344,6 +611,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ItemListDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
   /api/items/{itemId}/inventory/pick:
@@ -420,268 +688,41 @@ paths:
       deprecated: true
 components:
   schemas:
-    ItemVendorDto:
-      required:
-      - id
-      - priceBreaks
-      - vendorId
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Id
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
-        vendorItemNumber:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item number for this vendor.
-        vendorItemName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item name for this vendor.
-        price:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The price of this item for this vendor.
-          format: double
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this item.
-        leadTimeInDays:
-          type:
-          - integer
-          - 'null'
-          description: Lead time for this vendor.
-          format: int32
-        unitOfMeasureName:
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The unit of measure name. This can be standard unit measurement names (Piece, Square foot, etc) or a custom measurement name.
-        unitQuantity:
-          type:
-          - number
-          - 'null'
-          description: 'The vendor unit quantity for conversions. Ex: a FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity of 5 would indicate that 5 FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName of this item for this vendor are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity in the base inventory unit of measure.'
-          format: double
-        inventoryUnitQuantity:
-          type:
-          - number
-          - 'null'
-          description: 'The inventory unit quantity for conversions. Ex: an FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity of 5 would indicate that 5 inventory units (Pieces, Foot, etc) of this item are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity units in FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName for this vendor.'
-          format: double
-        priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonPriceBreakDto'
-          description: Price breaks.
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Notes on this association.
-      additionalProperties: false
-      description: Vendor with additional context for an item.
-    TagDto:
-      required:
-      - id
-      - name
-      - style
-      - types
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Descriptive name associated to the object
-        style:
-          $ref: '#/components/schemas/CommonEnumStyleEnum'
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-        types:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
-          description: Represents where/how this tag is used.
-        deleted:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate if this tag has been deleted.
-      additionalProperties: false
-      description: Represents a tag
-    ItemCustomerTierDto:
-      required:
-      - customerTier
-      - priceBreaks
-      type: object
-      properties:
-        customerTier:
-          $ref: '#/components/schemas/CustomerTierDto'
-        priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/CommonPriceBreakDto'
-          description: Price breaks.
-      additionalProperties: false
-      description: Item customer tier definition
-    ItemUpdateDto:
-      type: object
-      properties:
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Item description.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-        accountingCode2Id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-        materialCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item material code key identifier. Please reference /api/material-codes endpoint.
-        gradeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item grade code key identifier. Please reference /api/grade-codes endpoint.
-        shapeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item shape code key identifier. Please reference /api/shape-codes endpoint.
-        gaugeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item gauge code key identifier. Please reference /api/gauge-codes endpoint.
-        categoryId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item category code key identifier. Please reference /api/item-categories endpoint.
-        width:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Item width
-          format: double
-        height:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Item height
-          format: double
-        length:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Item length
-          format: double
-        weight:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Item weight
-          format: double
-        minimumStockOnHand:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Item minimum stock on hand.
-          format: double
-        minimumProductionQuantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Item minimum production quantity for a manufacturing run.
-          format: double
-        internalNotes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Internal item notes.
-        salesUnitOfMeasureConversions:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonUnitOfMeasureConversionDto'
-          description: Unit of measure conversions for sellable items.
-        isTaxable:
-          type:
-          - boolean
-          - 'null'
-          description: Whether or not this item is taxable (default)
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents an update on an Item.
+    InventoryEventSecondaryType:
+      enum:
+      - pick
+      - receive
+      - override
+      - revert
+      - deposit
+      - create
+      - consume
+      - ship
+      - sold
+      - transferOut
+      - transferIn
+      - found
+      - expired
+      - damaged
+      - lost
+      - returnVendor
+      - returnStock
+      - receivedNoPo
+      - returnIncrease
+      - returnDecrease
+      - otherIncrease
+      - otherDecrease
+      - scrap
+      - waste
+      - transferredFromSalesOrder
+      - overrideItemValue
+      - transferFromLot
+      - transferToLot
+      - stockAdjustmentIncrease
+      - stockAdjustmentDecrease
+      - stockTake
+      type: string
+      description: Secondary, verbose description for an event.
     CommonReferenceDto:
       type: object
       properties:
@@ -701,75 +742,7 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a reference to a document in a DB collection
-    ItemRequestAddRevision:
-      required:
-      - revision
-      type: object
-      properties:
-        revision:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The revision to be created.
-        archiveSourceItem:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate whether we should archive the source item. This will default to false.
-      additionalProperties: false
-      description: Add an item revision.
-    CommonAccountingDetailsDto:
-      type: object
-      properties:
-        classId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-      additionalProperties: false
-      description: An object that contains all accounting details.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    InventoryRequestItemInventoryPickEvent:
+    InventoryRequestItemInventoryReceiveEvent:
       required:
       - secondaryType
       type: object
@@ -824,88 +797,48 @@ components:
           - 'null'
           description: Notes associated to this transaction.
       additionalProperties: false
-      description: Pick event for item inventory.
-    ItemMaterialVendorDto:
-      required:
-      - id
-      - vendorId
+      description: Receive event for item inventory.
+    ItemRequestListItemCostBreakdownsParameters:
       type: object
       properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Id
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
-        vendorItemNumber:
-          maxLength: 200
-          minLength: 1
+        types:
           type:
-          - string
+          - array
           - 'null'
-          description: The item number for this vendor.
-        vendorItemName:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The item name for this vendor.
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Notes to the vendor.
+          items:
+            $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
+          description: Only cost breakdowns of these types. Omitted or empty returns every type.
       additionalProperties: false
-      description: Material vendor with additional context for an item.
-    ItemNumberFilter:
+      description: Filters for an item's cost breakdown list.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    ItemsAndInventoryDataQualityPlanStatus:
+      enum:
+      - needsApproval
+      - approved
+      type: string
+    CommonCostDto:
       required:
-      - casingOption
-      - mode
-      - query
+      - perUnit
+      - total
       type: object
       properties:
-        query:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: The filter string to match against.
-        mode:
-          $ref: '#/components/schemas/ItemRequestFilterMode'
-        casingOption:
-          $ref: '#/components/schemas/CommonEnumCasingOption'
-        revision:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Optional revision to match against. Revision is always tested for exact equality
+        total:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        perUnit:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
       additionalProperties: false
-      description: Filter used to limit results by item number
-    FulcrumProductMaterialsFulcrumLengthUnits:
-      enum:
-      - inch
-      - foot
-      - yard
-      - millimeter
-      - centimeter
-      - meter
-      type: string
-    DomainPriceBreaksPriceBreakTypeEnum:
-      enum:
-      - price
-      - margin
-      - cost
-      - operation
-      - shopRate
-      type: string
+      description: Cost information
     ItemCreateDto:
       required:
       - itemOrigin
@@ -956,6 +889,15 @@ components:
           - boolean
           - 'null'
           description: Indicate if this item is going to be lot-tracked.
+        isNonInventory:
+          type:
+          - boolean
+          - 'null'
+          description: 'Indicate if this item is a non-inventory item — one that supports the business but is never
+
+            held in inventory. Only a buy item that is not sellable can be non-inventory; anything else
+
+            is rejected with a 400. Defaults to false.'
         accountingCodeId:
           maxLength: 24
           minLength: 24
@@ -1085,73 +1027,216 @@ components:
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
       description: Details of item to be created
-    ItemMaterialDetailsDto:
+    ItemNumberFilter:
+      required:
+      - casingOption
+      - mode
+      - query
       type: object
       properties:
-        materialWidth:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: For Sheets, the Width
-          format: double
-        materialLength:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Length. For Sheets, the Height
-          format: double
-        materialThickness:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Thickness or Diameter
-          format: double
-        form:
-          $ref: '#/components/schemas/FulcrumProductMaterialsMaterialForms'
-        unit:
-          $ref: '#/components/schemas/FulcrumProductMaterialsFulcrumLengthUnits'
-        materialId:
+        query:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The filter string to match against.
+        mode:
+          $ref: '#/components/schemas/ItemRequestFilterMode'
+        casingOption:
+          $ref: '#/components/schemas/CommonEnumCasingOption'
+        revision:
+          maxLength: 200
+          minLength: 1
           type:
           - string
           - 'null'
-          description: 'Ex: SS-SAE-304-Sheet-0.25000'
-        materialName:
-          type:
-          - string
-          - 'null'
-          description: 'Ex: Stainless Steel 304 Sheet 1/4"'
-        isRemnant:
-          type: boolean
-          description: True if the item was created as a remnant.
+          description: Optional revision to match against. Revision is always tested for exact equality
       additionalProperties: false
-      description: Material Details
-    CommonEnumCasingOption:
+      description: Filter used to limit results by item number
+    CommonEnumOperationTypeEnum:
       enum:
-      - caseSensitive
-      - caseInsensitive
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
       type: string
-      description: Case sensititivy options. Of note, in a SQL environment, this should have no impact as SQL is case-insensitive naturally.
-    CommonEnumTagTypeEnum:
+      description: Operation type
+    ItemInputUnitCostDto:
+      required:
+      - basis
+      - currencyCode
+      type: object
+      properties:
+        unitCost:
+          type:
+          - number
+          - 'null'
+          description: Cost per unit of the item's inventory unit of measure, in `currencyCode`. Null when Fulcrum costs the item at nothing.
+          format: double
+        basis:
+          $ref: '#/components/schemas/DtoItemInputUnitCostBasisEnum'
+        vendor:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        priceBreakQuantity:
+          type:
+          - integer
+          - 'null'
+          description: 'The starting quantity, in the item''s inventory unit of measure, of the vendor price break that priced the vendor portion.
+
+            Null unless that portion came from a vendor price break.'
+          format: int32
+        currencyCode:
+          type: string
+          description: 'The currency `unitCost` is expressed in: the company''s primary currency, or `unconvertedVendorCurrencyCode` when that is set
+
+            and `basis` is `vendorPriceBreak`, `vendorPrice` or `materialVendor`.'
+        unitOfMeasureName:
+          type:
+          - string
+          - 'null'
+          description: The item's inventory unit of measure, which `unitCost` is per.
+        unconvertedVendorCurrencyCode:
+          type:
+          - string
+          - 'null'
+          description: 'The currency of the vendor pricing that contributed to `unitCost` when it is not the primary currency and has no exchange rate,
+
+            so it was used unconverted. Null when the vendor pricing was converted or in the primary currency, or no vendor pricing contributed.
+
+            With `inventoryAndVendor`, `unitCost` mixes this currency with the primary currency.'
+      additionalProperties: false
+      description: The unit cost Fulcrum assigns to an item when it is consumed as a routing input, and the basis it used.
+    DtoItemInputUnitCostBasisEnum:
       enum:
-      - item
-      - accountingCode
-      - itemCategory
-      - itemShape
-      - itemMaterial
-      - itemGrade
-      - itemGauge
-      - itemShippingContainer
-      - itemClass
-      - breakReasonCode
-      - refundReasonCode
-      - vendorOrderIssueCode
-      - chartOfAccounts
+      - none
+      - vendorPriceBreak
+      - vendorPrice
+      - inventoryValue
+      - inventoryAndVendor
+      - materialVendor
       type: string
-      description: What the tag is used for (can be many).
-    InventoryRequestItemInventoryReceiveEvent:
+      description: The source that priced an item's input unit cost.
+    DomainPriceBreaksPriceBreakTypeEnum:
+      enum:
+      - price
+      - margin
+      - cost
+      - operation
+      - shopRate
+      type: string
+    ItemPurchaseHistoryDto:
+      required:
+      - purchases
+      - totalPurchaseCount
+      - windowMonths
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        windowMonths:
+          type: integer
+          description: Window the history covers, in months back from now. Reflects the value actually used after clamping.
+          format: int32
+        totalPurchaseCount:
+          type: integer
+          description: Number of purchases in FulcrumProduct.PublicApi.Dto.Item.PurchaseHistory.ItemPurchaseHistoryDto.Purchases.
+          format: int32
+        purchases:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemPurchaseHistoryEntryDto'
+          description: Every purchase of the item in the window, newest first.
+        summary:
+          $ref: '#/components/schemas/ItemPurchaseHistorySummaryDto'
+      additionalProperties: false
+      description: What one item has cost, read from the purchase orders that bought it.
+    TagDto:
+      required:
+      - id
+      - name
+      - style
+      - types
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Descriptive name associated to the object
+        style:
+          $ref: '#/components/schemas/CommonEnumStyleEnum'
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonEnumTagTypeEnum'
+          description: Represents where/how this tag is used.
+        deleted:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if this tag has been deleted.
+      additionalProperties: false
+      description: Represents a tag
+    ItemPurchaseHistorySummaryDto:
+      required:
+      - vendorCount
+      type: object
+      properties:
+        minUnitPrice:
+          type:
+          - number
+          - 'null'
+          description: Lowest effective unit price paid in the window.
+          format: double
+        maxUnitPrice:
+          type:
+          - number
+          - 'null'
+          description: Highest effective unit price paid in the window.
+          format: double
+        avgUnitPrice:
+          type:
+          - number
+          - 'null'
+          description: Mean effective unit price across the window, to four decimal places.
+          format: double
+        latestUnitPrice:
+          type:
+          - number
+          - 'null'
+          description: Effective unit price on the most recent purchase — the "last price paid".
+          format: double
+        latestOrderDateUtc:
+          type:
+          - string
+          - 'null'
+          description: Order date of the most recent purchase (UTC).
+          format: date-time
+        vendorCount:
+          type: integer
+          description: How many distinct vendors the item was bought from in the window.
+          format: int32
+      additionalProperties: false
+      description: Roll-up over an item's purchases in the window. Prices are effective prices.
+    ItemsAndInventoryRoutingsCostBreakdownType:
+      enum:
+      - estimated
+      - inProgressJob
+      - completedJob
+      - cancelledJob
+      type: string
+    InventoryRequestItemInventoryPickEvent:
       required:
       - secondaryType
       type: object
@@ -1206,7 +1291,487 @@ components:
           - 'null'
           description: Notes associated to this transaction.
       additionalProperties: false
-      description: Receive event for item inventory.
+      description: Pick event for item inventory.
+    CommonEnumCasingOption:
+      enum:
+      - caseSensitive
+      - caseInsensitive
+      type: string
+      description: Case sensititivy options. Of note, in a SQL environment, this should have no impact as SQL is case-insensitive naturally.
+    ItemRequestFindParametersV2:
+      type: object
+      properties:
+        numbers:
+          maxItems: 50
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ItemNumberFilter'
+          description: Filter items based on numbers
+        customField:
+          $ref: '#/components/schemas/CommonCustomFieldSearchDto'
+        customFields:
+          maxItems: 50
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonCustomFieldSearchDto'
+          description: 'Filter items based on custom fields
+
+            Note: these will be OR''d with each other and are not additive in filtering.'
+        latestRevision:
+          type: boolean
+          description: Indicate whether we want the latest revision(s) of the items.
+        itemIds:
+          maxItems: 50
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter to items whose ids are in the list
+        descriptionFilter:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to items whose description contains this text. Matching is a case-insensitive
+
+            substring test; it is not a phrase or keyword search and supports no operators.'
+        isArchived:
+          type:
+          - boolean
+          - 'null'
+          description: Include or exclude archived items
+        includeUsageData:
+          type: boolean
+          description: If set to true, data on where the item is being used will be included in the results
+        includeVendorData:
+          type: boolean
+          description: If set to true, vendor details about the item will be included in the results
+        includeCustomerData:
+          type: boolean
+          description: If set to true, customer details about the item will be included in the results
+        includeCustomerTierData:
+          type: boolean
+          description: If set to true, customer tier details about the item will be included in the results
+        vendorId:
+          type:
+          - string
+          - 'null'
+          description: If provided, filter to items that are produced by this vendor.
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filters to items modified at or after (inclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Unlike the other list endpoints, this bound is inclusive, so with `modifiedBeforeUtc` it selects the window [after, before).
+
+
+            `modifiedUtc` also advances when a file is attached to, removed from, moved onto or off, or rewritten on the item.
+
+            To poll without missing changes: set `modifiedBeforeUtc` to the current time minus a short lag (for example two
+
+            minutes), so in-flight writes have committed. Request the window sorted by `modifiedUtc` with `take` of 1000 or
+
+            less and no `skip`. If the page is full (it holds `take` items), the window is too wide: halve it, setting
+
+            `modifiedBeforeUtc` to `modifiedAfterUtc` + (`modifiedBeforeUtc` - `modifiedAfterUtc`) / 2, and
+
+            request again. Otherwise process the page and continue with `modifiedAfterUtc` set to this window''s
+
+            `modifiedBeforeUtc`. If a full page holds a single `modifiedUtc` value, halving cannot narrow it further:
+
+            page through that one instant with `skip` and `take`, since items sharing a `modifiedUtc` are
+
+            ordered by `id`.
+
+            Deleted items never appear in this list. To learn of deletions, reconcile separately.'
+          format: date-time
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filters to items modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Each window boundary belongs to exactly one window; choose a lag longer than any write takes to commit, since an
+
+            item''s stamp is its write time, not its commit time.'
+          format: date-time
+      additionalProperties: false
+      description: 'Parameters used for searching/finding items.
+
+        To sync items incrementally, poll the half-open window [`modifiedAfterUtc`, `modifiedBeforeUtc`)
+
+        with the pattern `modifiedAfterUtc` describes.'
+    CommonTimeDto:
+      required:
+      - labor
+      - machine
+      - setup
+      type: object
+      properties:
+        labor:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        machine:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+        setup:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Time information
+    DtoPagedResultDtoCommonCostBreakdownDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonCostBreakdownDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    ItemMaterialCreateDto:
+      required:
+      - length
+      - materialShapeId
+      type: object
+      properties:
+        materialShapeId:
+          minLength: 1
+          type: string
+          description: 'The id of the material shape to cut the item from. Must be a shape that is already activated for this
+
+            shop, as returned by the Material List endpoint with `active` true; an id that is only present in
+
+            the materials database is rejected with a 404. Activate it first with the Material Activate endpoint.'
+        length:
+          type: number
+          description: 'The length of the piece, expressed in the material shape''s length unit (inch, foot, millimeter, ...).
+
+            Required for every shape, and must be greater than zero.'
+          format: double
+        width:
+          type:
+          - number
+          - 'null'
+          description: 'The width of the piece, expressed in the material shape''s length unit. Required when the material shape
+
+            is planar (sheet, plate, tread plate), because those shapes are sized by length and width, and the width
+
+            determines both the generated item number and the item''s calculated weight; omitting it is rejected with
+
+            a 400 rather than defaulted. Must be omitted when the material shape is linear (bar, tube, pipe, beam,
+
+            angle, channel), because those shapes are sized by length alone and their width is fixed by the shape;
+
+            supplying it is rejected with a 400 rather than ignored, so a caller is never left believing a width was
+
+            stored.'
+          format: double
+        isRemnant:
+          type:
+          - boolean
+          - 'null'
+          description: "Set true to create the item as a remnant — an offcut left over from a larger piece. Defaults to false.\nA remnant is excluded from the shop's default buy-item accounting code, so it is created with no\naccounting code unless one is assigned afterwards.\n            \nApplies only when a new item is created. The generated number encodes the shape and the dimensions but\nnot remnant state, so a request whose number already resolves to an existing item returns that item\nunchanged, keeping whatever remnant state it already had."
+      additionalProperties: false
+      description: 'Details of the material item to be created. Thickness, form and length unit are not supplied here — they
+
+        come from the selected material shape.'
+    CommonCostBreakdownDto:
+      required:
+      - calculatedOn
+      - componentLabor
+      - componentMachine
+      - componentMaterial
+      - componentOutsideProcessing
+      - cumulative
+      - cumulativeLabor
+      - cumulativeMachine
+      - cumulativeMaterial
+      - cumulativeOutsideProcessing
+      - id
+      - itemLabor
+      - itemMachine
+      - itemMaterial
+      - itemOutsideProcessing
+      - lines
+      - quantity
+      - shopRateMachine
+      - shopRateRun
+      - shopRateSetup
+      - time
+      - type
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 24
+          type: string
+          description: The id of the parent item.
+        type:
+          $ref: '#/components/schemas/ItemsAndInventoryRoutingsCostBreakdownType'
+        quantity:
+          minimum: 0
+          type: integer
+          description: Number of units.
+          format: int32
+        quantityScrapped:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Number of units scrapped.
+          format: int32
+        calculatedOn:
+          type: string
+          description: When was this cost breakdown last calculated/aggregated.
+          format: date-time
+        time:
+          $ref: '#/components/schemas/CommonTimeDto'
+        cumulative:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        cumulativeOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        itemOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateSetup:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateRun:
+          $ref: '#/components/schemas/CommonCostDto'
+        shopRateMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMaterial:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentLabor:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentMachine:
+          $ref: '#/components/schemas/CommonCostDto'
+        componentOutsideProcessing:
+          $ref: '#/components/schemas/CommonCostDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonCostBreakdownLineDto'
+          description: Cost breakdown line details.
+      additionalProperties: false
+      description: Cost breakdown
+    InventoryEnumEventSourceType:
+      enum:
+      - purchaseOrder
+      - job
+      - shipment
+      - shipmentLineItem
+      - shipping
+      - receiving
+      - item
+      - workOrder
+      - salesOrder
+      - jobOperation
+      - workOrderOperation
+      - fulfillment
+      - itemToMakeMaterialRemnant
+      - poRcvValueAdj
+      type: string
+      description: Indicator for the initial source of the event.
+    ItemPurchaseHistoryEntryDto:
+      required:
+      - purchaseOrderNumber
+      type: object
+      properties:
+        purchaseOrder:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        purchaseOrderNumber:
+          type: integer
+          description: Human-facing purchase order number.
+          format: int32
+        purchaseOrderStatus:
+          type:
+          - string
+          - 'null'
+          description: Order status at read time — only `Ordered` or `Paid` appear here.
+        orderDateUtc:
+          type:
+          - string
+          - 'null'
+          description: When the order was placed (UTC).
+          format: date-time
+        vendor:
+          $ref: '#/components/schemas/CommonReferenceDto'
+        unitPrice:
+          type:
+          - number
+          - 'null'
+          description: Unit price on the order line.
+          format: double
+        actualBilledUnitPrice:
+          type:
+          - number
+          - 'null'
+          description: Unit price the vendor actually billed, when it came back different from the ordered price.
+          format: double
+        effectiveUnitPrice:
+          type:
+          - number
+          - 'null'
+          description: 'The price actually paid: the billed price when there is one, otherwise the ordered price. Use this rather than picking between the two.'
+          format: double
+        quantityOrdered:
+          type:
+          - number
+          - 'null'
+          description: Quantity ordered on the line.
+          format: double
+        quantityReceived:
+          type:
+          - number
+          - 'null'
+          description: Quantity received against the line so far.
+          format: double
+      additionalProperties: false
+      description: One purchase of the item — a part line on an order that was placed.
+    ItemCanMakeDto:
+      type: object
+      properties:
+        canMakeFromOnHand:
+          type:
+          - number
+          - 'null'
+          description: 'The quantity that can be made from on-hand inventory of subcomponents of this item.
+
+            Null if the planning cache has not yet been computed.'
+          format: double
+        canMakeFromAvailable:
+          type:
+          - number
+          - 'null'
+          description: 'The quantity that can be made from available inventory (on-hand + incoming supply) of subcomponents of this item.
+
+            Null if the planning cache has not yet been computed.'
+          format: double
+      additionalProperties: false
+      description: 'Indicates how much of this item can be produced from its subcomponent inventory.
+
+        Only applicable to make items.'
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    DomainItemsAndInventoryItemOrigin:
+      enum:
+      - make
+      - buy
+      - makeOrBuy
+      - customerSupplied
+      - kit
+      - none
+      type: string
     CommonPriceBreakDto:
       required:
       - type
@@ -1265,40 +1830,60 @@ components:
           $ref: '#/components/schemas/DomainPriceBreaksPriceBreakTypeEnum'
       additionalProperties: false
       description: Price break definition
-    FulcrumProductMaterialsMaterialForms:
-      enum:
-      - sheet
-      - plate
-      - roundBar
-      - flatBar
-      - channel
-      - squareTube
-      - angle
-      - treadPlate
-      - hexBar
-      - squareBar
-      - teeBar
-      - hBeam
-      - rectTube
-      - pipe
-      - wBeam
-      - sBeam
-      - roundTube
-      - rectBar
-      - wideBar
-      - reinforcingBar
-      - halfRoundBar
-      - halfOvalBar
-      type: string
-    JsonPatchOperation:
+    CommonUnitOfMeasureConversionDto:
+      required:
+      - destinationQuantity
+      - destinationUnitOfMeasureName
+      - sourceQuantity
       type: object
       properties:
-        op:
+        sourceQuantity:
+          type: number
+          description: This value signifies the quantity of the item's source unit of measure.
+          format: double
+        destinationQuantity:
+          type: number
+          description: This value signifies the quantity of the "destination" unit of measure.
+          format: double
+        destinationUnitOfMeasureName:
+          minLength: 1
           type: string
-        value:
-          type: string
-        path:
-          type: string
+          description: The destination unit of measure.
+        isCustom:
+          type: boolean
+          description: Indicate if this is a custom (not out-of-the-box) unit of measure.
+        isDefault:
+          type: boolean
+          description: Indicate if this is the default unit of measure
+        multiplier:
+          type: number
+          description: Indicates the conversion factor used to calculate source to converted units.
+          format: double
+          readOnly: true
+      additionalProperties: false
+      description: Unit of measure conversion definition
+    FulcrumProductMaterialsFulcrumLengthUnits:
+      enum:
+      - inch
+      - foot
+      - yard
+      - millimeter
+      - centimeter
+      - meter
+      type: string
+    CommonEnumStyleEnum:
+      enum:
+      - primary
+      - secondary
+      - success
+      - danger
+      - warning
+      - info
+      - light
+      - dark
+      - connected
+      type: string
+      description: Style enum (for tags).
     ItemListDto:
       required:
       - accountingDetails
@@ -1548,6 +2133,14 @@ components:
           description: Includes customer (selling) details for this item.
         qualityPlanStatus:
           $ref: '#/components/schemas/ItemsAndInventoryDataQualityPlanStatus'
+        needsQualityPlan:
+          type: boolean
+          description: 'Whether this item requires an approved quality plan. When true, the item has an approved quality plan
+
+            only if FulcrumProduct.PublicApi.Dto.Item.ItemDto.QualityPlanStatus is Approved; when false, no quality plan approval is required.
+
+            Read-only: returned on item reads but not settable through the create/update endpoints.'
+          readOnly: true
         usedByItems:
           type:
           - array
@@ -1559,228 +2152,6 @@ components:
             the request parameters.'
       additionalProperties: false
       description: An item
-    ItemRequestFilterMode:
-      enum:
-      - equal
-      - startsWith
-      - contains
-      type: string
-      description: How item numbers are matched against the search string
-    CommonUnitOfMeasureConversionDto:
-      required:
-      - destinationQuantity
-      - destinationUnitOfMeasureName
-      - sourceQuantity
-      type: object
-      properties:
-        sourceQuantity:
-          type: number
-          description: This value signifies the quantity of the item's source unit of measure.
-          format: double
-        destinationQuantity:
-          type: number
-          description: This value signifies the quantity of the "destination" unit of measure.
-          format: double
-        destinationUnitOfMeasureName:
-          minLength: 1
-          type: string
-          description: The destination unit of measure.
-        isCustom:
-          type: boolean
-          description: Indicate if this is a custom (not out-of-the-box) unit of measure.
-        isDefault:
-          type: boolean
-          description: Indicate if this is the default unit of measure
-        multiplier:
-          type: number
-          description: Indicates the conversion factor used to calculate source to converted units.
-          format: double
-          readOnly: true
-      additionalProperties: false
-      description: Unit of measure conversion definition
-    ItemRevisionDto:
-      type: object
-      properties:
-        isLatestRevision:
-          type: boolean
-          description: Indicate if this is the latest revision of an item.
-        revision:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Revision name.
-      additionalProperties: false
-      description: Item revision information.
-    InventoryEnumEventSourceType:
-      enum:
-      - purchaseOrder
-      - job
-      - shipment
-      - shipmentLineItem
-      - shipping
-      - receiving
-      - item
-      - workOrder
-      - salesOrder
-      - jobOperation
-      - workOrderOperation
-      - fulfillment
-      - itemToMakeMaterialRemnant
-      - poRcvValueAdj
-      type: string
-      description: Indicator for the initial source of the event.
-    CustomerTierDto:
-      required:
-      - id
-      - name
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique id associated to this entity.
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Identifying name. Must be unique.
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Description
-      additionalProperties: false
-      description: Customer tier definition.
-    InventoryEventSecondaryType:
-      enum:
-      - pick
-      - receive
-      - override
-      - revert
-      - deposit
-      - create
-      - consume
-      - ship
-      - sold
-      - transferOut
-      - transferIn
-      - found
-      - expired
-      - damaged
-      - lost
-      - returnVendor
-      - returnStock
-      - receivedNoPo
-      - returnIncrease
-      - returnDecrease
-      - otherIncrease
-      - otherDecrease
-      - scrap
-      - waste
-      - transferredFromSalesOrder
-      - overrideItemValue
-      - transferFromLot
-      - transferToLot
-      - stockAdjustmentIncrease
-      - stockAdjustmentDecrease
-      - stockTake
-      type: string
-      description: Secondary, verbose description for an event.
-    ItemRequestFindParametersV2:
-      type: object
-      properties:
-        numbers:
-          maxItems: 50
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ItemNumberFilter'
-          description: Filter items based on numbers
-        customField:
-          $ref: '#/components/schemas/CommonCustomFieldSearchDto'
-        customFields:
-          maxItems: 50
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonCustomFieldSearchDto'
-          description: 'Filter items based on custom fields
-
-            Note: these will be OR''d with each other and are not additive in filtering.'
-        latestRevision:
-          type: boolean
-          description: Indicate whether we want the latest revision(s) of the items.
-        itemIds:
-          maxItems: 50
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter to items whose ids are in the list
-        descriptionFilter:
-          type:
-          - string
-          - 'null'
-          description: 'Filter items by description.
-
-            Use (escaped) double-quotes to filter by exact phrase, e.g., \\"search phrase\\".
-
-            Prepend search term with "-" to exclude'
-        isArchived:
-          type:
-          - boolean
-          - 'null'
-          description: Include or exclude archived items
-        includeUsageData:
-          type: boolean
-          description: If set to true, data on where the item is being used will be included in the results
-        includeVendorData:
-          type: boolean
-          description: If set to true, vendor details about the item will be included in the results
-        includeCustomerData:
-          type: boolean
-          description: If set to true, customer details about the item will be included in the results
-        includeCustomerTierData:
-          type: boolean
-          description: If set to true, customer tier details about the item will be included in the results
-        vendorId:
-          type:
-          - string
-          - 'null'
-          description: If provided, filter to items that are produced by this vendor.
-      additionalProperties: false
-      description: Parameters used for searching/finding items.
-    ItemCanMakeDto:
-      type: object
-      properties:
-        canMakeFromOnHand:
-          type:
-          - number
-          - 'null'
-          description: 'The quantity that can be made from on-hand inventory of subcomponents of this item.
-
-            Null if the planning cache has not yet been computed.'
-          format: double
-        canMakeFromAvailable:
-          type:
-          - number
-          - 'null'
-          description: 'The quantity that can be made from available inventory (on-hand + incoming supply) of subcomponents of this item.
-
-            Null if the planning cache has not yet been computed.'
-          format: double
-      additionalProperties: false
-      description: 'Indicates how much of this item can be produced from its subcomponent inventory.
-
-        Only applicable to make items.'
     ItemDto:
       required:
       - accountingDetails
@@ -2030,74 +2401,16 @@ components:
           description: Includes customer (selling) details for this item.
         qualityPlanStatus:
           $ref: '#/components/schemas/ItemsAndInventoryDataQualityPlanStatus'
+        needsQualityPlan:
+          type: boolean
+          description: 'Whether this item requires an approved quality plan. When true, the item has an approved quality plan
+
+            only if FulcrumProduct.PublicApi.Dto.Item.ItemDto.QualityPlanStatus is Approved; when false, no quality plan approval is required.
+
+            Read-only: returned on item reads but not settable through the create/update endpoints.'
+          readOnly: true
       additionalProperties: false
       description: An item
-    ItemRequestFindParameters:
-      type: object
-      properties:
-        number:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to items who's number contains the given string
-        revision:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to items who's revision matches the given string
-        customField:
-          $ref: '#/components/schemas/CommonCustomFieldSearchDto'
-        latestRevision:
-          type: boolean
-          description: Indicate whether we want the latest revision(s) of the items.
-        itemIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter to items whose ids are in the list
-        descriptionFilter:
-          type:
-          - string
-          - 'null'
-          description: 'Filter items by description.
-
-            Use (escaped) double-quotes to filter by exact phrase, e.g., \\"search phrase\\".
-
-            Prepend search term with "-" to exclude'
-        isArchived:
-          type:
-          - boolean
-          - 'null'
-          description: Include or exclude archived items
-      additionalProperties: false
-      description: Parameters used for searching/finding items.
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CommonCustomFieldSearchDto:
-      required:
-      - key
-      - value
-      type: object
-      properties:
-        key:
-          minLength: 1
-          type: string
-          description: Key/identifier for the custom field
-        value:
-          minLength: 1
-          type: string
-          description: Underlying value of the custom field
-      additionalProperties: false
-      description: Custom field associated to an entity.
     ItemShippingDto:
       type: object
       properties:
@@ -2132,15 +2445,732 @@ components:
           description: The country of origin
       additionalProperties: false
       description: Item Shipping Properties
-    DomainItemsAndInventoryItemOrigin:
+    CustomerTierDto:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique id associated to this entity.
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Identifying name. Must be unique.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Description
+      additionalProperties: false
+      description: Customer tier definition.
+    ItemUpdateDto:
+      type: object
+      properties:
+        number:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: 'The item number. If omitted, the current number is kept. Renaming enforces number
+
+            uniqueness (400 on collision) and updates every reference to the item — BOM inputs,
+
+            usage, purchase orders, and the system lot. Uniqueness is scoped to number + revision:
+
+            when renaming an item with multiple revisions, rename every revision of the family or
+
+            the revisions will split under different numbers.'
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Item description.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        accountingCode2Id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        materialCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item material code key identifier. Please reference /api/material-codes endpoint.
+        gradeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item grade code key identifier. Please reference /api/grade-codes endpoint.
+        shapeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item shape code key identifier. Please reference /api/shape-codes endpoint.
+        gaugeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item gauge code key identifier. Please reference /api/gauge-codes endpoint.
+        categoryId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item category code key identifier. Please reference /api/item-categories endpoint.
+        width:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Item width
+          format: double
+        height:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Item height
+          format: double
+        length:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Item length
+          format: double
+        weight:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Item weight
+          format: double
+        minimumStockOnHand:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Item minimum stock on hand.
+          format: double
+        minimumProductionQuantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Item minimum production quantity for a manufacturing run.
+          format: double
+        internalNotes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Internal item notes.
+        unitOfMeasureName:
+          type:
+          - string
+          - 'null'
+          description: 'The item''s stocking unit of measure — the unit every inventory quantity, cost, and
+
+            transaction on the item is expressed in. If omitted — or sent as null, or as a string that is
+
+            empty or only whitespace — the current unit of measure is kept; there is no way to clear it.
+
+            The unit must belong to the item''s existing unit type (a Pieces item accepts Piece, Set or
+
+            Case); the unit type itself cannot be changed after the item is created. Changing the unit
+
+            is rejected while anything already carries a unit that the change would invalidate — the item
+
+            being in use by a quote, sales order, purchase order, job, invoice or another item''s routing,
+
+            holding inventory on hand, or having a price break that carries a price (item, vendor, customer, or customer-tier)
+
+            — because none of those is converted when the unit changes. The 400 names which one blocked the
+
+            change. Each condition is read as the item stands before the update, so clearing a blocker and
+
+            changing the unit in one request is still rejected — clear it first, then change the unit in a
+
+            second request. Sales unit of measure conversions are the exception: they are replaced wholesale
+
+            by every update, so changing the unit while sending none is accepted, and a request that changes
+
+            the unit while conversions are present — sent on the update, or carried forward from the item by
+
+            a patch — is rejected. An item with no unit type recorded cannot have its unit changed at all.
+
+            Surrounding whitespace is trimmed; the remainder is matched case-sensitively, as on item create.'
+        salesUnitOfMeasureConversions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonUnitOfMeasureConversionDto'
+          description: Unit of measure conversions for sellable items.
+        isTaxable:
+          type:
+          - boolean
+          - 'null'
+          description: Whether or not this item is taxable (default)
+        isLotTracked:
+          type:
+          - boolean
+          - 'null'
+          description: Whether this item is lot-tracked. If omitted, the current setting is kept.
+        isNonInventory:
+          type:
+          - boolean
+          - 'null'
+          description: 'Whether this item is a non-inventory item — one that supports the business but is never
+
+            held in inventory. Turning it on is rejected with a 400 unless the item is a buy item that is
+
+            not sellable; an item that is already non-inventory can restate that value, so a read-modify-write
+
+            update of a legacy item does not start failing. Setting this also keeps the item''s
+
+            inventoried state in step: a non-inventory item is never inventoried. If omitted, the
+
+            current setting is kept.'
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Represents an update on an Item.
+    ItemRevisionDto:
+      type: object
+      properties:
+        isLatestRevision:
+          type: boolean
+          description: Indicate if this is the latest revision of an item.
+        revision:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Revision name.
+      additionalProperties: false
+      description: Item revision information.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    ItemMaterialVendorDto:
+      required:
+      - id
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item number for this vendor.
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this vendor.
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes to the vendor.
+      additionalProperties: false
+      description: Material vendor with additional context for an item.
+    CommonEnumTagTypeEnum:
       enum:
-      - make
-      - buy
-      - makeOrBuy
-      - customerSupplied
-      - kit
-      - none
+      - item
+      - accountingCode
+      - itemCategory
+      - itemShape
+      - itemMaterial
+      - itemGrade
+      - itemGauge
+      - itemShippingContainer
+      - itemClass
+      - breakReasonCode
+      - refundReasonCode
+      - vendorOrderIssueCode
+      - chartOfAccounts
       type: string
+      description: What the tag is used for (can be many).
+    ItemVendorDto:
+      required:
+      - id
+      - priceBreaks
+      - vendorId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Id
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        vendorItemNumber:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item number for this vendor.
+        vendorItemName:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The item name for this vendor.
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The price of this item for this vendor.
+          format: double
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this item.
+        leadTimeInDays:
+          type:
+          - integer
+          - 'null'
+          description: Lead time for this vendor.
+          format: int32
+        unitOfMeasureName:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The unit of measure name. This can be standard unit measurement names (Piece, Square foot, etc) or a custom measurement name.
+        unitQuantity:
+          type:
+          - number
+          - 'null'
+          description: 'The vendor unit quantity for conversions. Ex: a FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity of 5 would indicate that 5 FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName of this item for this vendor are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity in the base inventory unit of measure.'
+          format: double
+        inventoryUnitQuantity:
+          type:
+          - number
+          - 'null'
+          description: 'The inventory unit quantity for conversions. Ex: an FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.InventoryUnitQuantity of 5 would indicate that 5 inventory units (Pieces, Foot, etc) of this item are equal to FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitQuantity units in FulcrumProduct.PublicApi.Dto.Item.Vendor.ItemVendorDto.UnitOfMeasureName for this vendor.'
+          format: double
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonPriceBreakDto'
+          description: Price breaks.
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Notes on this association.
+      additionalProperties: false
+      description: Vendor with additional context for an item.
+    ItemRequestFilterMode:
+      enum:
+      - equal
+      - startsWith
+      - contains
+      type: string
+      description: How item numbers are matched against the search string
+    CommonCostBreakdownOperationDto:
+      required:
+      - operationId
+      type: object
+      properties:
+        operationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Operation id. Please reference /api/operations
+        name:
+          type:
+          - string
+          - 'null'
+          description: Operation name.
+        timeInSeconds:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in seconds.
+          format: double
+          readOnly: true
+        timeInHours:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in hours
+          format: double
+        ratePerSecond:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per second
+          format: double
+          readOnly: true
+        ratePerHour:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per hour
+          format: double
+      additionalProperties: false
+      description: Operation information
+    CommonCustomFieldSearchDto:
+      required:
+      - key
+      - value
+      type: object
+      properties:
+        key:
+          minLength: 1
+          type: string
+          description: Key/identifier for the custom field
+        value:
+          minLength: 1
+          type: string
+          description: Underlying value of the custom field
+      additionalProperties: false
+      description: Custom field associated to an entity.
+    ItemCustomerTierDto:
+      required:
+      - customerTier
+      - priceBreaks
+      type: object
+      properties:
+        customerTier:
+          $ref: '#/components/schemas/CustomerTierDto'
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommonPriceBreakDto'
+          description: Price breaks.
+      additionalProperties: false
+      description: Item customer tier definition
+    ItemRequestAddRevision:
+      required:
+      - revision
+      type: object
+      properties:
+        revision:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: The revision to be created.
+        archiveSourceItem:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate whether we should archive the source item. This will default to false.
+      additionalProperties: false
+      description: Add an item revision.
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value: {}
+        path:
+          type: string
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
+    ItemRequestFindParameters:
+      type: object
+      properties:
+        number:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter to items who's number contains the given string
+        revision:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter to items who's revision matches the given string
+        customField:
+          $ref: '#/components/schemas/CommonCustomFieldSearchDto'
+        latestRevision:
+          type: boolean
+          description: Indicate whether we want the latest revision(s) of the items.
+        itemIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter to items whose ids are in the list
+        descriptionFilter:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to items whose description contains this text. Matching is a case-insensitive
+
+            substring test; it is not a phrase or keyword search and supports no operators.'
+        isArchived:
+          type:
+          - boolean
+          - 'null'
+          description: Include or exclude archived items
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filters to items modified at or after (inclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Unlike the other list endpoints, this bound is inclusive, so with `modifiedBeforeUtc` it selects the window [after, before).
+
+            An item''s `modifiedUtc` also advances when a file is attached to it, removed from it, moved onto or off it, or rewritten.
+
+            Deleted items never appear in this list.'
+          format: date-time
+        modifiedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filters to items modified before (exclusive) this parameter in UTC time. If no time component is passed, midnight UTC will be used.
+
+            Each window boundary belongs to exactly one window; when polling, end each window a lag before the current time
+
+            that is longer than any write takes to commit, since an item''s stamp is its write time, not its commit time.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding items.
+    FulcrumProductMaterialsMaterialForms:
+      enum:
+      - sheet
+      - plate
+      - roundBar
+      - flatBar
+      - channel
+      - squareTube
+      - angle
+      - treadPlate
+      - hexBar
+      - squareBar
+      - teeBar
+      - hBeam
+      - rectTube
+      - pipe
+      - wBeam
+      - sBeam
+      - roundTube
+      - rectBar
+      - wideBar
+      - reinforcingBar
+      - halfRoundBar
+      - halfOvalBar
+      type: string
+    ItemMaterialDetailsDto:
+      type: object
+      properties:
+        materialWidth:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: For Sheets, the Width
+          format: double
+        materialLength:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Length. For Sheets, the Height
+          format: double
+        materialThickness:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Thickness or Diameter
+          format: double
+        form:
+          $ref: '#/components/schemas/FulcrumProductMaterialsMaterialForms'
+        unit:
+          $ref: '#/components/schemas/FulcrumProductMaterialsFulcrumLengthUnits'
+        materialId:
+          type:
+          - string
+          - 'null'
+          description: 'Ex: SS-SAE-304-Sheet-0.25000'
+        materialName:
+          type:
+          - string
+          - 'null'
+          description: 'Ex: Stainless Steel 304 Sheet 1/4"'
+        isRemnant:
+          type: boolean
+          description: True if the item was created as a remnant.
+      additionalProperties: false
+      description: Material Details
+    CommonCostBreakdownLineDto:
+      required:
+      - cost
+      - costType
+      - name
+      type: object
+      properties:
+        costType:
+          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
+        operationType:
+          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        name:
+          minLength: 1
+          type: string
+          description: Decription of this line.
+        cost:
+          minimum: 0
+          type: number
+          description: Cost.
+          format: double
+        quantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Quantity (if applicable)
+          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Id of the item that was picked. Please reference /api/items endpoint.
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: The name of the item that was picked.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
+        operationInformation:
+          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
+      additionalProperties: false
+      description: Cost breakdown line information.
     ItemCustomerDto:
       required:
       - customerId
@@ -2185,84 +3215,23 @@ components:
           description: Price breaks.
       additionalProperties: false
       description: Customer with additional context for an item.
-    CommonEnumStyleEnum:
+    CommonEnumCostBreakdownLineTypeEnum:
       enum:
-      - primary
-      - secondary
-      - success
-      - danger
-      - warning
-      - info
-      - light
-      - dark
-      - connected
+      - material
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      - componentMaterial
+      - componentLabor
+      - componentMachine
+      - componentOutsideProcessing
+      - nestPartMaterialUsage
+      - nestPartMaterialScrap
+      - overhead
+      - unknown
       type: string
-      description: Style enum (for tags).
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    ItemsAndInventoryDataQualityPlanStatus:
-      enum:
-      - needsApproval
-      - approved
-      type: string
-    CommonEnumSortDirectionEnum:
-      enum:
-      - ascending
-      - descending
-      type: string
-      description: Specify sorting direction.
+      description: Cost breakdown types
   securitySchemes:
     bearer:
       type: http
@@ -2273,6 +3242,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -2283,6 +3255,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -2303,9 +3278,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -2367,6 +3348,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -2384,6 +3366,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -2441,6 +3426,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -2459,6 +3447,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -2468,6 +3459,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

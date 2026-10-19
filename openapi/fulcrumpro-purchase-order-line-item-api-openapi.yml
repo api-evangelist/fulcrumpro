@@ -40,6 +40,7 @@ paths:
                 $ref: '#/components/schemas/PurchaseOrderLineItemDto'
         '404':
           description: Purchase order or line item did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-PurchaseOrders-View Purchase Order
   /api/purchase-orders/{purchaseOrderId}/line-items/list:
@@ -72,6 +73,7 @@ paths:
                   $ref: '#/components/schemas/PurchaseOrderLineItemDto'
         '404':
           description: The purchase order did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-PurchaseOrders-View Purchase Order
   /api/purchase-orders/{purchaseOrderId}/line-items/{lineItemId}/tax-allocations:
@@ -107,6 +109,7 @@ paths:
                 $ref: '#/components/schemas/PurchaseOrderLineItemTaxAllocationResponseDto'
         '404':
           description: Purchase order or line item did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-PurchaseOrders-View Purchase Order
 components:
@@ -149,6 +152,46 @@ components:
           format: double
       additionalProperties: false
       description: Represents a tax allocation from a PO-level tax line item to an individual line item.
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
     PurchaseOrderLineItemTaxAllocationResponseDto:
       type: object
       properties:
@@ -171,6 +214,16 @@ components:
           format: double
       additionalProperties: false
       description: Tax allocation data for a purchase order line item.
+    PurchaseOrderLineItemTypeEnum:
+      enum:
+      - part
+      - outsideProcessing
+      - tax
+      - discount
+      - fee
+      - vendorCredit
+      type: string
+      description: Purchase order line item type
     PurchaseOrderLineItemDto:
       required:
       - accountingDetails
@@ -285,56 +338,6 @@ components:
           $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Represents a generic line item on a purchase order.
-    PurchaseOrderLineItemTypeEnum:
-      enum:
-      - part
-      - outsideProcessing
-      - tax
-      - discount
-      - fee
-      - vendorCredit
-      type: string
-      description: Purchase order line item type
-    CommonAccountingDetailsDto:
-      type: object
-      properties:
-        classId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-      additionalProperties: false
-      description: An object that contains all accounting details.
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -399,6 +402,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -409,6 +415,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -429,9 +438,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -493,6 +508,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -510,6 +526,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -567,6 +586,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -585,6 +607,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -594,6 +619,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

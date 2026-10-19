@@ -48,6 +48,7 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -111,6 +112,7 @@ paths:
                 $ref: '#/components/schemas/SalesOrderTaxLineItemDto'
         '404':
           description: Sales order or tax line items did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
     put:
@@ -160,6 +162,7 @@ paths:
                 $ref: '#/components/schemas/SalesOrderTaxLineItemDto'
         '404':
           description: Sales order or tax line items did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -193,10 +196,107 @@ paths:
                   $ref: '#/components/schemas/SalesOrderTaxLineItemDto'
         '404':
           description: The sales order did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
 components:
   schemas:
+    SalesOrderTaxLineItemUpdateDto:
+      type: object
+      properties:
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
+
+            If FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.TaxCodeId will be ignored.'
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.TaxRate will supercede the defined tax rate.
+          format: double
+        avalaraOptions:
+          $ref: '#/components/schemas/SalesOrderTaxLineItemAvalaraOptions'
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Represents a tax line item on a sales order.
+    SalesOrderTaxLineItemAvalaraOptions:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/CommonAddressDto'
+      additionalProperties: false
+      description: Options for use with Avalara (if enabled).
+    SalesOrderTaxLineItemDto:
+      required:
+      - accountingDetails
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique id associated to this entity.
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemDto.TaxRate will supercede the defined tax rate.
+          format: double
+        avalaraOptions:
+          $ref: '#/components/schemas/SalesOrderTaxLineItemAvalaraOptions'
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+        price:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax amount applied at this rate across the entire sales order.
+          format: double
+        accountingDetails:
+          $ref: '#/components/schemas/CommonAccountingDetailsDto'
+      additionalProperties: false
+      description: Represents a tax line item on a sales order.
     CommonAddressDto:
       required:
       - address1
@@ -268,139 +368,6 @@ components:
           format: email
       additionalProperties: false
       description: Address definition
-    SalesOrderTaxLineItemDto:
-      required:
-      - accountingDetails
-      - id
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique id associated to this entity.
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Tax code key identifier. Please reference /api/tax-rates endpoint.
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax code to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemDto.TaxRate will supercede the defined tax rate.
-          format: double
-        avalaraOptions:
-          $ref: '#/components/schemas/SalesOrderTaxLineItemAvalaraOptions'
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-        price:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax amount applied at this rate across the entire sales order.
-          format: double
-        accountingDetails:
-          $ref: '#/components/schemas/CommonAccountingDetailsDto'
-      additionalProperties: false
-      description: Represents a tax line item on a sales order.
-    SalesOrderTaxLineItemAvalaraOptions:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/CommonAddressDto'
-      additionalProperties: false
-      description: Options for use with Avalara (if enabled).
-    SalesOrderTaxLineItemCreateDto:
-      type: object
-      properties:
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
-
-            If FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.TaxCodeId will be ignored.'
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.TaxRate will supercede the defined tax rate.
-          format: double
-        avalaraOptions:
-          $ref: '#/components/schemas/SalesOrderTaxLineItemAvalaraOptions'
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents a tax line item on a sales order.
-    SalesOrderTaxLineItemUpdateDto:
-      type: object
-      properties:
-        description:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Verbose description for this entity.
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
-
-            If FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.TaxCodeId will be ignored.'
-        taxRate:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemUpdateDto.TaxRate will supercede the defined tax rate.
-          format: double
-        avalaraOptions:
-          $ref: '#/components/schemas/SalesOrderTaxLineItemAvalaraOptions'
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents a tax line item on a sales order.
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -452,6 +419,43 @@ components:
           description: The id of the created record
       additionalProperties: false
       description: Response for a created record
+    SalesOrderTaxLineItemCreateDto:
+      type: object
+      properties:
+        description:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Verbose description for this entity.
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Tax code key identifier. Please reference /api/tax-rates endpoint.
+
+            If FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.AvalaraOptions is provided, FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.TaxCodeId will be ignored.'
+        taxRate:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Tax rate to use for this entity. If a FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.TaxCodeId is provided, the provided FulcrumProduct.PublicApi.Dto.SalesOrder.TaxLineItem.TaxLineItemCreateDto.TaxRate will supercede the defined tax rate.
+          format: double
+        avalaraOptions:
+          $ref: '#/components/schemas/SalesOrderTaxLineItemAvalaraOptions'
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Represents a tax line item on a sales order.
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -516,6 +520,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -526,6 +533,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -546,9 +556,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -610,6 +626,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -627,6 +644,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -684,6 +704,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -702,6 +725,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -711,6 +737,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

@@ -1,0 +1,550 @@
+openapi: 3.2.0
+info:
+  title: Fulcrum Public Alert API
+  version: v1
+servers:
+- url: https://api.fulcrumpro.com
+tags:
+- name: Alert
+paths:
+  /api/alerts/list:
+    post:
+      tags:
+      - Alert
+      summary: Find the job-tracking alerts that are currently raised, on job operations and…
+      operationId: ListAlert
+      parameters:
+      - name: Sort.Field
+        in: query
+        description: Sort field
+        schema:
+          minLength: 1
+          type: string
+      - name: Sort.Dir
+        in: query
+        description: Sort direction
+        schema:
+          $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
+      - name: Skip
+        in: query
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: Take
+        in: query
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/AlertRequestFindParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRequestFindParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AlertRequestFindParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AlertRequestFindParameters'
+      responses:
+        '200':
+          description: List of active alerts matching the filters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertDto'
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertDto'
+        '400':
+          description: The sort field, paging or filter parameters were invalid
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Jobs-Jobs-View Job
+components:
+  schemas:
+    AlertOperationDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: 'Unique id of the job operation, or of the work-order operation when the alert''s source is
+
+            `workOrder`.'
+        name:
+          type:
+          - string
+          - 'null'
+          description: The operation name.
+        workCenter:
+          $ref: '#/components/schemas/AlertReferenceDto'
+        equipment:
+          $ref: '#/components/schemas/AlertReferenceDto'
+      additionalProperties: false
+      description: The operation an alert was raised on.
+    AlertRequestFindParameters:
+      type: object
+      properties:
+        jobIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter alerts to those raised on an operation of one of these jobs.
+        workOrderIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter alerts to those raised on an operation of one of these work orders.
+        workCenterIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter alerts to those raised on an operation scheduled to one of these work centers.
+        equipmentIds:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter alerts to those raised on an operation scheduled to one of these pieces of equipment.
+        alertNames:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter alerts to those with one of these alert names.
+        raisedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filter alerts raised after (exclusive) this time in UTC. If no time component is passed,
+
+            midnight UTC will be used.'
+          format: date-time
+        raisedBeforeUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Filter alerts raised before (exclusive) this time in UTC. If no time component is passed,
+
+            midnight UTC will be used.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding active job-tracking alerts. Filters combine with AND.
+    DtoAlertSourceEnum:
+      enum:
+      - job
+      - workOrder
+      type: string
+      description: What a job-tracking alert was raised on.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    AlertItemToMakeDto:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Unique id of the item to make within its job.
+        itemId:
+          type:
+          - string
+          - 'null'
+          description: Id of the item being made.
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: Name of the item being made.
+        itemNumber:
+          type:
+          - string
+          - 'null'
+          description: Number of the item being made.
+      additionalProperties: false
+      description: The job item to make an alerted operation belongs to.
+    AlertJobDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id of the job.
+        number:
+          type: integer
+          description: The job number.
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+          description: The job name.
+      additionalProperties: false
+      description: The job an alerted operation belongs to.
+    AlertWorkOrderDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id of the work order.
+        number:
+          type: integer
+          description: The work order number.
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+          description: The work order name.
+      additionalProperties: false
+      description: The work order an alerted operation belongs to.
+    AlertReferenceDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id.
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name.
+      additionalProperties: false
+      description: An id and name reference on an alerted operation.
+    AlertDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique id of the alert.
+          format: int32
+        alertName:
+          type:
+          - string
+          - 'null'
+          description: The alert type's name, as configured in the job-tracking alert settings.
+        active:
+          type: boolean
+          description: Whether the alert is raised. A cleared alert is removed and no longer listed.
+        raisedAtUtc:
+          type: string
+          description: When the alert was raised, in UTC.
+          format: date-time
+        source:
+          $ref: '#/components/schemas/DtoAlertSourceEnum'
+        job:
+          $ref: '#/components/schemas/AlertJobDto'
+        itemToMake:
+          $ref: '#/components/schemas/AlertItemToMakeDto'
+        workOrder:
+          $ref: '#/components/schemas/AlertWorkOrderDto'
+        operation:
+          $ref: '#/components/schemas/AlertOperationDto'
+      additionalProperties: false
+      description: 'An active job-tracking alert, such as "Waiting on Material" or "Machine Down", raised from the
+
+        Job Tracking tablet against one job operation or one work-order operation.'
+  securitySchemes:
+    bearer:
+      type: http
+      description: Your API bearer token generated in System Data > Advanced > Public API Setup
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Accounting Code
+  tags:
+  - Accounting Code
+- name: Alert
+  tags:
+  - Alert
+- name: Attachment
+  tags:
+  - Attachment
+  - Attachment Certification
+- name: Auth
+  tags:
+  - Auth
+- name: CAPAs
+  tags:
+  - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
+- name: Chart Of Accounts
+  tags:
+  - Chart Of Accounts
+- name: Company Info
+  tags:
+  - Company Info
+- name: Custom Field
+  tags:
+  - Custom Field
+- name: Customer
+  tags:
+  - Customer
+  - Customer Address
+  - Customer Contact
+- name: Customer Tier
+  tags:
+  - Customer Tier
+- name: Department
+  tags:
+  - Department
+- name: Department Shift
+  tags:
+  - Department Shift
+- name: Equipment
+  tags:
+  - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
+- name: Gauge Code
+  tags:
+  - Gauge Code
+- name: Grade Code
+  tags:
+  - Grade Code
+- name: InProcessTrackingFieldType
+  tags:
+  - InProcessTrackingFieldType
+- name: Inventory
+  tags:
+  - Inventory
+- name: Inventory Event
+  tags:
+  - Inventory Event
+  - Inventory Event Details
+- name: Inventory Lot
+  tags:
+  - Inventory Lot
+- name: Inventory Transactions
+  tags:
+  - Inventory Transactions
+- name: Invoice
+  tags:
+  - Invoice
+  - Invoice Deposit Adjustment Line Item
+  - Invoice Deposit Line Item
+  - Invoice Discount Line Item
+  - Invoice Fee Line Item
+  - Invoice Line Item
+  - Invoice Note
+  - Invoice Part Line Item
+  - Invoice Refund Line Item
+  - Invoice Shipping Charge Line Item
+  - Invoice Tax Line Item
+- name: Item
+  tags:
+  - Item
+  - Item Custom Fields
+  - Item Customer
+  - Item Material Vendor
+  - Item PriceBreaks
+  - Item Routing
+  - Item Vendor
+- name: Item Category
+  tags:
+  - Item Category
+- name: Item Class
+  tags:
+  - Item Class
+- name: Item Tag
+  tags:
+  - Item Tag
+- name: Job
+  tags:
+  - Job
+  - Job Custom Fields
+  - Job Full Routing
+  - Job Part Line Item Full Routing
+  - Job Item To Make
+  - Job Item To Make Operation
+  - Job Message
+  - Job Operation
+- name: Job Tracking Timers
+  tags:
+  - Job Tracking Timers
+- name: Location
+  tags:
+  - Location
+- name: Material
+  tags:
+  - Material
+  - Material Vendor
+- name: Material Code
+  tags:
+  - Material Code
+- name: NCRs
+  tags:
+  - NCRs
+- name: Nesting
+  tags:
+  - Nesting
+- name: Note
+  tags:
+  - Note
+- name: Operation
+  tags:
+  - Operation
+- name: Payment Term
+  tags:
+  - Payment Term
+- name: Purchase Order
+  tags:
+  - Purchase Order
+  - Purchase Order Custom Fields
+  - Purchase Order Discount Line Item
+  - Purchase Order Fee Line Item
+  - Purchase Order Line Item
+  - Purchase Order Outside Processing Line Item
+  - Purchase Order Part Line Item
+  - Purchase Order Tax Line Item
+  - Purchase Order Vendor Credit Line Item
+- name: Quote
+  tags:
+  - Quote
+  - Quote Custom Fields
+  - Quote Discount Line Item
+  - Quote Fee Line Item
+  - Quote Part Line Item
+  - Quote Part Line Item Custom Fields
+  - Quote Part Line Item Full Routing
+  - Quote Tax Line Item
+- name: Receiving
+  tags:
+  - Receiving Receipt
+  - Receiving Receipt Line Item
+- name: Refund Reason Code
+  tags:
+  - Refund Reason Code
+- name: Reporting
+  tags:
+  - Reporting
+- name: Sales Order
+  tags:
+  - Sales Order
+  - Sales Order Blanket Line Item
+  - Sales Order Custom Fields
+  - Sales Order Discount Line Item
+  - Sales Order Fee Line Item
+  - Sales Order Line Item
+  - Sales Order Part Line Item
+  - Sales Order Part Line Item Custom Fields
+  - Sales Order Part Line Item Full Routing
+  - Sales Order Refund Line Item
+  - Sales Order Shipping Charge Line Item
+  - Sales Order Tax Line Item
+- name: ScrapReport
+  tags:
+  - ScrapReport
+- name: Settings
+  tags:
+  - Settings
+- name: Shape Code
+  tags:
+  - Shape Code
+- name: Shipment Line Items (V3)
+  tags:
+  - Shipment Line Items (V3)
+- name: Shipment
+  tags:
+  - Shipment Custom Fields
+- name: Shipments
+  tags:
+  - Shipments
+- name: Shipping Method
+  tags:
+  - Shipping Method
+- name: Tag
+  tags:
+  - Tag
+- name: Task
+  tags:
+  - Task
+- name: Tax Rate
+  tags:
+  - Tax Rate
+- name: Time Clock Timers
+  tags:
+  - Time Clock Timers
+- name: Timer
+  tags:
+  - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
+- name: User
+  tags:
+  - User
+  - User Status
+- name: Vendor
+  tags:
+  - Vendor
+  - Vendor Address
+  - Vendor Contact
+- name: Work Order
+  tags:
+  - Work Order
+- name: WorkCenter
+  tags:
+  - WorkCenter

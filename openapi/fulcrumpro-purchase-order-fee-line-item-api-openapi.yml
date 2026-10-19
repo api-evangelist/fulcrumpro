@@ -50,6 +50,7 @@ paths:
           description: Purchase order does not exist
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-PurchaseOrders-Edit Purchase Order
@@ -113,6 +114,7 @@ paths:
                 $ref: '#/components/schemas/PurchaseOrderFeeLineItemDto'
         '404':
           description: Purchase order or fee line item did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-PurchaseOrders-View Purchase Order
     patch:
@@ -150,8 +152,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/PurchaseOrderFeeLineItemDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: Purchase order or fee line item did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-PurchaseOrders-Edit Purchase Order
@@ -202,6 +207,7 @@ paths:
                 $ref: '#/components/schemas/PurchaseOrderFeeLineItemDto'
         '404':
           description: Purchase order or fee line item did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-PurchaseOrders-Edit Purchase Order
@@ -235,6 +241,7 @@ paths:
                   $ref: '#/components/schemas/PurchaseOrderFeeLineItemDto'
         '404':
           description: The purchase order did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-PurchaseOrders-View Purchase Order
   /api/purchase-orders/{purchaseOrderId}/fee-line-items/{lineItemId}/tax-allocations:
@@ -270,48 +277,11 @@ paths:
                 $ref: '#/components/schemas/PurchaseOrderLineItemTaxAllocationResponseDto'
         '404':
           description: Purchase order or line item did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-PurchaseOrders-View Purchase Order
 components:
   schemas:
-    PurchaseOrderAppliedTaxDto:
-      required:
-      - taxAmount
-      - taxLineItemId
-      type: object
-      properties:
-        taxLineItemId:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: 'The id of the PO-level tax line item that generated this tax amount.
-
-            Reference /api/purchase-orders/{id}/tax-line-items for full details.'
-        taxCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: The tax code id. Please reference /api/tax-rates endpoint.
-        taxCodeCode:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The tax code identifier string (e.g., "CA State Tax").
-        taxRate:
-          minimum: 0
-          type: number
-          description: The tax rate applied (as a decimal, e.g., 0.0725 for 7.25%).
-          format: double
-        taxAmount:
-          type: number
-          description: The calculated tax amount allocated to this line item from this tax line.
-          format: double
-      additionalProperties: false
-      description: Represents a tax allocation from a PO-level tax line item to an individual line item.
     PurchaseOrderFeeLineItemUpdateDto:
       required:
       - price
@@ -390,28 +360,53 @@ components:
           description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
       additionalProperties: false
       description: Represents a fee line item on a purchase order.
-    PurchaseOrderLineItemTaxAllocationResponseDto:
+    CommonEnumLineItemUomEnum:
+      enum:
+      - notApplicable
+      - piece
+      - linearFeet
+      - hour
+      - yard
+      type: string
+      description: Line item unit of measure.
+    PurchaseOrderAppliedTaxDto:
+      required:
+      - taxAmount
+      - taxLineItemId
       type: object
       properties:
-        appliedTaxes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
-          description: 'Tax amounts allocated to this line item from PO-level tax lines.
+        taxLineItemId:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: 'The id of the PO-level tax line item that generated this tax amount.
 
-            Null if the line item is not taxable or has no tax allocations.'
-        totalTax:
+            Reference /api/purchase-orders/{id}/tax-line-items for full details.'
+        taxCodeId:
+          maxLength: 24
+          minLength: 24
           type:
-          - number
+          - string
           - 'null'
-          description: 'Total tax amount allocated to this line item across all applicable tax lines.
-
-            Null if the line item is not taxable.'
+          description: The tax code id. Please reference /api/tax-rates endpoint.
+        taxCodeCode:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The tax code identifier string (e.g., "CA State Tax").
+        taxRate:
+          minimum: 0
+          type: number
+          description: The tax rate applied (as a decimal, e.g., 0.0725 for 7.25%).
+          format: double
+        taxAmount:
+          type: number
+          description: The calculated tax amount allocated to this line item from this tax line.
           format: double
       additionalProperties: false
-      description: Tax allocation data for a purchase order line item.
+      description: Represents a tax allocation from a PO-level tax line item to an individual line item.
     PurchaseOrderFeeLineItemDto:
       required:
       - accountingDetails
@@ -507,26 +502,34 @@ components:
       properties:
         op:
           type: string
-        value:
-          type: string
+        value: {}
         path:
           type: string
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CreatedResponseDto:
-      required:
-      - id
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
+    PurchaseOrderLineItemTaxAllocationResponseDto:
       type: object
       properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
+        appliedTaxes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PurchaseOrderAppliedTaxDto'
+          description: 'Tax amounts allocated to this line item from PO-level tax lines.
+
+            Null if the line item is not taxable or has no tax allocations.'
+        totalTax:
+          type:
+          - number
+          - 'null'
+          description: 'Total tax amount allocated to this line item across all applicable tax lines.
+
+            Null if the line item is not taxable.'
+          format: double
       additionalProperties: false
-      description: Response for a created record
+      description: Tax allocation data for a purchase order line item.
     CommonAccountingDetailsDto:
       type: object
       properties:
@@ -567,15 +570,22 @@ components:
           description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
       additionalProperties: false
       description: An object that contains all accounting details.
-    CommonEnumLineItemUomEnum:
-      enum:
-      - notApplicable
-      - piece
-      - linearFeet
-      - hour
-      - yard
-      type: string
-      description: Line item unit of measure.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
     PurchaseOrderFeeLineItemCreateDto:
       required:
       - price
@@ -718,6 +728,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -728,6 +741,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -748,9 +764,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -812,6 +834,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -829,6 +852,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -886,6 +912,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -904,6 +933,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -913,6 +945,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

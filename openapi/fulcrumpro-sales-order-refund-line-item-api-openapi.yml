@@ -48,6 +48,7 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
@@ -109,6 +110,7 @@ paths:
                   $ref: '#/components/schemas/SalesOrderRefundLineItemDto'
         '404':
           description: The sales order did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-SalesOrders-View Sales Order
   /api/sales-orders/{salesOrderId}/refund-line-items/{lineItemId}:
@@ -159,11 +161,121 @@ paths:
                 $ref: '#/components/schemas/SalesOrderRefundLineItemDto'
         '404':
           description: Sales order or line items did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-SalesOrders-Edit Sales Order
 components:
   schemas:
+    SalesOrderRefundLineItemUpdateDto:
+      required:
+      - refundAmount
+      - refundQuantity
+      type: object
+      properties:
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The refund line item description.
+        refundQuantity:
+          minimum: 0
+          type: number
+          description: The quantity to be refunded.
+          format: double
+        refundAmount:
+          minimum: 0
+          type: number
+          description: The refund amount.
+          format: double
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
+        refundReasonCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Refund reason code key identifier. Please reference /api/refund-reason-codes endpoint.
+        isReturn:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if a return is expected.
+        returnQuantity:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: The quantity to be returned.
+          format: double
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
+      additionalProperties: false
+      description: Represents a refund line item on a sales order.
+    CommonAccountingDetailsDto:
+      type: object
+      properties:
+        classId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Item class identifier. Please reference /api/item-classes endpoint.
+        incomeAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        assetAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        expenseAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+        cogsAccountId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
+      additionalProperties: false
+      description: An object that contains all accounting details.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
     SalesOrderRefundLineItemDto:
       required:
       - accountingDetails
@@ -246,115 +358,6 @@ components:
           $ref: '#/components/schemas/CommonAccountingDetailsDto'
       additionalProperties: false
       description: Refund line item.
-    CommonAccountingDetailsDto:
-      type: object
-      properties:
-        classId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Item class identifier. Please reference /api/item-classes endpoint.
-        incomeAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Income account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        assetAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Asset account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        expenseAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Expense account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-        cogsAccountId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: COGS account (chart of accounts) key identifier. Please reference /api/chart-of-accounts endpoint.
-      additionalProperties: false
-      description: An object that contains all accounting details.
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    SalesOrderRefundLineItemUpdateDto:
-      required:
-      - refundAmount
-      - refundQuantity
-      type: object
-      properties:
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The refund line item description.
-        refundQuantity:
-          minimum: 0
-          type: number
-          description: The quantity to be refunded.
-          format: double
-        refundAmount:
-          minimum: 0
-          type: number
-          description: The refund amount.
-          format: double
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code key identifier. Please reference /api/accounting-codes endpoint.
-        refundReasonCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Refund reason code key identifier. Please reference /api/refund-reason-codes endpoint.
-        isReturn:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate if a return is expected.
-        returnQuantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: The quantity to be returned.
-          format: double
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for this line item.
-      additionalProperties: false
-      description: Represents a refund line item on a sales order.
     CommonExternalReferenceDto:
       required:
       - externalId
@@ -482,6 +485,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -492,6 +498,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -512,9 +521,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -576,6 +591,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -593,6 +609,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -650,6 +669,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -668,6 +690,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -677,6 +702,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

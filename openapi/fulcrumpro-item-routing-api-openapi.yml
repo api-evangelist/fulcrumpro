@@ -35,6 +35,7 @@ paths:
           description: Input item id provided was not found on this item
         '404':
           description: Item id provided is not present in the system
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
     post:
@@ -117,6 +118,10 @@ paths:
           description: Validation issue with input
         '404':
           description: An item was not found matching the item id
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
   /api/items/{itemId}/routing/input-items/batch:
     post:
       tags:
@@ -160,6 +165,10 @@ paths:
           description: Validation issue with input
         '404':
           description: An item was not found matching the item id
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
   /api/items/{itemId}/routing/input-items/{inputItemId}:
     delete:
       tags:
@@ -222,6 +231,7 @@ paths:
           description: Input item id provided was not found on this item
         '404':
           description: Item id provided is not present in the system
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
     post:
@@ -325,6 +335,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ItemRoutingInputItemDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
   /api/items/{itemId}/routing/input-materials:
@@ -368,6 +379,10 @@ paths:
           description: Validation issue with input
         '404':
           description: A material was not found matching the material id
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
   /api/items/{itemId}/routing/input-materials/{materialId}:
     delete:
       tags:
@@ -409,6 +424,19 @@ paths:
           maxLength: 24
           minLength: 24
           type: string
+      - name: skip
+        in: query
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: take
+        in: query
+        schema:
+          maximum: 5000
+          minimum: 0
+          type: integer
+          format: int32
       responses:
         '200':
           description: List of input materials matching the filters
@@ -423,6 +451,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
   /api/items/{itemId}/routing/input-materials/{materialId}/nesting:
@@ -601,6 +630,10 @@ paths:
           description: Validation issue with input
         '404':
           description: Item id not present in the system
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
   /api/items/{itemId}/routing/operations:
     post:
       tags:
@@ -644,6 +677,10 @@ paths:
           description: Validation issue with input
         '404':
           description: Item id not present in the system
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
   /api/items/{itemId}/routing/operations/{operationId}:
     delete:
       tags:
@@ -704,6 +741,7 @@ paths:
                 $ref: '#/components/schemas/ItemRoutingOperationDto'
         '404':
           description: Item id or operation id provided are not present in the system
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
     put:
@@ -750,6 +788,10 @@ paths:
           description: Validation issue with input
         '404':
           description: Item id not present in the system
+      x-c4-exposed: true
+      x-c4-mutation: true
+      x-c4-required-permissions:
+      - ItemsAndInventory-Items-Edit Item
   /api/items/{itemId}/routing/operations/{operationId}/items:
     post:
       tags:
@@ -878,6 +920,7 @@ paths:
           description: Operation or operation item id provided was not found on this item
         '404':
           description: An item was not found matching the itemId
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
     post:
@@ -993,6 +1036,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ItemRoutingInputItemDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
   /api/items/{itemId}/routing/operations/list:
@@ -1052,6 +1096,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ItemRoutingOperationDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
   /api/items/{itemId}/routing/operations/{operationId}/materials/list:
@@ -1089,42 +1134,111 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ItemRoutingInputMaterialDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
 components:
   schemas:
-    ItemRoutingInputMaterialNestingCreateDto:
+    ItemRoutingOperationTimeOption:
+      enum:
+      - fixedSeconds
+      - fixedMinutes
+      - fixedHours
+      - fixedDays
+      - secondsPerUnit
+      - minutesPerUnit
+      - hoursPerUnit
+      - daysPerUnit
+      - unitsPerHour
+      type: string
+      description: The time unit or option used in operation times
+    BatchCreatedResponseDto:
       required:
-      - d2
-      - d3
-      - produces
+      - ids
       type: object
       properties:
-        d2:
-          type: number
-          description: Length
-          format: double
-        d3:
-          type: number
-          description: For Sheets, the Width
-          format: double
-        produces:
-          type: integer
-          description: The quantity produced, given the bounding box dimensions (D2 x D3).
-          format: int32
-        useForEstimatedCosting:
-          type: boolean
-          description: 'Indicates if this nesting record will be used for estimated costing.
-
-            NOTE: Only one nesting record for a material can have this value set to true.'
+        ids:
+          type: array
+          items:
+            type: string
+          description: The ids of the created records
       additionalProperties: false
-      description: An input material nesting for routing
-    CommonEnumMaterialVendorPriceUnitEnum:
-      enum:
-      - kilogram
-      - pound
-      type: string
-      description: Specifies how a routing input item quantity is measured.
+      description: Response for a batch created record
+    ItemRoutingOperationTime:
+      type: object
+      properties:
+        time:
+          type: number
+          description: Time or units of this operation
+          format: double
+        option:
+          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
+      additionalProperties: false
+      description: Operation time and type
+    MaterialShapeVendorDto:
+      required:
+      - id
+      - isPrimary
+      - priceBreaks
+      - priceUnit
+      - vendorId
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor identifier. Pelase reference /api/vendors endpoint.
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: Currency code/denomination associated to this vendor.
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        leadTimeInDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Number of days required between order and receipt
+          format: int32
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Material vendor definition
+    MaterialShapeVendorPriceBreakDto:
+      required:
+      - id
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          type: number
+          description: The price per unit.
+          format: double
+      additionalProperties: false
+      description: Vendor prices breaks for a material shape.
     ItemRoutingInputMaterialDto:
       required:
       - costing
@@ -1168,53 +1282,6 @@ components:
             This value should be the Id from the response from items/{itemId}/routing/operations/list'
       additionalProperties: false
       description: An item input material
-    ItemRoutingOutsideProcessingCostOption:
-      enum:
-      - fixed
-      - perUnit
-      type: string
-      description: The cost option for the outside processing operation
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    ItemRoutingInputMaterialUpdateDto:
-      required:
-      - costing
-      type: object
-      properties:
-        costing:
-          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
-        routingStepId:
-          maxLength: 36
-          minLength: 36
-          type:
-          - string
-          - 'null'
-          description: 'The routing step id.
-
-            This value should be the Id from the response from items/{itemId}/routing/operations/list'
-      additionalProperties: false
-      description: Update an input material for routing
-    BatchCreatedResponseDto:
-      required:
-      - ids
-      type: object
-      properties:
-        ids:
-          type: array
-          items:
-            type: string
-          description: The ids of the created records
-      additionalProperties: false
-      description: Response for a batch created record
     ItemRoutingInputMaterialNestingDto:
       required:
       - d2
@@ -1231,250 +1298,31 @@ components:
           format: uuid
         d2:
           type: number
-          description: Length
+          description: Length of the nest's bounding box, in the material's `dimensionUnits`.
           format: double
         d3:
           type: number
-          description: For Sheets, the Width
+          description: Width of the nest's bounding box, in the material's `dimensionUnits`. Still required (greater than zero) for a `Linear` material, but not used to cost it.
           format: double
         produces:
           type: integer
-          description: The quantity produced, given the bounding box dimensions (D2 x D3).
+          description: 'The quantity produced, given the bounding box dimensions (D2 x D3).
+
+            Each part is costed at the material weight of the bounding box (D2 x D3 for `Planar`, D2 for `Linear`) divided by this quantity.'
           format: int32
         useForEstimatedCosting:
           type: boolean
           description: 'Indicates if this nesting record will be used for estimated costing.
 
+            A nesting generated by applying a nest to a quote takes precedence over this flag.
+
+            When neither applies, the nesting with the largest `produces` not exceeding the quantity being costed is used,
+
+            or the smallest `produces` when every nesting exceeds it.
+
             NOTE: Only one nesting record for a material can have this value set to true.'
       additionalProperties: false
       description: Create an input material nesting for routing
-    MaterialShapeVendorDto:
-      required:
-      - id
-      - isPrimary
-      - priceBreaks
-      - priceUnit
-      - vendorId
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique id associated to this entity.
-          format: uuid
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor identifier. Pelase reference /api/vendors endpoint.
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this material.
-        currencyCode:
-          type:
-          - string
-          - 'null'
-          description: Currency code/denomination associated to this vendor.
-        priceUnit:
-          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
-        leadTimeInDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Number of days required between order and receipt
-          format: int32
-        priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakDto'
-          description: Vendor price breaks
-      additionalProperties: false
-      description: Material vendor definition
-    RoutingRequestOperationFindParameters:
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to operations who's name contains the given string
-      additionalProperties: false
-      description: Parameters used for searching/finding operations on an item's routing.
-    ItemRoutingInputMaterialCreateDto:
-      required:
-      - costing
-      - materialId
-      type: object
-      properties:
-        materialId:
-          minLength: 1
-          type: string
-          description: The material id to be added. Please reference /api/materials endpoint.
-        costing:
-          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
-        nestings:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ItemRoutingInputMaterialNestingCreateDto'
-          description: Nestings associated to this material indicating bounding box dimensions and production quantities.
-        routingStepId:
-          maxLength: 36
-          minLength: 36
-          type:
-          - string
-          - 'null'
-          description: 'The routing step id.
-
-            This value should be the Id from the response from items/{itemId}/routing/operations/list'
-      additionalProperties: false
-      description: Create an input material for routing
-    ItemRoutingOperationDto:
-      required:
-      - id
-      - name
-      - systemOperationId
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: The Id of this operation specific to this item's routing
-        name:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Name of the system operation
-        systemOperationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Id of the system operation
-        order:
-          minimum: 0
-          type: integer
-          description: The order of this operation.  Operations with the same order are expected to run in parallel
-          format: int32
-        isOutsideProcessing:
-          type: boolean
-          description: Specifies whether this is an outside processing operation
-        outsideProcessingOperation:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
-        operation:
-          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
-        leadDays:
-          minimum: 0
-          type: integer
-          description: Lead days
-          format: int32
-        unattended:
-          type:
-          - boolean
-          - 'null'
-          description: 'If `true`, the run portion of this step is unattended by
-
-            an operator.'
-        machineTrackingEnabled:
-          type: boolean
-          description: Whether machine tracking is enabled.
-        instructions:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Instructions for this operation.
-      additionalProperties: false
-      description: A routing operation (step)
-    ItemRoutingDto:
-      type: object
-      properties:
-        allowContinuousFlow:
-          type:
-          - boolean
-          - 'null'
-          description: Allow an operation to start before previous operations in the routing end
-      additionalProperties: false
-      description: Represents an item's routing
-    SalesOrderPartLineItemInputItemCreateBatchDto:
-      required:
-      - lineItems
-      type: object
-      properties:
-        lineItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
-          description: The input items to add to an item.
-      additionalProperties: false
-      description: Represents a batch of input items to add to an item.
-    ItemRoutingOperationCreateDto:
-      required:
-      - systemOperationId
-      type: object
-      properties:
-        systemOperationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: System Operation Id
-        order:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: The order of this operation.  Operations with the same order are expected to run in parallel
-          format: int32
-        outsideProcessingOperation:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
-        operation:
-          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
-        leadDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead days. Will default to zero if not provided.
-          format: int32
-        unattended:
-          type:
-          - boolean
-          - 'null'
-          description: 'If `true`, the run portion of this step is unattended by
-
-            an operator.'
-        instructions:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Operation instructions. Will default to the instructions defined on the operation when not provided.
-        inputMaterialIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: 'The ids on the input material to associate to this operation.
-
-            This value should be the Id from the response from items/{itemId}/routing/input-materials/list'
-      additionalProperties: false
-      description: A routing operation (step)
-    ItemRoutingUpdateDto:
-      type: object
-      properties:
-        allowContinuousFlow:
-          type:
-          - boolean
-          - 'null'
-          description: Allow an operation to start before previous operations in the routing end
-      additionalProperties: false
-      description: Represents updates to an item's routing
     ItemRoutingNormalOperationDto:
       type: object
       properties:
@@ -1497,45 +1345,50 @@ components:
           description: Indicate if this operation is nestable.
       additionalProperties: false
       description: Defines non-outside-processing fields
-    CommonEnumMaterialRequirementCostingEnum:
-      enum:
-      - fullCost
-      - usageBased
-      type: string
-      description: Specifies the costing of the material.
-    ItemRoutingOperationTime:
-      type: object
-      properties:
-        time:
-          type: number
-          description: Time or units of this operation
-          format: double
-        option:
-          $ref: '#/components/schemas/ItemRoutingOperationTimeOption'
-      additionalProperties: false
-      description: Operation time and type
-    MaterialShapeVendorPriceBreakDto:
+    ItemRoutingInputMaterialUpdateDto:
       required:
-      - id
-      - price
-      - quantity
+      - costing
       type: object
       properties:
-        id:
-          type: string
-          description: Unique id associated to this entity.
-          format: uuid
-        quantity:
-          minimum: 0
-          type: integer
-          description: The minimum quantity to associate this price break to.
-          format: int32
-        price:
-          type: number
-          description: The price per unit.
-          format: double
+        costing:
+          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
+        routingStepId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: 'The routing step id.
+
+            This value should be the Id of an operation on the routing being edited, as returned by that routing''s operations list
+
+            (for example items/{itemId}/routing/operations/list, or the sales-order part line item routing''s operations/list).'
       additionalProperties: false
-      description: Vendor prices breaks for a material shape.
+      description: Update an input material for routing
+    ItemRoutingUpdateDto:
+      type: object
+      properties:
+        allowContinuousFlow:
+          type:
+          - boolean
+          - 'null'
+          description: Allow an operation to start before previous operations in the routing end
+      additionalProperties: false
+      description: Represents updates to an item's routing
+    ItemRoutingOutsideProcessingOperationDto:
+      type: object
+      properties:
+        outsideProcessingTime:
+          $ref: '#/components/schemas/ItemRoutingOperationTime'
+        outsideProcessingCost:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
+        selectedVendorId:
+          type:
+          - string
+          - 'null'
+          description: Outside processing vendor
+      additionalProperties: false
+      description: Defines outside processing fields
     ItemRoutingInputItemDto:
       required:
       - description
@@ -1576,42 +1429,94 @@ components:
           description: The description to give the item.
           readOnly: true
         valueTypeUnits:
+          minimum: 0
           type: number
           description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemDto.ValueType
           format: double
         valueType:
           $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+        fixedUnits:
+          type:
+          - number
+          - 'null'
+          description: 'Quantity required per lot, regardless of the parent quantity being made, in addition to
+
+            FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemDto.ValueTypeUnits. Null when the line has no fixed quantity.'
+          format: double
+        routingStepId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: 'Id of the routing operation (step) this input item is attached to, or null when it is not
+
+            attached to a specific operation. Corresponds to the Id from the routing''s operations list
+
+            (e.g. jobs/{jobId}/routing/{routingId}/operations/list or items/{itemId}/routing/operations/list).'
+        isMaterialLine:
+          type: boolean
+          description: 'True when this line is tied to an input material (created by a material selection).
+
+            Material-tied lines must be included in every input-items replace — they cannot be
+
+            removed through that endpoint.'
       additionalProperties: false
       description: An item
-    CommonEnumInputItemValueTypeEnum:
-      enum:
-      - creates
-      - requires
-      type: string
-      description: Specifies how a routing input item quantity is measured.
-    CommonEnumMaterialFormEnum:
-      enum:
-      - sheet
-      - plate
-      - roundBar
-      - flatBar
-      - channel
-      - squareTube
-      - angle
-      - treadPlate
-      - hexBar
-      - squareBar
-      - teeBar
-      - hBeam
-      - rectTube
-      - pipe
-      - wBeam
-      - sBeam
-      - roundTube
-      - rectBar
-      - wideBar
-      type: string
-      description: Specifies the form of the material.
+    ItemRoutingOutsideProcessingOperationCost:
+      type: object
+      properties:
+        costOption:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
+        fixedCost:
+          type:
+          - number
+          - 'null'
+          description: The fixed total cost for the operation
+          format: double
+        perUnitCost:
+          type:
+          - number
+          - 'null'
+          description: The cost per unit for the operation
+          format: double
+      additionalProperties: false
+      description: Outside processing operation cost
+    ItemRoutingInputItemUpdateDto:
+      type: object
+      properties:
+        valueTypeUnits:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemUpdateDto.ValueType
+          format: double
+        valueType:
+          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+        fixedUnits:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: 'Quantity required per lot, regardless of the parent quantity being made, in addition to
+
+            FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemUpdateDto.ValueTypeUnits. Omit to leave the line''s fixed quantity unchanged; null clears it.'
+          format: double
+      additionalProperties: false
+      description: An input item for routing
+    RoutingRequestItemFindParameters:
+      type: object
+      properties:
+        number:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter to items who's number contains the given string
+      additionalProperties: false
+      description: Parameters used for searching/finding input items on an item's routing.
     ItemRoutingInputItemCreateDto:
       required:
       - itemId
@@ -1625,26 +1530,31 @@ components:
           type: string
           description: The item id to be added. Please reference /api/items endpoint.
         valueTypeUnits:
+          minimum: 0
           type: number
           description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemCreateDto.ValueType
           format: double
         valueType:
           $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
+        fixedUnits:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: 'Quantity required per lot, regardless of the parent quantity being made, in addition to
+
+            FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemCreateDto.ValueTypeUnits. Omitted or null on a new line means no fixed quantity. Where this
+
+            body updates an existing line, omit it to leave the fixed quantity unchanged; null clears it.'
+          format: double
       additionalProperties: false
       description: An input item for routing
-    ItemRoutingOperationTimeOption:
+    CommonEnumInputItemValueTypeEnum:
       enum:
-      - fixedSeconds
-      - fixedMinutes
-      - fixedHours
-      - fixedDays
-      - secondsPerUnit
-      - minutesPerUnit
-      - hoursPerUnit
-      - daysPerUnit
-      - unitsPerHour
+      - creates
+      - requires
       type: string
-      description: The time unit or option used in operation times
+      description: Specifies how a routing input item quantity is measured.
     ItemRoutingOperationUpdateDto:
       type: object
       properties:
@@ -1682,64 +1592,6 @@ components:
           description: Instructions for this operation.
       additionalProperties: false
       description: A routing operation (step)
-    ItemRoutingInputItemUpdateDto:
-      required:
-      - valueTypeUnits
-      type: object
-      properties:
-        valueTypeUnits:
-          type: number
-          description: Measurement unit depending on FulcrumProduct.PublicApi.Dto.Item.Routing.InputItemUpdateDto.ValueType
-          format: double
-        valueType:
-          $ref: '#/components/schemas/CommonEnumInputItemValueTypeEnum'
-      additionalProperties: false
-      description: An input item for routing
-    RoutingRequestItemFindParameters:
-      type: object
-      properties:
-        number:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Filter to items who's number contains the given string
-      additionalProperties: false
-      description: Parameters used for searching/finding input items on an item's routing.
-    ItemRoutingOutsideProcessingOperationDto:
-      type: object
-      properties:
-        outsideProcessingTime:
-          $ref: '#/components/schemas/ItemRoutingOperationTime'
-        outsideProcessingCost:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationCost'
-        selectedVendorId:
-          type:
-          - string
-          - 'null'
-          description: Outside processing vendor
-      additionalProperties: false
-      description: Defines outside processing fields
-    ItemRoutingOutsideProcessingOperationCost:
-      type: object
-      properties:
-        costOption:
-          $ref: '#/components/schemas/ItemRoutingOutsideProcessingCostOption'
-        fixedCost:
-          type:
-          - number
-          - 'null'
-          description: The fixed total cost for the operation
-          format: double
-        perUnitCost:
-          type:
-          - number
-          - 'null'
-          description: The cost per unit for the operation
-          format: double
-      additionalProperties: false
-      description: Outside processing operation cost
     MaterialShapeDto:
       required:
       - form
@@ -1808,6 +1660,43 @@ components:
           - string
           - 'null'
           description: Version
+        dimensionUnits:
+          type:
+          - string
+          - 'null'
+          description: 'Unit the material''s dimensions are in: `Inch`, `Foot`, `Yard`, `Millimeter`, `Centimeter` or `Meter`.
+
+            Routing input-material nesting `d2` and `d3` are costed in this unit. A routing costs from a copy of the material''s
+
+            units, shape type and density taken when the input material was added, so later changes to the material may not reach it.'
+        shapeType:
+          type:
+          - string
+          - 'null'
+          description: 'How the material is measured: `Planar` (sheet and plate, costed by length and width) or `Linear` (bar, tube and
+
+            structural shapes, costed by length). A nesting''s `d3` applies only to `Planar` materials.'
+        linearDensity:
+          type:
+          - number
+          - 'null'
+          description: Weight per unit length, in `densityUnits`. Used to cost `Linear` materials.
+          format: double
+        planarDensity:
+          type:
+          - number
+          - 'null'
+          description: Weight per unit area, in `densityUnits`. Used to cost `Planar` materials.
+          format: double
+        densityUnits:
+          type:
+          - string
+          - 'null'
+          description: 'Unit of `linearDensity` and `planarDensity`: `PoundPerFoot`, `KilogramPerMeter`,
+
+            `PoundPerSquareFoot` or `KilogramPerSquareMeter`.
+
+            An input material whose material has no density for its `shapeType` is estimated at zero material cost.'
         vendors:
           type: array
           items:
@@ -1815,6 +1704,274 @@ components:
           description: Vendors that supply this material.
       additionalProperties: false
       description: Material definition.
+    ItemRoutingOperationDto:
+      required:
+      - id
+      - name
+      - systemOperationId
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: The Id of this operation specific to this item's routing
+        name:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Name of the system operation
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Id of the system operation
+        order:
+          minimum: 0
+          type: integer
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+        isOutsideProcessing:
+          type: boolean
+          description: Specifies whether this is an outside processing operation
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type: integer
+          description: Lead days
+          format: int32
+        unattended:
+          type:
+          - boolean
+          - 'null'
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+        machineTrackingEnabled:
+          type: boolean
+          description: Whether machine tracking is enabled.
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Instructions for this operation.
+      additionalProperties: false
+      description: A routing operation (step)
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    CommonEnumMaterialRequirementCostingEnum:
+      enum:
+      - fullCost
+      - usageBased
+      type: string
+      description: Specifies the costing of the material.
+    ItemRoutingDto:
+      type: object
+      properties:
+        allowContinuousFlow:
+          type:
+          - boolean
+          - 'null'
+          description: Allow an operation to start before previous operations in the routing end
+      additionalProperties: false
+      description: Represents an item's routing
+    ItemRoutingInputMaterialNestingCreateDto:
+      required:
+      - d2
+      - d3
+      - produces
+      type: object
+      properties:
+        d2:
+          type: number
+          description: Length of the nest's bounding box, in the material's `dimensionUnits`.
+          format: double
+        d3:
+          type: number
+          description: Width of the nest's bounding box, in the material's `dimensionUnits`. Still required (greater than zero) for a `Linear` material, but not used to cost it.
+          format: double
+        produces:
+          type: integer
+          description: 'The quantity produced, given the bounding box dimensions (D2 x D3).
+
+            Each part is costed at the material weight of the bounding box (D2 x D3 for `Planar`, D2 for `Linear`) divided by this quantity.'
+          format: int32
+        useForEstimatedCosting:
+          type: boolean
+          description: 'Indicates if this nesting record will be used for estimated costing.
+
+            A nesting generated by applying a nest to a quote takes precedence over this flag.
+
+            When neither applies, the nesting with the largest `produces` not exceeding the quantity being costed is used,
+
+            or the smallest `produces` when every nesting exceeds it.
+
+            NOTE: Only one nesting record for a material can have this value set to true.'
+      additionalProperties: false
+      description: An input material nesting for routing
+    CommonEnumMaterialFormEnum:
+      enum:
+      - sheet
+      - plate
+      - roundBar
+      - flatBar
+      - channel
+      - squareTube
+      - angle
+      - treadPlate
+      - hexBar
+      - squareBar
+      - teeBar
+      - hBeam
+      - rectTube
+      - pipe
+      - wBeam
+      - sBeam
+      - roundTube
+      - rectBar
+      - wideBar
+      type: string
+      description: Specifies the form of the material.
+    ItemRoutingOutsideProcessingCostOption:
+      enum:
+      - fixed
+      - perUnit
+      type: string
+      description: The cost option for the outside processing operation
+    ItemRoutingOperationCreateDto:
+      required:
+      - systemOperationId
+      type: object
+      properties:
+        systemOperationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: System Operation Id
+        order:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The order of this operation.  Operations with the same order are expected to run in parallel
+          format: int32
+        outsideProcessingOperation:
+          $ref: '#/components/schemas/ItemRoutingOutsideProcessingOperationDto'
+        operation:
+          $ref: '#/components/schemas/ItemRoutingNormalOperationDto'
+        leadDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead days. Will default to zero if not provided.
+          format: int32
+        unattended:
+          type:
+          - boolean
+          - 'null'
+          description: 'If `true`, the run portion of this step is unattended by
+
+            an operator.'
+        instructions:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Operation instructions. Will default to the instructions defined on the operation when not provided.
+        inputMaterialIds:
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: 'The ids on the input material to associate to this operation.
+
+            This value should be the Id from the response from items/{itemId}/routing/input-materials/list'
+      additionalProperties: false
+      description: A routing operation (step)
+    SalesOrderPartLineItemInputItemCreateBatchDto:
+      required:
+      - lineItems
+      type: object
+      properties:
+        lineItems:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemRoutingInputItemCreateDto'
+          description: The input items to add to an item.
+      additionalProperties: false
+      description: Represents a batch of input items to add to an item.
+    CommonEnumMaterialVendorPriceUnitEnum:
+      enum:
+      - kilogram
+      - pound
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    RoutingRequestOperationFindParameters:
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Filter to operations who's name contains the given string
+      additionalProperties: false
+      description: Parameters used for searching/finding operations on an item's routing.
+    ItemRoutingInputMaterialCreateDto:
+      required:
+      - costing
+      - materialId
+      type: object
+      properties:
+        materialId:
+          minLength: 1
+          type: string
+          description: The material id to be added. Please reference /api/materials endpoint.
+        costing:
+          $ref: '#/components/schemas/CommonEnumMaterialRequirementCostingEnum'
+        nestings:
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ItemRoutingInputMaterialNestingCreateDto'
+          description: 'Nestings associated to this material indicating bounding box dimensions and production quantities.
+
+            The estimated material cost is taken from one nesting (see `useForEstimatedCosting`); with no nesting, the material costs zero.'
+        routingStepId:
+          maxLength: 36
+          minLength: 36
+          type:
+          - string
+          - 'null'
+          description: 'The routing step id.
+
+            This value should be the Id of an operation on the routing being edited, as returned by that routing''s operations list
+
+            (for example items/{itemId}/routing/operations/list, or the sales-order part line item routing''s operations/list).'
+      additionalProperties: false
+      description: Create an input material for routing
   securitySchemes:
     bearer:
       type: http
@@ -1825,6 +1982,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -1835,6 +1995,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -1855,9 +2018,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -1919,6 +2088,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -1936,6 +2106,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -1993,6 +2166,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -2011,6 +2187,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -2020,6 +2199,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

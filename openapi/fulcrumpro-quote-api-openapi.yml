@@ -7,6 +7,111 @@ servers:
 tags:
 - name: Quote
 paths:
+  /api/quotes/{quoteId}/capable-to-promise:
+    post:
+      tags:
+      - Quote
+      summary: Calculate when a quote could be made
+      description: 'Queues a capable-to-promise calculation, which schedules the quote''s make lines against the current
+
+        schedule at high, moderate and low job priority without creating any jobs. The calculation runs in the
+
+        background; read its result with Get Quote Capable To Promise. A calculation already pending for the quote is
+
+        not queued again, and the request still answers 202. The body and each of its fields are optional.'
+      operationId: CalculateQuoteCapableToPromise
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/QuoteCapableToPromiseRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteCapableToPromiseRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/QuoteCapableToPromiseRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/QuoteCapableToPromiseRequest'
+      responses:
+        '202':
+          description: The calculation was queued, or one was already pending
+        '403':
+          description: Capable to promise is disabled for this site
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoErrorDetails'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoErrorDetails'
+        '404':
+          description: Quote did not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoErrorDetails'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoErrorDetails'
+        '503':
+          description: This API host can't run the calculation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DtoErrorDetails'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/DtoErrorDetails'
+      x-c4-required-permissions:
+      - Orders-Quotes-Edit Quote
+    get:
+      tags:
+      - Quote
+      summary: Get the latest capable-to-promise calculation for a quote
+      description: 'Returns the latest calculation that has started for the quote. A calculation queued with Calculate Quote
+
+        Capable To Promise is not returned until it starts; until then this returns the previous calculation, so
+
+        compare `createdUtc` with the value read before to tell when the new one has replaced it. A quote with
+
+        no calculation returns `notRun`. Each run is one job-priority scenario; its `estimatedEndUtc` is
+
+        when the whole quote could be made at that priority, and is null when any of its lines has no estimated end.'
+      operationId: GetQuoteCapableToPromise
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The latest calculation for the quote
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteCapableToPromiseDto'
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/QuoteCapableToPromiseDto'
+        '403':
+          description: Capable to promise is disabled for this site
+        '404':
+          description: Quote did not exist
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
   /api/quotes/{quoteId}/to-sales-order:
     post:
       tags:
@@ -35,6 +140,7 @@ paths:
           description: Validation issue or invalid/bad request
         '404':
           description: Quote did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-Quotes-Edit Quote
@@ -74,6 +180,7 @@ paths:
         '400':
           description: Validation issues with input
       deprecated: true
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-Quotes-Edit Quote
@@ -110,6 +217,7 @@ paths:
                 $ref: '#/components/schemas/CreatedResponseDto'
         '400':
           description: Validation issues with input
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-Quotes-Edit Quote
@@ -178,6 +286,7 @@ paths:
                 $ref: '#/components/schemas/QuoteDto'
         '404':
           description: Quote did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-Quotes-View Quote
     patch:
@@ -208,8 +317,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/QuoteDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: Quote did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-Quotes-Edit Quote
@@ -253,6 +365,42 @@ paths:
                 $ref: '#/components/schemas/QuoteDto'
         '404':
           description: Quote did not exist
+  /api/quotes/{quoteId}/pdf:
+    get:
+      tags:
+      - Quote
+      summary: Download the PDF for a quote
+      description: 'The document is rendered when you call this, from the
+
+        quote''s current state and the tenant''s PDFs & Emails settings, so it is the same document
+
+        the product''s Download button produces rather than a stored copy of one sent earlier. The
+
+        file name carries the quote''s revision letter when it has one.'
+      operationId: GetQuotePdf
+      parameters:
+      - name: quoteId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The quote PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: No quote with that id, or the quote is deleted
+        '500':
+          description: The renderer did not produce a usable document
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Orders-Quotes-View Quote
   /api/quotes/list:
     post:
       tags:
@@ -273,14 +421,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -314,6 +483,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/QuoteDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Orders-Quotes-View Quote
   /api/quotes/{quoteId}/status:
@@ -352,6 +522,7 @@ paths:
           description: invalid status change
         '404':
           description: quote did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Orders-Quotes-Edit Quote
@@ -385,6 +556,12 @@ components:
         quotedDate:
           type: string
           description: Quoted date (generally the creation date but can be post/pre-dated).
+          format: date-time
+        dueDate:
+          type:
+          - string
+          - 'null'
+          description: The date the quote needs to be completed by. Null when the quote has no due date.
           format: date-time
         status:
           $ref: '#/components/schemas/DtoQuotesStatus'
@@ -461,6 +638,93 @@ components:
           description: A field for the seller to provide additional details or instructions for the customer relating to the order.
       additionalProperties: false
       description: Represents a Quote
+    CommonReferenceDto:
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Unique Id associated to the referenced object
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Descriptive name associated to the object
+      additionalProperties: false
+      description: Represents a reference to a document in a DB collection
+    QuoteCapableToPromiseRunDto:
+      required:
+      - lines
+      - priority
+      type: object
+      properties:
+        priority:
+          $ref: '#/components/schemas/QuoteCapableToPromisePriority'
+        estimatedStartUtc:
+          type:
+          - string
+          - 'null'
+          description: The earliest estimated start across the scenario's work. Null when no work was scheduled.
+          format: date-time
+        estimatedEndUtc:
+          type:
+          - string
+          - 'null'
+          description: 'The latest estimated end across the scenario''s work: when the whole quote could be made. Null when no
+
+            work was scheduled, or when any of its work has no estimated end.'
+          format: date-time
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteCapableToPromiseLineDto'
+          description: The estimate for each quote part line that needed work scheduled, ordered by `partLineItemId`.
+      additionalProperties: false
+      description: The estimate for a quote's work when it is scheduled at one job priority.
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
+    QuoteCapableToPromiseRequest:
+      type: object
+      properties:
+        inventoryFulfillment:
+          type: boolean
+          description: 'When true, inventory on hand that is not already demanded elsewhere covers part of each line, and only
+
+            the remainder is scheduled. Defaults to false.'
+        ignoreWarnings:
+          type: boolean
+          description: 'When true, the calculation runs even when the current schedule is out of date, which makes it take
+
+            longer. When false, an out-of-date schedule ends the calculation with a warning instead. Defaults to false.'
+      additionalProperties: false
+      description: Options for a capable-to-promise calculation on a quote.
+    DtoQuoteUpdateQuotesStatus:
+      enum:
+      - draft
+      - needsApproval
+      - approved
+      - sent
+      - won
+      - lost
+      type: string
+      description: Statuses you can update a quote too
+    QuoteCapableToPromiseStatus:
+      enum:
+      - notRun
+      - running
+      - succeeded
+      - failed
+      type: string
+      description: Where the latest capable-to-promise calculation for a quote stands.
     CustomerContactCreateDto:
       required:
       - firstName
@@ -503,25 +767,6 @@ components:
           format: email
       additionalProperties: false
       description: A customer contact
-    CommonReferenceDto:
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Unique Id associated to the referenced object
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Descriptive name associated to the object
-      additionalProperties: false
-      description: Represents a reference to a document in a DB collection
     DtoQuotesStatus:
       enum:
       - open
@@ -533,27 +778,125 @@ components:
       - lost
       type: string
       description: Quotes status
-    CreatedResponseDto:
+    QuoteCreateDto:
       required:
-      - id
+      - customerId
       type: object
       properties:
-        id:
+        customerId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: The id of the customer to be created
+        billingAddress:
+          $ref: '#/components/schemas/CommonAddressCreateDto'
+        shippingAddress:
+          $ref: '#/components/schemas/CommonAddressCreateDto'
+        contact:
+          $ref: '#/components/schemas/CustomerContactCreateDto'
+        externalReferences:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            $ref: '#/components/schemas/CommonExternalReferenceDto'
+          description: Arbitrary key-value-pair like data that can be used to later on search for the Quote
+        salesPersonId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: 'Sales Person identifier.  Please reference /api/users endpoint.
+
+            If not provided, the salesperson defined on the customer will be used.'
+        crmOpportunity:
+          $ref: '#/components/schemas/FulcrumProDomainReference'
+        opportunity:
+          type:
+          - string
+          - 'null'
+          description: CRM Opportunity identifier.
+        notesToCustomer:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: A field for the seller to provide additional details or instructions for the customer relating to the order.
+      additionalProperties: false
+      description: Details of sales order to be created
+    CommonAddressDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+        address1:
+          maxLength: 200
           minLength: 1
           type: string
-          description: The id of the created record
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Second address line.
+        address3:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Third address line.
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Address state/province.
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Country identifier.
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          format: tel
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
       additionalProperties: false
-      description: Response for a created record
-    DtoQuoteUpdateQuotesStatus:
-      enum:
-      - draft
-      - needsApproval
-      - approved
-      - sent
-      - won
-      - lost
-      type: string
-      description: Statuses you can update a quote too
+      description: Address definition
     DomainCurrenciesDocumentCurrencyInfo:
       type: object
       properties:
@@ -579,6 +922,236 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
+    FulcrumProDomainReference:
+      type: object
+      properties:
+        primaryKeyId:
+          type: integer
+          format: int32
+        id:
+          maxLength: 36
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        name:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        createdUtc:
+          type: string
+          format: date-time
+      additionalProperties: false
+    CommonExternalReferenceFindDto:
+      required:
+      - key
+      type: object
+      properties:
+        key:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Arbitrary sub-key that can be used to qualify the value
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The external identifier
+      additionalProperties: false
+      description: Search parameter for identifier record(s) via their external identifiers.
+    QuoteCapableToPromiseDto:
+      required:
+      - runs
+      - status
+      - warnings
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/QuoteCapableToPromiseStatus'
+        createdUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When this calculation was recorded. Until a newly queued calculation starts, the previous one is returned,
+
+            so compare this with the value read before to tell when a new calculation has replaced it. Null when none
+
+            has run.'
+          format: date-time
+        startedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the latest calculation started. Null when none has run, or when it was refused or failed: a failure
+
+            is recorded without run times.'
+          format: date-time
+        endedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'When the latest calculation ended. Null while it is running, when none has run, or when it was refused or
+
+            failed.'
+          format: date-time
+        failureMessage:
+          type:
+          - string
+          - 'null'
+          description: Why the latest calculation failed, when it did.
+        warnings:
+          type: array
+          items:
+            type: string
+          description: Messages for the warnings the latest calculation raised.
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteCapableToPromiseRunDto'
+          description: 'One scenario per job priority, ordered high, moderate, low, then lineItem. Empty unless a calculation
+
+            produced estimates.'
+      additionalProperties: false
+      description: 'The latest capable-to-promise calculation for a quote: when its work could be made.'
+    QuoteRequestFindParameters:
+      type: object
+      properties:
+        numbers:
+          maxItems: 500
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: Filter quotes to only given numbers
+        externalReference:
+          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
+        status:
+          $ref: '#/components/schemas/DtoQuotesStatus'
+        modifiedAfterUtc:
+          type:
+          - string
+          - 'null'
+          description: Filter to quote records modified after the given datetime (in UTC)
+          format: date-time
+        quotedDateFrom:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to quotes whose quoted date falls on or after this date. The whole day is included, so
+
+            any time component is ignored.'
+          format: date-time
+        quotedDateTo:
+          type:
+          - string
+          - 'null'
+          description: 'Filter to quotes whose quoted date falls on or before this date. The whole day is included, so
+
+            a quote quoted later that same day still matches.'
+          format: date-time
+      additionalProperties: false
+      description: Parameters used for searching/finding quotes.
+    DtoErrorDetails:
+      type: object
+      properties:
+        errorMessage:
+          type: string
+          description: Error Message
+      additionalProperties: false
+      description: ''
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: The id of the created record
+      additionalProperties: false
+      description: Response for a created record
+    QuoteRequestUpdateQuoteStatusRequest:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/DtoQuoteUpdateQuotesStatus'
+      additionalProperties: false
+      description: Update a Quote status.
     CommonAddressCreateDto:
       required:
       - address1
@@ -672,6 +1245,39 @@ components:
           description: General notes associated to this customer address
       additionalProperties: false
       description: Address with additional context
+    QuoteCapableToPromiseLineDto:
+      required:
+      - partLineItemId
+      type: object
+      properties:
+        partLineItemId:
+          type: string
+          description: Id of the quote part line item.
+        estimatedStartUtc:
+          type:
+          - string
+          - 'null'
+          description: When work on the line is estimated to start. Null when it could not be scheduled.
+          format: date-time
+        estimatedEndUtc:
+          type:
+          - string
+          - 'null'
+          description: When work on the line is estimated to end. Null when it could not be scheduled.
+          format: date-time
+      additionalProperties: false
+      description: The estimate for one quote part line within a capable-to-promise scenario.
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value: {}
+        path:
+          type: string
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
     QuoteUpdateDto:
       type: object
       properties:
@@ -684,6 +1290,16 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/CommonExternalReferenceDto'
           description: Arbitrary key-value-pair like data that can be used to later on search for the Quote
+        dueDate:
+          type:
+          - string
+          - 'null'
+          description: 'The date the quote needs to be completed by. Only the calendar date is used, exactly as
+
+            written; any time or UTC offset is ignored. Omitting the field or sending null on an update
+
+            leaves the stored due date alone — to clear it, patch /dueDate with null.'
+          format: date-time
         opportunity:
           type:
           - string
@@ -705,281 +1321,14 @@ components:
           description: A field for the seller to provide additional details or instructions for the customer relating to the order.
       additionalProperties: false
       description: Details of quote to be updated
-    FulcrumProDomainReference:
-      type: object
-      properties:
-        primaryKeyId:
-          type: integer
-          format: int32
-        id:
-          maxLength: 36
-          minLength: 0
-          type:
-          - string
-          - 'null'
-        name:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-        createdUtc:
-          type: string
-          format: date-time
-      additionalProperties: false
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
-    QuoteRequestUpdateQuoteStatusRequest:
-      required:
-      - status
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/DtoQuoteUpdateQuotesStatus'
-      additionalProperties: false
-      description: Update a Quote status.
-    CommonAddressDto:
-      required:
-      - address1
-      - city
-      - postalCode
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-        address1:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary address line.
-        address2:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Second address line.
-        address3:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Third address line.
-        city:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address city
-        stateProvince:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Address state/province.
-        postalCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Postal/zip code.
-        country:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Country identifier.
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number.
-          format: tel
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-      additionalProperties: false
-      description: Address definition
-    QuoteRequestFindParameters:
-      type: object
-      properties:
-        numbers:
-          maxItems: 500
-          minItems: 1
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-          description: Filter quotes to only given numbers
-        externalReference:
-          $ref: '#/components/schemas/CommonExternalReferenceFindDto'
-        status:
-          $ref: '#/components/schemas/DtoQuotesStatus'
-        modifiedAfterUtc:
-          type:
-          - string
-          - 'null'
-          description: Filter to quote records modified after the given datetime (in UTC)
-          format: date-time
-      additionalProperties: false
-      description: Parameters used for searching/finding quotes.
-    QuoteCreateDto:
-      required:
-      - customerId
-      type: object
-      properties:
-        customerId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: The id of the customer to be created
-        billingAddress:
-          $ref: '#/components/schemas/CommonAddressCreateDto'
-        shippingAddress:
-          $ref: '#/components/schemas/CommonAddressCreateDto'
-        contact:
-          $ref: '#/components/schemas/CustomerContactCreateDto'
-        externalReferences:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            $ref: '#/components/schemas/CommonExternalReferenceDto'
-          description: Arbitrary key-value-pair like data that can be used to later on search for the Quote
-        salesPersonId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: 'Sales Person identifier.  Please reference /api/users endpoint.
-
-            If not provided, the salesperson defined on the customer will be used.'
-        crmOpportunity:
-          $ref: '#/components/schemas/FulcrumProDomainReference'
-        opportunity:
-          type:
-          - string
-          - 'null'
-          description: CRM Opportunity identifier.
-        notesToCustomer:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: A field for the seller to provide additional details or instructions for the customer relating to the order.
-      additionalProperties: false
-      description: Details of sales order to be created
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    CommonExternalReferenceFindDto:
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Specifies the group name (key) that this external reference originates from (e.g. an external application name)
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Arbitrary sub-key that can be used to qualify the value
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The external identifier
-      additionalProperties: false
-      description: Search parameter for identifier record(s) via their external identifiers.
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    CommonEnumSortDirectionEnum:
+    QuoteCapableToPromisePriority:
       enum:
-      - ascending
-      - descending
+      - high
+      - moderate
+      - low
+      - lineItem
       type: string
-      description: Specify sorting direction.
+      description: The job priority a capable-to-promise scenario schedules the quote's work at.
   securitySchemes:
     bearer:
       type: http
@@ -990,6 +1339,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -1000,6 +1352,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -1020,9 +1375,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -1084,6 +1445,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -1101,6 +1463,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -1158,6 +1523,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -1176,6 +1544,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -1185,6 +1556,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

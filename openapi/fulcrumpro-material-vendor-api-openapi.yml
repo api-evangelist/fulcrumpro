@@ -84,6 +84,7 @@ paths:
           description: Validation issues with input
         '404':
           description: Item with the given id did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-Edit Item
@@ -154,6 +155,7 @@ paths:
                   $ref: '#/components/schemas/MaterialShapeVendorDto'
         '404':
           description: The material did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
   /api/materials/{materialId}/vendors/{vendorId}:
@@ -249,33 +251,45 @@ paths:
                 $ref: '#/components/schemas/MaterialShapeVendorDto'
         '404':
           description: Material did not exist or no vendor existed
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-Edit Item
 components:
   schemas:
-    MaterialShapeVendorPriceBreakDto:
+    MaterialVendorListMaterialVendorRequestDto:
       required:
-      - id
+      - materialId
+      type: object
+      properties:
+        materialId:
+          minLength: 1
+          type: string
+          description: Unique id of the material to list vendors for.
+      additionalProperties: false
+      description: 'Request parameters for listing the vendors on a material.
+
+        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
+
+        which cannot be round-tripped through URL path segments.'
+    MaterialShapeVendorPriceBreakCreateDto:
+      required:
       - price
       - quantity
       type: object
       properties:
-        id:
-          type: string
-          description: Unique id associated to this entity.
-          format: uuid
         quantity:
           minimum: 0
           type: integer
           description: The minimum quantity to associate this price break to.
           format: int32
         price:
+          minimum: 0
           type: number
           description: The price per unit.
           format: double
       additionalProperties: false
-      description: Vendor prices breaks for a material shape.
+      description: Vendor prices break create/update for a material shape.
     MaterialShapeVendorUpdateDto:
       required:
       - priceBreaks
@@ -292,37 +306,7 @@ components:
           description: Lead time for this vendor.
           format: int32
         priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
-          description: Vendor price breaks
-      additionalProperties: false
-      description: Vendor with additional context for a material.
-    MaterialShapeVendorCreateDto:
-      required:
-      - priceBreaks
-      - priceUnit
-      - vendorId
-      type: object
-      properties:
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
-        priceUnit:
-          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this material.
-        leadTimeInDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Lead time for this vendor.
-          format: int32
-        priceBreaks:
+          minItems: 1
           type: array
           items:
             $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
@@ -371,27 +355,77 @@ components:
           description: Vendor price breaks
       additionalProperties: false
       description: Material vendor definition
+    MaterialShapeVendorPriceBreakDto:
+      required:
+      - id
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          type: number
+          description: The price per unit.
+          format: double
+      additionalProperties: false
+      description: Vendor prices breaks for a material shape.
     CommonEnumMaterialVendorPriceUnitEnum:
       enum:
       - kilogram
       - pound
       type: string
       description: Specifies how a routing input item quantity is measured.
-    MaterialVendorListMaterialVendorRequestDto:
+    MaterialShapeVendorCreateDto:
       required:
-      - materialId
+      - priceBreaks
+      - priceUnit
+      - vendorId
       type: object
       properties:
-        materialId:
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor id associated to this entity. Please reference /api/vendors endpoint.
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        leadTimeInDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Lead time for this vendor.
+          format: int32
+        priceBreaks:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Vendor with additional context for a material.
+    CreatedResponseDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
           minLength: 1
           type: string
-          description: Unique id of the material to list vendors for.
+          description: The id of the created record
       additionalProperties: false
-      description: 'Request parameters for listing the vendors on a material.
-
-        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
-
-        which cannot be round-tripped through URL path segments.'
+      description: Response for a created record
     MaterialVendorUpdateMaterialVendorRequestDto:
       required:
       - materialId
@@ -413,6 +447,7 @@ components:
           description: Lead time for this vendor.
           format: int32
         priceBreaks:
+          minItems: 1
           type: array
           items:
             $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
@@ -453,6 +488,7 @@ components:
           description: Lead time for this vendor.
           format: int32
         priceBreaks:
+          minItems: 1
           type: array
           items:
             $ref: '#/components/schemas/MaterialShapeVendorPriceBreakCreateDto'
@@ -463,35 +499,6 @@ components:
         Introduced for the v2 endpoint because material ids may contain ''/'' characters,
 
         which cannot be round-tripped through URL path segments.'
-    CreatedResponseDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: The id of the created record
-      additionalProperties: false
-      description: Response for a created record
-    MaterialShapeVendorPriceBreakCreateDto:
-      required:
-      - price
-      - quantity
-      type: object
-      properties:
-        quantity:
-          minimum: 0
-          type: integer
-          description: The minimum quantity to associate this price break to.
-          format: int32
-        price:
-          minimum: 0
-          type: number
-          description: The price per unit.
-          format: double
-      additionalProperties: false
-      description: Vendor prices break create/update for a material shape.
   securitySchemes:
     bearer:
       type: http
@@ -502,6 +509,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -512,6 +522,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -532,9 +545,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -596,6 +615,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -613,6 +633,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -670,6 +693,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -688,6 +714,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -697,6 +726,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

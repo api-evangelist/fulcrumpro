@@ -33,6 +33,7 @@ paths:
                 $ref: '#/components/schemas/ShipmentsShipmentDto'
         '404':
           description: Shipment did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Shipping-Shipping-View Shipments
     patch:
@@ -63,8 +64,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/ShipmentsShipmentDto'
+        '400':
+          description: The patch document is malformed — an unknown path, an unsupported operation, or a value the target field cannot hold
         '404':
           description: Shipment did not exist
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - Shipping-Shipping-Edit Shipments
@@ -108,6 +112,53 @@ paths:
                 $ref: '#/components/schemas/ShipmentsShipmentDto'
         '404':
           description: Shipment did not exist
+  /api/shipments/{shipmentId}/pdf:
+    get:
+      tags:
+      - Shipments
+      summary: Download the PDF for a shipment
+      description: 'The document is rendered when you call this, from
+
+        the shipment''s current state and the tenant''s PDFs & Emails settings, so it is the same
+
+        document the product''s Download button produces rather than a stored copy of one sent
+
+        earlier. Served in every shipment status, including Cancelled.
+
+
+        The file name is composed from the order the shipment fulfils and the shipment''s sequence
+
+        number rather than from the id you request by: `SO1862-2.pdf` for a shipment against
+
+        sales order 1862, and `PO104-1.pdf` for an outside-processing shipment against purchase
+
+        order 104. The packing slip is rendered against that order, so a shipment whose order has
+
+        been deleted, or which is attached to neither, has no document to return and gives a 404.'
+      operationId: GetShipmentPdf
+      parameters:
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          maxLength: 24
+          minLength: 24
+          type: string
+      responses:
+        '200':
+          description: The shipment's packing slip PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: No shipment with that id, the shipment is deleted, or the order it fulfils is missing or deleted
+        '500':
+          description: The renderer did not produce a usable document
+      x-c4-exposed: true
+      x-c4-required-permissions:
+      - Shipping-Shipping-View Shipments
   /api/shipments/list:
     post:
       tags:
@@ -128,14 +179,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -165,249 +237,11 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/DtoPagedResultDtoShipmentsShipmentDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Shipping-Shipping-View Shipments
 components:
   schemas:
-    ShipmentsShipmentUpdateDto:
-      type: object
-      properties:
-        shipByDate:
-          type:
-          - string
-          - 'null'
-          description: Ship by date.
-          format: date-time
-        notes:
-          maxLength: 2000
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Shipment notes.
-        displayNotesToCustomer:
-          type: boolean
-          description: Whether or not to display the shipment notes on the pack list.
-        trackingNumber:
-          type:
-          - string
-          - 'null'
-          description: The tracking number for the shipment.
-        shippingMethodId:
-          type:
-          - string
-          - 'null'
-          description: The shipping method identifier
-        shippedDate:
-          type:
-          - string
-          - 'null'
-          description: The shipped date
-          format: date-time
-        shippedDateOverride:
-          type:
-          - string
-          - 'null'
-          description: The override of the shipped date (used for changing the date of a shipment after it's been created)
-          format: date-time
-        shippingCost:
-          type:
-          - number
-          - 'null'
-          description: The shipment's cost
-          format: double
-      additionalProperties: false
-      description: Represents an update to a Shipment.
-    CommonAddressDto:
-      required:
-      - address1
-      - city
-      - postalCode
-      type: object
-      properties:
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
-        address1:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Primary address line.
-        address2:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Second address line.
-        address3:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Third address line.
-        city:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Address city
-        stateProvince:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Address state/province.
-        postalCode:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Postal/zip code.
-        country:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Country identifier.
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number.
-          format: tel
-        email:
-          type:
-          - string
-          - 'null'
-          description: Email address
-          format: email
-      additionalProperties: false
-      description: Address definition
-    DtoPagedResultDtoShipmentsShipmentDto:
-      required:
-      - data
-      - hasNextPage
-      - hasPreviousPage
-      - page
-      - pageSize
-      - totalCount
-      - totalPages
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShipmentsShipmentDto'
-          description: The data
-        page:
-          type: integer
-          description: The 1-indexed page
-          format: int32
-          readOnly: true
-        pageSize:
-          type: integer
-          description: The page size
-          format: int32
-          readOnly: true
-        totalCount:
-          type: integer
-          description: The total count of records
-          format: int32
-        totalPages:
-          type: integer
-          description: The total pages
-          format: int32
-          readOnly: true
-        hasPreviousPage:
-          type: boolean
-          description: True if there is a previous page
-          readOnly: true
-        hasNextPage:
-          type: boolean
-          description: True if there is a next page
-          readOnly: true
-      additionalProperties: false
-      description: Paged result
-    ShippingDataShipmentType:
-      enum:
-      - unknown
-      - standard
-      - outsideProcessing
-      type: string
-    ShippingDataPackingStatus:
-      enum:
-      - notPacked
-      - partiallyPacked
-      - fullyPacked
-      - overPacked
-      type: string
-    CommonExternalReferenceDto:
-      required:
-      - externalId
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Specifies the type of this identifier.
-        externalId:
-          maxLength: 500
-          minLength: 0
-          type: string
-          description: The external identifier
-        displayId:
-          maxLength: 500
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
-
-            will fall back to the ExternalId'
-        status:
-          type:
-          - string
-          - 'null'
-          description: A status for the external reference
-        url:
-          type:
-          - string
-          - 'null'
-          description: An external url for the reference
-        modifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Date the external reference was modified
-          format: date-time
-        lastSyncedUtc:
-          type:
-          - string
-          - 'null'
-          description: 'Date the external system last successfully synced this reference. Set by integrations
-
-            on successful sync only; null means never synced or that the sync timestamp isn''t
-
-            maintained by the integration.'
-          format: date-time
-      additionalProperties: false
-      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
-    ShippingDataShipmentStatus:
-      enum:
-      - pending
-      - open
-      - shipped
-      - cancelled
-      type: string
     CommonReferenceDto:
       type: object
       properties:
@@ -427,20 +261,13 @@ components:
           description: Descriptive name associated to the object
       additionalProperties: false
       description: Represents a reference to a document in a DB collection
-    JsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/JsonPatchOperation'
-      description: Array of operations to perform
-    JsonPatchOperation:
-      type: object
-      properties:
-        op:
-          type: string
-        value:
-          type: string
-        path:
-          type: string
+    ShippingDataPackingStatus:
+      enum:
+      - notPacked
+      - partiallyPacked
+      - fullyPacked
+      - overPacked
+      type: string
     ShipmentsShipmentDto:
       required:
       - id
@@ -519,6 +346,13 @@ components:
           format: double
         address:
           $ref: '#/components/schemas/CommonAddressDto'
+        customerAddressId:
+          type:
+          - string
+          - 'null'
+          description: 'The id of the recipient address. A shipment addressed from one of the customer''s addresses
+
+            carries that address''s id. Please reference /api/customers/{customerId}/addresses endpoint.'
         customFields:
           type:
           - object
@@ -534,6 +368,57 @@ components:
           description: The external references associated with this shipment
       additionalProperties: false
       description: Represents a shipment
+    DtoPagedResultDtoShipmentsShipmentDto:
+      required:
+      - data
+      - hasNextPage
+      - hasPreviousPage
+      - page
+      - pageSize
+      - totalCount
+      - totalPages
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentsShipmentDto'
+          description: The data
+        page:
+          type: integer
+          description: The 1-indexed page
+          format: int32
+          readOnly: true
+        pageSize:
+          type: integer
+          description: The page size
+          format: int32
+          readOnly: true
+        totalCount:
+          type: integer
+          description: The total count of records
+          format: int32
+        totalPages:
+          type: integer
+          description: The total pages
+          format: int32
+          readOnly: true
+        hasPreviousPage:
+          type: boolean
+          description: True if there is a previous page
+          readOnly: true
+        hasNextPage:
+          type: boolean
+          description: True if there is a next page
+          readOnly: true
+      additionalProperties: false
+      description: Paged result
+    CommonEnumSortDirectionEnum:
+      enum:
+      - ascending
+      - descending
+      type: string
+      description: Specify sorting direction.
     ShipmentsListParameters:
       type: object
       properties:
@@ -558,6 +443,12 @@ components:
           items:
             type: string
           description: Filter shipments by shipment identifiers.
+        names:
+          maxItems: 500
+          type: array
+          items:
+            type: string
+          description: Filter shipments by shipment number, e.g. SHP-SO1234-1 or SHP-PO5678-2.
         shipByDateBefore:
           type:
           - string
@@ -588,12 +479,209 @@ components:
           format: date-time
       additionalProperties: false
       description: Parameters used for searching V3 shipments
-    CommonEnumSortDirectionEnum:
+    ShippingDataShipmentStatus:
       enum:
-      - ascending
-      - descending
+      - pending
+      - open
+      - shipped
+      - cancelled
       type: string
-      description: Specify sorting direction.
+    CommonAddressDto:
+      required:
+      - address1
+      - city
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Name of the address (Bob's Shipping, Primary, Reno Warehouse, etc).
+        address1:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Primary address line.
+        address2:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Second address line.
+        address3:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Third address line.
+        city:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Address city
+        stateProvince:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Address state/province.
+        postalCode:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Postal/zip code.
+        country:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Country identifier.
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          format: tel
+        email:
+          type:
+          - string
+          - 'null'
+          description: Email address
+          format: email
+      additionalProperties: false
+      description: Address definition
+    JsonPatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+        value: {}
+        path:
+          type: string
+        from:
+          type: string
+          description: Source path — present for move/copy operations, absent otherwise.
+    JsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/JsonPatchOperation'
+      description: Array of operations to perform
+    ShipmentsShipmentUpdateDto:
+      type: object
+      properties:
+        shipByDate:
+          type:
+          - string
+          - 'null'
+          description: Ship by date.
+          format: date-time
+        notes:
+          maxLength: 2000
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Shipment notes.
+        displayNotesToCustomer:
+          type: boolean
+          description: Whether or not to display the shipment notes on the pack list.
+        trackingNumber:
+          type:
+          - string
+          - 'null'
+          description: The tracking number for the shipment.
+        shippingMethodId:
+          type:
+          - string
+          - 'null'
+          description: The shipping method identifier
+        shippedDate:
+          type:
+          - string
+          - 'null'
+          description: 'The shipped date. Read-only: the value is accepted but not applied; the shipped date is set when the shipment ships.'
+          format: date-time
+        shippedDateOverride:
+          type:
+          - string
+          - 'null'
+          description: The actual ship date override. Takes precedence over the shipped date wherever a ship date is reported. Send the calendar date at midnight UTC (e.g. 2014-10-23T00:00:00Z); it is stored as sent and reports compare it as a date. Null clears it. On update, a value outside 2000-01-01 to 2099-12-31 is rejected; patch does not range-check.
+          format: date-time
+        shippingCost:
+          type:
+          - number
+          - 'null'
+          description: 'The shipment''s cost. Read-only: the value is accepted but not applied.'
+          format: double
+      additionalProperties: false
+      description: Represents an update to a Shipment.
+    ShippingDataShipmentType:
+      enum:
+      - unknown
+      - standard
+      - outsideProcessing
+      type: string
+    CommonExternalReferenceDto:
+      required:
+      - externalId
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Specifies the type of this identifier.
+        externalId:
+          maxLength: 500
+          minLength: 0
+          type: string
+          description: The external identifier
+        displayId:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The id/number that a human sees. For a quote, this might be ''Q1000''.  If this is null, the display
+
+            will fall back to the ExternalId'
+        status:
+          type:
+          - string
+          - 'null'
+          description: A status for the external reference
+        url:
+          type:
+          - string
+          - 'null'
+          description: An external url for the reference
+        modifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date the external reference was modified
+          format: date-time
+        lastSyncedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Date the external system last successfully synced this reference. Set by integrations
+
+            on successful sync only; null means never synced or that the sync timestamp isn''t
+
+            maintained by the integration.'
+          format: date-time
+      additionalProperties: false
+      description: The external reference for entities that implement FulcrumProduct.Domain.Common.IHasExternalReferences
   securitySchemes:
     bearer:
       type: http
@@ -604,6 +692,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -614,6 +705,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -634,9 +728,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -698,6 +798,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -715,6 +816,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -772,6 +876,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -790,6 +897,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -799,6 +909,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

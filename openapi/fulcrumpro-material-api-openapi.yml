@@ -42,6 +42,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MaterialShapeDto'
+      x-c4-exposed: true
       x-c4-mutation: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-Edit Item
@@ -104,6 +105,7 @@ paths:
                 $ref: '#/components/schemas/MaterialShapeDto'
         '404':
           description: Material did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
   /api/materials/list:
@@ -126,14 +128,35 @@ paths:
           $ref: '#/components/schemas/CommonEnumSortDirectionEnum'
       - name: Skip
         in: query
-        description: Number of records to skip.
+        description: 'Number of records to skip. Defaults to 0. Combine with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Take to page
+
+          through a result set larger than one page.'
         schema:
           minimum: 0
           type: integer
           format: int32
       - name: Take
         in: query
-        description: Number of records to return (maximum)
+        description: 'Number of records to return. Validation accepts 0 through 5000, but `0` is not a
+
+          page size and what an endpoint does with it varies, so send a value from 1 to 5000.
+
+
+          Two cases differ. A request that supplies paging but leaves this field out takes this
+
+          field''s default of <b>50</b>. A request that supplies no paging at all is
+
+          endpoint-specific — some define their own fallback — so it does not reliably mean any
+
+          particular number of records. Either way the response says nothing about records it
+
+          did not return, so send this explicitly whenever the size of the answer matters.
+
+          Endpoints returning a paged envelope report `totalCount` and `hasNextPage`
+
+          alongside the records; endpoints returning a bare array report neither, so page those
+
+          with FulcrumProduct.PublicApi.Dto.Common.PagingDto.Skip until a page comes back shorter than the value requested.'
         schema:
           maximum: 5000
           minimum: 0
@@ -167,186 +190,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MaterialShapeDto'
+      x-c4-exposed: true
       x-c4-required-permissions:
       - ItemsAndInventory-Items-View Item
 components:
   schemas:
-    MaterialShapeVendorPriceBreakDto:
-      required:
-      - id
-      - price
-      - quantity
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique id associated to this entity.
-          format: uuid
-        quantity:
-          minimum: 0
-          type: integer
-          description: The minimum quantity to associate this price break to.
-          format: int32
-        price:
-          type: number
-          description: The price per unit.
-          format: double
-      additionalProperties: false
-      description: Vendor prices breaks for a material shape.
-    FulcrumProductMaterialsFulcrumLengthUnits:
-      enum:
-      - inch
-      - foot
-      - yard
-      - millimeter
-      - centimeter
-      - meter
-      type: string
-    MaterialRequestFindParameters:
-      type: object
-      properties:
-        ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Filter materials based on matching ids.
-        materials:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Material names.
-        grades:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Grades.
-        forms:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonEnumMaterialFormEnum'
-          description: Material forms.
-        displayDimensions:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: A list of dimension display values to include
-        active:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate whether to specifically only pull active materials. If left null, all rows are included.
-      additionalProperties: false
-      description: Parameters used for searching/finding materials.
-    MaterialShapeVendorDto:
-      required:
-      - id
-      - isPrimary
-      - priceBreaks
-      - priceUnit
-      - vendorId
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique id associated to this entity.
-          format: uuid
-        vendorId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Vendor identifier. Pelase reference /api/vendors endpoint.
-        isPrimary:
-          type: boolean
-          description: Signifies if this is the primary vendor for this material.
-        currencyCode:
-          type:
-          - string
-          - 'null'
-          description: Currency code/denomination associated to this vendor.
-        priceUnit:
-          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
-        leadTimeInDays:
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Number of days required between order and receipt
-          format: int32
-        priceBreaks:
-          type: array
-          items:
-            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakDto'
-          description: Vendor price breaks
-      additionalProperties: false
-      description: Material vendor definition
-    CommonEnumMaterialVendorPriceUnitEnum:
-      enum:
-      - kilogram
-      - pound
-      type: string
-      description: Specifies how a routing input item quantity is measured.
-    CommonEnumMaterialFormEnum:
-      enum:
-      - sheet
-      - plate
-      - roundBar
-      - flatBar
-      - channel
-      - squareTube
-      - angle
-      - treadPlate
-      - hexBar
-      - squareBar
-      - teeBar
-      - hBeam
-      - rectTube
-      - pipe
-      - wBeam
-      - sBeam
-      - roundTube
-      - rectBar
-      - wideBar
-      type: string
-      description: Specifies the form of the material.
-    MaterialRequestActivateMaterials:
-      required:
-      - materialIds
-      type: object
-      properties:
-        materialIds:
-          type: array
-          items:
-            type: string
-          description: Material ids to activate.
-        unit:
-          $ref: '#/components/schemas/FulcrumProductMaterialsFulcrumLengthUnits'
-      additionalProperties: false
-      description: Parameters used for activating materials.
-    MaterialRequestGetMaterialRequestDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          minLength: 1
-          type: string
-          description: Unique id of the material to retrieve.
-      additionalProperties: false
-      description: 'Request parameters for looking up a single material by id.
-
-        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
-
-        which cannot be round-tripped through URL path segments.'
     MaterialShapeDto:
       required:
       - form
@@ -415,6 +263,43 @@ components:
           - string
           - 'null'
           description: Version
+        dimensionUnits:
+          type:
+          - string
+          - 'null'
+          description: 'Unit the material''s dimensions are in: `Inch`, `Foot`, `Yard`, `Millimeter`, `Centimeter` or `Meter`.
+
+            Routing input-material nesting `d2` and `d3` are costed in this unit. A routing costs from a copy of the material''s
+
+            units, shape type and density taken when the input material was added, so later changes to the material may not reach it.'
+        shapeType:
+          type:
+          - string
+          - 'null'
+          description: 'How the material is measured: `Planar` (sheet and plate, costed by length and width) or `Linear` (bar, tube and
+
+            structural shapes, costed by length). A nesting''s `d3` applies only to `Planar` materials.'
+        linearDensity:
+          type:
+          - number
+          - 'null'
+          description: Weight per unit length, in `densityUnits`. Used to cost `Linear` materials.
+          format: double
+        planarDensity:
+          type:
+          - number
+          - 'null'
+          description: Weight per unit area, in `densityUnits`. Used to cost `Planar` materials.
+          format: double
+        densityUnits:
+          type:
+          - string
+          - 'null'
+          description: 'Unit of `linearDensity` and `planarDensity`: `PoundPerFoot`, `KilogramPerMeter`,
+
+            `PoundPerSquareFoot` or `KilogramPerSquareMeter`.
+
+            An input material whose material has no density for its `shapeType` is estimated at zero material cost.'
         vendors:
           type: array
           items:
@@ -422,12 +307,190 @@ components:
           description: Vendors that supply this material.
       additionalProperties: false
       description: Material definition.
+    FulcrumProductMaterialsFulcrumLengthUnits:
+      enum:
+      - inch
+      - foot
+      - yard
+      - millimeter
+      - centimeter
+      - meter
+      type: string
     CommonEnumSortDirectionEnum:
       enum:
       - ascending
       - descending
       type: string
       description: Specify sorting direction.
+    MaterialShapeVendorDto:
+      required:
+      - id
+      - isPrimary
+      - priceBreaks
+      - priceUnit
+      - vendorId
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        vendorId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Vendor identifier. Pelase reference /api/vendors endpoint.
+        isPrimary:
+          type: boolean
+          description: Signifies if this is the primary vendor for this material.
+        currencyCode:
+          type:
+          - string
+          - 'null'
+          description: Currency code/denomination associated to this vendor.
+        priceUnit:
+          $ref: '#/components/schemas/CommonEnumMaterialVendorPriceUnitEnum'
+        leadTimeInDays:
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Number of days required between order and receipt
+          format: int32
+        priceBreaks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialShapeVendorPriceBreakDto'
+          description: Vendor price breaks
+      additionalProperties: false
+      description: Material vendor definition
+    CommonEnumMaterialFormEnum:
+      enum:
+      - sheet
+      - plate
+      - roundBar
+      - flatBar
+      - channel
+      - squareTube
+      - angle
+      - treadPlate
+      - hexBar
+      - squareBar
+      - teeBar
+      - hBeam
+      - rectTube
+      - pipe
+      - wBeam
+      - sBeam
+      - roundTube
+      - rectBar
+      - wideBar
+      type: string
+      description: Specifies the form of the material.
+    MaterialRequestGetMaterialRequestDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: Unique id of the material to retrieve.
+      additionalProperties: false
+      description: 'Request parameters for looking up a single material by id.
+
+        Introduced for the v2 endpoint because material ids may contain ''/'' characters,
+
+        which cannot be round-tripped through URL path segments.'
+    MaterialRequestActivateMaterials:
+      required:
+      - materialIds
+      type: object
+      properties:
+        materialIds:
+          minItems: 1
+          type: array
+          items:
+            type: string
+          description: Material ids to activate.
+        unit:
+          $ref: '#/components/schemas/FulcrumProductMaterialsFulcrumLengthUnits'
+      additionalProperties: false
+      description: Parameters used for activating materials.
+    MaterialShapeVendorPriceBreakDto:
+      required:
+      - id
+      - price
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique id associated to this entity.
+          format: uuid
+        quantity:
+          minimum: 0
+          type: integer
+          description: The minimum quantity to associate this price break to.
+          format: int32
+        price:
+          type: number
+          description: The price per unit.
+          format: double
+      additionalProperties: false
+      description: Vendor prices breaks for a material shape.
+    CommonEnumMaterialVendorPriceUnitEnum:
+      enum:
+      - kilogram
+      - pound
+      type: string
+      description: Specifies how a routing input item quantity is measured.
+    MaterialRequestFindParameters:
+      type: object
+      properties:
+        ids:
+          minItems: 1
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Filter materials based on matching ids.
+        materials:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Material names.
+        grades:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Grades.
+        forms:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonEnumMaterialFormEnum'
+          description: Material forms.
+        displayDimensions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of dimension display values to include
+        active:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate whether to specifically only pull active materials. If left null, all rows are included.
+      additionalProperties: false
+      description: Parameters used for searching/finding materials.
   securitySchemes:
     bearer:
       type: http
@@ -438,6 +501,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -448,6 +514,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -468,9 +537,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -532,6 +607,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -549,6 +625,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -606,6 +685,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -624,6 +706,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -633,6 +718,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User

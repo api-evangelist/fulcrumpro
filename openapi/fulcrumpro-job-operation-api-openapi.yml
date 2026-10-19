@@ -37,10 +37,236 @@ paths:
                   $ref: '#/components/schemas/JobTrackingOperationDetailsDto'
         '404':
           description: Job did not exist
+      x-c4-exposed: true
       x-c4-required-permissions:
       - Jobs-Jobs-View Job
 components:
   schemas:
+    JobItemToMakeStatusEnum:
+      enum:
+      - new
+      - working
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make status
+    CommonCostBreakdownOperationDto:
+      required:
+      - operationId
+      type: object
+      properties:
+        operationId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Operation id. Please reference /api/operations
+        name:
+          type:
+          - string
+          - 'null'
+          description: Operation name.
+        timeInSeconds:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in seconds.
+          format: double
+          readOnly: true
+        timeInHours:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Time in hours
+          format: double
+        ratePerSecond:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per second
+          format: double
+          readOnly: true
+        ratePerHour:
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Rate per hour
+          format: double
+      additionalProperties: false
+      description: Operation information
+    ItemsAndInventoryRoutingsCostBreakdownType:
+      enum:
+      - estimated
+      - inProgressJob
+      - completedJob
+      - cancelledJob
+      type: string
+    ItemReferenceDto:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: Unique Id associated to this entity
+        number:
+          maxLength: 200
+          minLength: 1
+          type: string
+          description: Item number.
+        revision:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Revision name.
+        name:
+          maxLength: 200
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: Item name.
+        description:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Item description.
+      additionalProperties: false
+      description: Item reference
+    CommonEnumCostBreakdownLineTypeEnum:
+      enum:
+      - material
+      - labor
+      - setup
+      - machine
+      - outsideProcessing
+      - componentMaterial
+      - componentLabor
+      - componentMachine
+      - componentOutsideProcessing
+      - nestPartMaterialUsage
+      - nestPartMaterialScrap
+      - overhead
+      - unknown
+      type: string
+      description: Cost breakdown types
+    JobTrackingItemToMakeDto:
+      required:
+      - depth
+      - id
+      - isCustom
+      - itemId
+      - quantityToMake
+      - status
+      type: object
+      properties:
+        id:
+          maxLength: 36
+          minLength: 36
+          type: string
+          description: Unique Id associated to this entity
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type: string
+          description: 'Id of the item on which this entity is based.
+
+            Please reference /api/items endpoint.'
+        quantityToMake:
+          type: number
+          description: Quantity of this item produced by the associated job.
+          format: double
+        isCustom:
+          type: boolean
+          description: Denotes whether this job produces a customized version of the base item
+        status:
+          $ref: '#/components/schemas/JobItemToMakeStatusEnum'
+        quantityMade:
+          type:
+          - number
+          - 'null'
+          description: Quantity already produced, if the job is in progress.
+          format: double
+        depth:
+          type: integer
+          description: 'Structurally, identify where in the tree of building the parent item this item lies.
+
+            Example: The top-level item would have a depth of zero and it''s direct subcomponents would be 1.
+
+            This cascades down so that a subcomponent to a subcomponent would be 2... and so on.'
+          format: int32
+        routingNotes:
+          type:
+          - string
+          - 'null'
+          description: 'The routing notes (the "Routing Notes" field) captured on this job''s routing for the item.
+
+            Null when the job''s routing has no note for the item.'
+        costBreakdown:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
+        costBreakdownEstimated:
+          $ref: '#/components/schemas/CommonCostBreakdownDto'
+        itemReference:
+          $ref: '#/components/schemas/ItemReferenceDto'
+      additionalProperties: false
+      description: Represents an item to make on a job (for tracking purposes)
+    CommonCostDto:
+      required:
+      - perUnit
+      - total
+      type: object
+      properties:
+        total:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        perUnit:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Cost information
+    CommonTimeDto:
+      required:
+      - labor
+      - machine
+      - setup
+      type: object
+      properties:
+        labor:
+          minimum: 0
+          type: number
+          description: Total
+          format: double
+        machine:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+        setup:
+          minimum: 0
+          type: number
+          description: Cost per unit
+          format: double
+      additionalProperties: false
+      description: Time information
+    DomainOperationsRouting_Step_RunTimeOption:
+      enum:
+      - fixed
+      - perUnit
+      - unitsPerHour
+      type: string
     CommonCostBreakdownDto:
       required:
       - calculatedOn
@@ -131,196 +357,18 @@ components:
           description: Cost breakdown line details.
       additionalProperties: false
       description: Cost breakdown
-    ItemsAndInventoryRoutingsCostBreakdownType:
-      enum:
-      - estimated
-      - inProgressJob
-      - completedJob
-      - cancelledJob
-      type: string
-    CommonCostDto:
+    JobTrackingOperationDetailsDto:
       required:
-      - perUnit
-      - total
+      - itemToMake
+      - operation
       type: object
       properties:
-        total:
-          minimum: 0
-          type: number
-          description: Total
-          format: double
-        perUnit:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
+        itemToMake:
+          $ref: '#/components/schemas/JobTrackingItemToMakeDto'
+        operation:
+          $ref: '#/components/schemas/JobTrackingOperationDto'
       additionalProperties: false
-      description: Cost information
-    CommonEnumOperationTypeEnum:
-      enum:
-      - labor
-      - setup
-      - machine
-      - outsideProcessing
-      type: string
-      description: Operation type
-    CommonCostBreakdownLineDto:
-      required:
-      - cost
-      - costType
-      - name
-      type: object
-      properties:
-        costType:
-          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
-        operationType:
-          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
-        name:
-          minLength: 1
-          type: string
-          description: Decription of this line.
-        cost:
-          minimum: 0
-          type: number
-          description: Cost.
-          format: double
-        quantity:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Quantity (if applicable)
-          format: double
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Id of the item that was picked. Please reference /api/items endpoint.
-        itemName:
-          type:
-          - string
-          - 'null'
-          description: The name of the item that was picked.
-        accountingCodeId:
-          maxLength: 24
-          minLength: 24
-          type:
-          - string
-          - 'null'
-          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
-        operationInformation:
-          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
-      additionalProperties: false
-      description: Cost breakdown line information.
-    JobTrackingItemToMakeDto:
-      required:
-      - depth
-      - id
-      - isCustom
-      - itemId
-      - quantityToMake
-      - status
-      type: object
-      properties:
-        id:
-          maxLength: 36
-          minLength: 36
-          type: string
-          description: Unique Id associated to this entity
-        itemId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: 'Id of the item on which this entity is based.
-
-            Please reference /api/items endpoint.'
-        quantityToMake:
-          type: number
-          description: Quantity of this item produced by the associated job.
-          format: double
-        isCustom:
-          type: boolean
-          description: Denotes whether this job produces a customized version of the base item
-        status:
-          $ref: '#/components/schemas/JobItemToMakeStatusEnum'
-        quantityMade:
-          type:
-          - number
-          - 'null'
-          description: Quantity already produced, if the job is in progress.
-          format: double
-        depth:
-          type: integer
-          description: 'Structurally, identify where in the tree of building the parent item this item lies.
-
-            Example: The top-level item would have a depth of zero and it''s direct subcomponents would be 1.
-
-            This cascades down so that a subcomponent to a subcomponent would be 2... and so on.'
-          format: int32
-        routingNotes:
-          type:
-          - string
-          - 'null'
-          description: 'The routing notes (the "Routing Notes" field) captured on this job''s routing for the item.
-
-            Null when the job''s routing has no note for the item.'
-        costBreakdown:
-          $ref: '#/components/schemas/CommonCostBreakdownDto'
-        costBreakdownEstimated:
-          $ref: '#/components/schemas/CommonCostBreakdownDto'
-        itemReference:
-          $ref: '#/components/schemas/ItemReferenceDto'
-      additionalProperties: false
-      description: Represents an item to make on a job (for tracking purposes)
-    CommonCostBreakdownOperationDto:
-      required:
-      - operationId
-      type: object
-      properties:
-        operationId:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Operation id. Please reference /api/operations
-        name:
-          type:
-          - string
-          - 'null'
-          description: Operation name.
-        timeInSeconds:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Time in seconds.
-          format: double
-          readOnly: true
-        timeInHours:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Time in hours
-          format: double
-        ratePerSecond:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Rate per second
-          format: double
-          readOnly: true
-        ratePerHour:
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Rate per hour
-          format: double
-      additionalProperties: false
-      description: Operation information
+      description: Represents a job operation and the item affected (for tracking purposes).
     JobTrackingOperationDto:
       required:
       - id
@@ -475,6 +523,49 @@ components:
           description: 'Identifier of work order that this operation is associated to, if applicable.
 
             Please reference api/work-orders endpoint.'
+        quantityToMake:
+          type: number
+          description: 'Quantity this operation is expected to produce.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          format: double
+          readOnly: true
+        quantityCompleted:
+          type: number
+          description: 'Quantity already completed on this operation, if the job is in progress.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          format: double
+          readOnly: true
+        quantityMade:
+          type: number
+          description: 'Quantity recorded as made on this operation: stamped when the operation completes, and banked through
+
+            receiving on an outside-processing operation. Unlike FulcrumProduct.PublicApi.Dto.Job.ItemToMake.Operation.OperationDto.QuantityCompleted, it does not include
+
+            the running count banked while the operation is in progress.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          format: double
+          readOnly: true
+        excludeSetupTimeFromAudit:
+          type: boolean
+          description: 'Whether this operation''s setup time is left out of the routing audit''s job-history averages.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          readOnly: true
+        excludeLaborTimeFromAudit:
+          type: boolean
+          description: 'Whether this operation''s labor time is left out of the routing audit''s job-history averages.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          readOnly: true
+        excludeMachineTimeFromAudit:
+          type: boolean
+          description: 'Whether this operation''s machine time is left out of the routing audit''s job-history averages.
+
+            Read-only: returned on operation reads but not settable through the update endpoints.'
+          readOnly: true
         isRework:
           type: boolean
           description: Whether this operation is a rework operation (a redo created from a prior operation).
@@ -485,126 +576,69 @@ components:
           $ref: '#/components/schemas/JobTrackingOperationReworkDto'
       additionalProperties: false
       description: Represents a job operation (for tracking purposes).
-    DomainOperationsRouting_Step_RunTimeOption:
-      enum:
-      - fixed
-      - perUnit
-      - unitsPerHour
-      type: string
     DomainOperationsRouting_Step_SetupTimeOption:
       enum:
       - fixed
       - perUnit
       type: string
-    CommonTimeDto:
+    CommonCostBreakdownLineDto:
       required:
-      - labor
-      - machine
-      - setup
+      - cost
+      - costType
+      - name
       type: object
       properties:
-        labor:
+        costType:
+          $ref: '#/components/schemas/CommonEnumCostBreakdownLineTypeEnum'
+        operationType:
+          $ref: '#/components/schemas/CommonEnumOperationTypeEnum'
+        name:
+          minLength: 1
+          type: string
+          description: Decription of this line.
+        cost:
           minimum: 0
           type: number
-          description: Total
+          description: Cost.
           format: double
-        machine:
+        quantity:
           minimum: 0
-          type: number
-          description: Cost per unit
+          type:
+          - number
+          - 'null'
+          description: Quantity (if applicable)
           format: double
-        setup:
-          minimum: 0
-          type: number
-          description: Cost per unit
-          format: double
+        itemId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Id of the item that was picked. Please reference /api/items endpoint.
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: The name of the item that was picked.
+        accountingCodeId:
+          maxLength: 24
+          minLength: 24
+          type:
+          - string
+          - 'null'
+          description: Accounting code affected. Please reference /api/accounting-codes endpoint.
+        operationInformation:
+          $ref: '#/components/schemas/CommonCostBreakdownOperationDto'
       additionalProperties: false
-      description: Time information
-    CommonEnumCostBreakdownLineTypeEnum:
+      description: Cost breakdown line information.
+    CommonEnumOperationTypeEnum:
       enum:
-      - material
       - labor
       - setup
       - machine
       - outsideProcessing
-      - componentMaterial
-      - componentLabor
-      - componentMachine
-      - componentOutsideProcessing
-      - nestPartMaterialUsage
-      - nestPartMaterialScrap
-      - overhead
-      - unknown
       type: string
-      description: Cost breakdown types
-    JobItemToMakeStatusEnum:
-      enum:
-      - new
-      - working
-      - complete
-      - cancelled
-      type: string
-      description: Job Item to Make status
-    JobTrackingOperationDetailsDto:
-      required:
-      - itemToMake
-      - operation
-      type: object
-      properties:
-        itemToMake:
-          $ref: '#/components/schemas/JobTrackingItemToMakeDto'
-        operation:
-          $ref: '#/components/schemas/JobTrackingOperationDto'
-      additionalProperties: false
-      description: Represents a job operation and the item affected (for tracking purposes).
-    ItemReferenceDto:
-      required:
-      - id
-      type: object
-      properties:
-        id:
-          maxLength: 24
-          minLength: 24
-          type: string
-          description: Unique Id associated to this entity
-        number:
-          maxLength: 200
-          minLength: 1
-          type: string
-          description: Item number.
-        revision:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Revision name.
-        name:
-          maxLength: 200
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: Item name.
-        description:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Item description.
-      additionalProperties: false
-      description: Item reference
-    JobItemToMakeOpStatusEnum:
-      enum:
-      - pending
-      - ready
-      - running
-      - paused
-      - complete
-      - cancelled
-      type: string
-      description: Job Item to Make Operation status
+      description: Operation type
     JobTrackingOperationReworkDto:
       type: object
       properties:
@@ -645,6 +679,16 @@ components:
           format: date-time
       additionalProperties: false
       description: Rework details associated with a job operation.
+    JobItemToMakeOpStatusEnum:
+      enum:
+      - pending
+      - ready
+      - running
+      - paused
+      - complete
+      - cancelled
+      type: string
+      description: Job Item to Make Operation status
   securitySchemes:
     bearer:
       type: http
@@ -655,6 +699,9 @@ x-tagGroups:
 - name: Accounting Code
   tags:
   - Accounting Code
+- name: Alert
+  tags:
+  - Alert
 - name: Attachment
   tags:
   - Attachment
@@ -665,6 +712,9 @@ x-tagGroups:
 - name: CAPAs
   tags:
   - CAPAs
+- name: Change Order
+  tags:
+  - Change Order
 - name: Chart Of Accounts
   tags:
   - Chart Of Accounts
@@ -685,9 +735,15 @@ x-tagGroups:
 - name: Department
   tags:
   - Department
+- name: Department Shift
+  tags:
+  - Department Shift
 - name: Equipment
   tags:
   - Equipment
+- name: Equipment Downtime
+  tags:
+  - Equipment Downtime
 - name: Gauge Code
   tags:
   - Gauge Code
@@ -749,6 +805,7 @@ x-tagGroups:
   - Job Part Line Item Full Routing
   - Job Item To Make
   - Job Item To Make Operation
+  - Job Message
   - Job Operation
 - name: Job Tracking Timers
   tags:
@@ -766,6 +823,9 @@ x-tagGroups:
 - name: NCRs
   tags:
   - NCRs
+- name: Nesting
+  tags:
+  - Nesting
 - name: Note
   tags:
   - Note
@@ -823,6 +883,9 @@ x-tagGroups:
 - name: ScrapReport
   tags:
   - ScrapReport
+- name: Settings
+  tags:
+  - Settings
 - name: Shape Code
   tags:
   - Shape Code
@@ -841,6 +904,9 @@ x-tagGroups:
 - name: Tag
   tags:
   - Tag
+- name: Task
+  tags:
+  - Task
 - name: Tax Rate
   tags:
   - Tax Rate
@@ -850,6 +916,12 @@ x-tagGroups:
 - name: Timer
   tags:
   - Timer
+- name: Tool
+  tags:
+  - Tool
+- name: Tool Calibration
+  tags:
+  - Tool Calibration
 - name: User
   tags:
   - User
